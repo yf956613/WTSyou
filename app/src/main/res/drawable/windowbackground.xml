@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@android:color/white"
+        android:height="5dp"/>
+    <!--
+    <item
+        android:drawable="@mipmap/personal_background"
+        android:gravity="top"
+        android:height="@dimen/statusbar_height"/>-->
+
+</layer-list>
+

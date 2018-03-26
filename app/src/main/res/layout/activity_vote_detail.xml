@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_background"
+    tools:context="com.qingye.wtsyou.activity.campaign.VoteDetailActivity">
+
+    <ImageView
+        android:id="@+id/iv_stars_main"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/margin_230"
+        android:background="@mipmap/img_xc"/>
+
+    <LinearLayout
+        android:id="@+id/ll_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_70"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/margin_6">
+
+            <ImageView
+                android:id="@+id/iv_campaign_img"
+                android:layout_width="102dp"
+                android:layout_height="133dp"
+                android:src="@mipmap/img_x"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.3"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_12"
+            android:layout_marginTop="@dimen/margin_8"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_campaign_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="薛之谦[我好像在哪里见过你]全国巡回演唱会"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_14"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_55">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true">
+
+                    <TextView
+                        android:id="@+id/iv_campaign_state"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="已投   "
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_12"/>
+
+                    <TextView
+                        android:id="@+id/tv_campaign_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="7000"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/orange_text2"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" / "
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:id="@+id/tv_campaign_all_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8000"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" 人"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/white"/>
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_below="@+id/rl_center"
+                android:id="@+id/tv_tag"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_25"
+                android:gravity="center"
+                android:paddingTop="@dimen/margin_2"
+                android:paddingBottom="@dimen/margin_2"
+                android:text="投票中"
+                android:textSize="@dimen/text_size_9"
+                android:textColor="@color/white"
+                android:background="@drawable/corners_gradient_red"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/iv_stars_main"
+        android:id="@+id/ll_center2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_6"
+        android:layout_marginRight="@dimen/margin_6"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_12">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@mipmap/calendar"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tv_campaign_place"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_gravity="center"
+                        android:text="福建厦门"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/black_text"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@mipmap/calendar"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tv_campaign_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_gravity="center"
+                        android:text="2018-4-28 20：00"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/black_text"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_28">
+
+                    <TextView
+                        android:id="@+id/tv_campaign_end_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4月23日 23:59"
+                        android:textSize="@dimen/text_size_10"
+                        android:textColor="@color/black_text"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="投票截止"
+                        android:textSize="@dimen/text_size_10"
+                        android:textColor="@color/black_text"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <com.qingye.wtsyou.widget.CircleProgressBar
+                android:layout_below="@+id/ll_center"
+                android:id="@+id/join_progressbar"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_25"
+                android:layout_centerInParent="true"
+                app:circle_color="@color/gray_background"
+                app:circle_width="2dp"
+                app:progress_color1="@color/orange_2"
+                app:progress_color2="@color/orange_3"
+                app:progress_color3="@color/orange_4"
+                app:progress_width="4dp"
+                app:start_arc="270"
+                app:max_progress="360"
+                app:is_set_top_title="false"
+                app:is_set_mid_content="true"
+                app:mid_progress_color="@color/black_text2"
+                app:current_progress_text_size="@dimen/text_size_18"
+                app:is_set_bottom_content="true"
+                app:bottom_content="投票进度"
+                app:bottom_content_color="@color/gray_text5"
+                app:bottom_content_text_size="@dimen/text_size_10"/>
+
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:layout_marginLeft="@dimen/margin_6"
+            android:layout_marginRight="@dimen/margin_6"
+            android:background="@drawable/corners_orange_shade_button"
+            android:textAllCaps="false"
+            android:text="立即投票给idol"
+            android:textSize="@dimen/text_size_12"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/ll_center2"
+        android:id="@+id/ll_center3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_4"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_marginRight="@dimen/margin_6"
+            android:layout_marginTop="@dimen/margin_12"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_alignParentLeft="true"
+                android:text="项目详情"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/text_size_13"/>
+
+            <LinearLayout
+                android:id="@+id/ll_detailed_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_alignParentRight="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="更多"
+                    android:textColor="@color/gray_text1"
+                    android:textSize="@dimen/text_size_10"/>
+
+                <ImageView
+                    android:layout_width="4dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_4"
+                    android:layout_marginTop="@dimen/margin_1"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/down_dd"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_crowd_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_12"
+            android:layout_marginBottom="@dimen/margin_12"
+            android:layout_marginLeft="@dimen/margin_6"
+            android:layout_marginRight="@dimen/margin_6"
+            android:text="众筹须知
+            付款成功后即可成功参与投票。"
+            android:textSize="@dimen/text_size_11"
+            android:textColor="@color/black_text2"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/ll_center3"
+        android:id="@+id/ll_center4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_4"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:layout_marginLeft="@dimen/margin_6"
+            android:layout_marginRight="@dimen/margin_6"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/iv_charts"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@mipmap/head_d"/>
+
+            <LinearLayout
+                android:layout_toRightOf="@+id/iv_charts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_8"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_charts_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text=""
+                    android:textColor="@color/black_text1"
+                    android:textSize="@dimen/text_size_13"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_3"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="发起人： "
+                        android:textColor="@color/gray_text1"
+                        android:textSize="@dimen/text_size_11"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:text="我们都爱讲冷笑话"
+                        android:textColor="@color/gray_text1"
+                        android:textSize="@dimen/text_size_11"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/campaign_detailed_head"/>
+    </LinearLayout>
+</RelativeLayout>

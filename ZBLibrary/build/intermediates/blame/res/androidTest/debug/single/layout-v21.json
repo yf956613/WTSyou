@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/layout-v21/notification_action_tombstone.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/layout-v21/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/layout-v21/notification_template_icon_group.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/layout-v21/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/layout-v21/notification_action.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/layout-v21/notification_action.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/layout-v21/notification_template_custom_big.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/layout-v21/notification_template_custom_big.xml"
+    }
+]

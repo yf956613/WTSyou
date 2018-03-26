@@ -1,0 +1,47 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="AppTheme.Base">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--toolbar (action Bar)颜色 EE7C1C-->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!--状态栏颜色 -->
+        <item name="colorPrimaryDark">#00000000</item>
+        <!-- 窗口背景色-->
+        <item name="android:windowBackground">@drawable/windowbackground</item>
+    </style>
+
+    <style name="bottom_tab_ll" parent="ll_vertical_match_match">
+        <item name="android:width">0dp</item>
+    </style>
+
+    <style name="bottom_tab_iv" parent="img_btn"></style>
+
+    <style name="bottom_tab_tv" parent="text_micro">
+    <item name="android:textColor">@color/gray_to_orange</item>
+    </style>
+
+    <style name="MyCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+
+        <item name="android:button">@drawable/check_box_style</item>
+        <item name="android:maxHeight">20.0dip</item>
+
+    </style>
+
+    <style name="dialog1" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item><!--边框-->
+        <item name="android:windowIsFloating">true</item><!--是否浮现在activity之上-->
+        <item name="android:windowIsTranslucent">true</item><!--半透明-->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item><!--模糊-->
+        <item name="android:windowFullscreen">true</item><!--全屏-->
+    </style>
+
+</resources>

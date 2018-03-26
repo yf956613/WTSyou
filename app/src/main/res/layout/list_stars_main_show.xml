@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tv_show_place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_6"
+        android:layout_marginTop="@dimen/margin_5"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="成都"
+        android:textSize="@dimen/text_size_13"
+        android:textColor="@color/black_text1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_6"
+        android:layout_marginBottom="@dimen/margin_5"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/margin_6"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_show_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="09.22"
+                    android:textSize="@dimen/text_size_13"
+                    android:textColor="@color/black_text2"/>
+
+                <TextView
+                    android:id="@+id/tv_show_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="19:30"
+                    android:textSize="@dimen/text_size_10"
+                    android:textColor="@color/gray_text5"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_6"
+            android:background="@color/orange_5"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:layout_margin="@dimen/margin_12"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_show_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="2017鹿晗世界巡回演唱会-成都站"
+                    android:textSize="@dimen/text_size_13"
+                    android:textColor="@color/black_text1"/>
+
+                <TextView
+                    android:id="@+id/show_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="成都双流体育场"
+                    android:textSize="@dimen/text_size_10"
+                    android:textColor="@color/gray_text4"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:paddingTop="@dimen/margin_10"
+                    android:paddingBottom="@dimen/margin_10"
+                    android:paddingLeft="@dimen/margin_8"
+                    android:paddingRight="@dimen/margin_8"
+                    android:text="购票"
+                    android:textColor="@color/orange_text1"
+                    android:textSize="@dimen/text_size_11"
+                    android:background="@drawable/circle_orange"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

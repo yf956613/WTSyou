@@ -1,0 +1,46 @@
+[
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/color-v23/abc_color_highlight_material.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/color-v23/abc_color_highlight_material.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/color-v23/abc_tint_spinner.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/color-v23/abc_tint_spinner.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/color-v23/abc_tint_btn_checkable.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/color-v23/abc_tint_btn_checkable.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/color-v23/abc_tint_edittext.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/color-v23/abc_tint_edittext.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/color-v23/abc_btn_colored_borderless_text_material.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/color-v23/abc_btn_colored_borderless_text_material.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/color-v23/abc_tint_default.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/color-v23/abc_tint_default.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/color-v23/abc_btn_colored_text_material.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/color-v23/abc_btn_colored_text_material.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/color-v23/design_tint_password_toggle.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/design-25.4.0.aar/fdf696693265507a71191cd15e71c16d/res/color-v23/design_tint_password_toggle.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/color-v23/abc_tint_switch_track.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/color-v23/abc_tint_switch_track.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/color-v23/abc_tint_switch_thumb.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/color-v23/abc_tint_switch_thumb.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/color-v23/abc_tint_seek_thumb.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/color-v23/abc_tint_seek_thumb.xml"
+    }
+]

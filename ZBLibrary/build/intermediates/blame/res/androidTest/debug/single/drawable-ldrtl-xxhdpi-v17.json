@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/drawable-ldrtl-xxhdpi-v17/abc_ic_menu_copy_mtrl_am_alpha.png",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/drawable-ldrtl-xxhdpi-v17/abc_ic_menu_copy_mtrl_am_alpha.png"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/drawable-ldrtl-xxhdpi-v17/abc_ic_menu_cut_mtrl_alpha.png",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/drawable-ldrtl-xxhdpi-v17/abc_ic_menu_cut_mtrl_alpha.png"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/drawable-ldrtl-xxhdpi-v17/abc_spinner_mtrl_am_alpha.9.png",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/drawable-ldrtl-xxhdpi-v17/abc_spinner_mtrl_am_alpha.9.png"
+    }
+]

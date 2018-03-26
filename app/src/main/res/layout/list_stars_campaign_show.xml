@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/ll_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/margin_6">
+
+            <ImageView
+                android:id="@+id/iv_campaign_img"
+                android:layout_width="102dp"
+                android:layout_height="133dp"
+                android:src="@mipmap/img_d"/>
+
+            <TextView
+                android:id="@+id/tv_tag"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/iv_campaign_img"
+                android:layout_marginTop="@dimen/margin_6"
+                android:layout_marginRight="@dimen/margin_5"
+                android:gravity="center"
+                android:paddingTop="@dimen/margin_2"
+                android:paddingBottom="@dimen/margin_2"
+                android:text="众筹中"
+                android:textSize="@dimen/text_size_9"
+                android:textColor="@color/white"
+                android:background="@drawable/re_corners_blue"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.3"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_12"
+            android:layout_marginTop="@dimen/margin_8"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_campaign_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="薛之谦[我好像在哪里见过你]全国巡回演唱会"
+                android:textColor="@color/black_text1"
+                android:textSize="@dimen/text_size_14"/>
+
+            <LinearLayout
+                android:id="@+id/ll_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_50"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_show_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2017.12.16"
+                    android:textSize="@dimen/text_size_10"
+                    android:textColor="@color/gray_text4"/>
+
+                <TextView
+                    android:id="@+id/tv_show_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="厦门体育中心体育场"
+                    android:textSize="@dimen/text_size_10"
+                    android:textColor="@color/gray_text4"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_below="@+id/ll_center"
+                android:id="@+id/rl_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_20">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true">
+
+                    <TextView
+                        android:id="@+id/tv_min_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="180"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/pink_text"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" - "
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/pink_text"/>
+
+                    <TextView
+                        android:id="@+id/tv_max_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1580"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/pink_text"/>
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:src="@mipmap/zuanshi_k"
+                        android:layout_gravity="top"
+                        android:layout_marginLeft="@dimen/margin_4"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_below="@+id/ll_content"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginLeft="@dimen/margin_6"
+        android:layout_marginRight="@dimen/text_size_12"
+        style="@style/divider_horizontal_1px"/>
+</RelativeLayout>

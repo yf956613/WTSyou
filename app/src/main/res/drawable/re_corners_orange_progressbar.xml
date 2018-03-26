@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 通用圆角布局  背景白色  边框灰色--> 
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners
+        android:bottomLeftRadius="550dp"/>
+    <gradient
+        android:startColor="#ff7553"
+        android:endColor="#ffbdad"
+        android:angle="90"
+        android:type="linear" />
+</shape>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="33dp"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:layout_marginLeft="@dimen/margin_8"
+        android:layout_marginRight="@dimen/margin_8"
+        android:background="@drawable/corners_gray_clarity_solid"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rlsearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+                <ImageView
+                    android:id="@+id/image_search"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:src="@mipmap/search_m"/>
+
+                <TextView
+                    android:id="@+id/edit_search_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/image_search"
+                    android:text="搜索活动"
+                    android:textSize="@dimen/text_size_11"
+                    android:textColorHint="@color/gray_text2"
+                    android:textColor="@color/gray_text2"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/image_close_search"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginRight="@dimen/margin_15"
+            android:layout_centerInParent="true"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+</LinearLayout>

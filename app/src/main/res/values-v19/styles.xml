@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--toolbar (action Bar)颜色 EE7C1C-->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!--状态栏颜色 -->
+        <item name="colorPrimaryDark">#00000000</item>
+        <!-- 窗口背景色-->
+        <item name="android:windowBackground">@drawable/windowbackground</item>
+
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+</resources>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="160dp"
+    android:layout_height="100dp"
+    android:layout_marginLeft="@dimen/margin_6"
+    android:layout_marginRight="@dimen/margin_6">
+
+    <ImageView
+        android:id="@+id/iv_conversation_top_img"
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/img_q"/>
+
+    <TextView
+        android:id="@+id/tv_star_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_6"
+        android:layout_marginRight="@dimen/margin_5"
+        android:layout_alignRight="@+id/iv_conversation_top_img"
+        android:gravity="center"
+        android:paddingTop="@dimen/margin_2"
+        android:paddingBottom="@dimen/margin_2"
+        android:paddingLeft="@dimen/margin_6"
+        android:paddingRight="@dimen/margin_6"
+        android:text="陈绮贞"
+        android:textSize="@dimen/text_size_9"
+        android:textColor="@color/white"
+        android:background="@drawable/re_corners_red"/>
+
+    <RelativeLayout
+        android:layout_width="170dp"
+        android:layout_height="110dp"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginRight="@dimen/margin_20"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_conversation_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_30"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:text="陈绮贞房间里的音乐会讨论聊天室"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_13"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_65"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="在线人数  "
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_10"/>
+
+            <TextView
+                android:layout_toRightOf="@+id/textview"
+                android:id="@+id/tv_online"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:text="1789"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_10"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

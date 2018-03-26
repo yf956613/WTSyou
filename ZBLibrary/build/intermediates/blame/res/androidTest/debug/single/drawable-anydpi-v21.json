@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/drawable-anydpi-v21/design_ic_visibility.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/design-25.4.0.aar/fdf696693265507a71191cd15e71c16d/res/drawable-anydpi-v21/design_ic_visibility.xml"
+    },
+    {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/drawable-anydpi-v21/design_ic_visibility_off.xml",
+        "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/design-25.4.0.aar/fdf696693265507a71191cd15e71c16d/res/drawable-anydpi-v21/design_ic_visibility_off.xml"
+    }
+]
