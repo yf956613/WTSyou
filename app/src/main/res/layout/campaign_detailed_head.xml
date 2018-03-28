@@ -52,7 +52,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:src="@mipmap/share_g"/>
+            android:src="@mipmap/share_w"/>
     </RelativeLayout>
 
 </RelativeLayout>

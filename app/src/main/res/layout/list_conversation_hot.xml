@@ -5,17 +5,14 @@
     android:layout_height="212dp"
     android:layout_centerHorizontal="true"
     android:layout_margin="@dimen/margin_4"
-    android:background="@drawable/re_corners_white_shadow"
-    android:gravity="center">
+    android:background="@drawable/corners_white_shadow">
 
     <ImageView
         android:id="@+id/iv_conversation_cover"
         android:layout_width="match_parent"
         android:layout_height="106dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/img_h" />
+        android:src="@mipmap/img_t" />
 
     <TextView
         android:id="@+id/tv_star_name"
@@ -36,19 +33,28 @@
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_9" />
 
-    <ImageView
-        android:id="@+id/iv_stars"
+    <LinearLayout
+        android:id="@+id/ll_img"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/margin_65"
-        android:src="@mipmap/head_d" />
+        android:background="@drawable/circle_white">
+
+        <ImageView
+            android:id="@+id/iv_personal"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/head_d"/>
+
+    </LinearLayout>
 
     <TextView
+        android:layout_below="@+id/ll_img"
         android:id="@+id/tv_creator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/iv_stars"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="@dimen/margin_45"
         android:layout_marginTop="@dimen/margin_4"

@@ -37,23 +37,23 @@
             android:layout_marginRight="@dimen/margin_70"
             android:layout_centerVertical="true">
 
-            <ImageView
-                android:id="@+id/iv_charts"
+            <com.qingye.wtsyou.widget.CircleImageView
+                android:id="@+id/iv_stars_img"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@mipmap/head_d"/>
 
             <LinearLayout
-                android:layout_toRightOf="@+id/iv_charts"
-                android:layout_width="wrap_content"
+                android:layout_toRightOf="@+id/iv_stars_img"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_8"
-                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_charts_name"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_stars_name"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:ellipsize="end"
@@ -75,6 +75,7 @@
                         android:textSize="@dimen/text_size_11"/>
 
                     <TextView
+                        android:id="@+id/tv_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="1"

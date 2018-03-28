@@ -1,4 +1,4 @@
-package com.qingye.wtsyou.view.home;
+package com.qingye.wtsyou.view.search;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

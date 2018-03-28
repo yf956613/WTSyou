@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.activity.search.SearchAreaActivity;
 import com.qingye.wtsyou.fragment.activity.StarsCampaignCrowdFragment;
 import com.qingye.wtsyou.fragment.activity.StarsCampaignShowFragment;
 import com.qingye.wtsyou.fragment.activity.StarsCampaignVoteFragment;
@@ -19,6 +20,10 @@ import com.qingye.wtsyou.fragment.home.StarsMainCrowdFragment;
 import com.qingye.wtsyou.fragment.home.StarsMainShowFragment;
 import com.qingye.wtsyou.fragment.home.StarsMainSupportFragment;
 import com.qingye.wtsyou.fragment.home.StarsMainVoteFragment;
+import com.qingye.wtsyou.modle.City;
+import com.qingye.wtsyou.utils.Constant;
+
+import java.io.Serializable;
 
 import zuo.biao.library.base.BaseTabActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
@@ -26,7 +31,7 @@ import zuo.biao.library.interfaces.OnBottomDragListener;
 public class ShowAllActivity extends BaseTabActivity implements View.OnClickListener, OnBottomDragListener {
 
     private ImageView ivBack;
-    private TextView tvHead;
+    private TextView tvHead,tvRight;
     private LinearLayout llCity;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -67,6 +72,7 @@ public class ShowAllActivity extends BaseTabActivity implements View.OnClickList
         tvHead.setText("全部演出");
         llCity = findViewById(R.id.ll_city);
         llCity.setVisibility(View.VISIBLE);
+        tvRight = findViewById(R.id.tv_right);
     }
 
     @Override
@@ -147,7 +153,26 @@ public class ShowAllActivity extends BaseTabActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.ll_city:
+                toActivity(SearchAreaActivity.createIntent(context),REQUEST_TO_SELECT_AREA);
+                break;
+            default:
+                break;
+        }
+    }
 
+    private static final int REQUEST_TO_SELECT_AREA = 1;
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case REQUEST_TO_SELECT_AREA:
+                if (data != null) {
+                    City selectedCity = (City) data.getExtras().getSerializable(Constant.SELECTED_CITY);
+                    tvRight.setText(selectedCity.name);
+                }
                 break;
             default:
                 break;

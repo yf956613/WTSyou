@@ -1,19 +1,15 @@
-package com.qingye.wtsyou.fragment.home;
-
+package com.qingye.wtsyou.fragment.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.home.SearchStarsAdapter;
-import com.qingye.wtsyou.adapter.home.SelectStarsAdapter;
-import com.qingye.wtsyou.modle.Stars;
-import com.qingye.wtsyou.view.home.SelectStarsView;
+import com.qingye.wtsyou.adapter.activity.ConversationAdapter;
+
+import com.qingye.wtsyou.modle.Conversation;
+import com.qingye.wtsyou.view.activity.ConversationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,22 +18,19 @@ import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class SelectStarsFragment extends BaseHttpRecyclerFragment<Stars,SelectStarsView,SelectStarsAdapter> implements CacheCallBack<Stars> {
+public class CampaignDetailedConversationFragment extends BaseHttpRecyclerFragment<Conversation,ConversationView,ConversationAdapter>implements CacheCallBack<Conversation> {
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     /**创建一个Fragment实例
      * @return
      */
-    public static SelectStarsFragment createInstance() {
+    public static CampaignDetailedConversationFragment createInstance() {
 
-        return new SelectStarsFragment();
+        return new CampaignDetailedConversationFragment();
     }
 
-    public SelectStarsFragment() {
+    public CampaignDetailedConversationFragment() {
         // Required empty public constructor
     }
 
@@ -45,7 +38,7 @@ public class SelectStarsFragment extends BaseHttpRecyclerFragment<Stars,SelectSt
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //类相关初始化，必须使用<<<<<<<<<<<<<<<<
         super.onCreateView(inflater, container, savedInstanceState);
-        setContentView(R.layout.fragment_select_stars);
+        setContentView(R.layout.fragment_campaign_detailed_conversation);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
         initCache(this);
@@ -62,10 +55,6 @@ public class SelectStarsFragment extends BaseHttpRecyclerFragment<Stars,SelectSt
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
         srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
 
-        //实例化一个GridLayoutManager，列数为2
-        final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
-        rvBaseRecycler.setLayoutManager(layoutManager);
-
         return view;
     }
 
@@ -75,19 +64,19 @@ public class SelectStarsFragment extends BaseHttpRecyclerFragment<Stars,SelectSt
     }
 
     @Override
-    public void setList(final List<Stars> list) {
-        final List<Stars> templist = new ArrayList<>();
+    public void setList(final List<Conversation> list) {
+        final List<Conversation> templist = new ArrayList<>();
         for(int i = 1;i < 6;i ++) {
-            Stars stars = new Stars();
-            stars.setId(i);
-            templist.add(stars);
+            Conversation conversation = new Conversation();
+            conversation.setId(i);
+            templist.add(conversation);
         }
         //list.addAll(templist);
-        setList(new AdapterCallBack<SelectStarsAdapter>() {
+        setList(new AdapterCallBack<ConversationAdapter>() {
 
             @Override
-            public SelectStarsAdapter createAdapter() {
-                return new SelectStarsAdapter(context);
+            public ConversationAdapter createAdapter() {
+                return new ConversationAdapter(context);
             }
 
             @Override
@@ -111,12 +100,12 @@ public class SelectStarsFragment extends BaseHttpRecyclerFragment<Stars,SelectSt
     }
 
     @Override
-    public List<Stars> parseArray(String json) {
+    public List<Conversation> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Stars> getCacheClass() {
+    public Class<Conversation> getCacheClass() {
         return null;
     }
 
@@ -126,7 +115,7 @@ public class SelectStarsFragment extends BaseHttpRecyclerFragment<Stars,SelectSt
     }
 
     @Override
-    public String getCacheId(Stars data) {
+    public String getCacheId(Conversation data) {
         return null;
     }
 

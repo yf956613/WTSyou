@@ -136,14 +136,22 @@
 
     </ScrollView>
 
-    <ImageView
-        android:id="@+id/iv_conversation_command"
+    <LinearLayout
+        android:id="@+id/ll_img"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/margin_15"
         android:layout_marginBottom="@dimen/margin_10"
-        android:src="@mipmap/head_d"/>
+        android:background="@drawable/circle_white_gray_shadow">
+
+        <com.qingye.wtsyou.widget.CircleImageView
+            android:id="@+id/iv_conversation_command"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
+            android:src="@mipmap/head_d"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.fragment.activity.CampaignDetailedConversationFragment;
 import com.qingye.wtsyou.widget.CircleProgressBar;
 
 import zuo.biao.library.base.BaseActivity;
@@ -56,6 +59,14 @@ public class VoteDetailActivity extends BaseActivity implements View.OnClickList
         ivBack = findViewById(R.id.iv_left);
         ivShare = findViewById(R.id.iv_right);
         mcircleProgressBar = findViewById(R.id.join_progressbar);
+
+        CampaignDetailedConversationFragment campaignDetailedConversationFragment = new CampaignDetailedConversationFragment();
+        //注意这里是调用getSupportFragmentManager()方法
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        //把碎片添加到碎片中
+        transaction.replace(R.id.list_conversation,campaignDetailedConversationFragment);
+        transaction.commit();
     }
 
     @Override

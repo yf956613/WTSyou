@@ -73,11 +73,20 @@
             android:layout_gravity="center_horizontal"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/stars_image"
-                android:layout_width="@dimen/margin_55"
-                android:layout_height="@dimen/margin_55"
-                android:src="@mipmap/head_a"/>
+            <LinearLayout
+                android:id="@+id/ll_img"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/circle_white_gray_shadow">
+
+                <com.qingye.wtsyou.widget.CircleImageView
+                    android:id="@+id/stars_image"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:src="@mipmap/head_a"/>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/stars_name"

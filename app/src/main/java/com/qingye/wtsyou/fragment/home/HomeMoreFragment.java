@@ -11,7 +11,7 @@ import android.widget.ImageView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.home.FocusStarsActivity;
-import com.qingye.wtsyou.activity.home.SelectStarsActivity;
+import com.qingye.wtsyou.activity.search.SelectStarsActivity;
 
 import zuo.biao.library.base.BaseFragment;
 import zuo.biao.library.ui.AlertDialog;

@@ -1,4 +1,4 @@
-package com.qingye.wtsyou.activity.home;
+package com.qingye.wtsyou.activity.search;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,15 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.home.SearchStarsAdapter;
+import com.qingye.wtsyou.activity.home.FansMainActivity;
+import com.qingye.wtsyou.adapter.search.SearchStarsAdapter;
 import com.qingye.wtsyou.modle.Stars;
-import com.qingye.wtsyou.view.home.SearchStarsView;
+import com.qingye.wtsyou.view.search.SearchStarsView;
 
 import java.util.ArrayList;
 import java.util.List;

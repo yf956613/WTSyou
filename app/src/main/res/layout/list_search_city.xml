@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_first_letter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_background2"
+        android:paddingLeft="10dp"
+        android:text="A"
+        android:textColor="@color/gray_text3"
+        android:textSize="@dimen/text_size_11"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_city_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_30"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_12"
+            android:layout_marginBottom="@dimen/margin_12"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="北京市"
+            android:textSize="@dimen/text_size_12"
+            android:textColor="@color/black_text1"/>
+
+    </RelativeLayout>
+
+    <View
+        style="@style/divider_horizontal_1px"
+        android:layout_marginLeft="@dimen/margin_10"/>
+
+</LinearLayout>

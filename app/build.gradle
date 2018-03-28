@@ -32,4 +32,6 @@ dependencies {
     compile project(':circleindicator')
     compile project(':LoopingViewPager')
     compile project(':imageloop')
+    compile files('libs/pinyin4j-2.5.0.jar')
+    compile files('libs/nineoldandroids-2.4.0.jar')
 }

@@ -12,8 +12,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <!--状态栏颜色 -->
         <item name="colorPrimaryDark">#00000000</item>
-        <!-- 窗口背景色-->
-        <item name="android:windowBackground">@drawable/windowbackground</item>
     </style>
 
     <style name="bottom_tab_ll" parent="ll_vertical_match_match">

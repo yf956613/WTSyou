@@ -11,8 +11,7 @@ import android.widget.ImageView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.home.ChartsActivity;
-import com.qingye.wtsyou.activity.home.SearchStarsActivity;
-import com.qingye.wtsyou.activity.home.SelectStarsActivity;
+import com.qingye.wtsyou.activity.search.SelectStarsActivity;
 import com.qingye.wtsyou.adapter.home.HomePagerAdapter;
 
 import me.relex.circleindicator.CircleIndicator;

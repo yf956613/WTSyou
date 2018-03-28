@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_7">
+
+        <RelativeLayout
+            android:id="@+id/rl_center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+
+            <ImageView
+                android:id="@+id/iv_charts"
+                android:layout_width="100dp"
+                android:layout_height="65dp"
+                android:src="@mipmap/img_q"/>
+
+            <LinearLayout
+                android:layout_toRightOf="@+id/iv_charts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_charts_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:text="范玮琪 福州演唱会应援活动"
+                        android:textColor="@color/black_text1"
+                        android:textSize="@dimen/text_size_13"/>
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="16dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="right"
+                        android:src="@mipmap/sound"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:text="维维维琪"
+                        android:textColor="@color/black_text2"
+                        android:textSize="@dimen/text_size_11"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@mipmap/personal_g"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/margin_8"
+                            android:text="4178"
+                            android:textColor="@color/gray_text1"
+                            android:textSize="@dimen/text_size_11"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            style="@style/divider_horizontal_1px"
+            android:layout_marginLeft="@dimen/margin_120"
+            android:layout_alignBottom="@+id/rl_center"/>
+    </RelativeLayout>
+
+</LinearLayout>

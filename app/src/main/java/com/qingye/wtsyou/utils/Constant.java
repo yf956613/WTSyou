@@ -6,4 +6,6 @@ package com.qingye.wtsyou.utils;
 
 public class Constant {
     public static final String TAB_FRAGMENT_POSITION = "POSITION";
+
+    public static final String SELECTED_CITY = "selectedCity";
 }

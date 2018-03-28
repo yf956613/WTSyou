@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.campaign.SearchCampaignActivity;
+import com.qingye.wtsyou.activity.search.SearchCampaignActivity;
 import com.qingye.wtsyou.activity.campaign.ShowAllActivity;
 import com.qingye.wtsyou.activity.campaign.SupportAllActivity;
 import com.qingye.wtsyou.adapter.home.LoopShowContentAdapter;

@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.home.RecommendStarsConversationActivity;
-import com.qingye.wtsyou.activity.home.SearchFansActivity;
+import com.qingye.wtsyou.activity.search.SearchFansActivity;
 import com.qingye.wtsyou.adapter.home.HomeContentAdapter;
 import com.qingye.wtsyou.modle.Campaign;
 

@@ -1,4 +1,4 @@
-package com.qingye.wtsyou.activity.campaign;
+package com.qingye.wtsyou.activity.search;
 
 import android.app.Activity;
 import android.content.Context;

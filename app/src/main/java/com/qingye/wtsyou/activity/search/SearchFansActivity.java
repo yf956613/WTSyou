@@ -1,4 +1,4 @@
-package com.qingye.wtsyou.activity.home;
+package com.qingye.wtsyou.activity.search;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,9 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.home.SearchFansAdapter;
+import com.qingye.wtsyou.activity.home.FansMainActivity;
+import com.qingye.wtsyou.adapter.search.SearchFansAdapter;
 import com.qingye.wtsyou.modle.Fans;
-import com.qingye.wtsyou.view.home.SearchFansView;
+import com.qingye.wtsyou.view.search.SearchFansView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import zuo.biao.library.interfaces.OnBottomDragListener;
 
 public class SearchFansActivity extends BaseHttpRecyclerActivity<Fans,SearchFansView,SearchFansAdapter> implements View.OnClickListener,OnBottomDragListener {
 
-    private ImageView ivLeft;
+    private ImageView ivBack;
     private TextView tvHead;
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -64,8 +65,8 @@ public class SearchFansActivity extends BaseHttpRecyclerActivity<Fans,SearchFans
     @Override
     public void initView() {
         super.initView();
-        ivLeft = findView(R.id.iv_left);
-        ivLeft.setImageResource(R.mipmap.back_a);
+        ivBack = findView(R.id.iv_left);
+        ivBack.setImageResource(R.mipmap.back_a);
         tvHead = findViewById(R.id.tv_head_title);
         tvHead.setText("粉丝列表");
     }
@@ -114,7 +115,7 @@ public class SearchFansActivity extends BaseHttpRecyclerActivity<Fans,SearchFans
     @Override
     public void initEvent() {//必须调用
         super.initEvent();
-        ivLeft.setOnClickListener(this);
+        ivBack.setOnClickListener(this);
     }
 
     public void onClick(View v) {

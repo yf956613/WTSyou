@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.activity.search.SelectStarsActivity;
 import com.qingye.wtsyou.adapter.home.FocusStarsAdapter;
 import com.qingye.wtsyou.modle.Stars;
 import com.qingye.wtsyou.view.home.FocusStarsView;

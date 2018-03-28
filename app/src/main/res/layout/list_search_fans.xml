@@ -19,18 +19,18 @@
             android:layout_marginRight="@dimen/margin_70"
             android:layout_centerVertical="true">
 
-            <ImageView
-                android:id="@+id/iv_charts"
+            <com.qingye.wtsyou.widget.CircleImageView
+                android:id="@+id/iv_fans"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@mipmap/head_d"/>
 
             <LinearLayout
-                android:layout_toRightOf="@+id/iv_charts"
+                android:layout_toRightOf="@+id/iv_fans"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_8"
-                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
                 android:orientation="vertical">
 
                 <TextView

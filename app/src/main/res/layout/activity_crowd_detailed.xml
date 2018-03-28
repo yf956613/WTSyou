@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/gray_background"
     tools:context="com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity">
 
     <ImageView
         android:id="@+id/iv_campaign_background_img"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/margin_230"
-        android:background="@mipmap/img_xc"/>
+        android:layout_width="match_parent"
+        android:layout_height="216dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/img_xc"/>
 
     <LinearLayout
         android:id="@+id/ll_content"
@@ -74,19 +74,19 @@
                         android:textSize="@dimen/text_size_12"/>
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="￥ "
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/white"/>
+
+                    <TextView
                         android:id="@+id/tv_campaign_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="7000"
                         android:textSize="@dimen/text_size_16"
                         android:textColor="@color/white"/>
-
-                    <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:src="@mipmap/zuanshi_k"
-                        android:layout_gravity="top"
-                        android:layout_marginLeft="@dimen/margin_4"/>
 
                 </LinearLayout>
 
@@ -116,6 +116,16 @@
         android:layout_height="wrap_content">
         <include layout="@layout/campaign_detailed_head"/>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_crowd"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/re_orange_shade_button"
+        android:text="立即众筹"
+        android:textSize="@dimen/text_size_12"
+        android:textColor="@color/white"/>
 
     <ScrollView
         android:layout_below="@+id/iv_campaign_background_img"
@@ -388,13 +398,4 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/btn_crowd"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/re_orange_shade_button"
-        android:text="立即众筹"
-        android:textSize="@dimen/text_size_12"
-        android:textColor="@color/white"/>
 </RelativeLayout>

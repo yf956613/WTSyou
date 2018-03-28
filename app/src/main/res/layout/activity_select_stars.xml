@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_background1"
-    tools:context="com.qingye.wtsyou.activity.home.SelectStarsActivity">
+    tools:context="com.qingye.wtsyou.activity.search.SelectStarsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,19 +22,23 @@
             layout="@layout/head"/>
     </LinearLayout>
 
-    <FrameLayout
+
+    <LinearLayout
         android:layout_below="@+id/ll_head"
         android:id="@+id/list_all_stars"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_18"
-        android:layout_marginRight="@dimen/margin_18"/>
+        android:layout_marginRight="@dimen/margin_18">
+
+        <include layout="@layout/base_http_recycler_fragment"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/clarity_black">
+        android:background="@color/clarity_black1">
 
         <FrameLayout
             android:id="@+id/list_selected_stars"

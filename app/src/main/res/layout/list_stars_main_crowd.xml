@@ -21,7 +21,7 @@
 
             <ImageView
                 android:id="@+id/iv_campaign_img"
-                android:layout_width="102dp"
+                android:layout_width="104dp"
                 android:layout_height="133dp"
                 android:src="@mipmap/img_d"/>
 
@@ -80,19 +80,19 @@
                         android:textSize="@dimen/text_size_12"/>
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="￥ "
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/black_text1"/>
+
+                    <TextView
                         android:id="@+id/tv_campaign_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="7000"
                         android:textSize="@dimen/text_size_16"
                         android:textColor="@color/black_text1"/>
-
-                    <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:src="@mipmap/zuanshi_k"
-                        android:layout_gravity="top"
-                        android:layout_marginLeft="@dimen/margin_4"/>
 
                 </LinearLayout>
 

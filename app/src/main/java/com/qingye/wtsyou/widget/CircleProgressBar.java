@@ -116,7 +116,7 @@ public class CircleProgressBar extends View {
         midProgressColor=a.getColor(R.styleable.CircleProgressBar_mid_progress_color, Color.GREEN);
         bottomcontentColor=a.getColor(R.styleable.CircleProgressBar_bottom_content_color,topTitleColor);
         toptitleTextSize= a.getDimension(R.styleable.CircleProgressBar_top_title_text_size, 15);
-        currentProgressTextsize=a.getDimension(R.styleable.CircleProgressBar_current_progress_text_size, 55);
+        currentProgressTextsize=a.getDimension(R.styleable.CircleProgressBar_current_progress_text_size, 50);
         bottomcontentTextSize=a.getDimension(R.styleable.CircleProgressBar_bottom_content_text_size, 15);
         
         sweepAngle=a.getInteger(R.styleable.CircleProgressBar_sweep_angle, 360);

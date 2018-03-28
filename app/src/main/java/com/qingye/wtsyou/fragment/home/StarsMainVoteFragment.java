@@ -135,9 +135,9 @@ import zuo.biao.library.interfaces.CacheCallBack;
 
     }
 
-        //点击item
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            toActivity(VoteDetailActivity.createIntent(context,id));
-        }
+    //点击item
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        toActivity(VoteDetailActivity.createIntent(context,id));
+    }
 }

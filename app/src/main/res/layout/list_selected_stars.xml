@@ -7,7 +7,7 @@
     android:layout_marginRight="@dimen/margin_6"
     android:orientation="vertical">
 
-    <ImageView
+    <com.qingye.wtsyou.widget.CircleImageView
         android:id="@+id/iv_stars_head"
         android:layout_width="38dp"
         android:layout_height="38dp"
