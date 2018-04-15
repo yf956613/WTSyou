@@ -31,7 +31,8 @@
         android:paddingRight="@dimen/margin_6"
         android:text="林宥嘉"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_9" />
+        android:textSize="@dimen/text_size_9"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/ll_img"

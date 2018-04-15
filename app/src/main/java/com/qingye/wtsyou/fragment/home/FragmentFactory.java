@@ -24,9 +24,6 @@ public class FragmentFactory {
                 fragment = new HomeStarsFragment();
                 break;
             case 3:
-                fragment = new HomeStarsFragment();
-                break;
-            case 4:
                 fragment = new HomeMoreFragment();
                 break;
         }

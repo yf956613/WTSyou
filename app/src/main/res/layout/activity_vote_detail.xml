@@ -7,135 +7,144 @@
     android:background="@color/gray_background"
     tools:context="com.qingye.wtsyou.activity.campaign.VoteDetailActivity">
 
-    <ImageView
-        android:id="@+id/iv_campaign_background_img"
-        android:layout_width="match_parent"
-        android:layout_height="216dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/img_xc"/>
-
-    <LinearLayout
-        android:id="@+id/ll_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_70"
-        android:orientation="horizontal">
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="@dimen/margin_6">
-
-            <ImageView
-                android:id="@+id/iv_campaign_img"
-                android:layout_width="102dp"
-                android:layout_height="133dp"
-                android:src="@mipmap/img_x"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2.3"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_12"
-            android:layout_marginTop="@dimen/margin_8"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_campaign_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:text="薛之谦[我好像在哪里见过你]全国巡回演唱会"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_14"/>
-
-            <RelativeLayout
-                android:id="@+id/rl_center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_55">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true">
-
-                    <TextView
-                        android:id="@+id/iv_campaign_state"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="已投   "
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12"/>
-
-                    <TextView
-                        android:id="@+id/tv_campaign_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="7000"
-                        android:textSize="@dimen/text_size_16"
-                        android:textColor="@color/orange_text2"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" / "
-                        android:textSize="@dimen/text_size_16"
-                        android:textColor="@color/white"/>
-
-                    <TextView
-                        android:id="@+id/tv_campaign_all_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="8000"
-                        android:textSize="@dimen/text_size_16"
-                        android:textColor="@color/white"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" 人"
-                        android:textSize="@dimen/text_size_16"
-                        android:textColor="@color/white"/>
-
-
-                </LinearLayout>
-
-
-            </RelativeLayout>
-
-            <TextView
-                android:layout_below="@+id/rl_center"
-                android:id="@+id/tv_tag"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_25"
-                android:gravity="center"
-                android:paddingTop="@dimen/margin_2"
-                android:paddingBottom="@dimen/margin_2"
-                android:text="投票中"
-                android:textSize="@dimen/text_size_9"
-                android:textColor="@color/white"
-                android:background="@drawable/corners_gradient_red"/>
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
     <ScrollView
-        android:layout_below="@+id/iv_campaign_background_img"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_campaign_background_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="216dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/img_xc"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_70"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/margin_6">
+
+                        <ImageView
+                            android:id="@+id/iv_campaign_img"
+                            android:layout_width="102dp"
+                            android:layout_height="133dp"
+                            android:src="@mipmap/img_x"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.3"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginRight="@dimen/margin_12"
+                        android:layout_marginTop="@dimen/margin_8"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_campaign_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="2"
+                            android:ellipsize="end"
+                            android:text="薛之谦[我好像在哪里见过你]全国巡回演唱会"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_14"/>
+
+                        <RelativeLayout
+                            android:id="@+id/rl_center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_55">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true">
+
+                                <TextView
+                                    android:id="@+id/iv_campaign_state"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="已投   "
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_size_12"/>
+
+                                <TextView
+                                    android:id="@+id/tv_campaign_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="7000"
+                                    android:textSize="@dimen/text_size_16"
+                                    android:textColor="@color/pink_text"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text=" / "
+                                    android:textSize="@dimen/text_size_16"
+                                    android:textColor="@color/white"/>
+
+                                <TextView
+                                    android:id="@+id/tv_campaign_all_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="8000"
+                                    android:textSize="@dimen/text_size_16"
+                                    android:textColor="@color/white"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text=" 人"
+                                    android:textSize="@dimen/text_size_16"
+                                    android:textColor="@color/white"/>
+
+
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_below="@+id/rl_center"
+                            android:id="@+id/tv_tag"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_25"
+                            android:gravity="center"
+                            android:paddingTop="@dimen/margin_2"
+                            android:paddingBottom="@dimen/margin_2"
+                            android:text="投票中"
+                            android:textSize="@dimen/text_size_9"
+                            android:textColor="@color/white"
+                            android:background="@drawable/corners_gradient_red"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -163,7 +172,7 @@
                             <ImageView
                                 android:layout_width="18dp"
                                 android:layout_height="18dp"
-                                android:src="@mipmap/address_g"
+                                android:src="@mipmap/dizhi"
                                 android:layout_gravity="center"/>
 
                             <TextView
@@ -243,18 +252,18 @@
                         app:is_set_top_title="false"
                         app:is_set_mid_content="true"
                         app:mid_progress_color="@color/black_text2"
-                        app:current_progress_text_size="@dimen/text_size_15"
+                        app:current_progress_text_size="@dimen/text_size_14"
                         app:is_set_bottom_content="true"
                         app:bottom_content="投票进度"
                         app:bottom_content_color="@color/gray_text5"
-                        app:bottom_content_text_size="@dimen/text_size_8"/>
+                        app:bottom_content_text_size="@dimen/text_size_7"/>
 
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/btn_vote"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="35dp"
                     android:layout_marginTop="@dimen/margin_10"
                     android:layout_marginBottom="@dimen/margin_10"
                     android:layout_marginLeft="@dimen/margin_6"
@@ -262,7 +271,7 @@
                     android:background="@drawable/corners_orange_shade_button"
                     android:textAllCaps="false"
                     android:text="立即投票给idol"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_14"
                     android:textColor="@color/white"/>
 
             </LinearLayout>
@@ -364,15 +373,16 @@
 
                     <LinearLayout
                         android:layout_toRightOf="@+id/ll_img"
-                        android:layout_width="wrap_content"
+                        android:layout_toLeftOf="@+id/ll_right"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_8"
                         android:layout_marginRight="@dimen/margin_8"
                         android:layout_centerVertical="true"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/tv_charts_name"
+                        <!--<TextView
+                            android:id="@+id/tv_fans_team_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
@@ -395,6 +405,7 @@
                                 android:textSize="@dimen/text_size_11"/>
 
                             <TextView
+                                android:id="@+id/tv_creator_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:maxLines="1"
@@ -403,14 +414,102 @@
                                 android:textColor="@color/gray_text1"
                                 android:textSize="@dimen/text_size_11"/>
 
+                        </LinearLayout>-->
+
+                        <TextView
+                            android:id="@+id/tv_creator_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:text="我们都爱讲冷笑话"
+                            android:textColor="@color/black_text1"
+                            android:textSize="@dimen/text_size_12"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_5">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="关注： "
+                                    android:textColor="@color/gray_text1"
+                                    android:textSize="@dimen/text_size_11"/>
+
+                                <TextView
+                                    android:id="@+id/tv_focus_num"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
+                                    android:text="345"
+                                    android:textColor="@color/gray_text1"
+                                    android:textSize="@dimen/text_size_11"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_15"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="粉丝： "
+                                    android:textColor="@color/gray_text1"
+                                    android:textSize="@dimen/text_size_11"/>
+
+                                <TextView
+                                    android:id="@+id/tv_fans_num"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
+                                    android:text="74783"
+                                    android:textColor="@color/gray_text1"
+                                    android:textSize="@dimen/text_size_11"/>
+
+                            </LinearLayout>
+
                         </LinearLayout>
 
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true">
+
+                        <TextView
+                            android:id="@+id/tv_operate"
+                            android:layout_width="48dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:paddingTop="@dimen/margin_4"
+                            android:paddingBottom="@dimen/margin_4"
+                            android:text="关 注"
+                            android:textSize="@dimen/text_size_11"
+                            android:textColor="@color/orange_line"
+                            android:background="@drawable/corners_orange_1"/>
+                    </LinearLayout>
+
                 </RelativeLayout>
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_conversation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_4"
@@ -451,7 +550,7 @@
         android:id="@+id/head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <include layout="@layout/campaign_detailed_head"/>
+        <include layout="@layout/transparent_head"/>
     </LinearLayout>
 
 </RelativeLayout>

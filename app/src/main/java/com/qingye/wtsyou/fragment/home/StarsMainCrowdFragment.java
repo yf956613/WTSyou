@@ -41,7 +41,7 @@ public class StarsMainCrowdFragment extends BaseHttpRecyclerFragment<Campaign,St
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //类相关初始化，必须使用<<<<<<<<<<<<<<<<
         super.onCreateView(inflater, container, savedInstanceState);
-        setContentView(R.layout.fragment_stars_main_show);
+        setContentView(R.layout.fragment_stars_main);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
         initCache(this);

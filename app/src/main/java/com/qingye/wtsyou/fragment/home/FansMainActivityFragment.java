@@ -43,7 +43,7 @@ public class FansMainActivityFragment extends BaseHttpRecyclerFragment<Campaign,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //类相关初始化，必须使用<<<<<<<<<<<<<<<<
         super.onCreateView(inflater, container, savedInstanceState);
-        setContentView(R.layout.fragment_fans_main_activity);
+        setContentView(R.layout.fragment_fans_main);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
         initCache(this);

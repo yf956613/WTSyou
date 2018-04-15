@@ -18,7 +18,7 @@
             android:background="@drawable/circle_white_orange_shadow">
 
             <ImageView
-                android:id="@+id/iv_stars"
+                android:id="@+id/iv_stars_img"
                 android:layout_width="63dp"
                 android:layout_height="63dp"
                 android:layout_gravity="center"
@@ -150,16 +150,15 @@
                 android:background="@color/light_gray"/>
         </LinearLayout>
 
-        <zuo.biao.library.ui.xlistview.XListView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@id/lvBaseList"
-            android:scrollbars="none"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginBottom="@dimen/margin_15"
             android:layout_marginLeft="@dimen/margin_3"
-            android:layout_marginRight="@dimen/margin_3"
-            android:divider="@null">
-        </zuo.biao.library.ui.xlistview.XListView>
+            android:layout_marginRight="@dimen/margin_3">
+
+            <include layout="@layout/base_http_recycler_fragment"/>
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

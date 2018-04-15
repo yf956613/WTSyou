@@ -3,15 +3,17 @@ package com.qingye.wtsyou.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.fragment.activity.ActivityFragment;
+import com.qingye.wtsyou.fragment.campaign.ActivityFragment;
 import com.qingye.wtsyou.fragment.conversation.ConversationFragment;
 import com.qingye.wtsyou.fragment.home.HomeFragment;
-import com.qingye.wtsyou.fragment.personal.PersonalFragment;
+import com.qingye.wtsyou.fragment.my.PersonalFragment;
 
 import zuo.biao.library.base.BaseBottomTabActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
@@ -40,6 +42,10 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tab,this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();

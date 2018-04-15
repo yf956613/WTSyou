@@ -16,6 +16,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    allprojects {
+        gradle.projectsEvaluated {
+            tasks.withType(JavaCompile) {
+                options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+            }
+        }
+    }
+
 }
 
 dependencies {
@@ -34,4 +47,6 @@ dependencies {
     compile project(':imageloop')
     compile files('libs/pinyin4j-2.5.0.jar')
     compile files('libs/nineoldandroids-2.4.0.jar')
+    compile project(':FlycoTabLayout_Lib')
+    compile project(path: ':FJEditTextCountLib')
 }

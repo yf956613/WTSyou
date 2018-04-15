@@ -7,119 +7,6 @@
     android:background="@color/gray_background"
     tools:context="com.qingye.wtsyou.activity.campaign.VoteDetailActivity">
 
-    <ImageView
-        android:id="@+id/iv_campaign_background_img"
-        android:layout_width="match_parent"
-        android:layout_height="216dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/img_xc"/>
-
-
-    <LinearLayout
-        android:id="@+id/ll_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_70"
-        android:orientation="horizontal">
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="@dimen/margin_6">
-
-            <ImageView
-                android:id="@+id/iv_campaign_img"
-                android:layout_width="102dp"
-                android:layout_height="133dp"
-                android:src="@mipmap/img_x"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2.3"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_12"
-            android:layout_marginTop="@dimen/margin_8"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_campaign_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:text="薛之谦[我好像在哪里见过你]全国巡回演唱会"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_14"/>
-
-            <RelativeLayout
-                android:id="@+id/rl_center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_55">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true">
-
-                    <TextView
-                        android:id="@+id/iv_campaign_state"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="￥   "
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12"/>
-
-                    <TextView
-                        android:id="@+id/tv_min_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="888"
-                        android:textSize="@dimen/text_size_16"
-                        android:textColor="@color/white"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" - "
-                        android:textSize="@dimen/text_size_16"
-                        android:textColor="@color/white"/>
-
-                    <TextView
-                        android:id="@+id/tv_max_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="8848"
-                        android:textSize="@dimen/text_size_16"
-                        android:textColor="@color/white"/>
-
-                </LinearLayout>
-
-
-            </RelativeLayout>
-
-            <TextView
-                android:layout_below="@+id/rl_center"
-                android:id="@+id/tv_tag"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_25"
-                android:gravity="center"
-                android:paddingTop="@dimen/margin_2"
-                android:paddingBottom="@dimen/margin_2"
-                android:text="售票中"
-                android:textSize="@dimen/text_size_9"
-                android:textColor="@color/white"
-                android:background="@drawable/corners_gradient_orange"/>
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
     <Button
         android:id="@+id/btn_buy"
         android:layout_width="match_parent"
@@ -127,20 +14,141 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/re_orange_shade_button"
         android:text="立即购买"
-        android:textSize="@dimen/text_size_12"
+        android:textSize="@dimen/text_size_14"
         android:textColor="@color/white"/>
 
-
-    <ScrollView
-        android:layout_below="@+id/iv_campaign_background_img"
+    <com.qingye.wtsyou.widget.ObservableScrollView
+        android:id="@+id/scrollview"
         android:layout_above="@+id/btn_buy"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_campaign_background_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="216dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/img_xc"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_70"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/margin_6">
+
+                        <ImageView
+                            android:id="@+id/iv_campaign_img"
+                            android:layout_width="102dp"
+                            android:layout_height="133dp"
+                            android:src="@mipmap/img_x"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.3"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginRight="@dimen/margin_12"
+                        android:layout_marginTop="@dimen/margin_8"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_campaign_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="2"
+                            android:ellipsize="end"
+                            android:text="薛之谦[我好像在哪里见过你]全国巡回演唱会"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_14"/>
+
+                        <RelativeLayout
+                            android:id="@+id/rl_center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_55">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true">
+
+                                <TextView
+                                    android:id="@+id/iv_campaign_state"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="￥   "
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_size_12"/>
+
+                                <TextView
+                                    android:id="@+id/tv_min_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="888"
+                                    android:textSize="@dimen/text_size_16"
+                                    android:textColor="@color/white"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text=" - "
+                                    android:textSize="@dimen/text_size_16"
+                                    android:textColor="@color/white"/>
+
+                                <TextView
+                                    android:id="@+id/tv_max_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="8848"
+                                    android:textSize="@dimen/text_size_16"
+                                    android:textColor="@color/white"/>
+
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_below="@+id/rl_center"
+                            android:id="@+id/tv_tag"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_25"
+                            android:gravity="center"
+                            android:paddingTop="@dimen/margin_2"
+                            android:paddingBottom="@dimen/margin_2"
+                            android:text="售票中"
+                            android:textSize="@dimen/text_size_9"
+                            android:textColor="@color/white"
+                            android:background="@drawable/corners_gradient_orange"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -311,13 +319,13 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </com.qingye.wtsyou.widget.ObservableScrollView>
 
     <LinearLayout
-        android:id="@+id/head"
+        android:id="@+id/ll_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <include layout="@layout/campaign_detailed_head"/>
+        <include layout="@layout/transparent_head"/>
     </LinearLayout>
 
 </RelativeLayout>

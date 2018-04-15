@@ -33,8 +33,9 @@
             android:id="@+id/rl_center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/ll_right"
             android:layout_marginLeft="@dimen/margin_15"
-            android:layout_marginRight="@dimen/margin_70"
+            android:layout_marginRight="@dimen/margin_8"
             android:layout_centerVertical="true">
 
             <com.qingye.wtsyou.widget.CircleImageView

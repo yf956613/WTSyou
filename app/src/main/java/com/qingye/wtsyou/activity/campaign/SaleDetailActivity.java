@@ -3,15 +3,20 @@ package com.qingye.wtsyou.activity.campaign;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.fragment.activity.CampaignDetailedConversationFragment;
-import com.qingye.wtsyou.widget.CircleProgressBar;
+import com.qingye.wtsyou.fragment.campaign.DetailedConversationFragment;
+import com.qingye.wtsyou.widget.ObservableScrollView;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
@@ -19,6 +24,11 @@ import zuo.biao.library.interfaces.OnBottomDragListener;
 public class SaleDetailActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
     private ImageView ivBack,ivShare;
+
+    private LinearLayout llHead;
+    private ObservableScrollView scrollView;
+    private ImageView backImageView;
+    private int imageHeight;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -42,6 +52,10 @@ public class SaleDetailActivity extends BaseActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sale_detail,this);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
@@ -54,13 +68,51 @@ public class SaleDetailActivity extends BaseActivity implements View.OnClickList
         ivBack = findViewById(R.id.iv_left);
         ivShare = findViewById(R.id.iv_right);
 
-        CampaignDetailedConversationFragment campaignDetailedConversationFragment = new CampaignDetailedConversationFragment();
+        DetailedConversationFragment campaignDetailedConversationFragment = new DetailedConversationFragment();
         //注意这里是调用getSupportFragmentManager()方法
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         //把碎片添加到碎片中
         transaction.replace(R.id.list_conversation,campaignDetailedConversationFragment);
         transaction.commit();
+
+        llHead = findViewById(R.id.ll_head);
+        backImageView = findViewById(R.id.iv_campaign_background_img);
+        scrollView = findViewById(R.id.scrollview);
+        initListeners();
+    }
+
+    private void initListeners() {
+        // 获取顶部图片高度后，设置滚动监听
+        ViewTreeObserver vto = backImageView.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                backImageView.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+                imageHeight = backImageView.getHeight();
+                scrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
+                    @Override
+                    public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
+                        // TODO Auto-generated method stub
+                        if (y <= 0) {
+                            llHead.setBackgroundColor(Color.parseColor("#00ffffff"));
+                            ivBack.setImageResource(R.mipmap.back_l);
+                            ivShare.setImageResource(R.mipmap.share_w);
+                        } else if (y > 0 && y <= imageHeight) {
+                            float scale = (float) y / imageHeight;
+                            float alpha = (255 * scale);
+                            llHead.setBackgroundColor(Color.parseColor("#ddffffff"));
+                            ivBack.setImageResource(R.mipmap.back_a);
+                            ivShare.setImageResource(R.mipmap.share_g);
+                        }
+                    }
+                });
+
+            }
+        });
+
+
     }
 
     @Override
@@ -93,6 +145,17 @@ public class SaleDetailActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onDragBottom(boolean rightToLeft) {
+        finish();
+    }
 
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch(keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                finish();
+                return true;
+        }
+
+        return super.onKeyUp(keyCode, event);
     }
 }

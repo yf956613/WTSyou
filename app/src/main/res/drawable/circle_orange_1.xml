@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 通用圆角布局  背景白色  边框灰色--> 
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="#ffffff" />
+    <stroke
+        android:color="@color/orange_line"
+        android:width="2px"/>
+</shape>

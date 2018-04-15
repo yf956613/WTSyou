@@ -4,11 +4,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/gray_background"
-    tools:context="com.qingye.wtsyou.fragment.activity.ActivityFragment">
+    tools:context="com.qingye.wtsyou.fragment.campaign.ActivityFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
         android:scrollbars="none">
 
         <LinearLayout
@@ -18,7 +19,9 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
                 <RelativeLayout
                     android:id="@+id/relative_loopImage"
@@ -175,6 +178,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_ad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_4"

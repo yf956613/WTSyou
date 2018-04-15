@@ -42,7 +42,7 @@
                     android:hint="搜索粉丝"
                     android:textSize="@dimen/text_size_11"
                     android:textColorHint="@color/gray_text2"
-                    android:textColor="@color/gray_text2"
+                    android:textColor="@color/black_text1"
                     android:textCursorDrawable="@drawable/color_cursor"
                     android:background="@null"/>
 

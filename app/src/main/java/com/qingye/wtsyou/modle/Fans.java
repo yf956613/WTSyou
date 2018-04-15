@@ -9,6 +9,6 @@ import zuo.biao.library.base.BaseModel;
 public class Fans extends BaseModel {
     @Override
     protected boolean isCorrect() {
-        return false;
+        return true;
     }
 }

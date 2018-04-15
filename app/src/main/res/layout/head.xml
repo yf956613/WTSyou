@@ -12,8 +12,9 @@
 
         <ImageView
             android:id="@+id/iv_left"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="@dimen/margin_4"
             android:layout_marginLeft="12dp"
             android:layout_centerVertical="true"/>
 
@@ -26,7 +27,7 @@
             android:gravity="center_vertical"
             android:text="想见你"
             android:textSize="@dimen/text_size_15"
-            android:textColor="@color/black_text"/>
+            android:textColor="@color/black_text1"/>
 
         <TextView
             android:id="@+id/tv_add_temp"
@@ -38,8 +39,8 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:text="功能"
-            android:textSize="@dimen/text_size_14"
-            android:textColor="#ffffff"
+            android:textSize="@dimen/text_size_13"
+            android:textColor="@color/black_text1"
             android:visibility="gone"/>
 
         <LinearLayout
@@ -66,6 +67,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="10dp"
+                android:padding="@dimen/margin_3"
                 android:layout_marginLeft="@dimen/margin_6"
                 android:layout_marginRight="12dp"
                 android:layout_gravity="center_vertical"
@@ -74,8 +76,9 @@
         </LinearLayout>
         <ImageView
             android:id="@+id/iv_right"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="@dimen/margin_4"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="12dp"
             android:layout_alignParentRight="true"

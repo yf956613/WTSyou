@@ -11,6 +11,7 @@ import com.qingye.wtsyou.activity.campaign.SaleDetailActivity;
 import com.qingye.wtsyou.adapter.home.StarsMainShowAdapter;
 import com.qingye.wtsyou.modle.Campaign;
 import com.qingye.wtsyou.view.home.StarsMainShowView;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class StarsMainShowFragment extends BaseHttpRecyclerFragment<Campaign,Sta
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //类相关初始化，必须使用<<<<<<<<<<<<<<<<
         super.onCreateView(inflater, container, savedInstanceState);
-        setContentView(R.layout.fragment_stars_main_show);
+        setContentView(R.layout.fragment_stars_main);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
         initCache(this);
@@ -49,6 +50,11 @@ public class StarsMainShowFragment extends BaseHttpRecyclerFragment<Campaign,Sta
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
+
+        //禁止滑动
+        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
+        rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
+        rvBaseRecycler.setLayoutManager(linearLayoutManager);
 
         //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
@@ -67,7 +73,7 @@ public class StarsMainShowFragment extends BaseHttpRecyclerFragment<Campaign,Sta
     @Override
     public void setList(final List<Campaign> list) {
         final List<Campaign> templist = new ArrayList<>();
-        for(int i = 1;i < 6;i ++) {
+        for(int i = 1;i < 11;i ++) {
             Campaign campaign = new Campaign();
             campaign.setId(i);
             templist.add(campaign);

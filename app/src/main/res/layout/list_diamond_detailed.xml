@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_7"
+        android:layout_marginBottom="@dimen/margin_7"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_toLeftOf="@+id/ll_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_8"
+            android:layout_marginRight="@dimen/margin_8"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_get_method"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="充值"
+                android:textColor="@color/black_text1"
+                android:textSize="@dimen/text_size_14"/>
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_3"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="2017/07/07 15:20"
+                android:textColor="@color/gray_text1"
+                android:textSize="@dimen/text_size_11"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="+  "
+                android:textSize="@dimen/text_size_13"
+                android:textColor="@color/orange_line"/>
+
+            <TextView
+                android:id="@+id/tv_reduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="-  "
+                android:textSize="@dimen/text_size_13"
+                android:textColor="@color/black_text1"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_value_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="200"
+                android:textSize="@dimen/text_size_13"
+                android:textColor="@color/orange_line"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View
+        style="@style/divider_horizontal_1px"
+        android:layout_marginLeft="@dimen/margin_10"/>
+</LinearLayout>

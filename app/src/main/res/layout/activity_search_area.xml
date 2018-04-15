@@ -46,7 +46,7 @@
         android:textSize="45sp"
         android:textColor="@color/white"
         android:gravity="center"
-        android:background="@drawable/corners_black"
+        android:background="@drawable/corners_clarity_black"
         android:textStyle="bold"
         android:layout_width="110dp"
         android:layout_height="110dp"/>

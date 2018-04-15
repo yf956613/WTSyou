@@ -9,10 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.conversation.ConversationHotAdapter;
+import com.qingye.wtsyou.adapter.conversation.ConversationHotAdapter1;
 import com.qingye.wtsyou.modle.Conversation;
-import com.qingye.wtsyou.modle.Stars;
-import com.qingye.wtsyou.view.conversation.ConversationHotView;
+import com.qingye.wtsyou.view.conversation.ConversationHotView1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ import zuo.biao.library.interfaces.CacheCallBack;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conversation,ConversationHotView,ConversationHotAdapter> implements CacheCallBack<Conversation> {
+public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conversation,ConversationHotView1,ConversationHotAdapter1> implements CacheCallBack<Conversation> {
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -44,7 +43,7 @@ public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conve
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //类相关初始化，必须使用<<<<<<<<<<<<<<<<
         super.onCreateView(inflater, container, savedInstanceState);
-        setContentView(R.layout.fragment_fans_main_conversation);
+        setContentView(R.layout.fragment_fans_main);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
         initCache(this);
@@ -82,11 +81,11 @@ public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conve
             templist.add(conversation);
         }
         //list.addAll(templist);
-        setList(new AdapterCallBack<ConversationHotAdapter>() {
+        setList(new AdapterCallBack<ConversationHotAdapter1>() {
 
             @Override
-            public ConversationHotAdapter createAdapter() {
-                return new ConversationHotAdapter(context);
+            public ConversationHotAdapter1 createAdapter() {
+                return new ConversationHotAdapter1(context);
             }
 
             @Override

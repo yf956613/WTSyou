@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_background2"
+    android:orientation="vertical"
+    tools:context="com.qingye.wtsyou.activity.my.CreateAddressActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="@color/white"></LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <include
+            layout="@layout/head"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_2"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_40"
+            android:src="@mipmap/phone_icon"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_40"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="您的手机号："
+                android:textSize="@dimen/text_size_14"
+                android:textColor="@color/black_text1"/>
+
+            <TextView
+                android:id="@+id/tv_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18659847929"
+                android:textSize="@dimen/text_size_14"
+                android:textColor="@color/black_text1"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_20"
+            android:paddingTop="@dimen/margin_10"
+            android:paddingBottom="@dimen/margin_10"
+            android:paddingLeft="@dimen/margin_40"
+            android:paddingRight="@dimen/margin_40"
+            android:text="更改手机号"
+            android:textSize="@dimen/text_size_13"
+            android:textColor="@color/black_text1"
+            android:background="@drawable/re_gray"/>
+
+    </LinearLayout>
+
+</LinearLayout>

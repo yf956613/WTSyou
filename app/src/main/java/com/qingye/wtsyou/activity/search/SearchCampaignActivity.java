@@ -3,16 +3,18 @@ package com.qingye.wtsyou.activity.search;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.fragment.activity.SearchCampaignShowFragment;
-import com.qingye.wtsyou.fragment.activity.SearchCampaignSupportFragment;
+import com.qingye.wtsyou.fragment.campaign.SearchCampaignShowFragment;
+import com.qingye.wtsyou.fragment.campaign.SearchCampaignSupportFragment;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
@@ -43,6 +45,10 @@ public class SearchCampaignActivity extends BaseActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_campaign,this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
@@ -96,6 +102,17 @@ public class SearchCampaignActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onDragBottom(boolean rightToLeft) {
+        finish();
+    }
 
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch(keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                finish();
+                return true;
+        }
+
+        return super.onKeyUp(keyCode, event);
     }
 }

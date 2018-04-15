@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_item"
+    android:layout_width="match_parent"
+    android:layout_height="212dp"
+    android:layout_centerHorizontal="true"
+    android:layout_margin="@dimen/margin_4"
+    android:background="@drawable/corners_white_shadow">
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/gouxuan"/>
+
+    <ImageView
+        android:id="@+id/iv_conversation_cover"
+        android:layout_width="match_parent"
+        android:layout_height="106dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/img_t" />
+
+    <TextView
+        android:id="@+id/tv_star_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/iv_conversation_cover"
+        android:layout_marginRight="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_6"
+        android:maxLength="4"
+        android:ellipsize="end"
+        android:background="@drawable/re_corners_orange"
+        android:gravity="center"
+        android:paddingTop="@dimen/margin_2"
+        android:paddingBottom="@dimen/margin_2"
+        android:paddingLeft="@dimen/margin_6"
+        android:paddingRight="@dimen/margin_6"
+        android:text="林宥嘉"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_9"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/ll_img"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_65"
+        android:background="@drawable/circle_white">
+
+        <ImageView
+            android:id="@+id/iv_personal"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/head_d"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_below="@+id/ll_img"
+        android:id="@+id/tv_creator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/margin_45"
+        android:layout_marginTop="@dimen/margin_4"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="又又又宥嘉"
+        android:textColor="@color/black_text1"
+        android:textSize="@dimen/text_size_9" />
+
+    <TextView
+        android:id="@+id/tv_conversation_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_creator"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/margin_45"
+        android:layout_marginTop="@dimen/margin_4"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="林宥嘉福州演唱会应援活动"
+        android:textColor="@color/black_text1"
+        android:textSize="@dimen/text_size_12" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_175">
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="在线人数  "
+            android:textColor="@color/gray_text3"
+            android:textSize="@dimen/text_size_10" />
+
+        <TextView
+            android:id="@+id/tv_online"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/textview"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="1789"
+            android:textColor="@color/gray_text3"
+            android:textSize="@dimen/text_size_10" />
+    </RelativeLayout>
+
+</RelativeLayout>

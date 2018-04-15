@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.qingye.wtsyou.fragment.activity.ActivityHotShowFragment">
+    tools:context="com.qingye.wtsyou.fragment.campaign.ActivityHotShowFragment">
 
     <include layout="@layout/base_http_recycler_fragment"/>
 

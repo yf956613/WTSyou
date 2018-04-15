@@ -1,6 +1,7 @@
 package com.qingye.wtsyou.fragment.home;
 
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -25,7 +26,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     private ImageView ivCharts,ivAddstars;
 
-    private ViewPager viewpager;
+    private ViewPager mViewpager;
     private CircleIndicator indicator;
 
     public HomeFragment() {
@@ -35,7 +36,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -76,12 +76,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         ivAddstars.setImageResource(R.mipmap.add);
 
         //滑动界面
-        viewpager = (ViewPager) view.findViewById(R.id.viewPager);
-        indicator = (CircleIndicator) view.findViewById(R.id.indicator);
-        viewpager.setAdapter(new HomePagerAdapter(context.getSupportFragmentManager()));
-        indicator.setViewPager(viewpager);
+        mViewpager = findViewById(R.id.viewPager);
+        indicator = findViewById(R.id.indicator);
+        mViewpager.setAdapter(new HomePagerAdapter(context.getSupportFragmentManager()));
+        indicator.setViewPager(mViewpager);
+        mViewpager.setOffscreenPageLimit(4);
         //从第一页开始滑
-        viewpager.setCurrentItem(0);
+        mViewpager.setCurrentItem(0);
     }
 
     @Override

@@ -35,10 +35,10 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/margin_2"
                 android:paddingBottom="@dimen/margin_2"
-                android:text="众筹中"
+                android:text="投票中"
                 android:textSize="@dimen/text_size_9"
                 android:textColor="@color/white"
-                android:background="@drawable/re_corners_blue"/>
+                android:background="@drawable/re_corners_red"/>
         </RelativeLayout>
 
         <RelativeLayout

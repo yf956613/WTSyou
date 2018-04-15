@@ -6,10 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.activity.campaign.SupportDetailActivity;
 import com.qingye.wtsyou.adapter.activity.ActivityNewSupportAdapter;
-import com.qingye.wtsyou.fragment.activity.ActivityOfficialFragment;
 import com.qingye.wtsyou.modle.Campaign;
 import com.qingye.wtsyou.view.activity.ActivityNewSupportView;
 
@@ -43,7 +44,7 @@ public class StarsMainSupportFragment extends BaseHttpRecyclerFragment<Campaign,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //类相关初始化，必须使用<<<<<<<<<<<<<<<<
         super.onCreateView(inflater, container, savedInstanceState);
-        setContentView(R.layout.fragment_stars_main_support);
+        setContentView(R.layout.fragment_stars_main);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
         initCache(this);
@@ -137,6 +138,12 @@ public class StarsMainSupportFragment extends BaseHttpRecyclerFragment<Campaign,
     public void initEvent() {//必须调用
         super.initEvent();
 
+    }
+
+    //点击item
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        toActivity(SupportDetailActivity.createIntent(context,id));
     }
 
 }

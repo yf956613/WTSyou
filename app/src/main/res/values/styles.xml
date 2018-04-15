@@ -31,6 +31,13 @@
 
     </style>
 
+    <style name="OnOrOff" parent="@android:style/Widget.CompoundButton.CheckBox">
+
+        <item name="android:button">@drawable/turn_on_or_off</item>
+        <item name="android:maxHeight">20.0dip</item>
+
+    </style>
+
     <style name="dialog1" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item><!--边框-->
         <item name="android:windowIsFloating">true</item><!--是否浮现在activity之上-->

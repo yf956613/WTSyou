@@ -3,8 +3,10 @@ package com.qingye.wtsyou.activity.search;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
@@ -59,6 +61,10 @@ public class SearchAreaActivity extends BaseHttpListActivity<City,SearchCityAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_area,this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
@@ -176,11 +182,6 @@ public class SearchAreaActivity extends BaseHttpListActivity<City,SearchCityAdap
         }
     }
 
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-
-    }
-
     //使用handler完成过一段时间做某事，在1秒之后让框框消失
     private Handler mHandler = new Handler();
 
@@ -269,5 +270,21 @@ public class SearchAreaActivity extends BaseHttpListActivity<City,SearchCityAdap
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    @Override
+    public void onDragBottom(boolean rightToLeft) {
+        finish();
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch(keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                finish();
+                return true;
+        }
+
+        return super.onKeyUp(keyCode, event);
     }
 }

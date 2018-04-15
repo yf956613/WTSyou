@@ -3,9 +3,11 @@ package com.qingye.wtsyou.activity.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +22,7 @@ import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.ui.BottomMenuView;
 
 public class PastChartsDetailedActivity extends BaseActivity implements View.OnClickListener, OnBottomDragListener
-        , BottomMenuView.OnBottomMenuItemClickListener, OnHttpResponseListener {
+         {
 
     private ImageView ivBack,ivRules;
     private TextView tvHead;
@@ -50,20 +52,19 @@ public class PastChartsDetailedActivity extends BaseActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_charts_detailed,this);
 
-        //获取intent中的数据
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+
+        /*//获取intent中的数据
         intent = getIntent();
-        Position = intent.getIntExtra(Constant.TAB_FRAGMENT_POSITION,Position);
+        Position = intent.getIntExtra(Constant.TAB_FRAGMENT_POSITION,Position);*/
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-
     }
 
     @Override
@@ -115,13 +116,19 @@ public class PastChartsDetailedActivity extends BaseActivity implements View.OnC
         }
     }
 
+ @Override
+ public void onDragBottom(boolean rightToLeft) {
+     finish();
+ }
+
     @Override
-    public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch(keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                finish();
+                return true;
+        }
 
-    }
-
-    @Override
-    public void onBottomMenuItemClick(int intentCode) {
-
+        return super.onKeyUp(keyCode, event);
     }
 }

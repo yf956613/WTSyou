@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/gray_background"
+    tools:context="com.qingye.wtsyou.activity.campaign.VoteDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="@color/white"></LinearLayout>
+    <LinearLayout
+        android:id="@+id/head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/head"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_4"
+        android:background="@color/white"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_16"
+                    android:text="活动名称"
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/black_text1"/>
+
+                <fj.edittextcount.lib.FJEditTextCount
+                    android:id="@+id/edt_vote_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_26"
+                    android:layout_marginRight="@dimen/margin_20"
+                    android:layout_marginTop="@dimen/margin_2"
+                    app:etMinHeight="20dp"
+                    app:etHint="活动名称，30字以内"
+                    app:etMaxLength="30"
+                    app:etPromptTextColor="@color/gray_text2"
+                    app:etPromptTextSize="@dimen/text_size_12"
+                    app:etTextColor="@color/black_text1"
+                    app:etTextSize="@dimen/text_size_12"
+                    app:etPromptPosition="promptDn"
+                    app:etType="percentage"
+                    app:etLineColor="#00ffffff"/>
+
+            </LinearLayout>
+
+            <View
+                style="@style/divider_horizontal_1px"
+                android:layout_marginTop="@dimen/margin_16"
+                android:layout_marginLeft="@dimen/margin_10"/>
+
+            <RelativeLayout
+                android:id="@+id/ll_associate_star"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/margin_35">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_gravity="center_vertical"
+                        android:text="关联明星"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/black_text1"/>
+
+                    <FrameLayout
+                        android:id="@+id/list_associate_stars"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_28"
+                        android:layout_marginRight="@dimen/margin_6"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="@dimen/margin_15"
+                    android:layout_height="@dimen/margin_15"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/back_b"/>
+            </RelativeLayout>
+
+            <View
+                style="@style/divider_horizontal_1px"
+                android:layout_marginLeft="@dimen/margin_10"/>
+
+            <RelativeLayout
+                android:id="@+id/ll_associate_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_16"
+                android:layout_marginLeft="@dimen/margin_10">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="活动城市"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/black_text1"/>
+
+                    <TextView
+                        android:id="@+id/tv_associate_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_38"
+                        android:text="福建省 厦门市"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/black_text1"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="@dimen/margin_15"
+                    android:layout_height="@dimen/margin_15"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/back_b"/>
+            </RelativeLayout>
+
+            <View
+                style="@style/divider_horizontal_1px"
+                android:layout_marginTop="@dimen/margin_16"
+                android:layout_marginLeft="@dimen/margin_10"/>
+
+            <RelativeLayout
+                android:id="@+id/ll_associate_conversation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_12"
+                android:layout_marginLeft="@dimen/margin_10">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/margin_35"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_gravity="center_vertical"
+                        android:text="关联聊天室"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/black_text1"/>
+
+                    <FrameLayout
+                        android:id="@+id/list_associate_conversation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_28"
+                        android:layout_marginRight="@dimen/margin_6"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="@dimen/margin_15"
+                    android:layout_height="@dimen/margin_15"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/back_b"/>
+            </RelativeLayout>
+
+            <View
+                style="@style/divider_horizontal_1px"
+                android:layout_marginTop="@dimen/margin_12"
+                android:layout_marginLeft="@dimen/margin_10"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_16"
+                    android:text="活动描述"
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/black_text1"/>
+
+                <fj.edittextcount.lib.FJEditTextCount
+                    android:id="@+id/edt_vote_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_26"
+                    android:layout_marginRight="@dimen/margin_20"
+                    android:layout_marginTop="@dimen/margin_2"
+                    app:etMinHeight="100dp"
+                    app:etHint="活动描述，60字以内"
+                    app:etMaxLength="60"
+                    app:etPromptTextColor="@color/gray_text2"
+                    app:etPromptTextSize="@dimen/text_size_12"
+                    app:etTextColor="@color/black_text1"
+                    app:etTextSize="@dimen/text_size_12"
+                    app:etPromptPosition="promptDn"
+                    app:etType="percentage"
+                    app:etLineColor="#00ffffff"/>
+            </LinearLayout>
+
+            <View
+                style="@style/divider_horizontal_1px"
+                android:layout_marginTop="@dimen/margin_8"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"/>
+
+            <Button
+                android:id="@+id/btn_create"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:layout_marginLeft="@dimen/margin_6"
+                android:layout_marginRight="@dimen/margin_6"
+                android:background="@drawable/corners_orange_shade_button"
+                android:textAllCaps="false"
+                android:text="发起投票"
+                android:textSize="@dimen/text_size_14"
+                android:textColor="@color/white"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin_15"
+                    android:background="@drawable/corners_gray_stroke_solid">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="一、申请投票需要什么条件"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/black_text1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1.等级达到6级以上"
+                        android:layout_marginTop="@dimen/margin_6"
+                        android:textSize="@dimen/text_size_10"
+                        android:textColor="@color/gray_text1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2.填写对应投票资料"
+                        android:layout_marginTop="@dimen/margin_4"
+                        android:textSize="@dimen/text_size_10"
+                        android:textColor="@color/gray_text1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="二、申请投票需要审核多久"
+                        android:layout_marginTop="@dimen/margin_6"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/black_text1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="在三个工作日内给予答复"
+                        android:layout_marginTop="@dimen/margin_6"
+                        android:textSize="@dimen/text_size_10"
+                        android:textColor="@color/gray_text1"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="55dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/margin_2"
+                    android:layout_marginBottom="@dimen/margin_2"
+                    android:gravity="center"
+                    android:text="投票须知"
+                    android:textSize="@dimen/text_size_10"
+                    android:textColor="@color/white"
+                    android:background="@drawable/re_corners_pink"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

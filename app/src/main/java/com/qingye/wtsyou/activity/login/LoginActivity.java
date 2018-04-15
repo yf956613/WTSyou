@@ -3,20 +3,26 @@ package com.qingye.wtsyou.activity.login;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.activity.MainTabActivity;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
+import zuo.biao.library.interfaces.OnHttpResponseListener;
 
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.utils.HttpRequest;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
+    private EditText edtLoginId,edtPassword;
     private Button btnLogin;
     private TextView tvModifyPwd,tvRegister;
 
@@ -43,6 +49,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login,this);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
@@ -52,6 +62,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void initView() {
+        edtLoginId = findViewById(R.id.edt_phone);
+        edtPassword = findViewById(R.id.edt_password);
         btnLogin = findViewById(R.id.btn_login);
         tvModifyPwd = findViewById(R.id.tv_modify_pwd);
         tvRegister =  findViewById(R.id.tv_register);
@@ -73,7 +85,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_login:
-                toActivity(MainTabActivity.createIntent(context));
+                login();
                 break;
             case R.id.tv_modify_pwd:
                 toActivity(ModifyPasswordActivity.createIntent(context));
@@ -92,6 +104,29 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onDragBottom(boolean rightToLeft) {
+        finish();
+    }
 
+    public void login() {
+        //仅测试用
+        HttpRequest.login("mobile", edtLoginId.getText().toString(),edtPassword.getText().toString(),0, new OnHttpResponseListener() {
+
+            @Override
+            public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+                showShortToast(resultJson);
+                toActivity(MainTabActivity.createIntent(context));
+            }
+        });
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch(keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                finish();
+                return true;
+        }
+
+        return super.onKeyUp(keyCode, event);
     }
 }

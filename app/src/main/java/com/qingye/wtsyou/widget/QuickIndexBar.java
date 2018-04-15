@@ -47,7 +47,6 @@ public class QuickIndexBar extends View {
         paint.setColor(getResources().getColor(R.color.orange_text2));
         paint.setTextSize(25);
         paint.setTextAlign(Paint.Align.CENTER);
-
     }
 
     /**

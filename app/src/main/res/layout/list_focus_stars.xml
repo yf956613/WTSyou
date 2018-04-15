@@ -8,16 +8,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_7"
-        android:layout_marginBottom="@dimen/margin_7"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:layout_marginLeft="@dimen/margin_10"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:id="@+id/rl_center"
+            android:layout_toLeftOf="@+id/ll_right"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/margin_70"
+            android:layout_marginRight="@dimen/margin_8"
             android:layout_centerVertical="true">
 
 
@@ -74,20 +75,42 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/ll_right"
+            android:id="@+id/ll_foucus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin_10"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true">
 
             <TextView
-                android:id="@+id/tv_operate"
+                android:id="@+id/tv_focus"
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:paddingTop="@dimen/margin_4"
                 android:paddingBottom="@dimen/margin_4"
-                android:text="打 榜"
+                android:text="关 注"
+                android:textSize="@dimen/text_size_11"
+                android:textColor="@color/orange_line"
+                android:background="@drawable/corners_orange_1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_un_focus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:paddingTop="@dimen/margin_4"
+                android:paddingBottom="@dimen/margin_4"
+                android:text="取 消"
                 android:textSize="@dimen/text_size_11"
                 android:textColor="@color/orange_line"
                 android:background="@drawable/corners_orange_1"/>

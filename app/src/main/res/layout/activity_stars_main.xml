@@ -5,18 +5,247 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@color/gray_background2"
     tools:context="com.qingye.wtsyou.activity.home.StarsMainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:descendantFocusability="blocksDescendants"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_top"
+                android:layout_width="match_parent"
+                android:layout_height="230dp">
+
+                <ImageView
+                    android:id="@+id/iv_stars_main"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/margin_230"
+                    android:scaleType="fitXY"
+                    android:background="@mipmap/stars_background"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="69dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/ll_img"
+                            android:layout_width="55dp"
+                            android:layout_height="55dp"
+                            android:layout_centerHorizontal="true"
+                            android:background="@drawable/circle_white_gray_shadow">
+
+                            <com.qingye.wtsyou.widget.CircleImageView
+                                android:id="@+id/stars_image"
+                                android:layout_width="53dp"
+                                android:layout_height="53dp"
+                                android:src="@mipmap/head_a"/>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/stars_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_5"
+                            android:layout_gravity="center_horizontal"
+                            android:maxLength="15"
+                            android:singleLine="true"
+                            android:text="鹿晗"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold"
+                            android:layout_below="@+id/personal_image"
+                            android:layout_centerHorizontal="true"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_50"
+                        android:layout_marginRight="@dimen/margin_50"
+                        android:layout_marginTop="@dimen/margin_4"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_No"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:text="10"
+                                android:textSize="@dimen/text_size_14"
+                                android:textColor="@color/white"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/margin_3"
+                                android:text="排行"
+                                android:textSize="@dimen/text_size_13"
+                                android:textColor="@color/white"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_fans"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_fans"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:text="67462"
+                                android:textSize="@dimen/text_size_14"
+                                android:textColor="@color/white"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/margin_3"
+                                android:text="粉丝"
+                                android:textSize="@dimen/text_size_13"
+                                android:textColor="@color/white"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_conversation"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_conversation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:text="462"
+                                android:textSize="@dimen/text_size_14"
+                                android:textColor="@color/white"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/margin_3"
+                                android:text="聊天室"
+                                android:textSize="@dimen/text_size_13"
+                                android:textColor="@color/white"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_90"
+                        android:layout_marginRight="@dimen/margin_90"
+                        android:layout_marginTop="@dimen/margin_6">
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tv_is_focus"
+                                android:layout_width="48dp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:gravity="center_horizontal"
+                                android:paddingTop="@dimen/margin_4"
+                                android:paddingBottom="@dimen/margin_4"
+                                android:text="已关注"
+                                android:textSize="@dimen/text_size_11"
+                                android:textColor="@color/white"
+                                android:background="@drawable/corners_white_stroke"/>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tv_hit"
+                                android:layout_width="48dp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal"
+                                android:paddingTop="@dimen/margin_4"
+                                android:paddingBottom="@dimen/margin_4"
+                                android:text="打 榜"
+                                android:textSize="@dimen/text_size_11"
+                                android:textColor="@color/white"
+                                android:background="@drawable/corners_white_stroke"/>
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_below="@+id/rl_top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    layout="@layout/activity_tab_sliding"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_205">
+        android:layout_height="wrap_content">
 
-        <include layout="@layout/base_tab_activity"/>
+        <include
+            layout="@layout/stars_head"/>
 
     </LinearLayout>
 
-    <include
-        layout="@layout/stars_head"/>
 </RelativeLayout>
