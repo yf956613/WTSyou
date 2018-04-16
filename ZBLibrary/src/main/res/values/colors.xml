@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="activity_bg">#f7f8f8</color>
+    <color name="activity_bg">#00f7f8f8</color>
     <color name="topbar_bg">#0033cc99</color>
     <color name="topbar_bg_white">#ffffffff</color>
     <color name="topbar_bg_black">#272e2a</color>
@@ -64,13 +64,15 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000</color>
     <color name="light_black">#333333</color>
-    <color name="clarity_black">#cc212121</color>
+    <color name="clarity_black">#33212121</color>
+    <color name="clarity_black1">#bb212121</color>
     <color name="clarity_gray">#E1F3F3F3</color>
     <color name="gray_1">#F3F3F3</color>
     <color name="gray_2">#FFFFFE</color>
     <color name="gray_5">#dddddd</color>
     <color name="gray_background">#F5F5F5</color>
     <color name="gray_background1">#FAFAFA</color>
+    <color name="gray_background2">#F0F0F0</color>
     <color name="orange_background">#F9A986</color>
     <color name="blue_1">#F2FAFF</color>
     <color name="blue_line">#71C9FF</color>
@@ -80,6 +82,8 @@
     <color name="orange_4">#FFA389</color>
     <color name="orange_5">#33FDDAA4</color>
     <color name="orange_line">#FF7554</color>
+    <color name="gray_line">#979797</color>
+    <color name="gray_line1">#E5E5E5</color>
     <color name="pink_1">#FFE8EC</color>
     <color name="pink_line">#FF728A</color>
     <color name="black_text">#454545</color>
@@ -91,14 +95,18 @@
     <color name="gray_text3">#909090</color>
     <color name="gray_text4">#929292</color>
     <color name="gray_text5">#C2C2C2</color>
+    <color name="gray_text6">#9A9A9A</color>
+    <color name="gray_text7">#B0B0B0</color>
+    <color name="gray_text8">#9E9E9E</color>
+    <color name="gray_text9">#B5B5B5</color>
     <color name="orange_text">#FFB148</color>
     <color name="orange_text1">#FF7654</color>
     <color name="orange_text2">#FE8360</color>
     <color name="orange_text3">#FB8063</color>
     <color name="pink_text">#FF728A</color>
+    <color name="red_text1">#ff3737</color>
     <color name="light_gray">#33DADADA</color>
 
-    <color name="claity_balck">#272727</color>
     <color name="background_tab_pressed">#0033B5E5</color>
     <color name="slidingtab_indicatorcolor">#85B850</color>
     <color name="cursor_color">#0fd7d0</color>

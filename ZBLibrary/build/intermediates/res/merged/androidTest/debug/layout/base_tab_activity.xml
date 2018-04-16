@@ -32,14 +32,15 @@
                     android:text="标题"
                     android:visibility="gone"/>
 
-                <LinearLayout
+                <ScrollView
                     android:id="@id/llBaseTabTabContainer"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/topbar_height"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
-                    android:background="@color/white" >
-                </LinearLayout>
+                    android:background="@color/white"
+                    android:scrollbars="horizontal">
+                </ScrollView>
             </LinearLayout>
 
             <LinearLayout

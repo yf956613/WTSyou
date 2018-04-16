@@ -107,7 +107,7 @@ public abstract class BaseAdapter<T, BV extends BaseView<T>> extends RecyclerVie
     /**
      * 传进来的数据列表
      */
-    protected List<T> list;
+    public List<T> list;
     public List<T> getList() {
         return list;
     }

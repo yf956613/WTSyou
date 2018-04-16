@@ -92,7 +92,7 @@
     <color name="abc_search_url_text_selected">@android:color/black</color>
     <color name="accent_material_dark">@color/material_deep_teal_200</color>
     <color name="accent_material_light">@color/material_deep_teal_500</color>
-    <color name="activity_bg">#f7f8f8</color>
+    <color name="activity_bg">#00f7f8f8</color>
     <color name="alpha_1">#1000</color>
     <color name="alpha_3">#eeeeee</color>
     <color name="alpha_6">#6000</color>
@@ -129,8 +129,8 @@
     <color name="button_material_light">#ffd6d7d7</color>
     <color name="button_selected">#ff419de4</color>
     <color name="button_unselected">#ff54acea</color>
-    <color name="claity_balck">#272727</color>
-    <color name="clarity_black">#cc212121</color>
+    <color name="clarity_black">#33212121</color>
+    <color name="clarity_black1">#bb212121</color>
     <color name="clarity_gray">#E1F3F3F3</color>
     <color name="colorAccent">#00FFFFFF</color>
     <color name="colorPrimary">#FFFFFF</color>
@@ -162,9 +162,12 @@
     <color name="gray_5">#dddddd</color>
     <color name="gray_background">#F5F5F5</color>
     <color name="gray_background1">#FAFAFA</color>
+    <color name="gray_background2">#F0F0F0</color>
     <color name="gray_bold">#303133</color>
     <color name="gray_deep">#999999</color>
     <color name="gray_interest">#d2d2d2</color>
+    <color name="gray_line">#979797</color>
+    <color name="gray_line1">#E5E5E5</color>
     <color name="gray_slight">#dcdcdc</color>
     <color name="gray_text">#DADADA</color>
     <color name="gray_text1">#BFBFBF</color>
@@ -172,6 +175,10 @@
     <color name="gray_text3">#909090</color>
     <color name="gray_text4">#929292</color>
     <color name="gray_text5">#C2C2C2</color>
+    <color name="gray_text6">#9A9A9A</color>
+    <color name="gray_text7">#B0B0B0</color>
+    <color name="gray_text8">#9E9E9E</color>
+    <color name="gray_text9">#B5B5B5</color>
     <color name="gray_unslected">#999999</color>
     <color name="green">#33cc66</color>
     <color name="green_btn">#33b422</color>
@@ -227,6 +234,7 @@
     <color name="red_interest">#ee3b3b</color>
     <color name="red_line">#ff3d01</color>
     <color name="red_text">#ff3d01</color>
+    <color name="red_text1">#ff3737</color>
     <color name="ripple_material_dark">#33ffffff</color>
     <color name="ripple_material_light">#1f000000</color>
     <color name="secondary_text_default_material_dark">#b3ffffff</color>

@@ -229,15 +229,15 @@ public final class SettingUtil {
 	/**
 	 * TODO 改为你的正式服务器地址
 	 */
-	public static final String URL_SERVER_ADDRESS_NORMAL_HTTP = "http://www.baidu.com/";//正式服务器
+	public static final String URL_SERVER_ADDRESS_NORMAL_HTTP = "http://apprest.missyou.iqingyu.com.cn/missyou-apprest-server/rest/";//正式服务器
 	/**
 	 * TODO 改为你的正式服务器地址
 	 */
-	public static final String URL_SERVER_ADDRESS_NORMAL_HTTPS = "https://www.baidu.com/";//正式服务器
+	public static final String URL_SERVER_ADDRESS_NORMAL_HTTPS = "http://apprest.missyou.iqingyu.com.cn/missyou-apprest-server/rest/";//正式服务器
 	/**
 	 * TODO 改为你的测试服务器地址,如果有的话
 	 */
-	public static final String URL_SERVER_ADDRESS_TEST = "https://github.com/TommyLemon/Android-ZBLibrary";//测试服务器
+	public static final String URL_SERVER_ADDRESS_TEST = "http://apprest.missyou.iqingyu.com.cn/missyou-apprest-server/rest/";//测试服务器
 
 	/**获取当前服务器地址
 	 * isHttps = false
@@ -266,15 +266,16 @@ public final class SettingUtil {
 	 * @return
 	 */
 	public static String getServerAddress(boolean isTest, boolean isHttps) {
-		SharedPreferences sdf = context.getSharedPreferences(APP_SETTING, Context.MODE_PRIVATE);
+		/*SharedPreferences sdf = context.getSharedPreferences(APP_SETTING, Context.MODE_PRIVATE);
 		if (sdf == null) {
 			return null;
-		}
-		if (isTest) {
+		}*/
+		/*if (isTest) {
 			return sdf.getString(KEY_SERVER_ADDRESS_TEST, URL_SERVER_ADDRESS_TEST);
-		}
-		return sdf.getString(KEY_SERVER_ADDRESS_NORMAL
-				, isHttps ? URL_SERVER_ADDRESS_NORMAL_HTTPS : URL_SERVER_ADDRESS_NORMAL_HTTP);
+		}*/
+		/*return sdf.getString(KEY_SERVER_ADDRESS_NORMAL
+				, isHttps ? URL_SERVER_ADDRESS_NORMAL_HTTPS : URL_SERVER_ADDRESS_NORMAL_HTTP);*/
+		return isHttps ? URL_SERVER_ADDRESS_NORMAL_HTTPS : URL_SERVER_ADDRESS_NORMAL_HTTP;
 	}
 
 

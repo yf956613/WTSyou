@@ -14,6 +14,8 @@
        />
 
     <android.support.v7.widget.RecyclerView
+        android:overScrollMode="never"
+        android:scrollbars="none"
         android:id="@id/rvBaseRecycler"
         style="@style/lv_no_divider"
         />

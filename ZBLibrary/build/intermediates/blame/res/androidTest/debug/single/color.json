@@ -40,6 +40,10 @@
         "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.4.0.aar/371c630f2a87cbf600828008e5aca95f/res/color/abc_tint_btn_checkable.xml"
     },
     {
+        "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/color/color_radio_button.xml",
+        "source": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/bundles/debug/res/color/color_radio_button.xml"
+    },
+    {
         "merged": "/Users/pm89/Library/Android/AndroidStudioProjects/WTSyou/ZBLibrary/build/intermediates/res/merged/androidTest/debug/color/design_error.xml",
         "source": "/Users/pm89/.gradle/caches/transforms-1/files-1.1/design-25.4.0.aar/fdf696693265507a71191cd15e71c16d/res/color/design_error.xml"
     },
