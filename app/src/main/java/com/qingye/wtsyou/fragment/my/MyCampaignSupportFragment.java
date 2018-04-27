@@ -6,12 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.activity.ActivityNewSupportAdapter;
+import com.qingye.wtsyou.activity.campaign.SupportDetailActivity;
+import com.qingye.wtsyou.adapter.campaign.ActivityNewSupportAdapter;
 import com.qingye.wtsyou.fragment.campaign.ActivityOfficialFragment;
 import com.qingye.wtsyou.modle.Campaign;
-import com.qingye.wtsyou.view.activity.ActivityNewSupportView;
+import com.qingye.wtsyou.view.campaign.ActivityNewSupportView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,4 +141,9 @@ public class MyCampaignSupportFragment extends BaseHttpRecyclerFragment<Campaign
 
     }
 
+    //点击item
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        toActivity(SupportDetailActivity.createIntent(context,id));
+    }
 }

@@ -18,7 +18,7 @@ import zuo.biao.library.base.BaseView;
 public class FansMainIdolView extends BaseView<Stars> implements View.OnClickListener {
 
     public FansMainIdolView(Activity context, ViewGroup parent) {
-        super(context, R.layout.list_stars_head, parent);
+        super(context, R.layout.list_head, parent);
     }
 
     @SuppressLint("InflateParams")

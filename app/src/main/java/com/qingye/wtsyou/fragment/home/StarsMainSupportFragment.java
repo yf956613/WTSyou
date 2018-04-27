@@ -10,9 +10,10 @@ import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.campaign.SupportDetailActivity;
-import com.qingye.wtsyou.adapter.activity.ActivityNewSupportAdapter;
+import com.qingye.wtsyou.adapter.campaign.ActivityNewSupportAdapter;
 import com.qingye.wtsyou.modle.Campaign;
-import com.qingye.wtsyou.view.activity.ActivityNewSupportView;
+import com.qingye.wtsyou.view.campaign.ActivityNewSupportView;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,12 @@ public class StarsMainSupportFragment extends BaseHttpRecyclerFragment<Campaign,
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
+
+        //禁止滑动
+        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
+        //linearLayoutManager.setScrollEnabled(false);
+        rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
+        rvBaseRecycler.setLayoutManager(linearLayoutManager);
 
         //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新

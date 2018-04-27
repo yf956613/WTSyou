@@ -17,6 +17,7 @@ import com.qingye.wtsyou.activity.home.FansMainActivity;
 import com.qingye.wtsyou.adapter.search.SearchStarsAdapter;
 import com.qingye.wtsyou.modle.Stars;
 import com.qingye.wtsyou.view.search.SearchStarsView;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,15 +55,17 @@ public class SearchStarsActivity extends BaseHttpRecyclerActivity<Stars,SearchSt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_stars,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
+
+        //禁止滑动
+        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
+        linearLayoutManager.setScrollEnabled(false);
+        rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
+        rvBaseRecycler.setLayoutManager(linearLayoutManager);
 
         //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
@@ -83,7 +86,7 @@ public class SearchStarsActivity extends BaseHttpRecyclerActivity<Stars,SearchSt
     @Override
     public void setList(final List<Stars> list) {
         final List<Stars> templist = new ArrayList<>();
-        for(int i = 1;i < 5;i ++) {
+        for(int i = 1;i < 15;i ++) {
             Stars stars = new Stars();
             stars.setId(i);
             templist.add(stars);

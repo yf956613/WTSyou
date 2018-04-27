@@ -18,6 +18,7 @@ import com.qingye.wtsyou.activity.my.AddressActivity;
 import com.qingye.wtsyou.activity.my.CampaignActivity;
 import com.qingye.wtsyou.activity.my.CardActivity;
 import com.qingye.wtsyou.activity.my.CoinActivity;
+import com.qingye.wtsyou.activity.my.DataActivity;
 import com.qingye.wtsyou.activity.my.DiamondActivity;
 import com.qingye.wtsyou.activity.my.FriendsActivity;
 import com.qingye.wtsyou.activity.my.HeartActivity;
@@ -39,6 +40,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     private ImageView ivLeft;
     private TextView tvRight;
+
+    private RelativeLayout rlPersonalMessage;
 
     private LinearLayout llIdol;
     private LinearLayout llFriends;
@@ -87,6 +90,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         ivLeft = findViewById(R.id.iv_left);
         tvRight = findViewById(R.id.tv_right);
 
+        rlPersonalMessage = findViewById(R.id.rlPersonalMessage);
+
         llIdol = findViewById(R.id.llIdol);
         llFriends = findViewById(R.id.llFriends);
         llConversation = findViewById(R.id.llConversation);
@@ -111,6 +116,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         ivLeft.setOnClickListener(this);
         tvRight.setOnClickListener(this);
 
+        rlPersonalMessage.setOnClickListener(this);
+
         llIdol.setOnClickListener(this);
         llFriends.setOnClickListener(this);
         llConversation.setOnClickListener(this);
@@ -128,6 +135,9 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.rlPersonalMessage:
+                toActivity(DataActivity.createIntent(context));
+                break;
             case R.id.iv_left:
                 toActivity(MessageActivity.createIntent(context));
                 break;

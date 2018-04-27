@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.activity.StarsCampaignShowAdapter;
+import com.qingye.wtsyou.activity.campaign.SaleDetailActivity;
+import com.qingye.wtsyou.adapter.campaign.StarsCampaignShowAdapter;
 import com.qingye.wtsyou.modle.Campaign;
-import com.qingye.wtsyou.view.activity.StarsCampaignShowView;
+import com.qingye.wtsyou.view.campaign.StarsCampaignShowView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,6 +132,11 @@ public class MyCampaignShowFragment extends BaseHttpRecyclerFragment<Campaign,St
     @Override
     public void initEvent() {//必须调用
         super.initEvent();
+    }
 
+    //点击item
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        toActivity(SaleDetailActivity.createIntent(context,id));
     }
 }

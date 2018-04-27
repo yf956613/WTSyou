@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity;
-import com.qingye.wtsyou.adapter.activity.ActivityHotShowAdapter;
+import com.qingye.wtsyou.adapter.campaign.ActivityHotShowAdapter;
 import com.qingye.wtsyou.modle.Campaign;
-import com.qingye.wtsyou.view.activity.ActivityHotShowView;
+import com.qingye.wtsyou.view.campaign.ActivityHotShowView;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;

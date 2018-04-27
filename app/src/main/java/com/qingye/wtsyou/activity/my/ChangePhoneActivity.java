@@ -45,10 +45,6 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_phone,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();

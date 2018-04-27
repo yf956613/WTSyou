@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_16"
                     android:text="活动名称"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_13"
                     android:textColor="@color/black_text1"/>
 
                 <fj.edittextcount.lib.FJEditTextCount
@@ -60,9 +60,9 @@
                     app:etHint="活动名称，30字以内"
                     app:etMaxLength="30"
                     app:etPromptTextColor="@color/gray_text2"
-                    app:etPromptTextSize="@dimen/text_size_12"
+                    app:etPromptTextSize="@dimen/text_size_13"
                     app:etTextColor="@color/black_text1"
-                    app:etTextSize="@dimen/text_size_12"
+                    app:etTextSize="@dimen/text_size_13"
                     app:etPromptPosition="promptDn"
                     app:etType="percentage"
                     app:etLineColor="#00ffffff"/>
@@ -91,7 +91,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_gravity="center_vertical"
                         android:text="关联明星"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_13"
                         android:textColor="@color/black_text1"/>
 
                     <FrameLayout
@@ -133,7 +133,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:text="活动城市"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_13"
                         android:textColor="@color/black_text1"/>
 
                     <TextView
@@ -142,7 +142,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_38"
                         android:text="福建省 厦门市"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_13"
                         android:textColor="@color/black_text1"/>
                 </LinearLayout>
 
@@ -179,7 +179,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_gravity="center_vertical"
                         android:text="关联聊天室"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_13"
                         android:textColor="@color/black_text1"/>
 
                     <FrameLayout
@@ -216,7 +216,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_16"
                     android:text="活动描述"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_13"
                     android:textColor="@color/black_text1"/>
 
                 <fj.edittextcount.lib.FJEditTextCount
@@ -230,9 +230,9 @@
                     app:etHint="活动描述，60字以内"
                     app:etMaxLength="60"
                     app:etPromptTextColor="@color/gray_text2"
-                    app:etPromptTextSize="@dimen/text_size_12"
+                    app:etPromptTextSize="@dimen/text_size_13"
                     app:etTextColor="@color/black_text1"
-                    app:etTextSize="@dimen/text_size_12"
+                    app:etTextSize="@dimen/text_size_13"
                     app:etPromptPosition="promptDn"
                     app:etType="percentage"
                     app:etLineColor="#00ffffff"/>
@@ -276,7 +276,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="一、申请投票需要什么条件"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_13"
                         android:textColor="@color/black_text1"/>
 
                     <TextView
@@ -284,7 +284,7 @@
                         android:layout_height="wrap_content"
                         android:text="1.等级达到6级以上"
                         android:layout_marginTop="@dimen/margin_6"
-                        android:textSize="@dimen/text_size_10"
+                        android:textSize="@dimen/text_size_11"
                         android:textColor="@color/gray_text1"/>
 
                     <TextView
@@ -292,7 +292,7 @@
                         android:layout_height="wrap_content"
                         android:text="2.填写对应投票资料"
                         android:layout_marginTop="@dimen/margin_4"
-                        android:textSize="@dimen/text_size_10"
+                        android:textSize="@dimen/text_size_11"
                         android:textColor="@color/gray_text1"/>
 
                     <TextView
@@ -300,7 +300,7 @@
                         android:layout_height="wrap_content"
                         android:text="二、申请投票需要审核多久"
                         android:layout_marginTop="@dimen/margin_6"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_13"
                         android:textColor="@color/black_text1"/>
 
                     <TextView
@@ -308,7 +308,7 @@
                         android:layout_height="wrap_content"
                         android:text="在三个工作日内给予答复"
                         android:layout_marginTop="@dimen/margin_6"
-                        android:textSize="@dimen/text_size_10"
+                        android:textSize="@dimen/text_size_11"
                         android:textColor="@color/gray_text1"/>
 
                 </LinearLayout>
@@ -320,7 +320,7 @@
                     android:layout_marginBottom="@dimen/margin_2"
                     android:gravity="center"
                     android:text="投票须知"
-                    android:textSize="@dimen/text_size_10"
+                    android:textSize="@dimen/text_size_11"
                     android:textColor="@color/white"
                     android:background="@drawable/re_corners_pink"/>
 

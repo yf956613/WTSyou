@@ -329,7 +329,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="签到规则"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_13"
                     android:textColor="@color/black_text1"
                     android:layout_gravity="center"/>
             </LinearLayout>

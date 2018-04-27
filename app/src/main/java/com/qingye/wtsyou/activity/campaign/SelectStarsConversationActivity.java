@@ -3,7 +3,6 @@ package com.qingye.wtsyou.activity.campaign;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.KeyEvent;
@@ -13,9 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.activity.SelectConversationAdapter;
+import com.qingye.wtsyou.adapter.campaign.SelectConversationAdapter;
 import com.qingye.wtsyou.modle.Conversation;
-import com.qingye.wtsyou.view.activity.SelectConversationView;
+import com.qingye.wtsyou.view.campaign.SelectConversationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +48,6 @@ public class SelectStarsConversationActivity extends BaseHttpRecyclerActivity<Co
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend_stars_conversation,this);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();

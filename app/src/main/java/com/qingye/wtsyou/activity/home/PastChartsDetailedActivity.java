@@ -52,10 +52,6 @@ public class PastChartsDetailedActivity extends BaseActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_charts_detailed,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         /*//获取intent中的数据
         intent = getIntent();
         Position = intent.getIntExtra(Constant.TAB_FRAGMENT_POSITION,Position);*/

@@ -62,10 +62,6 @@ public class SearchAreaActivity extends BaseHttpListActivity<City,SearchCityAdap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_area,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
@@ -229,34 +225,36 @@ public class SearchAreaActivity extends BaseHttpListActivity<City,SearchCityAdap
 
     private void fillList() {
         // 虚拟数据
-        cities.add(new City("伊尼戈-洛佩斯",1,0));
-        cities.add(new City("阿梅奥比",2,0));
-        cities.add(new City("孙兴民",3,0));
-        cities.add(new City("伊布拉希莫维奇",4,0));
-        cities.add(new City("伊班",5,0));
-        cities.add(new City("梅西",6,0));
-        cities.add(new City("姆希塔扬",7,0));
-        cities.add(new City("伊沃",8,0));
-        cities.add(new City("阿圭罗",9,0));
-        cities.add(new City("奥古斯托",10,0));
-        cities.add(new City("鲁尼",11,0));
-        cities.add(new City("科斯切尔尼",12,0));
-        cities.add(new City("张伯伦",13,0));
-        cities.add(new City("苏亚雷斯",14,0));
-        cities.add(new City("亚亚-图雷",15,0));
-        cities.add(new City("周杰伦",16,0));
-        cities.add(new City("陈坤",17,0));
-        cities.add(new City("王寿挺",18,0));
-        cities.add(new City("李刚",19,0));
-        cities.add(new City("哈维",20,0));
-        cities.add(new City("林俊杰",21,0));
-        cities.add(new City("阿里",22,0));
-        cities.add(new City("图兰",23,0));
-        cities.add(new City("赵四",24,0));
-        cities.add(new City("尼古拉斯-赵四",25,0));
-        cities.add(new City("赵子龙",26,0));
-        cities.add(new City("格列兹曼",27,0));
-        cities.add(new City("诺伊尔",28,0));
+        cities.add(new City("成都",1,0));
+        cities.add(new City("重庆",2,0));
+        cities.add(new City("厦门",3,0));
+        cities.add(new City("上海",4,0));
+        cities.add(new City("大连",5,0));
+        cities.add(new City("福州",6,0));
+        cities.add(new City("北京",7,0));
+        cities.add(new City("深圳",8,0));
+        cities.add(new City("广州",9,0));
+        cities.add(new City("天津",10,0));
+        cities.add(new City("哈尔滨",11,0));
+        cities.add(new City("洛阳",12,0));
+        cities.add(new City("郑州",13,0));
+        cities.add(new City("南京",14,0));
+        cities.add(new City("杭州",15,0));
+        cities.add(new City("苏州",16,0));
+        cities.add(new City("武汉",17,0));
+        cities.add(new City("长沙",18,0));
+        cities.add(new City("昆明",19,0));
+        cities.add(new City("乌鲁木齐",20,0));
+        cities.add(new City("兰州",21,0));
+        cities.add(new City("贵阳",22,0));
+        cities.add(new City("遵义",23,0));
+        cities.add(new City("长春",24,0));
+        cities.add(new City("石家庄",25,0));
+        cities.add(new City("秦皇岛",26,0));
+        cities.add(new City("烟台",27,0));
+        cities.add(new City("齐齐哈尔",28,0));
+        cities.add(new City("佳木斯",29,0));
+        cities.add(new City("呼和浩特",30,0));
     }
 
     @Override

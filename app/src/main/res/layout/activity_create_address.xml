@@ -47,7 +47,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_gravity="center_vertical"
                     android:text="收货人"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_13"
                     android:textColor="@color/black_text1"/>
 
                 <EditText
@@ -57,7 +57,7 @@
                     android:layout_marginLeft="@dimen/margin_38"
                     android:maxLength="6"
                     android:hint="名称,6字以内"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_13"
                     android:textColorHint="@color/gray_text2"
                     android:textColor="@color/black_text1"
                     android:textCursorDrawable="@drawable/color_cursor"
@@ -89,7 +89,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_gravity="center_vertical"
                     android:text="联系电话"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_13"
                     android:textColor="@color/black_text1"/>
 
                 <EditText
@@ -100,7 +100,7 @@
                     android:maxLines="1"
                     android:hint="联系电话"
                     android:inputType="phone"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_13"
                     android:textColorHint="@color/gray_text2"
                     android:textColor="@color/black_text1"
                     android:textCursorDrawable="@drawable/color_cursor"
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:text="所在地区"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_13"
                     android:textColor="@color/black_text1"/>
 
                 <TextView
@@ -142,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_28"
                     android:text="福建省 厦门市"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_13"
                     android:textColor="@color/black_text1"/>
             </LinearLayout>
 
@@ -176,7 +176,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:text="详细地址"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_13"
                     android:textColor="@color/black_text1"/>
 
                 <EditText
@@ -186,7 +186,7 @@
                     android:layout_marginLeft="@dimen/margin_28"
                     android:gravity="top"
                     android:hint="详细地址"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_13"
                     android:textColorHint="@color/gray_text2"
                     android:textColor="@color/black_text1"
                     android:textCursorDrawable="@drawable/color_cursor"

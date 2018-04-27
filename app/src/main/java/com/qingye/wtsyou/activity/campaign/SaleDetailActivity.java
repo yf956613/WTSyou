@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -24,6 +25,7 @@ import zuo.biao.library.interfaces.OnBottomDragListener;
 public class SaleDetailActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
     private ImageView ivBack,ivShare;
+    private Button btnBuy,btnBuyEnd;
 
     private LinearLayout llHead;
     private ObservableScrollView scrollView;
@@ -52,10 +54,6 @@ public class SaleDetailActivity extends BaseActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sale_detail,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
@@ -67,6 +65,9 @@ public class SaleDetailActivity extends BaseActivity implements View.OnClickList
     public void initView() {
         ivBack = findViewById(R.id.iv_left);
         ivShare = findViewById(R.id.iv_right);
+
+        btnBuy = findViewById(R.id.btn_buy);
+        btnBuyEnd = findViewById(R.id.btn_buy_end);
 
         DetailedConversationFragment campaignDetailedConversationFragment = new DetailedConversationFragment();
         //注意这里是调用getSupportFragmentManager()方法
@@ -100,8 +101,6 @@ public class SaleDetailActivity extends BaseActivity implements View.OnClickList
                             ivBack.setImageResource(R.mipmap.back_l);
                             ivShare.setImageResource(R.mipmap.share_w);
                         } else if (y > 0 && y <= imageHeight) {
-                            float scale = (float) y / imageHeight;
-                            float alpha = (255 * scale);
                             llHead.setBackgroundColor(Color.parseColor("#ddffffff"));
                             ivBack.setImageResource(R.mipmap.back_a);
                             ivShare.setImageResource(R.mipmap.share_g);
@@ -123,6 +122,7 @@ public class SaleDetailActivity extends BaseActivity implements View.OnClickList
     @Override
     public void initEvent() {
         ivBack.setOnClickListener(this);
+        btnBuy.setOnClickListener(this);
     }
 
     @Override
@@ -132,6 +132,9 @@ public class SaleDetailActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.iv_right:
+                break;
+            case R.id.btn_buy:
+                toActivity(SaleOrderActivity.createIntent(context));
                 break;
             default:
                 break;

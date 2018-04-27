@@ -19,10 +19,6 @@ import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.SlidingPagerAdapter;
 import com.qingye.wtsyou.entity.TabEntity;
-import com.qingye.wtsyou.fragment.my.MyCampaignCrowdFragment;
-import com.qingye.wtsyou.fragment.my.MyCampaignShowFragment;
-import com.qingye.wtsyou.fragment.my.MyCampaignSupportFragment;
-import com.qingye.wtsyou.fragment.my.MyCampaignVoteFragment;
 import com.qingye.wtsyou.fragment.my.OrderAllFragment;
 import com.qingye.wtsyou.fragment.my.OrderUnDeliveryFragment;
 import com.qingye.wtsyou.fragment.my.OrderUnPayFragment;
@@ -73,10 +69,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         OrderAllFragment orderAllFragment = new OrderAllFragment();
         OrderUnPayFragment orderUnPayFragment = new OrderUnPayFragment();
         OrderUnDeliveryFragment orderUnDeliveryFragment = new OrderUnDeliveryFragment();
@@ -106,7 +98,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         tvHead.setText("我的订单");
 
         mTabLayout = findViewById(R.id.tab);
-        mTabLayout.setIndicatorColor(Color.parseColor("#000000"));
         mViewPager = findViewById(R.id.viewPager);
         mViewPager.setAdapter(new SlidingPagerAdapter(getSupportFragmentManager(),mFragments,mTitles,context));
         mViewPager.setOffscreenPageLimit(4);

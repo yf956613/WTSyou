@@ -83,13 +83,13 @@
             android:layout_centerVertical="true">
 
             <TextView
-                android:id="@+id/tv_focus"
+                android:id="@+id/tv_rank"
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:paddingTop="@dimen/margin_4"
                 android:paddingBottom="@dimen/margin_4"
-                android:text="关 注"
+                android:text="打 榜"
                 android:textSize="@dimen/text_size_11"
                 android:textColor="@color/orange_line"
                 android:background="@drawable/corners_orange_1"/>
@@ -112,8 +112,9 @@
                 android:paddingBottom="@dimen/margin_4"
                 android:text="取 消"
                 android:textSize="@dimen/text_size_11"
-                android:textColor="@color/orange_line"
-                android:background="@drawable/corners_orange_1"/>
+                android:textColor="@color/gray_text1"
+                android:background="@drawable/corners_gray"
+                android:visibility="gone"/>
         </LinearLayout>
     </RelativeLayout>
 

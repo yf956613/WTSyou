@@ -15,26 +15,52 @@
         android:orientation="vertical"></LinearLayout>
 
     <LinearLayout
-        android:layout_below="@+id/ll_top"
-        android:id="@+id/head"
+        android:id="@+id/ll_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_25"
+        android:background="@color/white"
+        android:orientation="vertical">
         <include layout="@layout/head"/>
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_background2"
+            android:visibility="gone"/>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_support"
+    <RelativeLayout
+        android:id="@+id/rl_btn"
         android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/re_orange_shade_button"
-        android:text="立即应援"
-        android:textSize="@dimen/text_size_14"
-        android:textColor="@color/white"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
 
-    <ScrollView
-        android:layout_below="@+id/head"
-        android:layout_above="@+id/btn_support"
+        <Button
+            android:id="@+id/btn_support"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/re_orange_shade_button"
+            android:text="立即应援"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/btn_support_end"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/re_orange_white_transparent_shade_button"
+            android:text="应援完成"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/white"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+    <com.qingye.wtsyou.widget.ObservableScrollView
+        android:layout_below="@+id/ll_head"
+        android:id="@+id/scrollview"
+        android:layout_above="@+id/rl_btn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
@@ -47,47 +73,104 @@
             android:focusable="true"
             android:focusableInTouchMode="true">
 
-            <ImageView
-                android:layout_below="@+id/head"
-                android:id="@+id/iv_campaign_background_img"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:scaleType="fitXY"
-                android:src="@mipmap/img_v"/>
+                android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_alignBottom="@+id/iv_campaign_background_img"
-                android:background="@drawable/re_gradient_black"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:layout_marginLeft="@dimen/margin_10"
-                    android:layout_gravity="center_vertical"
-                    android:ellipsize="end"
-                    android:maxLength="15"
-                    android:text="距离应援结束还有:"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_13"/>
+                <ImageView
+                    android:layout_below="@+id/head"
+                    android:id="@+id/iv_campaign_background_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/img_v"/>
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="6"
-                    android:layout_marginRight="@dimen/margin_10"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="right|center_vertical">
+                    android:id="@+id/ll_ing"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_alignBottom="@+id/iv_campaign_background_img"
+                    android:background="@drawable/re_gradient_black"
+                    android:orientation="horizontal">
 
-                    <include
-                        layout="@layout/count_down"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_gravity="center_vertical"
+                        android:ellipsize="end"
+                        android:maxLength="15"
+                        android:text="距离应援结束还有:"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_13"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:layout_marginRight="@dimen/margin_10"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="right|center_vertical">
+
+                        <include
+                            layout="@layout/layout_count_down"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll_end"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_alignBottom="@+id/iv_campaign_background_img"
+                    android:background="@drawable/re_gradient_black"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:layout_marginRight="@dimen/margin_10"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_10"
+                            android:layout_gravity="center_vertical"
+                            android:ellipsize="end"
+                            android:maxLength="15"
+                            android:text="截止日期"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_13"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_6"
+                            android:text="2018-08-23"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_13"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/margin_10"
+                        android:text="已结束"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_13"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_below="@+id/iv_campaign_background_img"
@@ -100,8 +183,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_12"
-                    android:layout_marginRight="@dimen/margin_12"
                     android:layout_marginTop="@dimen/margin_12"
                     android:layout_marginBottom="@dimen/margin_12"
                     android:orientation="vertical">
@@ -110,17 +191,31 @@
                         android:id="@+id/tv_campaign_place"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_12"
+                        android:layout_marginRight="@dimen/margin_12"
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:text="[房间里的音乐会]陈绮贞音乐会应援"
                         android:textSize="@dimen/text_size_13"
                         android:textColor="@color/black_text"/>
 
+                    <LinearLayout
+                        android:id="@+id/ll_tv_progress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <include
+                            android:id="@+id/progress_value"
+                            layout="@layout/text_progress"/>
+
+                    </LinearLayout>
+
                     <ProgressBar
                         android:id="@+id/join_progressbar"
                         android:layout_width="match_parent"
                         android:layout_height="8dp"
-                        android:layout_marginTop="@dimen/margin_15"
+                        android:layout_marginLeft="@dimen/margin_20"
+                        android:layout_marginRight="@dimen/margin_20"
                         android:max="100"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:progressDrawable="@drawable/progress_horizontal2"/>
@@ -129,6 +224,8 @@
                         android:id="@+id/ll_raise"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_12"
+                        android:layout_marginRight="@dimen/margin_12"
                         android:layout_marginTop="@dimen/margin_10"
                         android:orientation="horizontal">
 
@@ -147,7 +244,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="￥  "
-                                    android:textSize="@dimen/text_size_12"
+                                    android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/orange_text2"/>
 
                                 <TextView
@@ -155,7 +252,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="1938"
-                                    android:textSize="@dimen/text_size_12"
+                                    android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/orange_text2"/>
 
                             </LinearLayout>
@@ -165,7 +262,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/margin_2"
                                 android:text="已筹金额"
-                                android:textSize="@dimen/text_size_10"
+                                android:textSize="@dimen/text_size_11"
                                 android:textColor="@color/gray_text1"/>
                         </LinearLayout>
 
@@ -185,7 +282,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="￥  "
-                                    android:textSize="@dimen/text_size_12"
+                                    android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/orange_text2"/>
 
                                 <TextView
@@ -193,7 +290,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="5000"
-                                    android:textSize="@dimen/text_size_12"
+                                    android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/orange_text2"/>
 
                             </LinearLayout>
@@ -204,7 +301,7 @@
                                 android:layout_marginTop="@dimen/margin_2"
                                 android:layout_gravity="right"
                                 android:text="目标金额"
-                                android:textSize="@dimen/text_size_10"
+                                android:textSize="@dimen/text_size_11"
                                 android:textColor="@color/gray_text1"/>
 
                         </LinearLayout>
@@ -235,14 +332,14 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="1938"
-                                    android:textSize="@dimen/text_size_12"
+                                    android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/orange_text2"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="  人"
-                                    android:textSize="@dimen/text_size_11"
+                                    android:textSize="@dimen/text_size_12"
                                     android:textColor="@color/orange_text2"/>
 
                             </LinearLayout>
@@ -252,7 +349,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/margin_2"
                                 android:text="已参与"
-                                android:textSize="@dimen/text_size_10"
+                                android:textSize="@dimen/text_size_11"
                                 android:textColor="@color/gray_text1"/>
                         </LinearLayout>
 
@@ -273,14 +370,14 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="5000"
-                                    android:textSize="@dimen/text_size_12"
+                                    android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/orange_text2"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="  人"
-                                    android:textSize="@dimen/text_size_11"
+                                    android:textSize="@dimen/text_size_12"
                                     android:textColor="@color/orange_text2"/>
 
                             </LinearLayout>
@@ -290,8 +387,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/margin_2"
                                 android:layout_gravity="right"
-                                android:text="目标金额"
-                                android:textSize="@dimen/text_size_10"
+                                android:text="目标人数"
+                                android:textSize="@dimen/text_size_11"
                                 android:textColor="@color/gray_text1"/>
 
                         </LinearLayout>
@@ -530,12 +627,12 @@
                     android:layout_marginRight="@dimen/margin_6"
                     android:text="众筹须知
             付款成功后即可成功参与投票。"
-                    android:textSize="@dimen/text_size_11"
+                    android:textSize="@dimen/text_size_12"
                     android:textColor="@color/black_text2"/>
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/ll_conversation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -544,6 +641,7 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
+                    android:id="@+id/text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_5"
@@ -554,7 +652,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
                         android:layout_alignParentLeft="true"
                         android:text="话题聊天室"
                         android:textColor="@color/black_text"
@@ -563,16 +660,18 @@
                 </RelativeLayout>
 
                 <FrameLayout
+                    android:layout_below="@+id/text"
                     android:id="@+id/list_conversation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
                 <LinearLayout
+                    android:layout_below="@+id/text"
                     android:id="@+id/ll_select_conversation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_15"
-                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
                     android:orientation="vertical"
                     android:visibility="gone">
 
@@ -598,10 +697,10 @@
                         android:background="@drawable/corners_orange_1"/>
                 </LinearLayout>
 
-            </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 
-    </ScrollView>
+    </com.qingye.wtsyou.widget.ObservableScrollView>
 
 </RelativeLayout>

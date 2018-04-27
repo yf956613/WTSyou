@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import com.qingye.wtsyou.activity.home.PastChartsRuleActivity;
 import com.qingye.wtsyou.adapter.my.CoinDetailedAdapter;
 import com.qingye.wtsyou.modle.CoinDetailed;
 import com.qingye.wtsyou.view.my.CoinDetailedView;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ public class CoinActivity extends BaseHttpRecyclerActivity<CoinDetailed,CoinDeta
 
     private ImageView ivBack,ivRule;
     private TextView tvHead;
+    private Button btnWithdraw;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -51,15 +54,17 @@ public class CoinActivity extends BaseHttpRecyclerActivity<CoinDetailed,CoinDeta
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coin,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
+
+        //禁止滑动
+        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
+        linearLayoutManager.setScrollEnabled(false);
+        rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
+        rvBaseRecycler.setLayoutManager(linearLayoutManager);
 
         //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
@@ -79,12 +84,13 @@ public class CoinActivity extends BaseHttpRecyclerActivity<CoinDetailed,CoinDeta
         tvHead = findViewById(R.id.tv_head_title);
         tvHead.setText("我的余额");
         tvHead.setTextColor(getResources().getColor(R.color.white));
+        btnWithdraw = findViewById(R.id.btn_withdraw);
     }
 
     @Override
     public void setList(List<CoinDetailed> list) {
         final List<CoinDetailed> templist = new ArrayList<>();
-        for(int i = 1;i < 6;i ++) {
+        for(int i = 1;i < 9;i ++) {
             CoinDetailed heartDetailed = new CoinDetailed();
             heartDetailed.setId(i);
             templist.add(heartDetailed);
@@ -124,6 +130,7 @@ public class CoinActivity extends BaseHttpRecyclerActivity<CoinDetailed,CoinDeta
         super.initEvent();
         ivBack.setOnClickListener(this);
         ivRule.setOnClickListener(this);
+        btnWithdraw.setOnClickListener(this);
     }
 
     @Override
@@ -135,6 +142,9 @@ public class CoinActivity extends BaseHttpRecyclerActivity<CoinDetailed,CoinDeta
                 break;
             case R.id.iv_right:
                 toActivity(PastChartsRuleActivity.createIntent(context));
+                break;
+            case R.id.btn_withdraw:
+                toActivity(WithdrawActivity.createIntent(context));
                 break;
             default:
                 break;

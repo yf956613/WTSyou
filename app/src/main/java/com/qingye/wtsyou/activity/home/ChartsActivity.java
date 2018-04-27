@@ -67,10 +67,6 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charts,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         HomeChartsStarsFragment homeChartsStarsFragment = new HomeChartsStarsFragment();
         HomeChartsFansFragment homeChartsFansFragment = new HomeChartsFansFragment();
 

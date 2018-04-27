@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "com.qingye.wtsyou"
         minSdkVersion 15
-        targetSdkVersion 26
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -49,4 +49,5 @@ dependencies {
     compile files('libs/nineoldandroids-2.4.0.jar')
     compile project(':FlycoTabLayout_Lib')
     compile project(path: ':FJEditTextCountLib')
+    compile 'pub.devrel:easypermissions:0.4.2'
 }

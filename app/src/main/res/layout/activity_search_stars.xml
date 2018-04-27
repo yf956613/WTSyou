@@ -49,6 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
                 android:layout_gravity="center_horizontal"
                 android:text="清空搜索历史"
                 android:textSize="@dimen/text_size_11"

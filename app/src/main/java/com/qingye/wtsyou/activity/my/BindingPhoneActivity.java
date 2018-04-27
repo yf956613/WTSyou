@@ -44,10 +44,6 @@ public class BindingPhoneActivity extends BaseActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_binging_phone,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
@@ -62,6 +58,7 @@ public class BindingPhoneActivity extends BaseActivity implements View.OnClickLi
         tvRight = findViewById(R.id.tv_add_temp);
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText("完成");
+        tvRight.setTextColor(getResources().getColor(R.color.gray_text10));
         tvHead = findViewById(R.id.tv_head_title);
         tvHead.setText("绑定手机");
 

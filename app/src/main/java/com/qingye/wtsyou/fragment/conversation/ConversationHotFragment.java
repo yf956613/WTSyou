@@ -13,6 +13,7 @@ import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.conversation.ConversationHotAdapter;
 import com.qingye.wtsyou.modle.Conversation;
 import com.qingye.wtsyou.view.conversation.ConversationHotView;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,12 @@ public class ConversationHotFragment extends BaseHttpRecyclerFragment<Conversati
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
+        //禁止滑动
+        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
+        linearLayoutManager.setScrollEnabled(false);
+        rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
+        rvBaseRecycler.setLayoutManager(linearLayoutManager);
+
         //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
@@ -76,7 +83,7 @@ public class ConversationHotFragment extends BaseHttpRecyclerFragment<Conversati
     @Override
     public void setList(final List<Conversation> list) {
         final List<Conversation> templist = new ArrayList<>();
-        for(int i = 1;i < 5;i ++) {
+        for(int i = 1;i < 7;i ++) {
             Conversation conversation = new Conversation();
             conversation.setId(i);
             templist.add(conversation);

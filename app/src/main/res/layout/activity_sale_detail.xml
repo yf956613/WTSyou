@@ -7,19 +7,36 @@
     android:background="@color/gray_background"
     tools:context="com.qingye.wtsyou.activity.campaign.VoteDetailActivity">
 
-    <Button
-        android:id="@+id/btn_buy"
+    <RelativeLayout
+        android:id="@+id/rl_btn"
         android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/re_orange_shade_button"
-        android:text="立即购买"
-        android:textSize="@dimen/text_size_14"
-        android:textColor="@color/white"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btn_buy"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/re_orange_shade_button"
+            android:text="立即购买"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/btn_buy_end"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:background="@drawable/re_orange_white_transparent_shade_button"
+            android:text="已售完"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/white"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
 
     <com.qingye.wtsyou.widget.ObservableScrollView
         android:id="@+id/scrollview"
-        android:layout_above="@+id/btn_buy"
+        android:layout_above="@+id/rl_btn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
@@ -186,7 +203,7 @@
                                 android:layout_marginLeft="@dimen/margin_10"
                                 android:layout_gravity="center"
                                 android:text="福建厦门"
-                                android:textSize="@dimen/text_size_12"
+                                android:textSize="@dimen/text_size_13"
                                 android:textColor="@color/black_text"/>
                         </LinearLayout>
 
@@ -208,7 +225,7 @@
                                 android:layout_marginLeft="@dimen/margin_10"
                                 android:layout_gravity="center"
                                 android:text="2018-4-28 20：00"
-                                android:textSize="@dimen/text_size_12"
+                                android:textSize="@dimen/text_size_13"
                                 android:textColor="@color/black_text1"/>
 
                         </LinearLayout>
@@ -279,12 +296,12 @@
                     android:layout_marginRight="@dimen/margin_6"
                     android:text="购票须知
             付款成功后即可成功参与投票。"
-                    android:textSize="@dimen/text_size_11"
+                    android:textSize="@dimen/text_size_12"
                     android:textColor="@color/black_text2"/>
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_4"
@@ -292,6 +309,7 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
+                    android:id="@+id/text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_5"
@@ -302,7 +320,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
                         android:layout_alignParentLeft="true"
                         android:text="话题聊天室"
                         android:textColor="@color/black_text"
@@ -311,11 +328,44 @@
                 </RelativeLayout>
 
                 <FrameLayout
+                    android:layout_below="@+id/text"
                     android:id="@+id/list_conversation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_below="@+id/text"
+                    android:id="@+id/ll_select_conversation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_15"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="当前还没关联聊天室哦，立即去关联吧~"
+                        android:textSize="@dimen/text_size_12"
+                        android:gravity="center_horizontal"/>
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/margin_15"
+                        android:layout_marginBottom="@dimen/margin_15"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/margin_4"
+                        android:paddingBottom="@dimen/margin_4"
+                        android:text="关联聊天室"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/orange_line"
+                        android:background="@drawable/corners_orange_1"/>
+                </LinearLayout>
+
+            </RelativeLayout>
 
         </LinearLayout>
 

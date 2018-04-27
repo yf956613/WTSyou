@@ -68,10 +68,6 @@ public class CampaignActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_campaign,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         MyCampaignShowFragment myCampaignShowFragment = new MyCampaignShowFragment();
         MyCampaignCrowdFragment myCampaignCrowdFragment = new MyCampaignCrowdFragment();
         MyCampaignVoteFragment myCampaignVoteFragment = new MyCampaignVoteFragment();

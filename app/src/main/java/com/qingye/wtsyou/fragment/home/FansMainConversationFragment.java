@@ -3,15 +3,17 @@ package com.qingye.wtsyou.fragment.home;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.conversation.ConversationHotAdapter1;
+import com.qingye.wtsyou.adapter.conversation.ConversationHotAdapter;
 import com.qingye.wtsyou.modle.Conversation;
-import com.qingye.wtsyou.view.conversation.ConversationHotView1;
+import com.qingye.wtsyou.view.conversation.ConversationHotView;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,11 @@ import zuo.biao.library.interfaces.CacheCallBack;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conversation,ConversationHotView1,ConversationHotAdapter1> implements CacheCallBack<Conversation> {
+public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conversation,ConversationHotView,ConversationHotAdapter> implements View.OnClickListener , CacheCallBack<Conversation> {
+
+    private TextView tvMore,tvLess;
+
+    private int size = 2;
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -43,16 +49,21 @@ public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conve
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //类相关初始化，必须使用<<<<<<<<<<<<<<<<
         super.onCreateView(inflater, container, savedInstanceState);
-        setContentView(R.layout.fragment_fans_main);
+        setContentView(R.layout.fragment_fans_main_conversation);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
         initCache(this);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
-        initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
+
+        //禁止滑动
+        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
+        linearLayoutManager.setScrollEnabled(false);
+        rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
+        rvBaseRecycler.setLayoutManager(linearLayoutManager);
 
         //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
@@ -60,9 +71,9 @@ public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conve
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
         srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        //实例化一个GridLayoutManager，列数为2
+        final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         rvBaseRecycler.setLayoutManager(layoutManager);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         return view;
     }
@@ -70,22 +81,24 @@ public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conve
     @Override
     public void initView() {
         super.initView();
+        tvMore = findViewById(R.id.tv_conversation_more);
+        tvLess = findViewById(R.id.tv_conversation_less);
     }
 
     @Override
     public void setList(final List<Conversation> list) {
         final List<Conversation> templist = new ArrayList<>();
-        for(int i = 1;i < 6;i ++) {
+        for(int i = 0;i < size;i ++) {
             Conversation conversation = new Conversation();
             conversation.setId(i);
             templist.add(conversation);
         }
         //list.addAll(templist);
-        setList(new AdapterCallBack<ConversationHotAdapter1>() {
+        setList(new AdapterCallBack<ConversationHotAdapter>() {
 
             @Override
-            public ConversationHotAdapter1 createAdapter() {
-                return new ConversationHotAdapter1(context);
+            public ConversationHotAdapter createAdapter() {
+                return new ConversationHotAdapter(context);
             }
 
             @Override
@@ -140,6 +153,39 @@ public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conve
     @Override
     public void initEvent() {//必须调用
         super.initEvent();
+        tvMore.setOnClickListener(this);
+        tvLess.setOnClickListener(this);
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_conversation_more:
+                tvMore.setVisibility(View.GONE);
+                tvLess.setVisibility(View.VISIBLE);
+                size = 6;
+                final List<Conversation> templist1 = new ArrayList<>();
+                for(int i = 0;i < size;i ++) {
+                    Conversation conversation = new Conversation();
+                    conversation.setId(i);
+                    templist1.add(conversation);
+                }
+                setList(templist1);
+                break;
+            case R.id.tv_conversation_less:
+                tvMore.setVisibility(View.VISIBLE);
+                tvLess.setVisibility(View.GONE);
+                size = 2;
+                final List<Conversation> templist2 = new ArrayList<>();
+                for(int i = 0;i < size;i ++) {
+                    Conversation conversation = new Conversation();
+                    conversation.setId(i);
+                    templist2.add(conversation);
+                }
+                setList(templist2);
+                break;
+            default:
+                break;
+        }
     }
 }

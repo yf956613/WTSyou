@@ -43,10 +43,6 @@ public class MainTabActivity extends BaseBottomTabActivity implements OnBottomDr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tab,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();

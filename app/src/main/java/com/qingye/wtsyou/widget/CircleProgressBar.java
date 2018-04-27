@@ -39,8 +39,6 @@ public class CircleProgressBar extends View {
 	private boolean isSetMidContent;
 	private boolean isSetBottomContent;
 	
-	
-	
 	private String topTitle;
 	private float currentProgress;
 	private String bottmoContent;
@@ -67,27 +65,27 @@ public class CircleProgressBar extends View {
 	private SweepGradient sweepGradient;
 	private Matrix rotateMatrix;
 	private  int colors[];
-//	private LinearGradient linearGradient;
+    //private LinearGradient linearGradient;
 	
 	
 	
 	public CircleProgressBar(Context context) {
 		super(context,null);
-		
+		this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 	}
 
 	public CircleProgressBar(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
 		 initView(context, attrs);
-		 
+		this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 	}
 
 	public CircleProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		 initView(context, attrs);
-		
 		// TODO Auto-generated constructor stub
+		 initView(context, attrs);
+		this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 	}
 
 	private void initView(Context context,AttributeSet attrs)
@@ -123,12 +121,14 @@ public class CircleProgressBar extends View {
         startAngle=a.getFloat(R.styleable.CircleProgressBar_start_arc,135);
         
         circleBgPaint=new Paint();
+		circleBgPaint.setStrokeWidth(1);
 		circleBgPaint.setColor(circleColor);
 		circleBgPaint.setStyle(Paint.Style.STROKE); 
 		circleBgPaint.setStrokeWidth(circleWidth);
 		circleBgPaint.setAntiAlias(true);
         
 		progressPaint=new Paint();
+		progressPaint.setStrokeWidth(1);
 		progressPaint.setColor(progressColor);
 		progressPaint.setStyle(Paint.Style.STROKE); 
 		progressPaint.setStrokeWidth(progressWidth);
@@ -136,6 +136,7 @@ public class CircleProgressBar extends View {
 		
 		
 		titlePaint=new Paint();
+		titlePaint.setStrokeWidth(1);
 		titlePaint.setAntiAlias(true);
 		titlePaint.setTextSize(toptitleTextSize);
 		titlePaint.setColor(topTitleColor);
@@ -143,12 +144,14 @@ public class CircleProgressBar extends View {
 		
 		
 		midPaint=new Paint();
+        midPaint.setStrokeWidth(1);
 		midPaint.setAntiAlias(true);
 		midPaint.setTextSize(currentProgressTextsize);
 		midPaint.setColor(midProgressColor);
 		midPaint.setTextAlign(Paint.Align.CENTER);
 		
 		bottomPaint=new Paint();
+		bottomPaint.setStrokeWidth(1);
 		bottomPaint.setAntiAlias(true);
 		bottomPaint.setTextSize(bottomcontentTextSize);
 		bottomPaint.setColor(bottomcontentColor);	

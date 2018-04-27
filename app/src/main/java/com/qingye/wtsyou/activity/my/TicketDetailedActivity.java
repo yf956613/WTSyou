@@ -3,15 +3,15 @@ package com.qingye.wtsyou.activity.my;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.other.BlurTransformation;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
@@ -20,6 +20,7 @@ public class TicketDetailedActivity extends BaseActivity implements View.OnClick
 
     private ImageView ivLeft;
     private TextView tvHead;
+    private ImageView bgmImg;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -43,10 +44,6 @@ public class TicketDetailedActivity extends BaseActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_detailed,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
@@ -60,11 +57,16 @@ public class TicketDetailedActivity extends BaseActivity implements View.OnClick
         ivLeft.setImageResource(R.mipmap.back_a);
         tvHead = findViewById(R.id.tv_head_title);
         tvHead.setText("门票详情");
+        bgmImg = findViewById(R.id.bgm_img);
     }
 
     @Override
     public void initData() {
-
+        int url = R.mipmap.img_x;
+        Glide.with(context)
+                .load(url)
+                .bitmapTransform(new BlurTransformation(context))
+                .into(bgmImg);
     }
 
     @Override

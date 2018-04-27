@@ -148,7 +148,7 @@ public class HomeChartsPastDetailedFragment extends BaseHttpListFragment<Charts,
             }
         } else {
             if (id > 0) {
-                toActivity(StarsMainActivity.createIntent(context, id));
+                //toActivity(StarsMainActivity.createIntent(context, id));
             }
         }
     }

@@ -15,11 +15,14 @@ limitations under the License.*/
 package com.qingye.wtsyou.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.manager.HttpManager;
 import zuo.biao.library.model.Parameter;
+import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.MD5Util;
 import zuo.biao.library.util.SettingUtil;
 import zuo.biao.library.util.StringUtil;
@@ -76,11 +79,13 @@ public class HttpRequest {
 	 */
 	public static void login(final String accountType,String loginId, final String password,
 							 final int requestCode, final OnHttpResponseListener listener) {
-		List<Parameter> paramList = new ArrayList<Parameter>();
-		addExistParameter(paramList, Constant.ACCOUNT_TYPE, accountType);
-		addExistParameter(paramList, Constant.LOGIN_ID, loginId);
-		addExistParameter(paramList, Constant.PASSWORD, password);
 
-		HttpManager.getInstance().post(paramList, URL_BASE + URLConstant.LOGIN, requestCode, listener);
+		Map<String ,String> params=new HashMap<>();
+		params.put(Constant.ACCOUNT_TYPE, accountType);
+		params.put(Constant.LOGIN_ID, loginId);
+		params.put(Constant.PASSWORD, password);
+
+
+		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.LOGIN, requestCode, listener);
 	}
 }

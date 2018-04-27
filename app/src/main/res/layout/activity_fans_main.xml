@@ -8,7 +8,8 @@
     android:orientation="vertical"
     tools:context="com.qingye.wtsyou.activity.home.FansMainActivity">
 
-    <ScrollView
+    <com.qingye.wtsyou.widget.ObservableScrollView
+        android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
@@ -327,10 +328,9 @@
                     android:background="@color/light_gray"/>
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
 
                 <FrameLayout
                     android:id="@+id/list_focus_stars"
@@ -341,16 +341,7 @@
                     android:layout_marginTop="@dimen/margin_10"
                     android:layout_marginBottom="@dimen/margin_10"/>
 
-                <TextView
-                    android:id="@+id/tv_all_focus_stars"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="· 查看全部 ·"
-                    android:textColor="@color/gray_text1"
-                    android:textSize="@dimen/text_size_10"/>
-
-            </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -399,7 +390,7 @@
                     android:background="@color/light_gray"/>
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -413,15 +404,7 @@
                     android:layout_marginTop="@dimen/margin_5"
                     android:layout_marginBottom="@dimen/margin_5"/>
 
-                <TextView
-                    android:id="@+id/tv_all_focus_converstion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="· 查看全部 ·"
-                    android:textColor="@color/gray_text1"
-                    android:textSize="@dimen/text_size_10"/>
-            </LinearLayout>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -474,7 +457,7 @@
                         android:background="@color/light_gray"/>
                 </LinearLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -496,17 +479,17 @@
                         android:textColor="@color/gray_text1"
                         android:textSize="@dimen/text_size_10"
                         android:visibility="gone"/>
-                </LinearLayout>
+                </RelativeLayout>
             </RelativeLayout>
 
         </LinearLayout>
 
-    </ScrollView>
+    </com.qingye.wtsyou.widget.ObservableScrollView>
 
     <LinearLayout
+        android:id="@+id/ll_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_25">
+        android:layout_height="wrap_content">
 
         <include layout="@layout/fans_head"/>
     </LinearLayout>

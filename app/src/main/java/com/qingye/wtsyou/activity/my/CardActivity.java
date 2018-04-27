@@ -21,6 +21,7 @@ import com.qingye.wtsyou.entity.TabEntity;
 import com.qingye.wtsyou.fragment.my.CardUnUsedFragment;
 import com.qingye.wtsyou.fragment.my.CardUsedFragment;
 
+
 import java.util.ArrayList;
 
 import zuo.biao.library.base.BaseActivity;
@@ -64,10 +65,6 @@ public class CardActivity extends BaseActivity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card,this);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
 
         CardUnUsedFragment cardUnUsedFragment = new CardUnUsedFragment();
         CardUsedFragment cardUsedFragment = new CardUsedFragment();

@@ -8,9 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.activity.ActivityNewSupportAdapter;
+import com.qingye.wtsyou.adapter.campaign.ActivityNewSupportAdapter;
 import com.qingye.wtsyou.modle.Campaign;
-import com.qingye.wtsyou.view.activity.ActivityNewSupportView;
+import com.qingye.wtsyou.view.campaign.ActivityNewSupportView;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,12 @@ public class ActivitySupportFragment extends BaseHttpRecyclerFragment<Campaign,A
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
+        //禁止滑动
+        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
+        linearLayoutManager.setScrollEnabled(false);
+        rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
+        rvBaseRecycler.setLayoutManager(linearLayoutManager);
+
         //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
@@ -70,7 +77,7 @@ public class ActivitySupportFragment extends BaseHttpRecyclerFragment<Campaign,A
     @Override
     public void setList(final List<Campaign> list) {
         final List<Campaign> templist = new ArrayList<>();
-        for(int i = 1;i < 4;i ++) {
+        for(int i = 1;i < 6;i ++) {
             Campaign campaign = new Campaign();
             campaign.setId(i);
             templist.add(campaign);

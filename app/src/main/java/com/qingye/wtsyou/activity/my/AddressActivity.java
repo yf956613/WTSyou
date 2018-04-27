@@ -3,7 +3,6 @@ package com.qingye.wtsyou.activity.my;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,13 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.home.FansMainActivity;
-import com.qingye.wtsyou.activity.search.SelectStarsActivity;
-import com.qingye.wtsyou.adapter.home.FocusStarsAdapter;
 import com.qingye.wtsyou.adapter.my.DeliveryAddressAdapter;
 import com.qingye.wtsyou.modle.DeliveryAddress;
-import com.qingye.wtsyou.modle.Stars;
-import com.qingye.wtsyou.view.home.FocusStarsView;
 import com.qingye.wtsyou.view.my.DeliveryAddressView;
 
 import java.util.ArrayList;
@@ -57,10 +51,6 @@ public class AddressActivity extends BaseHttpRecyclerActivity<DeliveryAddress,De
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address,this);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();

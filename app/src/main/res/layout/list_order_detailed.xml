@@ -198,6 +198,20 @@
             android:visibility="gone"/>
 
         <TextView
+            android:id="@+id/tv_reminding"
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_3"
+            android:paddingBottom="@dimen/margin_3"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/margin_10"
+            android:text="提醒发货"
+            android:textSize="@dimen/text_size_11"
+            android:textColor="@color/black_text2"
+            android:background="@drawable/corners_orange_3"
+            android:visibility="gone"/>
+
+        <TextView
             android:id="@+id/tv_pay"
             android:layout_width="58dp"
             android:layout_height="wrap_content"

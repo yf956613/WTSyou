@@ -20,7 +20,7 @@ import com.qingye.wtsyou.activity.campaign.CreateVoteActivity;
 import com.qingye.wtsyou.activity.search.SearchCampaignActivity;
 import com.qingye.wtsyou.activity.campaign.ShowAllActivity;
 import com.qingye.wtsyou.activity.campaign.SupportAllActivity;
-import com.qingye.wtsyou.adapter.home.LoopShowContentAdapter;
+import com.qingye.wtsyou.adapter.campaign.LoopShowContentAdapter;
 import com.qingye.wtsyou.modle.ImageLoopContent;
 
 import java.util.ArrayList;
@@ -85,9 +85,9 @@ public class ActivityFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void initView() {
 
-        relativeLoopImage = (RelativeLayout) findViewById(R.id.relative_loopImage);
-        vpNews = (ImageLoopViewPager) findViewById(R.id.vp_news);
-        pageIndicatorView = (PageIndicatorView) findViewById(R.id.pageIndicatorView);
+        relativeLoopImage = findViewById(R.id.relative_loopImage);
+        vpNews = findViewById(R.id.vp_news);
+        pageIndicatorView = findViewById(R.id.pageIndicatorView);
 
         final List<ImageLoopContent> list = new ArrayList<>();
         for (int i = 1;i < 5;i ++) {
@@ -165,7 +165,7 @@ public class ActivityFragment extends BaseFragment implements View.OnClickListen
                 dialog.setContentView(view);
                 //自定义宽高（高度一般不用调整，在xml调整好就可以了，这里我只调整了宽度）
                 WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-                params.width = WindowManager.LayoutParams.MATCH_PARENT;;
+                params.width = WindowManager.LayoutParams.MATCH_PARENT;
                 dialog.getWindow().setAttributes(params);
                 //show之前设置返回键无效，触摸屏无效
                 dialog.setCancelable(false);

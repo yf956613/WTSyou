@@ -1,16 +1,17 @@
 <resources>
     <string name="app_name">想见你</string>
 
-    <!--tab选项名称-->
-    <string-array name="tab_names">
-        <item>第一页</item>
-        <item>第二页</item>
-        <item>第三页</item>
-        <item>第四页</item>
-        <item>第五页</item>
-        <item>第六页</item>
-    </string-array>
+    <string name="cancle">取消</string>
+    <string name="title">请选择时间</string>
+    <string name="commit">确定</string>
+    <string name="year">年</string>
+    <string name="month">月</string>
+    <string name="day">日</string>
+    <string name="hour">时</string>
+    <string name="minute">分</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="select_date">选择日期</string>
+    <string name="current_date">当前日期</string>
+    <string name="select_time">选择时间</string>
+    <string name="current_time">当前时间</string>
 </resources>

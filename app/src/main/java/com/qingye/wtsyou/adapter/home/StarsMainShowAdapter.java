@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.modle.Campaign;
-import com.qingye.wtsyou.view.activity.ActivityHotShowView;
 import com.qingye.wtsyou.view.home.StarsMainShowView;
 
 import zuo.biao.library.base.BaseAdapter;

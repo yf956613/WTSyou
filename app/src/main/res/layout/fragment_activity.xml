@@ -153,7 +153,7 @@
                             android:layout_gravity="center"
                             android:text="更多"
                             android:textColor="@color/gray_text1"
-                            android:textSize="@dimen/text_size_10"/>
+                            android:textSize="@dimen/text_size_11"/>
 
                         <ImageView
                             android:layout_width="4dp"
@@ -275,11 +275,11 @@
                         <TextView
                             android:id="@+id/text_view"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="15dp"
                             android:layout_gravity="center"
                             android:text="更多"
                             android:textColor="@color/gray_text1"
-                            android:textSize="@dimen/text_size_10"/>
+                            android:textSize="@dimen/text_size_11" />
 
                         <ImageView
                             android:layout_width="4dp"

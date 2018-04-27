@@ -71,10 +71,6 @@ public class ShowAllActivity extends BaseActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_all,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         StarsCampaignVoteFragment starsCampaignVoteFragment = new StarsCampaignVoteFragment();
         StarsCampaignCrowdFragment starscampaignCrowdFragment = new StarsCampaignCrowdFragment();
         StarsCampaignShowFragment starsCampaignShowFragment = new StarsCampaignShowFragment();

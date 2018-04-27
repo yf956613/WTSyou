@@ -7,19 +7,36 @@
     android:background="@color/gray_background"
     tools:context="com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity">
 
-    <Button
-        android:id="@+id/btn_crowd"
+    <RelativeLayout
+        android:id="@+id/rl_btn"
         android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/re_orange_shade_button"
-        android:text="立即众筹"
-        android:textSize="@dimen/text_size_14"
-        android:textColor="@color/white"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btn_crowd"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/re_orange_shade_button"
+            android:text="立即众筹"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/btn_crowd_end"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/re_orange_white_transparent_shade_button"
+            android:text="众筹结束"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/white"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
 
     <com.qingye.wtsyou.widget.ObservableScrollView
         android:id="@+id/scrollview"
-        android:layout_above="@+id/btn_crowd"
+        android:layout_above="@+id/rl_btn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
@@ -60,6 +77,7 @@
                             android:id="@+id/iv_campaign_img"
                             android:layout_width="102dp"
                             android:layout_height="133dp"
+                            android:scaleType="fitXY"
                             android:src="@mipmap/img_x"/>
 
                     </RelativeLayout>
@@ -100,7 +118,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="已筹集   "
                                     android:textColor="@color/white"
-                                    android:textSize="@dimen/text_size_12"/>
+                                    android:textSize="@dimen/text_size_13"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -141,11 +159,12 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/rl_center_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/ll_top"
@@ -165,7 +184,7 @@
                         android:gravity="center"
                         android:text="2018年4月12日"
                         android:textColor="@color/black_text1"
-                        android:textSize="@dimen/text_size_12"/>
+                        android:textSize="@dimen/text_size_13" />
 
                     <TextView
                         android:id="@+id/tv_campaign_address"
@@ -178,7 +197,7 @@
                         android:ellipsize="end"
                         android:text="厦门嘉庚体育馆"
                         android:textColor="@color/black_text1"
-                        android:textSize="@dimen/text_size_12"/>
+                        android:textSize="@dimen/text_size_13"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -192,6 +211,7 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        android:id="@+id/ll_participate"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -203,7 +223,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/margin_3"
                             android:text="众筹人数"
-                            android:textSize="@dimen/text_size_12"
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text1"/>
 
                         <TextView
@@ -221,6 +241,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_conversation"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -232,7 +253,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/margin_3"
                             android:text="聊天室"
-                            android:textSize="@dimen/text_size_12"
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text1"/>
 
                         <TextView
@@ -250,6 +271,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_detailed"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -261,7 +283,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/margin_3"
                             android:text="筹资目标"
-                            android:textSize="@dimen/text_size_12"
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text1"/>
 
                         <TextView
@@ -280,7 +302,7 @@
 
                 </LinearLayout>
 
-
+<!--
                 <com.qingye.wtsyou.widget.CircleProgressBar
                     android:layout_below="@+id/ll_center"
                     android:id="@+id/join_progressbar"
@@ -304,21 +326,62 @@
                     app:bottom_content="众筹进度"
                     app:bottom_content_color="@color/gray_text5"
                     app:bottom_content_text_size="@dimen/text_size_10"/>
+-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.4"
+                    android:layout_below="@+id/ll_center">
+
+                    <RelativeLayout
+                        android:id="@+id/circleprogress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true">
+
+                        <com.qingye.wtsyou.widget.CircleProgress
+                            android:id="@+id/join_progressbar"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:layout_centerHorizontal="true"
+                            app:progress_color1="@color/orange_2"
+                            app:progress_color2="@color/orange_3"
+                            app:progress_color3="@color/orange_4"
+                            app:circle_width="2dp"
+                            app:circle_color="@color/gray_background"
+                            app:current_progress_text_size="@dimen/text_size_18"
+                            app:progress_width="4dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/margin_35"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:text="众筹进度"
+                            android:textSize="@dimen/text_size_11"
+                            android:textColor="@color/gray_text5"/>
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
 
                 <LinearLayout
-                    android:layout_below="@+id/join_progressbar"
+                    android:layout_below="@+id/circleprogress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_10"
                     android:layout_marginBottom="@dimen/margin_12"
                     android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
                     android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="距离结束:    "
-                        android:textSize="@dimen/text_size_11"
+                        android:textSize="@dimen/text_size_12"
                         android:textColor="@color/gray_text4"/>
 
                     <TextView
@@ -326,11 +389,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="10天12时34分23秒"
-                        android:textSize="@dimen/text_size_11"
+                        android:textSize="@dimen/text_size_12"
                         android:textColor="@color/gray_text4"/>
                 </LinearLayout>
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_below="@+id/rl_center_2"
@@ -370,7 +433,7 @@
                             android:layout_gravity="center"
                             android:text="更多"
                             android:textColor="@color/gray_text1"
-                            android:textSize="@dimen/text_size_10"/>
+                            android:textSize="@dimen/text_size_11"/>
 
                         <ImageView
                             android:layout_width="4dp"
@@ -391,12 +454,82 @@
                     android:layout_marginBottom="@dimen/margin_12"
                     android:layout_marginLeft="@dimen/margin_6"
                     android:layout_marginRight="@dimen/margin_6"
+                    android:maxLines="8"
+                    android:ellipsize="end"
                     android:text="众筹须知
             付款成功后即可成功参与投票。"
-                    android:textSize="@dimen/text_size_11"
+                    android:textSize="@dimen/text_size_12"
                     android:textColor="@color/black_text2"/>
 
             </LinearLayout>
+
+<!--
+            <RelativeLayout
+                android:id="@+id/ll_conversation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_4"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_marginRight="@dimen/margin_6"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="话题聊天室"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/text_size_13"/>
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:layout_below="@+id/text"
+                    android:id="@+id/list_conversation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_select_conversation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_15"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="当前还没关联聊天室哦，立即去关联吧~"
+                        android:textSize="@dimen/text_size_12"
+                        android:gravity="center_horizontal"/>
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/margin_15"
+                        android:layout_marginBottom="@dimen/margin_15"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/margin_4"
+                        android:paddingBottom="@dimen/margin_4"
+                        android:text="关联聊天室"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/orange_line"
+                        android:background="@drawable/corners_orange_1"/>
+                </LinearLayout>
+
+            </RelativeLayout>
+-->
 
         </LinearLayout>
     </com.qingye.wtsyou.widget.ObservableScrollView>

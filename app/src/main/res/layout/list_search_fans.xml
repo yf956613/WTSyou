@@ -106,21 +106,41 @@
                 android:textColor="@color/orange_line"
                 android:background="@drawable/corners_orange_1"/>
 
-            <TextView
-                android:id="@+id/tv_cancel"
-                android:layout_width="48dp"
+            <LinearLayout
+                android:id="@+id/ll_right"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/margin_10"
-                android:gravity="center_horizontal"
-                android:paddingTop="@dimen/margin_4"
-                android:paddingBottom="@dimen/margin_4"
-                android:text="已关注"
-                android:textSize="@dimen/text_size_11"
-                android:textColor="@color/gray_text1"
-                android:background="@drawable/corners_gray"
-                android:visibility="gone"/>
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_talk"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="@dimen/margin_4"
+                    android:paddingBottom="@dimen/margin_4"
+                    android:text="私 信"
+                    android:textSize="@dimen/text_size_11"
+                    android:textColor="@color/orange_line"
+                    android:background="@drawable/corners_orange_1"/>
+
+                <TextView
+                    android:id="@+id/tv_cancel"
+                    android:layout_width="62dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="@dimen/margin_4"
+                    android:paddingBottom="@dimen/margin_4"
+                    android:text="互相关注"
+                    android:textSize="@dimen/text_size_11"
+                    android:textColor="@color/gray_text1"
+                    android:background="@drawable/corners_gray"/>
+            </LinearLayout>
 
         </LinearLayout>
+
     </RelativeLayout>
 
     <View

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/margin_20"
+    android:layout_marginRight="@dimen/margin_20"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_reduce"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="—"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/black_text2"
+            android:background="@drawable/corners_gray_left"/>
+
+        <EditText
+            android:id="@+id/edt_number_count"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_weight="1"
+            android:numeric="integer"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/margin_2"
+            android:selectAllOnFocus="true"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:text="1"
+            android:textSize="@dimen/text_size_12"
+            android:textColor="@color/black_text2"
+            android:background="@color/white_slight"/>
+
+        <TextView
+            android:id="@+id/tv_add"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/margin_2"
+            android:text="+"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/black_text2"
+            android:background="@drawable/corners_gray_right"/>
+
+    </LinearLayout>
+
+</LinearLayout>

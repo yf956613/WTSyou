@@ -14,9 +14,11 @@ limitations under the License.*/
 
 package com.qingye.wtsyou.application;
 
+import android.os.StrictMode;
 import android.util.Log;
 
 import zuo.biao.library.base.BaseApplication;
+import zuo.biao.library.manager.HttpManager;
 import zuo.biao.library.util.StringUtil;
 
 /**Application
@@ -35,6 +37,11 @@ public class DemoApplication extends BaseApplication {
 		super.onCreate();
 		context = this;
 
+		StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+		StrictMode.setVmPolicy(builder.build());
+
+		//初始化请求方法，主要添加context
+		new HttpManager(getApplicationContext());
 	}
 
 }

@@ -67,10 +67,6 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         MessageOfficialFragment messageOfficialFragment = new MessageOfficialFragment();
         MessageShowFragment messageShowFragment = new MessageShowFragment();
         MessageTalkFragment messageTalkFragment = new MessageTalkFragment();

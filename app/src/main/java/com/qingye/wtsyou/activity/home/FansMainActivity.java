@@ -3,18 +3,21 @@ package com.qingye.wtsyou.activity.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.fragment.home.FansMainActivityFragment;
+import com.qingye.wtsyou.fragment.home.FansMainCampaignFragment;
 import com.qingye.wtsyou.fragment.home.FansMainConversationFragment;
 import com.qingye.wtsyou.fragment.home.FansMainIdolFragment;
+import com.qingye.wtsyou.widget.ObservableScrollView;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
@@ -22,6 +25,11 @@ import zuo.biao.library.interfaces.OnBottomDragListener;
 public class FansMainActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
     private ImageView ivBack,ivMore;
+
+    private LinearLayout llHead;
+    private ObservableScrollView scrollView;
+    private ImageView backImageView;
+    private int imageHeight;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -47,10 +55,6 @@ public class FansMainActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fans_main,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
@@ -65,7 +69,7 @@ public class FansMainActivity extends BaseActivity implements View.OnClickListen
 
         FansMainIdolFragment fansMainIdolFragment = new FansMainIdolFragment();
         FansMainConversationFragment fansMainConversationFragment = new FansMainConversationFragment();
-        FansMainActivityFragment fansMainActivityFragment = new FansMainActivityFragment();
+        FansMainCampaignFragment fansMainActivityFragment = new FansMainCampaignFragment();
         //注意这里是调用getSupportFragmentManager()方法
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -74,6 +78,42 @@ public class FansMainActivity extends BaseActivity implements View.OnClickListen
         transaction.replace(R.id.list_focus_conversation,fansMainConversationFragment);
         transaction.replace(R.id.list_focus_campaign,fansMainActivityFragment);
         transaction.commit();
+
+        llHead = findViewById(R.id.ll_head);
+        backImageView = findViewById(R.id.iv_fans_img);
+        scrollView = findViewById(R.id.scrollview);
+        initListeners();
+    }
+
+    private void initListeners() {
+        // 获取顶部图片高度后，设置滚动监听
+        ViewTreeObserver vto = backImageView.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                backImageView.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+                imageHeight = backImageView.getHeight();
+                scrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
+                    @Override
+                    public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
+                        // TODO Auto-generated method stub
+                        if (y <= 0) {
+                            llHead.setBackgroundColor(Color.parseColor("#00ffffff"));
+                            ivBack.setImageResource(R.mipmap.back_l);
+                            ivMore.setImageResource(R.mipmap.more);
+                        } else if (y > 0 && y <= imageHeight) {
+                            llHead.setBackgroundColor(Color.parseColor("#ddffffff"));
+                            ivBack.setImageResource(R.mipmap.back_a);
+                            ivMore.setImageResource(R.mipmap.gengduo);
+                        }
+                    }
+                });
+
+            }
+        });
+
+
     }
 
     @Override

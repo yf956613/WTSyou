@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity;
 import com.qingye.wtsyou.adapter.home.StarsMainCrowdAdapter;
 import com.qingye.wtsyou.modle.Campaign;
 import com.qingye.wtsyou.view.home.StarsMainCrowdView;
@@ -132,4 +134,9 @@ public class MyCampaignCrowdFragment extends BaseHttpRecyclerFragment<Campaign,S
         super.initEvent();
     }
 
+    //点击item
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        toActivity(CrowdDetailedActivity.createIntent(context,id));
+    }
 }

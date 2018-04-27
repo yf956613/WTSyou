@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 通用圆角布局  背景白色  边框灰色--> 
+<!-- 通用圆角布局  背景白色  边框灰色-->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/orange_1" />
     <corners
-        android:radius="8dp"/>
+        android:radius="4dp"/>
     <stroke
         android:color="@color/orange_line"
         android:width="1px"/>

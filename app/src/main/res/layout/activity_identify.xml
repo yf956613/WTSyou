@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_background2"
+    android:orientation="vertical"
+    tools:context="com.qingye.wtsyou.activity.my.CreateAddressActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="@color/white"></LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <include
+            layout="@layout/head"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_2"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="95dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_40"
+            android:src="@mipmap/id"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_45"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:text="为了保证您直播中产生的收益财产安全
+需支付宝实名认证后创建～"
+            android:textSize="@dimen/text_size_13"
+            android:textColor="@color/gray_text2"/>
+
+        <Button
+            android:id="@+id/btn_identify"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="@dimen/margin_45"
+            android:layout_marginBottom="@dimen/margin_15"
+            android:layout_marginLeft="@dimen/margin_15"
+            android:layout_marginRight="@dimen/margin_15"
+            android:background="@drawable/corners_orange_shade_button"
+            android:text="立即验证"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+</LinearLayout>

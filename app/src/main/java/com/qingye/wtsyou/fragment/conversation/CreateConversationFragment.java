@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.activity.ConversationAdapter;
+import com.qingye.wtsyou.adapter.campaign.ConversationAdapter;
 import com.qingye.wtsyou.modle.Conversation;
-import com.qingye.wtsyou.view.activity.ConversationView;
+import com.qingye.wtsyou.view.campaign.ConversationView;
 
 import java.util.ArrayList;
 import java.util.List;

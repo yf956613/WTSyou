@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_15"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_15"
+        android:layout_marginTop="@dimen/margin_4"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:text="1、"
+            android:textSize="@dimen/text_size_13"
+            android:textColor="@color/black_text1"/>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_more"
+                android:layout_width="40dp"
+                android:layout_height="15dp"
+                android:padding="@dimen/margin_4"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/next_l"
+                android:layout_gravity="top"/>
+
+            <ImageView
+                android:id="@+id/iv_less"
+                android:layout_width="40dp"
+                android:layout_height="15dp"
+                android:padding="@dimen/margin_4"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/next_k"
+                android:layout_gravity="top"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginLeft="@dimen/margin_35"
+        android:layout_marginRight="@dimen/margin_45"
+        android:text="想见你APP是一款粉丝追星app，在想见你app里你能找到志同道合的粉丝小伙伴们"
+        android:textSize="@dimen/text_size_12"
+        android:visibility="gone"/>
+
+</LinearLayout>

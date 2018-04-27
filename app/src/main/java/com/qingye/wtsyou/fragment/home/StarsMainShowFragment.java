@@ -53,6 +53,7 @@ public class StarsMainShowFragment extends BaseHttpRecyclerFragment<Campaign,Sta
 
         //禁止滑动
         FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
+        //linearLayoutManager.setScrollEnabled(false);
         rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
         rvBaseRecycler.setLayoutManager(linearLayoutManager);
 

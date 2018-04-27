@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.modle.HeartDetailed;
-import com.qingye.wtsyou.modle.Stars;
 
 import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
@@ -19,7 +18,7 @@ import zuo.biao.library.base.BaseView;
 public class HeartDetailedView extends BaseView<HeartDetailed> implements View.OnClickListener {
 
     public HeartDetailedView(Activity context, ViewGroup parent) {
-        super(context, R.layout.list_heart_detailed, parent);
+        super(context, R.layout.list_detailed, parent);
     }
 
     @SuppressLint("InflateParams")

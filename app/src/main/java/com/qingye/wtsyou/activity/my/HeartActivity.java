@@ -15,6 +15,7 @@ import com.qingye.wtsyou.activity.home.PastChartsRuleActivity;
 import com.qingye.wtsyou.adapter.my.HeartDetailedAdapter;
 import com.qingye.wtsyou.modle.HeartDetailed;
 import com.qingye.wtsyou.view.my.HeartDetailedView;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,15 +52,17 @@ public class HeartActivity extends BaseHttpRecyclerActivity<HeartDetailed,HeartD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_heart,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
+
+        //禁止滑动
+        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
+        linearLayoutManager.setScrollEnabled(false);
+        rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
+        rvBaseRecycler.setLayoutManager(linearLayoutManager);
 
         //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
@@ -84,7 +87,7 @@ public class HeartActivity extends BaseHttpRecyclerActivity<HeartDetailed,HeartD
     @Override
     public void setList(List<HeartDetailed> list) {
         final List<HeartDetailed> templist = new ArrayList<>();
-        for(int i = 1;i < 6;i ++) {
+        for(int i = 1;i < 9;i ++) {
             HeartDetailed heartDetailed = new HeartDetailed();
             heartDetailed.setId(i);
             templist.add(heartDetailed);

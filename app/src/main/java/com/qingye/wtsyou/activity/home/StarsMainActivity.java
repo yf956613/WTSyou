@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
@@ -19,7 +18,6 @@ import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.search.SearchFansActivity;
 import com.qingye.wtsyou.adapter.SlidingPagerAdapter;
 import com.qingye.wtsyou.entity.TabEntity;
 import com.qingye.wtsyou.fragment.home.StarsMainCrowdFragment;
@@ -72,10 +70,6 @@ public class StarsMainActivity extends BaseActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stars_main,this);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
 
         StarsMainShowFragment starsMainShowFragment = new StarsMainShowFragment();
         StarsMainCrowdFragment starsMainCrowdFragment = new StarsMainCrowdFragment();

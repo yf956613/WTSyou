@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <com.qingye.wtsyou.wheelview.WheelView
+        android:id="@+id/wheel_view_wv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:textColorCenter="@color/orange_text2"
+        app:lineSpaceingDimens="10dp"
+        app:itemVisibleNum="2"
+        app:lineColor="@color/orange_text2"
+        app:textSizeCenter="22dp"
+        app:textSizeOuter="14dp"
+        app:isLoop="true"
+        app:textColorOuter="@android:color/darker_gray"
+    />
+
+
+</LinearLayout>

@@ -8,6 +8,7 @@
 
     <ScrollView
         style="@style/ll_vertical_match_match"
+        android:overScrollMode="never"
         android:scrollbars="none"
         android:layout_weight="1">
 
@@ -26,6 +27,7 @@
                     android:src="@mipmap/personal_background"/>
 
                 <RelativeLayout
+                    android:id="@+id/rlPersonalMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_65"
@@ -78,7 +80,7 @@
                             android:textSize="@dimen/text_size_11"/>
 
                         <TextView
-                            android:id="@+id/personal_sign"
+                            android:id="@+id/personal_signnature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:maxLength="15"
@@ -89,10 +91,11 @@
 
                         <ImageView
                             android:id="@+id/change_sign"
-                            android:layout_width="11dp"
-                            android:layout_height="11dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:padding="@dimen/margin_4"
                             android:layout_marginLeft="@dimen/margin_8"
-                            android:src="@mipmap/editors"/>
+                            android:src="@mipmap/editors" />
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -119,7 +122,7 @@
                         android:layout_marginTop="@dimen/margin_8"
                         android:layout_marginLeft="@dimen/margin_10"
                         android:text="我的"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_13"
                         android:textColor="@color/black_text"/>
 
                     <View
@@ -164,7 +167,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/margin_5"
                                     android:text="爱豆"
-                                    android:textSize="@dimen/text_size_12"
+                                    android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/black_text"/>
                             </LinearLayout>
 
@@ -203,7 +206,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/margin_5"
                                     android:text="好友"
-                                    android:textSize="@dimen/text_size_12"
+                                    android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/black_text"/>
                             </LinearLayout>
 
@@ -242,7 +245,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/margin_5"
                                     android:text="聊天室"
-                                    android:textSize="@dimen/text_size_12"
+                                    android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/black_text"/>
                             </LinearLayout>
 
@@ -288,7 +291,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/margin_5"
                                     android:text="爱心"
-                                    android:textSize="@dimen/text_size_12"
+                                    android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/black_text"/>
                             </LinearLayout>
 
@@ -327,7 +330,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/margin_5"
                                     android:text="钻石"
-                                    android:textSize="@dimen/text_size_12"
+                                    android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/black_text"/>
                             </LinearLayout>
 
@@ -366,7 +369,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/margin_5"
                                     android:text="金币"
-                                    android:textSize="@dimen/text_size_12"
+                                    android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/black_text"/>
                             </LinearLayout>
 
@@ -387,8 +390,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/margin_8"
                     android:layout_marginRight="@dimen/margin_10"
-                    android:layout_marginTop="@dimen/margin_11"
-                    android:layout_marginBottom="@dimen/margin_11"
+                    android:paddingTop="@dimen/margin_11"
+                    android:paddingBottom="@dimen/margin_11"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -405,7 +408,7 @@
                             android:layout_marginLeft="@dimen/margin_8"
                             android:layout_gravity="center"
                             android:text="活动"
-                            android:textSize="@dimen/text_size_12"
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text"/>
                     </LinearLayout>
 
@@ -428,8 +431,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/margin_8"
                     android:layout_marginRight="@dimen/margin_10"
-                    android:layout_marginTop="@dimen/margin_11"
-                    android:layout_marginBottom="@dimen/margin_11"
+                    android:paddingTop="@dimen/margin_11"
+                    android:paddingBottom="@dimen/margin_11"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -446,7 +449,7 @@
                             android:layout_marginLeft="@dimen/margin_8"
                             android:layout_gravity="center"
                             android:text="订单"
-                            android:textSize="@dimen/text_size_12"
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text"/>
                     </LinearLayout>
 
@@ -469,8 +472,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/margin_8"
                     android:layout_marginRight="@dimen/margin_10"
-                    android:layout_marginTop="@dimen/margin_11"
-                    android:layout_marginBottom="@dimen/margin_11"
+                    android:paddingTop="@dimen/margin_11"
+                    android:paddingBottom="@dimen/margin_11"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -487,7 +490,7 @@
                             android:layout_marginLeft="@dimen/margin_8"
                             android:layout_gravity="center"
                             android:text="卡券"
-                            android:textSize="@dimen/text_size_12"
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text"/>
                     </LinearLayout>
 
@@ -510,8 +513,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/margin_8"
                     android:layout_marginRight="@dimen/margin_10"
-                    android:layout_marginTop="@dimen/margin_11"
-                    android:layout_marginBottom="@dimen/margin_11"
+                    android:paddingTop="@dimen/margin_11"
+                    android:paddingBottom="@dimen/margin_11"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -528,7 +531,7 @@
                             android:layout_marginLeft="@dimen/margin_8"
                             android:layout_gravity="center"
                             android:text="地址"
-                            android:textSize="@dimen/text_size_12"
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text"/>
                     </LinearLayout>
 
@@ -551,8 +554,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/margin_8"
                     android:layout_marginRight="@dimen/margin_10"
-                    android:layout_marginTop="@dimen/margin_11"
-                    android:layout_marginBottom="@dimen/margin_11"
+                    android:paddingTop="@dimen/margin_11"
+                    android:paddingBottom="@dimen/margin_11"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -569,7 +572,7 @@
                             android:layout_marginLeft="@dimen/margin_8"
                             android:layout_gravity="center"
                             android:text="门票"
-                            android:textSize="@dimen/text_size_12"
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text"/>
                     </LinearLayout>
 
@@ -600,8 +603,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/margin_8"
                     android:layout_marginRight="@dimen/margin_10"
-                    android:layout_marginTop="@dimen/margin_11"
-                    android:layout_marginBottom="@dimen/margin_11"
+                    android:paddingTop="@dimen/margin_11"
+                    android:paddingBottom="@dimen/margin_11"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -618,7 +621,7 @@
                             android:layout_marginLeft="@dimen/margin_8"
                             android:layout_gravity="center"
                             android:text="设置"
-                            android:textSize="@dimen/text_size_12"
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text"/>
                     </LinearLayout>
 
@@ -637,8 +640,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_25">
+        android:layout_height="wrap_content">
 
         <include layout="@layout/personal_head"/>
     </LinearLayout>

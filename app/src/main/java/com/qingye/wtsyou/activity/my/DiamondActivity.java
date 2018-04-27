@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import com.qingye.wtsyou.modle.DiamondDetailed;
 import com.qingye.wtsyou.modle.HeartDetailed;
 import com.qingye.wtsyou.view.my.DiamondDetailedView;
 import com.qingye.wtsyou.view.my.HeartDetailedView;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ public class DiamondActivity extends BaseHttpRecyclerActivity<DiamondDetailed,Di
 
     private ImageView ivBack,ivRule;
     private TextView tvHead;
+    private Button btnRecharge;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -54,15 +57,17 @@ public class DiamondActivity extends BaseHttpRecyclerActivity<DiamondDetailed,Di
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diamond,this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
+
+        //禁止滑动
+        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
+        linearLayoutManager.setScrollEnabled(false);
+        rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
+        rvBaseRecycler.setLayoutManager(linearLayoutManager);
 
         //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
@@ -82,12 +87,13 @@ public class DiamondActivity extends BaseHttpRecyclerActivity<DiamondDetailed,Di
         tvHead = findViewById(R.id.tv_head_title);
         tvHead.setText("我的钻石");
         tvHead.setTextColor(getResources().getColor(R.color.white));
+        btnRecharge = findViewById(R.id.btn_recharge);
     }
 
     @Override
     public void setList(List<DiamondDetailed> list) {
         final List<DiamondDetailed> templist = new ArrayList<>();
-        for(int i = 1;i < 6;i ++) {
+        for(int i = 1;i < 9;i ++) {
             DiamondDetailed diamondDetailed = new DiamondDetailed();
             diamondDetailed.setId(i);
             templist.add(diamondDetailed);
@@ -127,6 +133,7 @@ public class DiamondActivity extends BaseHttpRecyclerActivity<DiamondDetailed,Di
         super.initEvent();
         ivBack.setOnClickListener(this);
         ivRule.setOnClickListener(this);
+        btnRecharge.setOnClickListener(this);
     }
 
     @Override
@@ -137,6 +144,9 @@ public class DiamondActivity extends BaseHttpRecyclerActivity<DiamondDetailed,Di
                 break;
             case R.id.iv_right:
                 toActivity(PastChartsRuleActivity.createIntent(context));
+                break;
+            case R.id.btn_recharge:
+                toActivity(RechargeActivity.createIntent(context));
                 break;
             default:
                 break;

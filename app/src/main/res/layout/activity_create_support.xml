@@ -53,7 +53,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_16"
                         android:text="应援标题"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_13"
                         android:textColor="@color/black_text1"/>
 
                     <fj.edittextcount.lib.FJEditTextCount
@@ -69,7 +69,7 @@
                         app:etPromptTextColor="@color/gray_text2"
                         app:etPromptTextSize="@dimen/text_size_12"
                         app:etTextColor="@color/black_text1"
-                        app:etTextSize="@dimen/text_size_12"
+                        app:etTextSize="@dimen/text_size_13"
                         app:etPromptPosition="promptDn"
                         app:etType="percentage"
                         app:etLineColor="#00ffffff"/>
@@ -92,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_16"
                         android:text="具体描述"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_13"
                         android:textColor="@color/black_text1"/>
 
                     <fj.edittextcount.lib.FJEditTextCount
@@ -106,9 +106,9 @@
                         app:etHint="应援标题，300字以内"
                         app:etMaxLength="300"
                         app:etPromptTextColor="@color/gray_text2"
-                        app:etPromptTextSize="@dimen/text_size_12"
+                        app:etPromptTextSize="@dimen/text_size_13"
                         app:etTextColor="@color/black_text1"
-                        app:etTextSize="@dimen/text_size_12"
+                        app:etTextSize="@dimen/text_size_13"
                         app:etPromptPosition="promptDn"
                         app:etType="percentage"
                         app:etLineColor="#00ffffff"/>
@@ -142,7 +142,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="@dimen/margin_75"
                             android:text="添加图片"
-                            android:textSize="@dimen/text_size_12"
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/gray_text7"/>
 
                     </RelativeLayout>
@@ -172,7 +172,7 @@
                     android:layout_marginTop="@dimen/margin_15"
                     android:layout_marginLeft="@dimen/margin_15"
                     android:text="选择应援类型"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_13"
                     android:textColor="@color/black_text1"/>
 
                 <RadioGroup
@@ -196,7 +196,7 @@
                         android:layout_marginLeft="@dimen/margin_15"
                         android:text="开机屏"
                         android:textColor="@color/color_radio_button"
-                        android:textSize="@dimen/text_size_12"
+                        android:textSize="@dimen/text_size_13"
                         android:checked="true"/>
 
                     <RadioButton
@@ -212,7 +212,7 @@
                         android:layout_marginLeft="@dimen/margin_15"
                         android:text="轮播图"
                         android:textColor="@color/color_radio_button"
-                        android:textSize="@dimen/text_size_12"/>
+                        android:textSize="@dimen/text_size_13"/>
 
                     <RadioButton
                         android:id="@+id/rbt_article"
@@ -227,7 +227,7 @@
                         android:layout_marginLeft="@dimen/margin_15"
                         android:text="安利文"
                         android:textColor="@color/color_radio_button"
-                        android:textSize="@dimen/text_size_12"/>
+                        android:textSize="@dimen/text_size_13"/>
 
                     <RadioButton
                         android:id="@+id/rbt_raise"
@@ -242,7 +242,7 @@
                         android:layout_marginLeft="@dimen/margin_15"
                         android:text="集资"
                         android:textColor="@color/color_radio_button"
-                        android:textSize="@dimen/text_size_12"/>
+                        android:textSize="@dimen/text_size_13"/>
 
                 </RadioGroup>
 
@@ -266,7 +266,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="一、申请投票需要什么条件"
-                            android:textSize="@dimen/text_size_12"
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text1"/>
 
                         <TextView
@@ -274,7 +274,7 @@
                             android:layout_height="wrap_content"
                             android:text="1.等级达到6级以上"
                             android:layout_marginTop="@dimen/margin_6"
-                            android:textSize="@dimen/text_size_10"
+                            android:textSize="@dimen/text_size_11"
                             android:textColor="@color/gray_text1"/>
 
                         <TextView
@@ -282,7 +282,7 @@
                             android:layout_height="wrap_content"
                             android:text="2.填写对应投票资料"
                             android:layout_marginTop="@dimen/margin_4"
-                            android:textSize="@dimen/text_size_10"
+                            android:textSize="@dimen/text_size_11"
                             android:textColor="@color/gray_text1"/>
 
                         <TextView
@@ -290,7 +290,7 @@
                             android:layout_height="wrap_content"
                             android:text="二、申请投票需要审核多久"
                             android:layout_marginTop="@dimen/margin_6"
-                            android:textSize="@dimen/text_size_12"
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text1"/>
 
                         <TextView
@@ -298,7 +298,7 @@
                             android:layout_height="wrap_content"
                             android:text="在三个工作日内给予答复"
                             android:layout_marginTop="@dimen/margin_6"
-                            android:textSize="@dimen/text_size_10"
+                            android:textSize="@dimen/text_size_11"
                             android:textColor="@color/gray_text1"/>
 
                     </LinearLayout>
@@ -309,8 +309,8 @@
                         android:paddingTop="@dimen/margin_2"
                         android:layout_marginBottom="@dimen/margin_2"
                         android:gravity="center"
-                        android:text="投票须知"
-                        android:textSize="@dimen/text_size_10"
+                        android:text="应援须知"
+                        android:textSize="@dimen/text_size_11"
                         android:textColor="@color/white"
                         android:background="@drawable/re_corners_pink"/>
 
@@ -349,7 +349,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
                                 android:text="目标金额"
-                                android:textSize="@dimen/text_size_12"
+                                android:textSize="@dimen/text_size_13"
                                 android:textColor="@color/black_text1"/>
 
                             <EditText
@@ -360,7 +360,7 @@
                                 android:numeric="integer"
                                 android:maxLength="10"
                                 android:hint="目标金额"
-                                android:textSize="@dimen/text_size_12"
+                                android:textSize="@dimen/text_size_13"
                                 android:textColorHint="@color/gray_text2"
                                 android:textColor="@color/black_text1"
                                 android:textCursorDrawable="@drawable/color_cursor"
@@ -397,7 +397,7 @@
                                 android:layout_alignParentLeft="true"
                                 android:layout_gravity="center_vertical"
                                 android:text="关联明星"
-                                android:textSize="@dimen/text_size_12"
+                                android:textSize="@dimen/text_size_13"
                                 android:textColor="@color/black_text1"/>
 
                             <FrameLayout
@@ -449,7 +449,7 @@
                                 android:layout_alignParentLeft="true"
                                 android:layout_gravity="center_vertical"
                                 android:text="关联聊天室"
-                                android:textSize="@dimen/text_size_12"
+                                android:textSize="@dimen/text_size_13"
                                 android:textColor="@color/black_text1"/>
 
                             <FrameLayout

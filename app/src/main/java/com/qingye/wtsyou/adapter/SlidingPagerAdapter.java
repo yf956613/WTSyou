@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 
 public class SlidingPagerAdapter extends FragmentPagerAdapter {
+
     private ArrayList<Fragment> mFragments;
     private String[] mTitles_3;
     private Context activity;

@@ -141,6 +141,6 @@ public class HomeChartsStarsFragment extends BaseHttpListFragment<Charts,HomeCha
     //点击item
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        toActivity(StarsMainActivity.createIntent(context, id));
+        //toActivity(StarsMainActivity.createIntent(context, id));
     }
 }

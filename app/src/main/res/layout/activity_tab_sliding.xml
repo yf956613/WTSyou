@@ -24,11 +24,17 @@
         tl:tl_indicator_color_start="#FE8360"
         tl:tl_indicator_color_end="#FFB447"
         tl:tl_underline_color="#DDDDDD"
-        tl:tl_underline_height="1dp"/>
+        tl:tl_underline_height="1.5px"/>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
 
 </LinearLayout>

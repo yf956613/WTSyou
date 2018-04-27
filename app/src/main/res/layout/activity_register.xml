@@ -58,9 +58,19 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:layout_gravity="center"
-                        android:text="中国大陆 （+"
+                        android:text="中国大陆"
                         android:textColor="@color/black_text1"
-                        android:textSize="@dimen/text_size_12"/>
+                        android:textSize="@dimen/text_size_13"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center"
+                        android:text=" （+"
+                        android:textColor="@color/black_text1"
+                        android:textSize="@dimen/text_size_13"/>
+
 
                     <TextView
                         android:id="@+id/tv_area_num"
@@ -70,7 +80,7 @@
                         android:layout_gravity="center"
                         android:text="86"
                         android:textColor="@color/black_text1"
-                        android:textSize="@dimen/text_size_12"/>
+                        android:textSize="@dimen/text_size_13"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -79,7 +89,7 @@
                         android:layout_gravity="center"
                         android:text="）"
                         android:textColor="@color/black_text1"
-                        android:textSize="@dimen/text_size_12"/>
+                        android:textSize="@dimen/text_size_13"/>
 
 
                 </LinearLayout>
@@ -107,7 +117,7 @@
                 android:maxLength="11"
                 android:numeric="integer"
                 android:textColor="@color/black_text1"
-                android:textSize="@dimen/text_size_12"
+                android:textSize="@dimen/text_size_13"
                 android:textColorHint="@color/gray_text2"
                 android:hint="请输入手机号"
                 android:textCursorDrawable="@drawable/color_cursor"
@@ -133,7 +143,7 @@
                     android:maxLength="11"
                     android:numeric="integer"
                     android:textColor="@color/black_text1"
-                    android:textSize="@dimen/text_size_12"
+                    android:textSize="@dimen/text_size_13"
                     android:textColorHint="@color/gray_text2"
                     android:hint="请输入验证码"
                     android:textCursorDrawable="@drawable/color_cursor"
@@ -165,7 +175,7 @@
                 android:layout_gravity="center"
                 android:inputType="textPassword"
                 android:textColor="@color/black_text1"
-                android:textSize="@dimen/text_size_12"
+                android:textSize="@dimen/text_size_13"
                 android:textColorHint="@color/gray_text2"
                 android:hint="请输入密码"
                 android:textCursorDrawable="@drawable/color_cursor"
@@ -212,7 +222,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="注册即代表你同意"
-            android:textSize="@dimen/text_size_9"
+            android:textSize="@dimen/text_size_10"
             android:textColor="@color/orange_text3"/>
 
         <LinearLayout
@@ -227,7 +237,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="想见你服务协议"
-                android:textSize="@dimen/text_size_9"
+                android:textSize="@dimen/text_size_10"
                 android:textColor="@color/orange_text3"/>
 
             <View

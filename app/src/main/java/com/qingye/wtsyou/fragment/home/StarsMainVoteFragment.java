@@ -11,6 +11,7 @@ import com.qingye.wtsyou.activity.campaign.VoteDetailActivity;
 import com.qingye.wtsyou.adapter.home.StarsMainVoteAdapter;
 import com.qingye.wtsyou.modle.Campaign;
 import com.qingye.wtsyou.view.home.StarsMainVoteView;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,12 @@ import zuo.biao.library.interfaces.CacheCallBack;
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
+
+        //禁止滑动
+        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
+        //linearLayoutManager.setScrollEnabled(false);
+        rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
+        rvBaseRecycler.setLayoutManager(linearLayoutManager);
 
         //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新

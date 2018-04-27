@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.activity.ActivityOfficialAdapter;
+import com.qingye.wtsyou.adapter.campaign.ActivityOfficialAdapter;
 import com.qingye.wtsyou.modle.Campaign;
-import com.qingye.wtsyou.view.activity.ActivityOfficialView;
+import com.qingye.wtsyou.view.campaign.ActivityOfficialView;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -7,7 +7,8 @@
     android:background="@color/gray_background"
     tools:context="com.qingye.wtsyou.activity.campaign.VoteDetailActivity">
 
-    <ScrollView
+    <com.qingye.wtsyou.widget.ObservableScrollView
+        android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
@@ -15,7 +16,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:focusable="true"
             android:focusableInTouchMode="true">
@@ -154,15 +155,15 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="65dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_6"
-                    android:layout_marginRight="@dimen/margin_6"
-                    android:layout_marginTop="@dimen/margin_12">
+                    android:layout_marginRight="@dimen/margin_6">
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="6"
+                        android:layout_gravity="center_vertical"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -233,7 +234,7 @@
 
                     </LinearLayout>
 
-                    <com.qingye.wtsyou.widget.CircleProgressBar
+                    <!--<com.qingye.wtsyou.widget.CircleProgressBar
                         android:layout_below="@+id/ll_center"
                         android:id="@+id/join_progressbar"
                         android:layout_width="0dp"
@@ -256,23 +257,78 @@
                         app:is_set_bottom_content="true"
                         app:bottom_content="投票进度"
                         app:bottom_content_color="@color/gray_text5"
-                        app:bottom_content_text_size="@dimen/text_size_7"/>
+                        app:bottom_content_text_size="@dimen/text_size_7"/>-->
+
+                    <RelativeLayout
+                        android:id="@+id/circleprogress"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.6"
+                        android:layout_below="@+id/ll_center">
+
+                        <com.qingye.wtsyou.widget.CircleProgress
+                            android:id="@+id/join_progressbar"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:layout_centerHorizontal="true"
+                            app:progress_color1="#9BF1ED"
+                            app:progress_color2="#9BF1ED"
+                            app:progress_color3="#9BF1ED"
+                            app:circle_width="1dp"
+                            app:circle_color="@color/gray_background"
+                            app:current_progress_text_size="@dimen/text_size_14"
+                            app:progress_width="3dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/margin_25"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:text="投票进度"
+                            android:textSize="@dimen/text_size_8"
+                            android:textColor="@color/gray_text5"/>
+
+                    </RelativeLayout>
 
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/btn_vote"
+                <RelativeLayout
+                    android:id="@+id/rl_btn"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="@dimen/margin_10"
-                    android:layout_marginBottom="@dimen/margin_10"
-                    android:layout_marginLeft="@dimen/margin_6"
-                    android:layout_marginRight="@dimen/margin_6"
-                    android:background="@drawable/corners_orange_shade_button"
-                    android:textAllCaps="false"
-                    android:text="立即投票给idol"
-                    android:textSize="@dimen/text_size_14"
-                    android:textColor="@color/white"/>
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true">
+
+                    <Button
+                        android:id="@+id/btn_vote"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:layout_marginBottom="@dimen/margin_10"
+                        android:layout_marginLeft="@dimen/margin_6"
+                        android:layout_marginRight="@dimen/margin_6"
+                        android:background="@drawable/corners_orange_shade_button"
+                        android:textAllCaps="false"
+                        android:text="立即投票给idol"
+                        android:textSize="@dimen/text_size_14"
+                        android:textColor="@color/white"/>
+
+                    <Button
+                        android:id="@+id/btn_vote_end"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:layout_marginBottom="@dimen/margin_10"
+                        android:layout_marginLeft="@dimen/margin_6"
+                        android:layout_marginRight="@dimen/margin_6"
+                        android:background="@drawable/corners_orange_white_transparent_shade_button"
+                        android:textAllCaps="false"
+                        android:text="投票结束"
+                        android:textSize="@dimen/text_size_14"
+                        android:textColor="@color/white"
+                        android:visibility="gone"/>
+
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -508,7 +564,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/ll_conversation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -517,6 +573,7 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
+                    android:id="@+id/text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_5"
@@ -536,18 +593,51 @@
                 </RelativeLayout>
 
                 <FrameLayout
+                    android:layout_below="@+id/text"
                     android:id="@+id/list_conversation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_below="@+id/text"
+                    android:id="@+id/ll_select_conversation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_15"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="当前还没关联聊天室哦，立即去关联吧~"
+                        android:textSize="@dimen/text_size_12"
+                        android:gravity="center_horizontal"/>
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/margin_15"
+                        android:layout_marginBottom="@dimen/margin_15"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/margin_4"
+                        android:paddingBottom="@dimen/margin_4"
+                        android:text="关联聊天室"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/orange_line"
+                        android:background="@drawable/corners_orange_1"/>
+                </LinearLayout>
+
+            </RelativeLayout>
 
         </LinearLayout>
 
-    </ScrollView>
+    </com.qingye.wtsyou.widget.ObservableScrollView>
 
     <LinearLayout
-        android:id="@+id/head"
+        android:id="@+id/ll_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <include layout="@layout/transparent_head"/>
