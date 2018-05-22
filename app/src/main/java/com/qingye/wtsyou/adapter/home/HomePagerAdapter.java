@@ -7,10 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.fragment.home.FragmentFactory;
+import com.qingye.wtsyou.modle.RecommendStars;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomePagerAdapter extends FragmentPagerAdapter {
 
     private String[] tabArr = {"1","2","3","4"};
+    private List<RecommendStars> recommendStarsList = new ArrayList<>();
 
     public HomePagerAdapter(FragmentManager fm) {
         super(fm);

@@ -10,7 +10,8 @@ import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.campaign.ActivityOfficialAdapter;
-import com.qingye.wtsyou.modle.Campaign;
+import com.qingye.wtsyou.modle.Officials;
+import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.view.campaign.ActivityOfficialView;
 
 import java.util.ArrayList;
@@ -23,7 +24,9 @@ import zuo.biao.library.interfaces.CacheCallBack;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ActivityOfficialFragment extends BaseHttpRecyclerFragment<Campaign,ActivityOfficialView,ActivityOfficialAdapter> implements CacheCallBack<Campaign> {
+public class ActivityOfficialFragment extends BaseHttpRecyclerFragment<Officials,ActivityOfficialView,ActivityOfficialAdapter> implements CacheCallBack<Officials> {
+
+    private  List<Officials> officials =  new ArrayList<>();
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -48,6 +51,10 @@ public class ActivityOfficialFragment extends BaseHttpRecyclerFragment<Campaign,
 
         initCache(this);
 
+        //获取传来的数据
+        Bundle bundle = getArguments();
+        officials = (List<Officials>) bundle.getSerializable(Constant.OFFICIALS);
+
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
@@ -64,6 +71,9 @@ public class ActivityOfficialFragment extends BaseHttpRecyclerFragment<Campaign,
         rvBaseRecycler.setLayoutManager(layoutManager);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
+        srlBaseHttpRecycler.autoRefresh();
+        setList(officials);
+
         return view;
     }
 
@@ -73,14 +83,7 @@ public class ActivityOfficialFragment extends BaseHttpRecyclerFragment<Campaign,
     }
 
     @Override
-    public void setList(final List<Campaign> list) {
-        final List<Campaign> templist = new ArrayList<>();
-        for(int i = 1;i < 3;i ++) {
-            Campaign campaign = new Campaign();
-            campaign.setId(i);
-            templist.add(campaign);
-        }
-        //list.addAll(templist);
+    public void setList(final List<Officials> list) {
         setList(new AdapterCallBack<ActivityOfficialAdapter>() {
 
             @Override
@@ -90,7 +93,7 @@ public class ActivityOfficialFragment extends BaseHttpRecyclerFragment<Campaign,
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -109,12 +112,12 @@ public class ActivityOfficialFragment extends BaseHttpRecyclerFragment<Campaign,
     }
 
     @Override
-    public List<Campaign> parseArray(String json) {
+    public List<Officials> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Campaign> getCacheClass() {
+    public Class<Officials> getCacheClass() {
         return null;
     }
 
@@ -124,7 +127,7 @@ public class ActivityOfficialFragment extends BaseHttpRecyclerFragment<Campaign,
     }
 
     @Override
-    public String getCacheId(Campaign data) {
+    public String getCacheId(Officials data) {
         return null;
     }
 

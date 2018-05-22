@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.campaign.ActivityOfficialAdapter;
-import com.qingye.wtsyou.modle.Campaign;
+import com.qingye.wtsyou.modle.Officials;
 import com.qingye.wtsyou.view.campaign.ActivityOfficialView;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import zuo.biao.library.interfaces.CacheCallBack;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Campaign,ActivityOfficialView,ActivityOfficialAdapter> implements View.OnClickListener ,CacheCallBack<Campaign> {
+public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Officials,ActivityOfficialView,ActivityOfficialAdapter> implements View.OnClickListener ,CacheCallBack<Officials> {
 
     private int size = 2;
 
@@ -76,10 +76,10 @@ public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Campaign,
     }
 
     @Override
-    public void setList(final List<Campaign> list) {
-        final List<Campaign> templist = new ArrayList<>();
+    public void setList(final List<Officials> list) {
+        final List<Officials> templist = new ArrayList<>();
         for(int i = 0;i < size;i ++) {
-            Campaign campaign = new Campaign();
+            Officials campaign = new Officials();
             campaign.setId(i);
             templist.add(campaign);
         }
@@ -112,12 +112,12 @@ public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Campaign,
     }
 
     @Override
-    public List<Campaign> parseArray(String json) {
+    public List<Officials> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Campaign> getCacheClass() {
+    public Class<Officials> getCacheClass() {
         return null;
     }
 
@@ -127,7 +127,7 @@ public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Campaign,
     }
 
     @Override
-    public String getCacheId(Campaign data) {
+    public String getCacheId(Officials data) {
         return null;
     }
 

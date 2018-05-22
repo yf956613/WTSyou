@@ -76,7 +76,7 @@ public class AssociateConversationFragment extends BaseHttpRecyclerFragment<Conv
     @Override
     public void setList(final List<Conversation> list) {
         final List<Conversation> templist = new ArrayList<>();
-        for(int i = 1;i < 6;i ++) {
+        for(int i = 1;i < 4;i ++) {
             Conversation conversation = new Conversation();
             conversation.setId(i);
             templist.add(conversation);

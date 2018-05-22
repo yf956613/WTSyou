@@ -84,7 +84,7 @@ public class WithdrawActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.btn_withdraw:
-                finish();
+
                 break;
             default:
                 break;

@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.home.PastChartsDetailedActivity;
-import com.qingye.wtsyou.adapter.home.HomeChartsPastAdapter;
-import com.qingye.wtsyou.modle.Charts;
-import com.qingye.wtsyou.view.home.HomeChartsPastView;
+import com.qingye.wtsyou.activity.home.PastStarsChartsDetailedActivity;
+import com.qingye.wtsyou.adapter.home.HomeStarsChartsPastAdapter;
+import com.qingye.wtsyou.modle.StarsCharts;
+import com.qingye.wtsyou.view.home.HomeStarsChartsPastView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import zuo.biao.library.interfaces.CacheCallBack;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<Charts,HomeChartsPastView,HomeChartsPastAdapter> implements CacheCallBack<Charts> {
+public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<StarsCharts,HomeStarsChartsPastView,HomeStarsChartsPastAdapter> implements CacheCallBack<StarsCharts> {
 
     int Position;
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -77,19 +77,18 @@ public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<Charts
     }
 
     @Override
-    public void setList(final List<Charts> list) {
-        final List<Charts> templist = new ArrayList<>();
+    public void setList(final List<StarsCharts> list) {
+        final List<StarsCharts> templist = new ArrayList<>();
         for(int i = 1;i < 4;i ++) {
-            Charts charts = new Charts();
-            charts.setId(i);
+            StarsCharts charts = new StarsCharts();
             templist.add(charts);
         }
         //list.addAll(templist);
-        setList(new AdapterCallBack<HomeChartsPastAdapter>() {
+        setList(new AdapterCallBack<HomeStarsChartsPastAdapter>() {
 
             @Override
-            public HomeChartsPastAdapter createAdapter() {
-                return new HomeChartsPastAdapter(context);
+            public HomeStarsChartsPastAdapter createAdapter() {
+                return new HomeStarsChartsPastAdapter(context);
             }
 
             @Override
@@ -110,7 +109,7 @@ public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<Charts
     }
 
     @Override
-    public List<Charts> parseArray(String json) {
+    public List<StarsCharts> parseArray(String json) {
         return null;
     }
 
@@ -120,7 +119,7 @@ public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<Charts
     }
 
     @Override
-    public Class<Charts> getCacheClass() {
+    public Class<StarsCharts> getCacheClass() {
         return null;
     }
 
@@ -130,7 +129,7 @@ public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<Charts
     }
 
     @Override
-    public String getCacheId(Charts data) {
+    public String getCacheId(StarsCharts data) {
         return null;
     }
 
@@ -142,7 +141,7 @@ public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<Charts
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (id > 0) {
-            toActivity(PastChartsDetailedActivity.createIntent(context, id, Position));
+            toActivity(PastStarsChartsDetailedActivity.createIntent(context, id, Position));
         }
     }
 }

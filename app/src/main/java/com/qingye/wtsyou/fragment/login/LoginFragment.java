@@ -1,10 +1,9 @@
 package com.qingye.wtsyou.fragment.login;
 
 
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,23 +13,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.qingye.wtsyou.MainActivity;
+import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainTabActivity;
-import com.qingye.wtsyou.activity.home.ChartsActivity;
-import com.qingye.wtsyou.activity.search.SelectStarsActivity;
-import com.qingye.wtsyou.adapter.home.HomePagerAdapter;
-import com.qingye.wtsyou.utils.EntityLogin;
+import com.qingye.wtsyou.modle.EntityLogin;
 import com.qingye.wtsyou.utils.HttpRequest;
+import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.widget.CustomDialog;
 import com.qingye.wtsyou.widget.VerticalViewPager;
 
-import me.relex.circleindicator.CircleIndicator;
 import zuo.biao.library.base.BaseFragment;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.manager.HttpManager;
 import zuo.biao.library.ui.AlertDialog;
 import zuo.biao.library.util.JSON;
-import zuo.biao.library.util.Log;
+import zuo.biao.library.util.StringUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +40,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     private EditText edtLoginId;//用户名
     private EditText edtPassword;//密码
     private Button btnLogin;//登录
+
+    private CustomDialog progressBar;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -59,6 +58,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.fragment_login);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
+
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
@@ -94,13 +95,40 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         btnLogin = findViewById(R.id.btn_login);
 
         //TODO--DELETE
-        edtLoginId.setText("18106956212");
+        edtLoginId.setText("18250711172");
         edtPassword.setText("123456");
     }
 
     @Override
     public void initData() {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
+        }
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
     }
 
     @Override
@@ -116,6 +144,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_login:
+                //toActivity(MainTabActivity.createIntent(context));
                 login();
                 break;
             case R.id.tv_modify_pwd:
@@ -155,38 +184,58 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                 break;
         }
     }
+
     public void login() {
         String loginId = edtLoginId.getText().toString().trim();
-        String password=edtPassword.getText().toString().trim();
-        if(TextUtils.isEmpty(loginId)){
-            showShortToast("请输入账号");
+        String password = edtPassword.getText().toString().trim();
+        if (TextUtils.isEmpty(loginId)){
+            showShortToast(R.string.editPhone);
             return;
-        }
-        if(TextUtils.isEmpty(password)){
-            showShortToast("请输入密码");
-            return;
-        }
-
-        //仅测试用
-        HttpRequest.login("mobile", edtLoginId.getText().toString(),edtPassword.getText().toString(),0, new OnHttpResponseListener() {
-
-            @Override
-            public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-
-                if(requestCode==0){
-                    EntityLogin entityLogin =  JSON.parseObject(resultJson,EntityLogin.class);
-                    if(entityLogin.isSuccess()){
-                        showShortToast("登录成功");
-                        HttpManager.getInstance().saveToken(entityLogin.getContent());//保存token信息
-                        //
-                        toActivity(MainTabActivity.createIntent(context));
-                    }else{
-                        showShortToast(entityLogin.getMessage());
-                    }
-
-                }
-//
+        } else {
+            if (loginId.length() < 11) {
+                showShortToast(R.string.checkPhone);
+                return;
             }
-        });
+        }
+        if (TextUtils.isEmpty(password)){
+            showShortToast(R.string.editPassword);
+            return;
+        }
+
+        if (NetUtil.checkNetwork(context)) {
+            setProgressBar();
+            progressBar.show();
+
+            HttpRequest.postLogin(0,"mobile", edtLoginId.getText().toString(),edtPassword.getText().toString(), new OnHttpResponseListener() {
+
+                @Override
+                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+
+                    if(!StringUtil.isEmpty(resultJson)){
+                        EntityLogin entityLogin =  JSON.parseObject(resultJson,EntityLogin.class);
+                        if(entityLogin.isSuccess()){
+                            //成功
+                            showShortToast(R.string.loginSuccess);
+                            toActivity(MainTabActivity.createIntent(context));
+                            HttpManager.getInstance().saveToken(entityLogin.getContent());//保存token信息
+
+                            progressBarDismiss();
+
+                        }else{//显示失败信息
+                            showShortToast(entityLogin.getMessage());
+
+                            progressBarDismiss();
+                        }
+                    }else{
+                        showShortToast(R.string.noReturn);
+
+                        progressBarDismiss();
+                    }
+                }
+            });
+        } else {
+            showShortToast(R.string.checkNetwork);
+        }
+
     }
 }

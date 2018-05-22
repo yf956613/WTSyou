@@ -5,9 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_background"
-    tools:context="com.qingye.wtsyou.activity.campaign.VoteDetailActivity">
+    tools:context="com.qingye.wtsyou.activity.campaign.VoteDetailedActivity">
 
-    <com.qingye.wtsyou.widget.ObservableScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_widget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.qingye.wtsyou.widget.ObservableScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -49,6 +54,7 @@
                             android:id="@+id/iv_campaign_img"
                             android:layout_width="102dp"
                             android:layout_height="133dp"
+                            android:scaleType="fitXY"
                             android:src="@mipmap/img_x"/>
 
                     </RelativeLayout>
@@ -130,12 +136,14 @@
                         <TextView
                             android:layout_below="@+id/rl_center"
                             android:id="@+id/tv_tag"
-                            android:layout_width="40dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_25"
                             android:gravity="center"
                             android:paddingTop="@dimen/margin_2"
                             android:paddingBottom="@dimen/margin_2"
+                            android:paddingLeft="@dimen/margin_6"
+                            android:paddingRight="@dimen/margin_6"
                             android:text="投票中"
                             android:textSize="@dimen/text_size_9"
                             android:textColor="@color/white"
@@ -226,7 +234,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="投票截止"
+                                android:text="  投票截止"
                                 android:textSize="@dimen/text_size_10"
                                 android:textColor="@color/gray_text6"/>
 
@@ -263,13 +271,13 @@
                         android:id="@+id/circleprogress"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.6"
+                        android:layout_weight="2"
                         android:layout_below="@+id/ll_center">
 
                         <com.qingye.wtsyou.widget.CircleProgress
                             android:id="@+id/join_progressbar"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
+                            android:layout_width="130dp"
+                            android:layout_height="130dp"
                             android:layout_centerHorizontal="true"
                             app:progress_color1="#9BF1ED"
                             app:progress_color2="#9BF1ED"
@@ -282,7 +290,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingBottom="@dimen/margin_25"
+                            android:paddingBottom="@dimen/margin_28"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
                             android:text="投票进度"
@@ -390,6 +398,8 @@
                     android:layout_marginBottom="@dimen/margin_12"
                     android:layout_marginLeft="@dimen/margin_6"
                     android:layout_marginRight="@dimen/margin_6"
+                    android:maxLines="8"
+                    android:ellipsize="end"
                     android:text="众筹须知
             付款成功后即可成功参与投票。"
                     android:textSize="@dimen/text_size_11"
@@ -635,6 +645,8 @@
         </LinearLayout>
 
     </com.qingye.wtsyou.widget.ObservableScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/ll_head"

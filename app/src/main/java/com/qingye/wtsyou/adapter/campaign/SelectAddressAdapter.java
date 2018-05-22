@@ -5,7 +5,6 @@ import android.view.ViewGroup;
 
 import com.qingye.wtsyou.modle.DeliveryAddress;
 import com.qingye.wtsyou.view.campaign.SelectAddressView;
-import com.qingye.wtsyou.view.my.DeliveryAddressView;
 
 import zuo.biao.library.base.BaseAdapter;
 
@@ -15,17 +14,22 @@ import zuo.biao.library.base.BaseAdapter;
 
 public class SelectAddressAdapter extends BaseAdapter<DeliveryAddress,SelectAddressView> {
 
+    private SelectAddressView.OnItemChildClickListener onItemChildClickListener;
+
+    //给监听设置一个构造函数，用于main中调用
+    public void setOnItemChildClickListener(SelectAddressView.OnItemChildClickListener onItemChildClickListener) {
+        this.onItemChildClickListener = onItemChildClickListener;
+    }
+
     public SelectAddressAdapter(Activity context) {
         super(context);
     }
 
     @Override
     public SelectAddressView createView(int position, ViewGroup parent) {
-        return new SelectAddressView(context, parent);
-    }
+        SelectAddressView selectAddressView = new SelectAddressView(context, parent);
+        selectAddressView.setOnItemChildClickListener(onItemChildClickListener);
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
+        return selectAddressView;
     }
 }

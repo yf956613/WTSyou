@@ -16,7 +16,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/ll_right"
             android:layout_marginRight="@dimen/margin_10"
             android:layout_centerVertical="true">
 
@@ -105,6 +104,20 @@
                 android:textSize="@dimen/text_size_11"
                 android:textColor="@color/orange_line"
                 android:background="@drawable/corners_orange_1"/>
+
+            <TextView
+                android:id="@+id/tv_cancel_focus"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin_10"
+                android:gravity="center_horizontal"
+                android:paddingTop="@dimen/margin_4"
+                android:paddingBottom="@dimen/margin_4"
+                android:text="已关注"
+                android:textSize="@dimen/text_size_11"
+                android:textColor="@color/gray_text1"
+                android:background="@drawable/corners_gray"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/ll_right"

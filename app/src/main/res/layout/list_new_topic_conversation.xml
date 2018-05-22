@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/margin_10">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:orientation="horizontal">
+
+            <com.qingye.wtsyou.widget.CircleImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@mipmap/head_d"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_6"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="神秘组织"
+                    android:textSize="@dimen/text_size_13"
+                    android:textColor="@color/black_text1"/>
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:text="2小时前"
+                    android:textSize="@dimen/text_size_10"
+                    android:textColor="@color/gray_text1"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_detailed_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                android:id="@+id/iv_more"
+                android:layout_width="30dp"
+                android:layout_height="28dp"
+                android:padding="@dimen/margin_6"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/next_l"/>
+
+            <ImageView
+                android:id="@+id/iv_less"
+                android:layout_width="30dp"
+                android:layout_height="28dp"
+                android:padding="@dimen/margin_6"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/next_k"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_6">
+
+        <ImageView
+            android:id="@+id/iv_new_support_img"
+            android:layout_width="match_parent"
+            android:layout_height="156dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/img_v"/>
+
+        <TextView
+            android:id="@+id/tv_tag"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_5"
+            android:layout_marginRight="@dimen/margin_7"
+            android:layout_alignRight="@+id/iv_new_support_img"
+            android:gravity="center"
+            android:paddingTop="@dimen/margin_2"
+            android:paddingBottom="@dimen/margin_2"
+            android:text="陈绮贞"
+            android:textSize="@dimen/text_size_9"
+            android:textColor="@color/white"
+            android:background="@drawable/re_corners_red"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:text="#陈绮贞09/16演唱会#  哇，陈绮贞演唱会终于要开始了，期
+待了很久了呢，你们觉得这次会唱什么歌呢？不过觉得这次的
+活动场真的很调档哎哈哈哈"
+        android:textSize="@dimen/text_size_13"
+        android:textColor="@color/black_text2"/>
+
+    <View
+        android:layout_marginTop="@dimen/margin_10"
+        style="@style/divider_horizontal_1px"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@mipmap/love"/>
+
+                <TextView
+                    android:id="@+id/tv_good"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_6"
+                    android:text="134"
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/gray_text10"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@mipmap/comment"/>
+
+                <TextView
+                    android:id="@+id/tv_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_6"
+                    android:text="234"
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/gray_text10"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@mipmap/read_e"/>
+
+                <TextView
+                    android:id="@+id/tv_read"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_6"
+                    android:text="6034"
+                    android:textSize="@dimen/text_size_12"
+                    android:textColor="@color/gray_text10"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

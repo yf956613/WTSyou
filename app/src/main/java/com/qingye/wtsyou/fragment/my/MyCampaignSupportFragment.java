@@ -1,19 +1,29 @@
 package com.qingye.wtsyou.fragment.my;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 
+import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.campaign.SupportDetailActivity;
+import com.qingye.wtsyou.activity.MainActivity;
+import com.qingye.wtsyou.activity.campaign.SupportDetailedActivity;
 import com.qingye.wtsyou.adapter.campaign.ActivityNewSupportAdapter;
 import com.qingye.wtsyou.fragment.campaign.ActivityOfficialFragment;
-import com.qingye.wtsyou.modle.Campaign;
+import com.qingye.wtsyou.modle.EntityPageData;
+import com.qingye.wtsyou.modle.EntitySupportDetailed;
+import com.qingye.wtsyou.modle.Supports;
+import com.qingye.wtsyou.utils.GsonUtil;
+import com.qingye.wtsyou.utils.HttpRequest;
+import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.campaign.ActivityNewSupportView;
+import com.qingye.wtsyou.widget.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +31,20 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
+import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.util.JSON;
+import zuo.biao.library.util.StringUtil;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyCampaignSupportFragment extends BaseHttpRecyclerFragment<Campaign,ActivityNewSupportView,ActivityNewSupportAdapter> implements CacheCallBack<Campaign> {
+public class MyCampaignSupportFragment extends BaseHttpRecyclerFragment<Supports,ActivityNewSupportView,ActivityNewSupportAdapter> implements CacheCallBack<Supports> {
+
+    private LinearLayout noMessage;
+
+    private CustomDialog progressBar;
+
+    private List<Supports> supportList = new ArrayList<>();
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -45,13 +64,16 @@ public class MyCampaignSupportFragment extends BaseHttpRecyclerFragment<Campaign
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //类相关初始化，必须使用<<<<<<<<<<<<<<<<
         super.onCreateView(inflater, container, savedInstanceState);
-        setContentView(R.layout.fragment_activity_support);
+        setContentView(R.layout.fragment_stars_campaign);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
+
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
         initCache(this);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
+        supportQuery();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
@@ -68,17 +90,45 @@ public class MyCampaignSupportFragment extends BaseHttpRecyclerFragment<Campaign
     @Override
     public void initView() {
         super.initView();
+
+        noMessage = findViewById(R.id.noMessage);
+    }
+
+    public void onResume() {
+
+        super.onResume();
     }
 
     @Override
-    public void setList(final List<Campaign> list) {
-        final List<Campaign> templist = new ArrayList<>();
-        for(int i = 1;i < 4;i ++) {
-            Campaign campaign = new Campaign();
-            campaign.setId(i);
-            templist.add(campaign);
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
         }
-        //list.addAll(templist);
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
+    }
+
+    @Override
+    public void setList(final List<Supports> list) {
+
         setList(new AdapterCallBack<ActivityNewSupportAdapter>() {
 
             @Override
@@ -88,7 +138,7 @@ public class MyCampaignSupportFragment extends BaseHttpRecyclerFragment<Campaign
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -107,12 +157,12 @@ public class MyCampaignSupportFragment extends BaseHttpRecyclerFragment<Campaign
     }
 
     @Override
-    public List<Campaign> parseArray(String json) {
+    public List<Supports> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Campaign> getCacheClass() {
+    public Class<Supports> getCacheClass() {
         return null;
     }
 
@@ -122,7 +172,7 @@ public class MyCampaignSupportFragment extends BaseHttpRecyclerFragment<Campaign
     }
 
     @Override
-    public String getCacheId(Campaign data) {
+    public String getCacheId(Supports data) {
         return null;
     }
 
@@ -141,9 +191,99 @@ public class MyCampaignSupportFragment extends BaseHttpRecyclerFragment<Campaign
 
     }
 
+    public void supportQuery() {
+        if (NetUtil.checkNetwork(getActivity())) {
+            setProgressBar();
+            progressBar.show();
+
+            HttpRequest.postMySupport(0, new OnHttpResponseListener() {
+
+                @Override
+                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+
+                    if(!StringUtil.isEmpty(resultJson)){
+
+                        EntityPageData entityPageData =  JSON.parseObject(resultJson,EntityPageData.class);
+
+                        if(entityPageData.isSuccess()){
+                            //成功
+                            //showShortToast(R.string.getSuccess);
+                            supportList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageData.getContent().getData())
+                                    ,new TypeToken<List<Supports>>(){}.getType());
+
+                            if (supportList.size() > 0) {
+                                setList(supportList);
+                                noMessage.setVisibility(View.GONE);
+                            } else {
+                                noMessage.setVisibility(View.VISIBLE);
+                            }
+
+                            progressBarDismiss();
+                        }else{//显示失败信息
+                            if (entityPageData.getCode().equals("401")) {
+                                showShortToast(R.string.tokenInvalid);
+                                toActivity(MainActivity.createIntent(context));
+                            } else {
+                                showShortToast(entityPageData.getMessage());
+                            }
+
+                            progressBarDismiss();
+                        }
+
+                    }else{
+                        showShortToast(R.string.noReturn);
+
+                        progressBarDismiss();
+                    }
+                }
+            });
+        } else {
+            showShortToast(R.string.checkNetwork);
+
+            progressBarDismiss();
+        }
+    }
+
     //点击item
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        toActivity(SupportDetailActivity.createIntent(context,id));
+        //检查网络
+        if (NetUtil.checkNetwork(context)) {
+            String uuid = supportList.get(position).getActivityId();
+
+            setProgressBar();
+            progressBar.show();
+
+            HttpRequest.getSupportDetailed(0, uuid, new OnHttpResponseListener() {
+                @Override
+                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+                    if(!StringUtil.isEmpty(resultJson)){
+                        EntitySupportDetailed entitySupportDetailed =  JSON.parseObject(resultJson,EntitySupportDetailed.class);
+                        if(entitySupportDetailed.isSuccess()){
+                            //成功//showShortToast(R.string.getSuccess);
+                            toActivity(SupportDetailedActivity.createIntent(context, entitySupportDetailed));
+
+                            progressBarDismiss();
+                        }else{//显示失败信息
+                            if (entitySupportDetailed.getCode().equals("401")) {
+                                showShortToast(R.string.tokenInvalid);
+                                toActivity(MainActivity.createIntent(context));
+                            } else {
+                                showShortToast(entitySupportDetailed.getMessage());
+                            }
+
+                            progressBarDismiss();
+                        }
+                    }else{
+                        showShortToast(R.string.noReturn);
+
+                        progressBarDismiss();
+                    }
+                }
+            });
+
+        } else {
+            showShortToast(R.string.checkNetwork);
+        }
     }
 }

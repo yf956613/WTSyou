@@ -20,6 +20,20 @@
         <include layout="@layout/head"></include>
     </LinearLayout>
 
-    <include
-        layout="@layout/activity_tab_sliding"/>
+    <com.qingye.wtsyou.widget.VpSwipeRefreshLayout
+        android:id="@+id/swipe_refresh_widget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                layout="@layout/activity_tab_sliding"/>
+
+        </LinearLayout>
+    </com.qingye.wtsyou.widget.VpSwipeRefreshLayout>
+
 </LinearLayout>

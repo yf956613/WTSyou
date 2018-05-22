@@ -57,8 +57,6 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
         ivLeft = findViewById(R.id.iv_left);
         ivLeft.setImageResource(R.mipmap.back_a);
         tvRight = findViewById(R.id.tv_add_temp);
-        tvRight.setVisibility(View.VISIBLE);
-        tvRight.setText("完成");
         tvHead = findViewById(R.id.tv_head_title);
         tvHead.setText("手机号");
 

@@ -11,10 +11,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.other.BlurTransformation;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
+
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class TicketDetailedActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -65,7 +67,7 @@ public class TicketDetailedActivity extends BaseActivity implements View.OnClick
         int url = R.mipmap.img_x;
         Glide.with(context)
                 .load(url)
-                .bitmapTransform(new BlurTransformation(context))
+                .apply(bitmapTransform(new BlurTransformation(25)))
                 .into(bgmImg);
     }
 

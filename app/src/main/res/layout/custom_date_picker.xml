@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="10dp"
-            android:text="@string/cancle"
+            android:text="@string/cancel"
             android:textColor="@color/orange_text2"
             android:textSize="@dimen/text_size_14" />
 

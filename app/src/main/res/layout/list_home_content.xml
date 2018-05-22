@@ -54,11 +54,13 @@
 
                 <TextView
                     android:id="@+id/tv_tag"
-                    android:layout_width="40dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:paddingTop="@dimen/margin_2"
                     android:paddingBottom="@dimen/margin_2"
+                    android:paddingLeft="@dimen/margin_6"
+                    android:paddingRight="@dimen/margin_6"
                     android:text="演唱会"
                     android:textSize="@dimen/text_size_10"
                     android:textColor="@color/white"
@@ -83,13 +85,6 @@
                     android:textSize="@dimen/text_size_12"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" · "
-                    android:textColor="@color/gray_text1"
-                    android:textSize="@dimen/text_size_12"/>
-
-                <TextView
                     android:id="@+id/tv_city"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -106,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerInParent="true"
-                android:text="2017/07/17"
+                android:text=""
                 android:textColor="@color/gray_text1"
                 android:textSize="@dimen/text_size_12"/>
 
@@ -133,7 +128,7 @@
         android:layout_centerInParent="true">
 
         <TextView
-            android:id="@+id/btn_operate"
+            android:id="@+id/tv_operate"
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

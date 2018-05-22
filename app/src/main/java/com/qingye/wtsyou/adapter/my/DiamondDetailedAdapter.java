@@ -22,9 +22,4 @@ public class DiamondDetailedAdapter extends BaseAdapter<DiamondDetailed,DiamondD
     public DiamondDetailedView createView(int position, ViewGroup parent) {
         return new DiamondDetailedView(context, parent);
     }
-
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

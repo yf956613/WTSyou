@@ -3,28 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/flower_blow"
-    tools:context="com.qingye.wtsyou.fragment.home.HomeStarsFragment">
+    tools:context="com.qingye.wtsyou.fragment.fragmentFactory.HomeStarsOneFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:layout_marginTop="@dimen/margin_15"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/circle_white_orange_shadow">
 
-            <ImageView
+            <com.qingye.wtsyou.widget.CircleImageView
                 android:id="@+id/iv_stars_img"
-                android:layout_width="63dp"
-                android:layout_height="63dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/head_a"/>
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_centerInParent="true"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_star_name"
@@ -32,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_2"
             android:layout_gravity="center_horizontal"
-            android:text="鹿晗"
+            android:text=""
             android:textSize="@dimen/text_size_14"
             android:textColor="@color/black_text1"/>
 
@@ -52,7 +51,7 @@
                     android:id="@+id/fans_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="67462"
+                    android:text=""
                     android:textSize="@dimen/text_size_14"
                     android:textColor="@color/black_text"/>
 
@@ -76,7 +75,7 @@
                     android:id="@+id/conversation_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="462"
+                    android:text=""
                     android:textSize="@dimen/text_size_14"
                     android:textColor="@color/black_text"/>
 
@@ -91,7 +90,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_handle"
+            android:id="@+id/btn_rank"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginTop="@dimen/margin_10"
@@ -100,7 +99,20 @@
             android:background="@drawable/corners_orange_shade_button"
             android:text="打 榜"
             android:textSize="@dimen/text_size_14"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btn_focus"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginLeft="@dimen/margin_40"
+            android:layout_marginRight="@dimen/margin_40"
+            android:background="@drawable/corners_orange_shade_button"
+            android:text="关注他"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -1,16 +1,26 @@
 package com.qingye.wtsyou.fragment.my;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 
+import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity;
 import com.qingye.wtsyou.adapter.home.StarsMainCrowdAdapter;
-import com.qingye.wtsyou.modle.Campaign;
+import com.qingye.wtsyou.modle.Crowd;
+import com.qingye.wtsyou.modle.EntityCrowdDetailed;
+import com.qingye.wtsyou.modle.EntityPageData;
+import com.qingye.wtsyou.utils.GsonUtil;
+import com.qingye.wtsyou.utils.HttpRequest;
+import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.home.StarsMainCrowdView;
+import com.qingye.wtsyou.widget.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +28,17 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
+import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.util.JSON;
+import zuo.biao.library.util.StringUtil;
 
-public class MyCampaignCrowdFragment extends BaseHttpRecyclerFragment<Campaign,StarsMainCrowdView,StarsMainCrowdAdapter> implements CacheCallBack<Campaign> {
+public class MyCampaignCrowdFragment extends BaseHttpRecyclerFragment<Crowd,StarsMainCrowdView,StarsMainCrowdAdapter> implements CacheCallBack<Crowd> {
+
+    private LinearLayout noMessage;
+
+    private CustomDialog progressBar;
+
+    private List<Crowd> crowdList = new ArrayList<>();
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -42,10 +61,13 @@ public class MyCampaignCrowdFragment extends BaseHttpRecyclerFragment<Campaign,S
         setContentView(R.layout.fragment_stars_campaign);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+
         initCache(this);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
+        crowdQuery();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
@@ -62,17 +84,45 @@ public class MyCampaignCrowdFragment extends BaseHttpRecyclerFragment<Campaign,S
     @Override
     public void initView() {
         super.initView();
+
+        noMessage = findViewById(R.id.noMessage);
+    }
+
+    public void onResume() {
+
+        super.onResume();
     }
 
     @Override
-    public void setList(final List<Campaign> list) {
-        final List<Campaign> templist = new ArrayList<>();
-        for(int i = 1;i < 6;i ++) {
-            Campaign campaign = new Campaign();
-            campaign.setId(i);
-            templist.add(campaign);
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
         }
-        //list.addAll(templist);
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
+    }
+
+    @Override
+    public void setList(final List<Crowd> list) {
+
         setList(new AdapterCallBack<StarsMainCrowdAdapter>() {
 
             @Override
@@ -82,7 +132,7 @@ public class MyCampaignCrowdFragment extends BaseHttpRecyclerFragment<Campaign,S
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -101,12 +151,12 @@ public class MyCampaignCrowdFragment extends BaseHttpRecyclerFragment<Campaign,S
     }
 
     @Override
-    public List<Campaign> parseArray(String json) {
+    public List<Crowd> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Campaign> getCacheClass() {
+    public Class<Crowd> getCacheClass() {
         return null;
     }
 
@@ -116,7 +166,7 @@ public class MyCampaignCrowdFragment extends BaseHttpRecyclerFragment<Campaign,S
     }
 
     @Override
-    public String getCacheId(Campaign data) {
+    public String getCacheId(Crowd data) {
         return null;
     }
 
@@ -134,9 +184,95 @@ public class MyCampaignCrowdFragment extends BaseHttpRecyclerFragment<Campaign,S
         super.initEvent();
     }
 
+    public void crowdQuery() {
+        if (NetUtil.checkNetwork(getActivity())) {
+            setProgressBar();
+            progressBar.show();
+
+            HttpRequest.postMyCrowd(0, new OnHttpResponseListener() {
+
+                        @Override
+                        public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+
+                            if(!StringUtil.isEmpty(resultJson)){
+                                EntityPageData entityPageData =  JSON.parseObject(resultJson,EntityPageData.class);
+
+                                if(entityPageData.isSuccess()){
+                                    //成功
+                                    //showShortToast(R.string.getSuccess);
+                                    crowdList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageData.getContent().getData())
+                                            ,new TypeToken<List<Crowd>>(){}.getType());
+
+                                    if (crowdList.size() > 0) {
+                                        setList(crowdList);
+                                        noMessage.setVisibility(View.GONE);
+                                    } else {
+                                        noMessage.setVisibility(View.VISIBLE);
+                                    }
+
+                                    progressBarDismiss();
+                                }else{//显示失败信息
+                                    if (entityPageData.getCode().equals("401")) {
+                                        showShortToast(R.string.tokenInvalid);
+                                        toActivity(MainActivity.createIntent(context));
+                                    } else {
+                                        showShortToast(entityPageData.getMessage());
+                                    }
+
+                                    progressBarDismiss();
+                                }
+
+                            }else{
+                                showShortToast(R.string.noReturn);
+
+                                progressBarDismiss();
+                            }
+                        }
+                    });
+        } else {
+            showShortToast(R.string.checkNetwork);
+
+            progressBarDismiss();
+        }
+    }
+
     //点击item
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        toActivity(CrowdDetailedActivity.createIntent(context,id));
+        //检查网络
+        if (NetUtil.checkNetwork(context)) {
+            String uuid = crowdList.get(position).getActivityId();
+
+            setProgressBar();
+            progressBar.show();
+
+            HttpRequest.getCrowdDetailed(0, uuid, new OnHttpResponseListener() {
+                @Override
+                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+                    if(!StringUtil.isEmpty(resultJson)){
+                        EntityCrowdDetailed entityCrowdDetailed =  JSON.parseObject(resultJson,EntityCrowdDetailed.class);
+                        if(entityCrowdDetailed.isSuccess()){
+                            //成功//showShortToast(R.string.getSuccess);
+                            toActivity(CrowdDetailedActivity.createIntent(context, entityCrowdDetailed));
+
+                            progressBarDismiss();
+                        }else{//显示失败信息
+                            if (entityCrowdDetailed.getCode().equals("401")) {
+                                showShortToast(R.string.tokenInvalid);
+                                toActivity(MainActivity.createIntent(context));
+                            } else {
+                                showShortToast(entityCrowdDetailed.getMessage());
+                            }
+                        }
+                    }else{
+                        showShortToast(R.string.noReturn);
+
+                        progressBarDismiss();
+                    }
+                }
+            });
+        } else {
+            showShortToast(R.string.checkNetwork);
+        }
     }
 }

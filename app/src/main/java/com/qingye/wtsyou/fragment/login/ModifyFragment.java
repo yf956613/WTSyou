@@ -1,22 +1,37 @@
 package com.qingye.wtsyou.fragment.login;
 
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.qingye.wtsyou.MainActivity;
+import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.basemodel.EntityBase;
+import com.qingye.wtsyou.utils.HttpRequest;
+import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.widget.CountButton;
+import com.qingye.wtsyou.widget.CustomDialog;
 import com.qingye.wtsyou.widget.VerticalViewPager;
 
 import zuo.biao.library.base.BaseFragment;
+import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.ui.AlertDialog;
+import zuo.biao.library.util.JSON;
+import zuo.biao.library.util.StringUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,11 +41,15 @@ public class ModifyFragment extends BaseFragment implements View.OnClickListener
     private TextView tvTextView;
     private Button btnRegister;
     private Button btnConfirm;
+    private EditText edtPhone;
+    private CountButton btnGetVerifyCode;
     private ImageView ivDownLeft,ivDownRight;
     private View line;
 
     private LinearLayout llArea;
     private LinearLayout llAgreement;
+
+    private CustomDialog progressBar;
 
     private int Id = 0;
 
@@ -85,6 +104,25 @@ public class ModifyFragment extends BaseFragment implements View.OnClickListener
         ivDownLeft = findViewById(R.id.iv_down_left);
         ivDownRight = findViewById(R.id.iv_down_right);
 
+        edtPhone = findViewById(R.id.edt_phone);
+        btnGetVerifyCode = findViewById(R.id.btn_getVerifyCode);
+        btnGetVerifyCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String mobile = edtPhone.getText().toString().trim();
+                boolean checkPhone = checkPhone(mobile);
+                //检查手机号
+                if (checkPhone) {
+                    //检查网络
+                    if (NetUtil.checkNetwork(context)) {
+                        getVerifyCode(mobile);
+                    } else {
+                        showShortToast(R.string.checkNetwork);
+                    }
+                }
+            }
+        });
+
         line = findViewById(R.id.line);
         llArea = findViewById(R.id.ll_select_area);
         llAgreement = findViewById(R.id.ll_agreement);
@@ -99,6 +137,25 @@ public class ModifyFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void initData() {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
+        }
+    }
+
+    private void setProgressBar() {
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
     }
 
     @Override
@@ -156,5 +213,43 @@ public class ModifyFragment extends BaseFragment implements View.OnClickListener
             default:
                 break;
         }
+    }
+
+    private boolean checkPhone(String mobile) {
+
+        if(TextUtils.isEmpty(mobile)){
+            showShortToast(R.string.editPhone);
+            return false;
+        } else {
+            if (mobile.length() < 11) {
+                showShortToast(R.string.checkPhone);
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+    private void getVerifyCode(String mobile) {
+        HttpRequest.getGetVerifyCode(0, mobile , new OnHttpResponseListener() {
+
+            @Override
+            public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+
+                if(!StringUtil.isEmpty(resultJson)){
+                    EntityBase entityBase =  JSON.parseObject(resultJson,EntityBase.class);
+                    if(entityBase.isSuccess()){
+                        //成功
+                        showShortToast(R.string.sendSuccess);
+                        btnGetVerifyCode.start();
+                    }else{//显示失败信息
+                        showShortToast(entityBase.getMessage());
+                    }
+                }else{
+                    showShortToast(R.string.noReturn);
+                }
+            }
+        });
+
     }
 }

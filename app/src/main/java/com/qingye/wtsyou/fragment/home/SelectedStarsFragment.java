@@ -10,7 +10,8 @@ import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.home.SelectedStarsAdapter;
-import com.qingye.wtsyou.modle.Stars;
+import com.qingye.wtsyou.modle.EntityStars;
+import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.view.home.SelectedStarsView;
 
 import java.util.ArrayList;
@@ -23,7 +24,9 @@ import zuo.biao.library.interfaces.CacheCallBack;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SelectedStarsFragment extends BaseHttpRecyclerFragment<Stars,SelectedStarsView,SelectedStarsAdapter> implements CacheCallBack<Stars> {
+public class SelectedStarsFragment extends BaseHttpRecyclerFragment<EntityStars,SelectedStarsView,SelectedStarsAdapter> implements CacheCallBack<EntityStars> {
+
+    private  List<EntityStars> selectedStars =  new ArrayList<>();
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -46,6 +49,10 @@ public class SelectedStarsFragment extends BaseHttpRecyclerFragment<Stars,Select
         setContentView(R.layout.fragment_selected_stars);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
+        //获取activity传来的数据
+        Bundle bundle = getArguments();
+        selectedStars = (List<EntityStars>) bundle.getSerializable(Constant.SELECTED_STARS);
+
         initCache(this);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
@@ -54,7 +61,6 @@ public class SelectedStarsFragment extends BaseHttpRecyclerFragment<Stars,Select
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
@@ -63,6 +69,9 @@ public class SelectedStarsFragment extends BaseHttpRecyclerFragment<Stars,Select
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvBaseRecycler.setLayoutManager(layoutManager);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        srlBaseHttpRecycler.autoRefresh();
+        setList(selectedStars);
 
         return view;
     }
@@ -73,14 +82,8 @@ public class SelectedStarsFragment extends BaseHttpRecyclerFragment<Stars,Select
     }
 
     @Override
-    public void setList(final List<Stars> list) {
-        final List<Stars> templist = new ArrayList<>();
-        for(int i = 1;i < 6;i ++) {
-            Stars stars = new Stars();
-            stars.setId(i);
-            templist.add(stars);
-        }
-        //list.addAll(templist);
+    public void setList(final List<EntityStars> list) {
+
         setList(new AdapterCallBack<SelectedStarsAdapter>() {
 
             @Override
@@ -90,7 +93,7 @@ public class SelectedStarsFragment extends BaseHttpRecyclerFragment<Stars,Select
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -109,12 +112,12 @@ public class SelectedStarsFragment extends BaseHttpRecyclerFragment<Stars,Select
     }
 
     @Override
-    public List<Stars> parseArray(String json) {
+    public List<EntityStars> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Stars> getCacheClass() {
+    public Class<EntityStars> getCacheClass() {
         return null;
     }
 
@@ -124,7 +127,7 @@ public class SelectedStarsFragment extends BaseHttpRecyclerFragment<Stars,Select
     }
 
     @Override
-    public String getCacheId(Stars data) {
+    public String getCacheId(EntityStars data) {
         return null;
     }
 

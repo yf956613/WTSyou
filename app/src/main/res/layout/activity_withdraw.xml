@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/gray_background2"
-    tools:context="com.qingye.wtsyou.activity.campaign.VoteDetailActivity">
+    tools:context="com.qingye.wtsyou.activity.campaign.VoteDetailedActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -73,7 +73,7 @@ public class DetailedConversationFragment extends BaseHttpRecyclerFragment<Conve
     @Override
     public void setList(final List<Conversation> list) {
         final List<Conversation> templist = new ArrayList<>();
-        for(int i = 1;i < 8;i ++) {
+        for(int i = 1;i < 4;i ++) {
             Conversation conversation = new Conversation();
             conversation.setId(i);
             templist.add(conversation);

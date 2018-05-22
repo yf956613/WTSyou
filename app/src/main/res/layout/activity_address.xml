@@ -8,17 +8,6 @@
     android:background="@color/gray_background2"
     tools:context="com.qingye.wtsyou.activity.search.SearchFansActivity">
 
-    <Button
-        android:id="@+id/btn_create_address"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:background="@drawable/re_orange_shade_button"
-        android:text="添加新地址"
-        android:textSize="@dimen/text_size_14"
-        android:textColor="@color/white"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_25"
@@ -31,13 +20,39 @@
         <include layout="@layout/head"></include>
     </LinearLayout>
 
-    <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_widget"
         android:layout_below="@+id/ll_head"
-        android:layout_above="@+id/btn_create_address"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/base_http_recycler_fragment"/>
-    </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/relativelayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_above="@+id/btn_create_address"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include layout="@layout/base_http_recycler_fragment"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_create_address"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:background="@drawable/re_orange_shade_button"
+                android:text="添加新地址"
+                android:textSize="@dimen/text_size_14"
+                android:textColor="@color/white"/>
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </RelativeLayout>

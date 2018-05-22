@@ -6,10 +6,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.activity.campaign.SupportDetailedActivity;
 import com.qingye.wtsyou.adapter.campaign.ActivityNewSupportAdapter;
-import com.qingye.wtsyou.modle.Campaign;
+import com.qingye.wtsyou.modle.Supports;
 import com.qingye.wtsyou.view.campaign.ActivityNewSupportView;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import zuo.biao.library.interfaces.CacheCallBack;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SearchCampaignSupportFragment extends BaseHttpRecyclerFragment<Campaign,ActivityNewSupportView,ActivityNewSupportAdapter> implements CacheCallBack<Campaign> {
+public class SearchCampaignSupportFragment extends BaseHttpRecyclerFragment<Supports,ActivityNewSupportView,ActivityNewSupportAdapter> implements CacheCallBack<Supports> {
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -68,10 +70,10 @@ public class SearchCampaignSupportFragment extends BaseHttpRecyclerFragment<Camp
     }
 
     @Override
-    public void setList(final List<Campaign> list) {
-        final List<Campaign> templist = new ArrayList<>();
+    public void setList(final List<Supports> list) {
+        final List<Supports> templist = new ArrayList<>();
         for(int i = 1;i < 4;i ++) {
-            Campaign campaign = new Campaign();
+            Supports campaign = new Supports();
             campaign.setId(i);
             templist.add(campaign);
         }
@@ -104,12 +106,12 @@ public class SearchCampaignSupportFragment extends BaseHttpRecyclerFragment<Camp
     }
 
     @Override
-    public List<Campaign> parseArray(String json) {
+    public List<Supports> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Campaign> getCacheClass() {
+    public Class<Supports> getCacheClass() {
         return null;
     }
 
@@ -119,7 +121,7 @@ public class SearchCampaignSupportFragment extends BaseHttpRecyclerFragment<Camp
     }
 
     @Override
-    public String getCacheId(Campaign data) {
+    public String getCacheId(Supports data) {
         return null;
     }
 
@@ -136,6 +138,12 @@ public class SearchCampaignSupportFragment extends BaseHttpRecyclerFragment<Camp
     public void initEvent() {//必须调用
         super.initEvent();
 
+    }
+
+    //点击item
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //toActivity(SupportDetailedActivity.createIntent(context,id));
     }
 
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/gray_background"
-    tools:context="com.qingye.wtsyou.activity.campaign.VoteDetailActivity">
+    tools:context="com.qingye.wtsyou.activity.campaign.VoteDetailedActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_26"
                     android:layout_marginRight="@dimen/margin_20"
-                    android:layout_marginTop="@dimen/margin_2"
+                    android:layout_marginTop="@dimen/margin_6"
                     app:etMinHeight="20dp"
                     app:etHint="活动名称，30字以内"
                     app:etMaxLength="30"
@@ -90,6 +90,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_gravity="center_vertical"
+                        android:paddingTop="@dimen/margin_16"
+                        android:paddingBottom="@dimen/margin_16"
                         android:text="关联明星"
                         android:textSize="@dimen/text_size_13"
                         android:textColor="@color/black_text1"/>
@@ -98,6 +100,7 @@
                         android:id="@+id/list_associate_stars"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/margin_28"
                         android:layout_marginRight="@dimen/margin_6"/>
 
@@ -117,15 +120,17 @@
                 android:layout_marginLeft="@dimen/margin_10"/>
 
             <RelativeLayout
-                android:id="@+id/ll_associate_city"
+                android:id="@+id/ll_associate_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_16"
                 android:layout_marginLeft="@dimen/margin_10">
 
                 <LinearLayout
+                    android:layout_toLeftOf="@+id/img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="@dimen/margin_6"
                     android:orientation="horizontal">
 
                     <TextView
@@ -137,16 +142,19 @@
                         android:textColor="@color/black_text1"/>
 
                     <TextView
-                        android:id="@+id/tv_associate_city"
+                        android:id="@+id/tv_associate_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_38"
-                        android:text="福建省 厦门市"
+                        android:paddingTop="@dimen/margin_16"
+                        android:paddingBottom="@dimen/margin_16"
+                        android:text=""
                         android:textSize="@dimen/text_size_13"
                         android:textColor="@color/black_text1"/>
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/img"
                     android:layout_width="@dimen/margin_15"
                     android:layout_height="@dimen/margin_15"
                     android:layout_marginRight="@dimen/margin_10"
@@ -157,14 +165,12 @@
 
             <View
                 style="@style/divider_horizontal_1px"
-                android:layout_marginTop="@dimen/margin_16"
                 android:layout_marginLeft="@dimen/margin_10"/>
 
             <RelativeLayout
                 android:id="@+id/ll_associate_conversation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_12"
                 android:layout_marginLeft="@dimen/margin_10">
 
                 <LinearLayout
@@ -178,6 +184,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_gravity="center_vertical"
+                        android:paddingTop="@dimen/margin_16"
+                        android:paddingBottom="@dimen/margin_16"
                         android:text="关联聊天室"
                         android:textSize="@dimen/text_size_13"
                         android:textColor="@color/black_text1"/>
@@ -186,6 +194,7 @@
                         android:id="@+id/list_associate_conversation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/margin_28"
                         android:layout_marginRight="@dimen/margin_6"/>
 
@@ -202,7 +211,6 @@
 
             <View
                 style="@style/divider_horizontal_1px"
-                android:layout_marginTop="@dimen/margin_12"
                 android:layout_marginLeft="@dimen/margin_10"/>
 
             <LinearLayout
@@ -225,7 +233,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_26"
                     android:layout_marginRight="@dimen/margin_20"
-                    android:layout_marginTop="@dimen/margin_2"
+                    android:layout_marginTop="@dimen/margin_6"
                     app:etMinHeight="100dp"
                     app:etHint="活动描述，60字以内"
                     app:etMaxLength="60"

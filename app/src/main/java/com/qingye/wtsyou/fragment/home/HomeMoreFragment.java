@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.home.FocusStarsActivity;
+import com.qingye.wtsyou.activity.my.FocusStarsActivity;
 import com.qingye.wtsyou.activity.search.SelectStarsActivity;
 
 import zuo.biao.library.base.BaseFragment;

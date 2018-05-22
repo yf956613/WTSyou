@@ -7,20 +7,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.campaign.VoteDetailActivity;
 import com.qingye.wtsyou.adapter.home.StarsMainVoteAdapter;
-import com.qingye.wtsyou.modle.Campaign;
+import com.qingye.wtsyou.modle.Vote;
 import com.qingye.wtsyou.view.home.StarsMainVoteView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
 
-    public class StarsMainVoteFragment extends BaseHttpRecyclerFragment<Campaign,StarsMainVoteView,StarsMainVoteAdapter> implements CacheCallBack<Campaign> {
+    public class StarsMainVoteFragment extends BaseHttpRecyclerFragment<Vote,StarsMainVoteView,StarsMainVoteAdapter> implements CacheCallBack<Vote> {
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -72,14 +70,8 @@ import zuo.biao.library.interfaces.CacheCallBack;
     }
 
     @Override
-    public void setList(final List<Campaign> list) {
-        final List<Campaign> templist = new ArrayList<>();
-        for(int i = 1;i < 6;i ++) {
-            Campaign campaign = new Campaign();
-            campaign.setId(i);
-            templist.add(campaign);
-        }
-        //list.addAll(templist);
+    public void setList(final List<Vote> list) {
+
         setList(new AdapterCallBack<StarsMainVoteAdapter>() {
 
             @Override
@@ -89,7 +81,7 @@ import zuo.biao.library.interfaces.CacheCallBack;
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -108,12 +100,12 @@ import zuo.biao.library.interfaces.CacheCallBack;
     }
 
     @Override
-    public List<Campaign> parseArray(String json) {
+    public List<Vote> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Campaign> getCacheClass() {
+    public Class<Vote> getCacheClass() {
         return null;
     }
 
@@ -123,7 +115,7 @@ import zuo.biao.library.interfaces.CacheCallBack;
     }
 
     @Override
-    public String getCacheId(Campaign data) {
+    public String getCacheId(Vote data) {
         return null;
     }
 
@@ -145,6 +137,6 @@ import zuo.biao.library.interfaces.CacheCallBack;
     //点击item
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        toActivity(VoteDetailActivity.createIntent(context,id));
+        //toActivity(VoteDetailedActivity.createIntent(context));
     }
 }

@@ -82,7 +82,7 @@ public class CircleProgress extends View {
 	//定义最大默认进度值
 	private int maxProgress = 100;
 	//定义百分比显示格式；格式为保留小数点后一位
-	private DecimalFormat mPercentFormat = new DecimalFormat("#.0");
+	private DecimalFormat mPercentFormat = new DecimalFormat("#");
 
 	public CircleProgress(Context context) {
 		super(context);

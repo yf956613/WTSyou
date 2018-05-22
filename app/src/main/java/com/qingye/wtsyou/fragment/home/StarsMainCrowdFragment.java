@@ -7,22 +7,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity;
 import com.qingye.wtsyou.adapter.home.StarsMainCrowdAdapter;
-import com.qingye.wtsyou.adapter.home.StarsMainShowAdapter;
-import com.qingye.wtsyou.modle.Campaign;
+import com.qingye.wtsyou.modle.Crowd;
 import com.qingye.wtsyou.view.home.StarsMainCrowdView;
-import com.qingye.wtsyou.view.home.StarsMainShowView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
 
-public class StarsMainCrowdFragment extends BaseHttpRecyclerFragment<Campaign,StarsMainCrowdView,StarsMainCrowdAdapter> implements CacheCallBack<Campaign> {
+public class StarsMainCrowdFragment extends BaseHttpRecyclerFragment<Crowd,StarsMainCrowdView,StarsMainCrowdAdapter> implements CacheCallBack<Crowd> {
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -73,14 +69,8 @@ public class StarsMainCrowdFragment extends BaseHttpRecyclerFragment<Campaign,St
     }
 
     @Override
-    public void setList(final List<Campaign> list) {
-        final List<Campaign> templist = new ArrayList<>();
-        for(int i = 1;i < 6;i ++) {
-            Campaign campaign = new Campaign();
-            campaign.setId(i);
-            templist.add(campaign);
-        }
-        //list.addAll(templist);
+    public void setList(final List<Crowd> list) {
+
         setList(new AdapterCallBack<StarsMainCrowdAdapter>() {
 
             @Override
@@ -90,7 +80,7 @@ public class StarsMainCrowdFragment extends BaseHttpRecyclerFragment<Campaign,St
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -109,12 +99,12 @@ public class StarsMainCrowdFragment extends BaseHttpRecyclerFragment<Campaign,St
     }
 
     @Override
-    public List<Campaign> parseArray(String json) {
+    public List<Crowd> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Campaign> getCacheClass() {
+    public Class<Crowd> getCacheClass() {
         return null;
     }
 
@@ -124,7 +114,7 @@ public class StarsMainCrowdFragment extends BaseHttpRecyclerFragment<Campaign,St
     }
 
     @Override
-    public String getCacheId(Campaign data) {
+    public String getCacheId(Crowd data) {
         return null;
     }
 
@@ -146,6 +136,6 @@ public class StarsMainCrowdFragment extends BaseHttpRecyclerFragment<Campaign,St
     //点击item
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        toActivity(CrowdDetailedActivity.createIntent(context,id));
+        //toActivity(CrowdDetailedActivity.createIntent(context,id));
     }
 }

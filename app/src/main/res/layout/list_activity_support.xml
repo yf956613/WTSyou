@@ -48,7 +48,7 @@
 
         <TextView
             android:layout_below="@+id/iv_new_support_img"
-            android:id="@+id/tv_hot_show_name"
+            android:id="@+id/tv_support_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_2"
@@ -61,7 +61,7 @@
             android:textColor="@color/black_text1"/>
 
         <LinearLayout
-            android:layout_below="@+id/tv_hot_show_name"
+            android:layout_below="@+id/tv_support_name"
             android:id="@+id/lldown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,11 +95,13 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_people"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:layout_gravity="center_vertical"
-                android:gravity="right|center_vertical">
+                android:gravity="right|center_vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -124,7 +126,7 @@
                     android:textSize="@dimen/text_size_11"/>
 
                 <TextView
-                    android:id="@+id/all"
+                    android:id="@+id/tv_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="6666"

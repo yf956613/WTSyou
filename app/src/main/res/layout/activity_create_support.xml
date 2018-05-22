@@ -62,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_26"
                         android:layout_marginRight="@dimen/margin_20"
-                        android:layout_marginTop="@dimen/margin_2"
+                        android:layout_marginTop="@dimen/margin_6"
                         app:etMinHeight="45dp"
                         app:etHint="应援标题，30字以内"
                         app:etMaxLength="30"
@@ -101,9 +101,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_26"
                         android:layout_marginRight="@dimen/margin_20"
-                        android:layout_marginTop="@dimen/margin_2"
+                        android:layout_marginTop="@dimen/margin_6"
                         app:etMinHeight="150dp"
-                        app:etHint="应援标题，300字以内"
+                        app:etHint="应援内容，300字以内"
                         app:etMaxLength="300"
                         app:etPromptTextColor="@color/gray_text2"
                         app:etPromptTextSize="@dimen/text_size_13"
@@ -125,6 +125,7 @@
                     android:layout_height="wrap_content">
 
                     <RelativeLayout
+                        android:id="@+id/rl_picture"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_15"
@@ -175,6 +176,20 @@
                     android:textSize="@dimen/text_size_13"
                     android:textColor="@color/black_text1"/>
 
+                <com.qingye.wtsyou.widget.AutoLineFeedLayout
+                    android:id="@+id/al"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/margin_20"
+                    android:layout_marginRight="@dimen/margin_20"
+                    app:paddingLeft="5dp"
+                    app:paddingRight="5dp"
+                    app:paddingTop="10dp"
+                    app:paddingBottom="10dp"
+                    app:verticalSpacing="10dp"
+                    app:horizontalSpacing="10dp" />
+
+<!--
                 <RadioGroup
                     android:id="@+id/rg_type"
                     android:layout_width="wrap_content"
@@ -245,6 +260,7 @@
                         android:textSize="@dimen/text_size_13"/>
 
                 </RadioGroup>
+-->
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -396,6 +412,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
                                 android:layout_gravity="center_vertical"
+                                android:paddingTop="@dimen/margin_16"
+                                android:paddingBottom="@dimen/margin_16"
                                 android:text="关联明星"
                                 android:textSize="@dimen/text_size_13"
                                 android:textColor="@color/black_text1"/>
@@ -404,6 +422,7 @@
                                 android:id="@+id/list_associate_stars"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/margin_28"
                                 android:layout_marginRight="@dimen/margin_6"/>
 
@@ -433,7 +452,6 @@
                         android:id="@+id/ll_associate_conversation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_12"
                         android:layout_marginBottom="@dimen/margin_14"
                         android:layout_marginLeft="@dimen/margin_10">
 
@@ -448,6 +466,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
                                 android:layout_gravity="center_vertical"
+                                android:paddingTop="@dimen/margin_16"
+                                android:paddingBottom="@dimen/margin_16"
                                 android:text="关联聊天室"
                                 android:textSize="@dimen/text_size_13"
                                 android:textColor="@color/black_text1"/>
@@ -456,6 +476,7 @@
                                 android:id="@+id/list_associate_conversation"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/margin_28"
                                 android:layout_marginRight="@dimen/margin_6"/>
 
@@ -468,6 +489,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerInParent="true"
                             android:src="@mipmap/back_b"/>
+
                     </RelativeLayout>
 
                 </LinearLayout>

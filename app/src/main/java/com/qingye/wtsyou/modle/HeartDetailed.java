@@ -1,25 +1,45 @@
 package com.qingye.wtsyou.modle;
 
-import zuo.biao.library.base.BaseModel;
-
 /**
  * Created by pm89 on 2018/3/6.
  */
 
-public class HeartDetailed extends BaseModel {
+public class HeartDetailed {
 
-    /**默认构造方法，JSON等解析时必须要有
-     */
-    public HeartDetailed() {
-        //default
-    }
-    public HeartDetailed(long id) {
-        this();
-        this.id = id;
+    private String uuid;
+    private String bizType;
+    private int loveValue;
+    private String occurTime;
+
+    public String getUuid() {
+        return uuid;
     }
 
-    @Override
-    protected boolean isCorrect() {
-        return true;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
+    }
+
+    public int getLoveValue() {
+        return loveValue;
+    }
+
+    public void setLoveValue(int loveValue) {
+        this.loveValue = loveValue;
+    }
+
+    public String getOccurTime() {
+        return occurTime;
+    }
+
+    public void setOccurTime(String occurTime) {
+        this.occurTime = occurTime;
     }
 }

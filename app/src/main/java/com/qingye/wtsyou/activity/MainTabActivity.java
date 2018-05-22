@@ -3,11 +3,9 @@ package com.qingye.wtsyou.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.View;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.fragment.campaign.ActivityFragment;

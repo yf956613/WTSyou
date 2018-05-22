@@ -2,6 +2,7 @@ package com.qingye.wtsyou.activity.my;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,9 +18,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.activity.MainActivity;
+import com.qingye.wtsyou.basemodel.EntityBase;
+import com.qingye.wtsyou.utils.HttpRequest;
+import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.widget.CustomDialog;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
+import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.util.JSON;
+import zuo.biao.library.util.StringUtil;
 
 public class SettingActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -32,8 +41,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private RelativeLayout rlFeedBack;
     private RelativeLayout rlContact;
     private RelativeLayout rlAbout;
+    private RelativeLayout rlQuit;
 
     private String mobile;
+
+    private CustomDialog progressBar;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -58,6 +70,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting, this);
 
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
@@ -79,7 +93,41 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         rlFeedBack = findViewById(R.id.rlFeedBack);
         rlContact = findViewById(R.id.rlContact);
         rlAbout = findViewById(R.id.rlAbout);
+        rlQuit = findViewById(R.id.rlQuit);
     }
+
+    public void onResume() {
+
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
+        }
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
+    }
+
 
     @Override
     public void initData() {
@@ -96,6 +144,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         rlFeedBack.setOnClickListener(this);
         rlContact.setOnClickListener(this);
         rlAbout.setOnClickListener(this);
+        rlQuit.setOnClickListener(this);
     }
 
     @Override
@@ -130,6 +179,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             case R.id.rlAbout:
                 toActivity(AboutActivity.createIntent(context));
                 break;
+            case R.id.rlQuit:
+                postLoginOut();
+                break;
             default:
                 break;
         }
@@ -157,6 +209,49 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 break;
             default:
         }
+    }
+
+    private void postLoginOut() {
+        if (NetUtil.checkNetwork(this)) {
+            setProgressBar();
+            progressBar.show();
+
+            HttpRequest.postLoginOut(0, new OnHttpResponseListener() {
+
+                @Override
+                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+
+                    if(!StringUtil.isEmpty(resultJson)){
+                        EntityBase entityBase =  JSON.parseObject(resultJson,EntityBase.class);
+                        if(entityBase.isSuccess()){
+                            //成功
+                            showShortToast(R.string.loginOutSuccess);
+
+                            toActivity(MainActivity.createIntent(context));
+
+                            progressBarDismiss();
+                        }else{//显示失败信息
+                            if (entityBase.getCode().equals("401")) {
+                                showShortToast(R.string.tokenInvalid);
+                                toActivity(MainActivity.createIntent(context));
+                            } else {
+                                showShortToast(entityBase.getMessage());
+                            }
+
+                            progressBarDismiss();
+                        }
+                    }else{
+                        showShortToast(R.string.noReturn);
+
+                        progressBarDismiss();
+                    }
+                }
+            });
+
+        } else {
+            showShortToast(R.string.checkNetwork);
+        }
+
     }
 
     @Override

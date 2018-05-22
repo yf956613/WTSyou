@@ -201,11 +201,9 @@
                 <RelativeLayout
                     android:id="@+id/rlGesture"
                     android:layout_width="match_parent"
-                    android:layout_height="32dp"
+                    android:layout_height="40dp"
                     android:layout_marginLeft="@dimen/margin_8"
                     android:layout_marginRight="@dimen/margin_10"
-                    android:paddingTop="@dimen/margin_4"
-                    android:paddingBottom="@dimen/margin_4"
                     android:orientation="horizontal">
 
                     <TextView
@@ -413,7 +411,7 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_quit"
+                android:id="@+id/rlQuit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_4"

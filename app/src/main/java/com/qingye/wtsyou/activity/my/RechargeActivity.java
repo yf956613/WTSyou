@@ -1,34 +1,66 @@
 package com.qingye.wtsyou.activity.my;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alipay.sdk.app.PayTask;
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.adapter.my.RechargeAdapter;
+import com.qingye.wtsyou.basemodel.IdName;
+import com.qingye.wtsyou.modle.EntityPaymentConfig;
 import com.qingye.wtsyou.modle.Recharge;
+import com.qingye.wtsyou.utils.HttpRequest;
+import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.my.RechargeView;
+import com.qingye.wtsyou.widget.CustomDialog;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import pub.devrel.easypermissions.EasyPermissions;
 import zuo.biao.library.base.BaseHttpRecyclerActivity;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.OnBottomDragListener;
+import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.util.JSON;
+import zuo.biao.library.util.StringUtil;
 
 public class RechargeActivity extends BaseHttpRecyclerActivity<Recharge,RechargeView,RechargeAdapter> implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
     private ImageView ivLeft;
     private TextView tvHead;
     private Button btnRecharge;
+    private TextView tvPayWay;
+
+    private View popUpView;
+    private PopupWindow payWayWin;
+    private RadioGroup radioGroup;
+    private RadioButton rbtWei,rbtAli;
+    private TextView tvSelect;
+
+    private CustomDialog progressBar;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -83,6 +115,57 @@ public class RechargeActivity extends BaseHttpRecyclerActivity<Recharge,Recharge
         tvHead = findViewById(R.id.tv_head_title);
         tvHead.setText("钻石充值");
         btnRecharge = findViewById(R.id.btn_recharge);
+
+        tvPayWay = findViewById(R.id.tv_way);
+        popUpView = getLayoutInflater().inflate(R.layout.popupwindow_pay_way, null);
+        payWayWin = new PopupWindow(popUpView, RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        payWayWin.setOutsideTouchable(true);
+        radioGroup = popUpView.findViewById(R.id.radio_group);
+        rbtWei = popUpView.findViewById(R.id.rbtn_wei);
+        rbtAli = popUpView.findViewById(R.id.rbtn_ali);
+        tvSelect = popUpView.findViewById(R.id.tv_select);
+        radioGroup.setOnCheckedChangeListener(new WayGrouplistener());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
+        }
+    }
+
+    private void setProgressBar() {
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
+    }
+
+    //radiobutton按钮监听
+    class WayGrouplistener implements RadioGroup.OnCheckedChangeListener {
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            if (checkedId == rbtWei.getId()) {
+                rbtWei.setChecked(true);
+            }
+            if (checkedId == rbtAli.getId()) {
+                rbtAli.setChecked(true);
+            }
+        }
     }
 
     @Override
@@ -128,6 +211,8 @@ public class RechargeActivity extends BaseHttpRecyclerActivity<Recharge,Recharge
         super.initEvent();
         ivLeft.setOnClickListener(this);
         btnRecharge.setOnClickListener(this);
+        tvPayWay.setOnClickListener(this);
+        tvSelect.setOnClickListener(this);
     }
 
     @Override
@@ -136,12 +221,128 @@ public class RechargeActivity extends BaseHttpRecyclerActivity<Recharge,Recharge
             case R.id.iv_left:
                 finish();
                 break;
+            case R.id.tv_way:
+                payWayWin.showAtLocation(v, Gravity.BOTTOM, 0, 0);
+                payWayWin.update(0, 0, RelativeLayout.LayoutParams.MATCH_PARENT,
+                        RelativeLayout.LayoutParams.MATCH_PARENT);
+                break;
             case R.id.btn_recharge:
-                finish();
+                IdName idName = new IdName();
+                idName.setId("alipay_app");
+                idName.setName("支付宝支付");
+                //检查网络
+                if (NetUtil.checkNetwork(context)) {
+                    pay(idName);
+                } else {
+                    showShortToast(R.string.checkNetwork);
+                }
+                break;
+            case R.id.tv_select:
+                if (rbtWei.isChecked()) {
+                    tvPayWay.setText("微信支付");
+                } else {
+                    tvPayWay.setText("支付宝支付");
+                }
+                payWayWin.dismiss();
                 break;
             default:
                 break;
         }
+    }
+
+    private void pay(final IdName channel) {
+        String[] perms = {android.Manifest.permission.READ_PHONE_STATE,};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+
+            //检查网络
+            if (NetUtil.checkNetwork(context)) {
+                setProgressBar();
+                progressBar.show();
+
+                    HttpRequest.postGetPaymentConfig(0, new Double(0.01), channel, new OnHttpResponseListener() {
+
+                        @Override
+                        public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+
+                            if(!StringUtil.isEmpty(resultJson)){
+                                EntityPaymentConfig entityPaymentConfig = JSON.parseObject(resultJson,EntityPaymentConfig.class);
+                                if(entityPaymentConfig.isSuccess()) {
+                                    aliPay(entityPaymentConfig);
+
+                                    progressBarDismiss();
+                                } else {
+                                    if (entityPaymentConfig.getCode().equals("401")) {
+                                        showShortToast(R.string.tokenInvalid);
+                                        toActivity(MainActivity.createIntent(context));
+                                    } else {
+                                        showShortToast(entityPaymentConfig.getMessage());
+                                    }
+
+                                    progressBarDismiss();
+                                }
+                            }else{
+                                showShortToast(R.string.noReturn);
+
+                                progressBarDismiss();
+                            }
+                        }
+                    });
+                } else {
+                    EasyPermissions.requestPermissions(this, "支付需要手机。。。。权限",
+                            0, perms);
+                }
+            } else {
+                showShortToast(R.string.checkNetwork);
+            }
+
+    }
+
+    public static final int SDK_PAY_FLAG = 100;
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            //showShortToast("支付回调=>>>" + msg);
+            switch (msg.what) {
+                case SDK_PAY_FLAG: {
+
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    };
+
+
+    private void aliPay(EntityPaymentConfig object) {
+        final EntityPaymentConfig entity = object;
+
+        Runnable payRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    showShortToast("获取支付参数成功，开始调用支付");
+                    final String payInfo = entity.getContent().getParameters().get(0).getValue();
+                    if (payInfo == null) {
+                        showShortToast("未调用支付，支付参数为空");
+                        return;
+                    }
+                    PayTask alipay = new PayTask(RechargeActivity.this);
+                    Map<String, String> result = alipay.payV2(payInfo, true);
+
+                    Message msg = new Message();
+                    msg.what = SDK_PAY_FLAG;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
     }
 
     @Override

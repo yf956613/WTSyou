@@ -11,6 +11,8 @@
         <item name="colorPrimaryDark">#ffffff</item>
         <item name="android:statusBarColor">#00ffffff</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:clipToPadding">false</item>
 
     </style>
 
@@ -56,5 +58,19 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/white</item>
     </style>
+
+    <style name="CustomDialog" parent="AppTheme">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <declare-styleable name="AutoLineFeedLayout">
+        <attr name="paddingLeft" format="reference|dimension" />
+        <attr name="paddingRight" format="reference|dimension" />
+        <attr name="paddingTop" format="reference|dimension" />
+        <attr name="paddingBottom" format="reference|dimension" />
+        <attr name="verticalSpacing"  format="reference|dimension" />
+        <attr name="horizontalSpacing"  format="reference|dimension"  />
+    </declare-styleable>
 
 </resources>

@@ -263,7 +263,7 @@ public class SearchAreaActivity extends BaseHttpListActivity<City,SearchCityAdap
         City selectedCity = adapter.getItem(position);
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(Constant.SELECTED_CITY,selectedCity);//放进数据流中
+        bundle.putSerializable(Constant.SELECTED_ADDRESS,selectedCity);//放进数据流中
 
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);

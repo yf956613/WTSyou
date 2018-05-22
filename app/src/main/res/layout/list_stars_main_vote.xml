@@ -23,11 +23,12 @@
                 android:id="@+id/iv_campaign_img"
                 android:layout_width="104dp"
                 android:layout_height="133dp"
+                android:scaleType="fitXY"
                 android:src="@mipmap/img_d"/>
 
             <TextView
                 android:id="@+id/tv_tag"
-                android:layout_width="40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@+id/iv_campaign_img"
                 android:layout_marginTop="@dimen/margin_6"
@@ -35,6 +36,8 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/margin_2"
                 android:paddingBottom="@dimen/margin_2"
+                android:paddingLeft="@dimen/margin_6"
+                android:paddingRight="@dimen/margin_6"
                 android:text="投票中"
                 android:textSize="@dimen/text_size_9"
                 android:textColor="@color/white"
@@ -80,10 +83,10 @@
                         android:textSize="@dimen/text_size_12"/>
 
                     <TextView
-                        android:id="@+id/tv_campaign_value"
+                        android:id="@+id/tv_join"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="7000"
+                        android:text=""
                         android:textSize="@dimen/text_size_16"
                         android:textColor="@color/orange_text2"/>
 
@@ -95,10 +98,10 @@
                         android:textColor="@color/black_text1"/>
 
                     <TextView
-                        android:id="@+id/tv_campaign_all_value"
+                        android:id="@+id/tv_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="8000"
+                        android:text=""
                         android:textSize="@dimen/text_size_16"
                         android:textColor="@color/black_text1"/>
 
@@ -142,7 +145,7 @@
                     android:id="@+id/tv_campaign_end_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10天12时34分23秒"
+                    android:text=""
                     android:textSize="@dimen/text_size_11"
                     android:textColor="@color/gray_text4"/>
             </LinearLayout>

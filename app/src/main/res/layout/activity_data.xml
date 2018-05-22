@@ -71,8 +71,7 @@
                             android:layout_width="45dp"
                             android:layout_height="45dp"
                             android:layout_marginLeft="@dimen/margin_8"
-                            android:layout_gravity="center"
-                            android:src="@mipmap/head_d"/>
+                            android:layout_gravity="center"/>
 
                         <ImageView
                             android:layout_width="@dimen/margin_15"
@@ -121,8 +120,7 @@
                             android:layout_height="42dp"
                             android:layout_marginLeft="@dimen/margin_8"
                             android:layout_gravity="center"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/img_t"/>
+                            android:scaleType="fitXY"/>
 
                         <ImageView
                             android:layout_width="@dimen/margin_15"
@@ -145,7 +143,7 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/rlName"
+                    android:id="@+id/rlNickname"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/margin_8"
@@ -171,12 +169,12 @@
                         android:layout_centerInParent="true">
 
                         <TextView
-                            android:id="@+id/tv_name"
+                            android:id="@+id/tv_nickname"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/margin_8"
                             android:layout_gravity="center"
-                            android:text="快乐的池塘"
+                            android:text=""
                             android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text1"/>
 
@@ -230,7 +228,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/margin_8"
                             android:layout_gravity="center"
-                            android:text="我们都是小青蛙，呱呱呱呱呱呱呱"
+                            android:text=""
                             android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text1"/>
 
@@ -336,8 +334,7 @@
                             android:layout_gravity="center"
                             android:text=""
                             android:textSize="@dimen/text_size_13"
-                            android:textColor="@color/black_text1"
-                            android:visibility="gone"/>
+                            android:textColor="@color/black_text1"/>
 
                         <ImageView
                             android:layout_width="@dimen/margin_15"

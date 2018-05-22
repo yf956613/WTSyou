@@ -58,7 +58,6 @@ public class BindingPhoneActivity extends BaseActivity implements View.OnClickLi
         tvRight = findViewById(R.id.tv_add_temp);
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText("完成");
-        tvRight.setTextColor(getResources().getColor(R.color.gray_text10));
         tvHead = findViewById(R.id.tv_head_title);
         tvHead.setText("绑定手机");
 

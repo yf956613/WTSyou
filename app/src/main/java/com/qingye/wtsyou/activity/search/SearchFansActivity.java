@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,8 @@ public class SearchFansActivity extends BaseHttpRecyclerActivity<Fans,SearchFans
 
     private ImageView ivBack;
     private TextView tvHead;
+    private EditText edtSearch;
+
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     /**启动这个Activity的Intent
@@ -71,6 +74,17 @@ public class SearchFansActivity extends BaseHttpRecyclerActivity<Fans,SearchFans
         ivBack.setImageResource(R.mipmap.back_a);
         tvHead = findViewById(R.id.tv_head_title);
         tvHead.setText("粉丝列表");
+
+        edtSearch = findViewById(R.id.edit_search_content);
+        edtSearch.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == event.KEYCODE_ENTER) {
+                    // do some your things
+                }
+                return false;
+            }
+        });
     }
 
     @Override

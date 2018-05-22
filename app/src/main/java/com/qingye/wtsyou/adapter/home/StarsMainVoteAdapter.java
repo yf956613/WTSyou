@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.modle.Campaign;
+import com.qingye.wtsyou.modle.EntityVoteDetailed;
+import com.qingye.wtsyou.modle.Vote;
 import com.qingye.wtsyou.view.home.StarsMainVoteView;
 
 import zuo.biao.library.base.BaseAdapter;
@@ -12,7 +14,7 @@ import zuo.biao.library.base.BaseAdapter;
  * Created by pm89 on 2018/3/6.
  */
 
-public class StarsMainVoteAdapter extends BaseAdapter<Campaign,StarsMainVoteView> {
+public class StarsMainVoteAdapter extends BaseAdapter<Vote,StarsMainVoteView> {
 
     public StarsMainVoteAdapter(Activity context) {
         super(context);
@@ -23,8 +25,4 @@ public class StarsMainVoteAdapter extends BaseAdapter<Campaign,StarsMainVoteView
         return new StarsMainVoteView(context, parent);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

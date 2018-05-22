@@ -79,6 +79,16 @@ public class SearchStarsActivity extends BaseHttpRecyclerActivity<Stars,SearchSt
         super.initView();
         edtContent = findView(R.id.edit_search_content);
         edtContent.setHint("搜索爱豆");
+        edtContent.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == event.KEYCODE_ENTER) {
+                    // do some your things
+                }
+                return false;
+            }
+        });
+
         rlCancel = findView(R.id.rl_btn);
         tvEmpty = findViewById(R.id.tv_empty);
     }
@@ -140,13 +150,6 @@ public class SearchStarsActivity extends BaseHttpRecyclerActivity<Stars,SearchSt
                 break;
             default:
                 break;
-        }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (id > 0) {
-            toActivity(FansMainActivity.createIntent(context,id));
         }
     }
 

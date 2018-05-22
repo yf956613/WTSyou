@@ -7,532 +7,545 @@
     android:background="@color/gray_background"
     tools:context="com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity">
 
-    <RelativeLayout
-        android:id="@+id/rl_btn"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_widget"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btn_crowd"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@drawable/re_orange_shade_button"
-            android:text="立即众筹"
-            android:textSize="@dimen/text_size_14"
-            android:textColor="@color/white"/>
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btn_crowd_end"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@drawable/re_orange_white_transparent_shade_button"
-            android:text="众筹结束"
-            android:textSize="@dimen/text_size_14"
-            android:textColor="@color/white"
-            android:visibility="gone"/>
-
-    </RelativeLayout>
-
-    <com.qingye.wtsyou.widget.ObservableScrollView
-        android:id="@+id/scrollview"
-        android:layout_above="@+id/rl_btn"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical">
-
-            <RelativeLayout
+            <com.qingye.wtsyou.widget.ObservableScrollView
+                android:id="@+id/scrollview"
+                android:layout_above="@+id/rl_btn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/iv_campaign_background_img"
-                    android:layout_width="match_parent"
-                    android:layout_height="216dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/img_xc"/>
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:scrollbars="none">
 
                 <LinearLayout
-                    android:id="@+id/ll_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_70"
-                    android:orientation="horizontal">
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:orientation="vertical">
 
                     <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="@dimen/margin_6">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
                         <ImageView
-                            android:id="@+id/iv_campaign_img"
-                            android:layout_width="102dp"
-                            android:layout_height="133dp"
+                            android:id="@+id/iv_campaign_background_img"
+                            android:layout_width="match_parent"
+                            android:layout_height="216dp"
                             android:scaleType="fitXY"
-                            android:src="@mipmap/img_x"/>
+                            android:src="@mipmap/img_xc"/>
+
+                        <LinearLayout
+                            android:id="@+id/ll_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_70"
+                            android:orientation="horizontal">
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginLeft="@dimen/margin_6">
+
+                                <ImageView
+                                    android:id="@+id/iv_campaign_img"
+                                    android:layout_width="102dp"
+                                    android:layout_height="133dp"
+                                    android:scaleType="fitXY"
+                                    android:src="@mipmap/img_x"/>
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2.3"
+                                android:layout_marginLeft="@dimen/margin_10"
+                                android:layout_marginRight="@dimen/margin_12"
+                                android:layout_marginTop="@dimen/margin_8"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_campaign_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="2"
+                                    android:ellipsize="end"
+                                    android:text="薛之谦[我好像在哪里见过你]全国巡回演唱会"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_size_14"/>
+
+                                <RelativeLayout
+                                    android:id="@+id/rl_center"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_55">
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentLeft="true">
+
+                                        <TextView
+                                            android:id="@+id/tv_campaign_state"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="已筹集   "
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_size_13"/>
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="￥ "
+                                            android:textSize="@dimen/text_size_16"
+                                            android:textColor="@color/white"/>
+
+                                        <TextView
+                                            android:id="@+id/tv_campaign_value"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="7000"
+                                            android:textSize="@dimen/text_size_16"
+                                            android:textColor="@color/white"/>
+
+                                    </LinearLayout>
+
+                                </RelativeLayout>
+
+                                <TextView
+                                    android:layout_below="@+id/rl_center"
+                                    android:id="@+id/tv_tag"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_25"
+                                    android:gravity="center"
+                                    android:paddingTop="@dimen/margin_2"
+                                    android:paddingBottom="@dimen/margin_2"
+                                    android:paddingLeft="@dimen/margin_6"
+                                    android:paddingRight="@dimen/margin_6"
+                                    android:text="众筹中"
+                                    android:textSize="@dimen/text_size_9"
+                                    android:textColor="@color/white"
+                                    android:background="@drawable/corners_gradient_blue"/>
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
 
                     </RelativeLayout>
 
-                    <RelativeLayout
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:id="@+id/rl_center_2"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2.3"
-                        android:layout_marginLeft="@dimen/margin_10"
-                        android:layout_marginRight="@dimen/margin_12"
-                        android:layout_marginTop="@dimen/margin_8"
+                        android:background="@color/white"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/tv_campaign_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLines="2"
-                            android:ellipsize="end"
-                            android:text="薛之谦[我好像在哪里见过你]全国巡回演唱会"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/text_size_14"/>
-
-                        <RelativeLayout
-                            android:id="@+id/rl_center"
+                        <LinearLayout
+                            android:id="@+id/ll_top"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_55">
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/margin_15"
+                            android:layout_marginLeft="@dimen/margin_55"
+                            android:layout_marginRight="@dimen/margin_55"
+                            android:orientation="vertical">
 
-                            <LinearLayout
+                            <TextView
+                                android:id="@+id/tv_campaign_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true">
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center"
+                                android:text="2018年4月12日"
+                                android:textColor="@color/black_text1"
+                                android:textSize="@dimen/text_size_13" />
+
+                            <TextView
+                                android:id="@+id/tv_campaign_address"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/margin_2"
+                                android:gravity="center"
+                                android:text="厦门嘉庚体育馆"
+                                android:textColor="@color/black_text1"
+                                android:textSize="@dimen/text_size_13"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_below="@+id/ll_top"
+                            android:id="@+id/ll_center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_40"
+                            android:layout_marginRight="@dimen/margin_40"
+                            android:layout_marginTop="@dimen/margin_4"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/ll_participate"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/tv_campaign_state"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="已筹集   "
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_size_13"/>
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="@dimen/margin_3"
+                                    android:text="众筹人数"
+                                    android:textSize="@dimen/text_size_13"
+                                    android:textColor="@color/black_text1"/>
 
                                 <TextView
+                                    android:id="@+id/tv_crowd_num"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="￥ "
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="@dimen/margin_2"
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
+                                    android:text="8,976"
                                     android:textSize="@dimen/text_size_16"
-                                    android:textColor="@color/white"/>
+                                    android:textColor="@color/orange_text2"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ll_conversation"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/tv_campaign_value"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="7000"
-                                    android:textSize="@dimen/text_size_16"
-                                    android:textColor="@color/white"/>
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="@dimen/margin_3"
+                                    android:text="聊天室"
+                                    android:textSize="@dimen/text_size_13"
+                                    android:textColor="@color/black_text1"/>
 
+                                <TextView
+                                    android:id="@+id/tv_conversation_num"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="@dimen/margin_2"
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
+                                    android:text="108"
+                                    android:textSize="@dimen/text_size_16"
+                                    android:textColor="@color/orange_text2"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ll_detailed"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="@dimen/margin_3"
+                                    android:text="筹资目标"
+                                    android:textSize="@dimen/text_size_13"
+                                    android:textColor="@color/black_text1"/>
+
+                                <TextView
+                                    android:id="@+id/tv_crowd_target"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_2"
+                                    android:layout_gravity="center_horizontal"
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
+                                    android:text="200 W"
+                                    android:textSize="@dimen/text_size_16"
+                                    android:textColor="@color/orange_text2"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!--
+                                        <com.qingye.wtsyou.widget.CircleProgressBar
+                                            android:layout_below="@+id/ll_center"
+                                            android:id="@+id/join_progressbar"
+                                            android:layout_width="90dp"
+                                            android:layout_height="90dp"
+                                            android:layout_marginTop="@dimen/margin_10"
+                                            android:layout_centerInParent="true"
+                                            app:circle_color="@color/gray_background"
+                                            app:circle_width="2dp"
+                                            app:progress_color1="@color/orange_2"
+                                            app:progress_color2="@color/orange_3"
+                                            app:progress_color3="@color/orange_4"
+                                            app:progress_width="4dp"
+                                            app:start_arc="270"
+                                            app:max_progress="360"
+                                            app:is_set_top_title="false"
+                                            app:is_set_mid_content="true"
+                                            app:mid_progress_color="@color/black_text2"
+                                            app:current_progress_text_size="@dimen/text_size_18"
+                                            app:is_set_bottom_content="true"
+                                            app:bottom_content="众筹进度"
+                                            app:bottom_content_color="@color/gray_text5"
+                                            app:bottom_content_text_size="@dimen/text_size_10"/>
+                        -->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1.4"
+                            android:layout_below="@+id/ll_center">
+
+                            <RelativeLayout
+                                android:id="@+id/circleprogress"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true">
+
+                                <com.qingye.wtsyou.widget.CircleProgress
+                                    android:id="@+id/join_progressbar"
+                                    android:layout_width="130dp"
+                                    android:layout_height="130dp"
+                                    android:layout_marginTop="@dimen/margin_10"
+                                    android:layout_centerHorizontal="true"
+                                    app:progress_color1="@color/orange_2"
+                                    app:progress_color2="@color/orange_3"
+                                    app:progress_color3="@color/orange_4"
+                                    app:circle_width="2dp"
+                                    app:circle_color="@color/gray_background"
+                                    app:current_progress_text_size="@dimen/text_size_18"
+                                    app:progress_width="4dp"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingBottom="@dimen/margin_35"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:text="众筹进度"
+                                    android:textSize="@dimen/text_size_11"
+                                    android:textColor="@color/gray_text5"/>
+
+                            </RelativeLayout>
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_below="@+id/circleprogress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_12"
+                            android:layout_centerHorizontal="true"
+                            android:layout_gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="距离结束:    "
+                                android:textSize="@dimen/text_size_13"
+                                android:textColor="@color/gray_text4"/>
+
+                            <TextView
+                                android:id="@+id/tv_campaign_end_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:textSize="@dimen/text_size_13"
+                                android:textColor="@color/gray_text4"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_below="@+id/rl_center_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_4"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_5"
+                            android:layout_marginRight="@dimen/margin_6"
+                            android:layout_marginTop="@dimen/margin_12"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:layout_alignParentLeft="true"
+                                android:text="项目详情"
+                                android:textColor="@color/black_text"
+                                android:textSize="@dimen/text_size_13"/>
+
+                            <LinearLayout
+                                android:id="@+id/ll_detailed_more"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:layout_alignParentRight="true">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="更多"
+                                    android:textColor="@color/gray_text1"
+                                    android:textSize="@dimen/text_size_11"/>
+
+                                <ImageView
+                                    android:layout_width="4dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/margin_4"
+                                    android:layout_marginTop="@dimen/margin_1"
+                                    android:layout_gravity="center"
+                                    android:src="@mipmap/down_dd"/>
                             </LinearLayout>
 
                         </RelativeLayout>
 
                         <TextView
-                            android:layout_below="@+id/rl_center"
-                            android:id="@+id/tv_tag"
-                            android:layout_width="40dp"
+                            android:id="@+id/tv_crowd_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_25"
-                            android:gravity="center"
-                            android:paddingTop="@dimen/margin_2"
-                            android:paddingBottom="@dimen/margin_2"
-                            android:text="众筹中"
-                            android:textSize="@dimen/text_size_9"
-                            android:textColor="@color/white"
-                            android:background="@drawable/corners_gradient_blue"/>
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/rl_center_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/ll_top"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/margin_15"
-                    android:layout_marginLeft="@dimen/margin_55"
-                    android:layout_marginRight="@dimen/margin_55"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_campaign_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center"
-                        android:text="2018年4月12日"
-                        android:textColor="@color/black_text1"
-                        android:textSize="@dimen/text_size_13" />
-
-                    <TextView
-                        android:id="@+id/tv_campaign_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/margin_2"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:text="厦门嘉庚体育馆"
-                        android:textColor="@color/black_text1"
-                        android:textSize="@dimen/text_size_13"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_below="@+id/ll_top"
-                    android:id="@+id/ll_center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_40"
-                    android:layout_marginRight="@dimen/margin_40"
-                    android:layout_marginTop="@dimen/margin_4"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:id="@+id/ll_participate"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/margin_3"
-                            android:text="众筹人数"
-                            android:textSize="@dimen/text_size_13"
-                            android:textColor="@color/black_text1"/>
-
-                        <TextView
-                            android:id="@+id/tv_crowd_num"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/margin_2"
-                            android:maxLines="1"
+                            android:layout_marginTop="@dimen/margin_12"
+                            android:layout_marginBottom="@dimen/margin_12"
+                            android:layout_marginLeft="@dimen/margin_6"
+                            android:layout_marginRight="@dimen/margin_6"
+                            android:maxLines="8"
                             android:ellipsize="end"
-                            android:text="8,976"
-                            android:textSize="@dimen/text_size_16"
-                            android:textColor="@color/orange_text2"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_conversation"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/margin_3"
-                            android:text="聊天室"
-                            android:textSize="@dimen/text_size_13"
-                            android:textColor="@color/black_text1"/>
-
-                        <TextView
-                            android:id="@+id/tv_conversation_num"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/margin_2"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            android:text="108"
-                            android:textSize="@dimen/text_size_16"
-                            android:textColor="@color/orange_text2"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_detailed"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/margin_3"
-                            android:text="筹资目标"
-                            android:textSize="@dimen/text_size_13"
-                            android:textColor="@color/black_text1"/>
-
-                        <TextView
-                            android:id="@+id/tv_crowd_target"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_2"
-                            android:layout_gravity="center_horizontal"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            android:text="200 W"
-                            android:textSize="@dimen/text_size_16"
-                            android:textColor="@color/orange_text2"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-<!--
-                <com.qingye.wtsyou.widget.CircleProgressBar
-                    android:layout_below="@+id/ll_center"
-                    android:id="@+id/join_progressbar"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_marginTop="@dimen/margin_10"
-                    android:layout_centerInParent="true"
-                    app:circle_color="@color/gray_background"
-                    app:circle_width="2dp"
-                    app:progress_color1="@color/orange_2"
-                    app:progress_color2="@color/orange_3"
-                    app:progress_color3="@color/orange_4"
-                    app:progress_width="4dp"
-                    app:start_arc="270"
-                    app:max_progress="360"
-                    app:is_set_top_title="false"
-                    app:is_set_mid_content="true"
-                    app:mid_progress_color="@color/black_text2"
-                    app:current_progress_text_size="@dimen/text_size_18"
-                    app:is_set_bottom_content="true"
-                    app:bottom_content="众筹进度"
-                    app:bottom_content_color="@color/gray_text5"
-                    app:bottom_content_text_size="@dimen/text_size_10"/>
--->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1.4"
-                    android:layout_below="@+id/ll_center">
-
-                    <RelativeLayout
-                        android:id="@+id/circleprogress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true">
-
-                        <com.qingye.wtsyou.widget.CircleProgress
-                            android:id="@+id/join_progressbar"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
-                            android:layout_marginTop="@dimen/margin_10"
-                            android:layout_centerHorizontal="true"
-                            app:progress_color1="@color/orange_2"
-                            app:progress_color2="@color/orange_3"
-                            app:progress_color3="@color/orange_4"
-                            app:circle_width="2dp"
-                            app:circle_color="@color/gray_background"
-                            app:current_progress_text_size="@dimen/text_size_18"
-                            app:progress_width="4dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="@dimen/margin_35"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="众筹进度"
-                            android:textSize="@dimen/text_size_11"
-                            android:textColor="@color/gray_text5"/>
-
-                    </RelativeLayout>
-
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_below="@+id/circleprogress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_10"
-                    android:layout_marginBottom="@dimen/margin_12"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="距离结束:    "
-                        android:textSize="@dimen/text_size_12"
-                        android:textColor="@color/gray_text4"/>
-
-                    <TextView
-                        android:id="@+id/tv_campaign_end_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="10天12时34分23秒"
-                        android:textSize="@dimen/text_size_12"
-                        android:textColor="@color/gray_text4"/>
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_below="@+id/rl_center_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_4"
-                android:background="@color/white"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_5"
-                    android:layout_marginRight="@dimen/margin_6"
-                    android:layout_marginTop="@dimen/margin_12"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="项目详情"
-                        android:textColor="@color/black_text"
-                        android:textSize="@dimen/text_size_13"/>
-
-                    <LinearLayout
-                        android:id="@+id/ll_detailed_more"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_alignParentRight="true">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="更多"
-                            android:textColor="@color/gray_text1"
-                            android:textSize="@dimen/text_size_11"/>
-
-                        <ImageView
-                            android:layout_width="4dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_4"
-                            android:layout_marginTop="@dimen/margin_1"
-                            android:layout_gravity="center"
-                            android:src="@mipmap/down_dd"/>
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/tv_crowd_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_12"
-                    android:layout_marginBottom="@dimen/margin_12"
-                    android:layout_marginLeft="@dimen/margin_6"
-                    android:layout_marginRight="@dimen/margin_6"
-                    android:maxLines="8"
-                    android:ellipsize="end"
-                    android:text="众筹须知
+                            android:text="众筹须知
             付款成功后即可成功参与投票。"
-                    android:textSize="@dimen/text_size_12"
-                    android:textColor="@color/black_text2"/>
+                            android:textSize="@dimen/text_size_12"
+                            android:textColor="@color/black_text2"/>
 
-            </LinearLayout>
+                    </LinearLayout>
 
-<!--
+                    <!--
+                                <RelativeLayout
+                                    android:id="@+id/ll_conversation"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_4"
+                                    android:background="@color/white"
+                                    android:orientation="vertical">
+
+                                    <RelativeLayout
+                                        android:id="@+id/text"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/margin_5"
+                                        android:layout_marginRight="@dimen/margin_6"
+                                        android:layout_marginTop="@dimen/margin_12"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentLeft="true"
+                                            android:text="话题聊天室"
+                                            android:textColor="@color/black_text"
+                                            android:textSize="@dimen/text_size_13"/>
+
+                                    </RelativeLayout>
+
+                                    <FrameLayout
+                                        android:layout_below="@+id/text"
+                                        android:id="@+id/list_conversation"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"/>
+
+                                    <LinearLayout
+                                        android:id="@+id/ll_select_conversation"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/margin_15"
+                                        android:layout_centerHorizontal="true"
+                                        android:orientation="vertical"
+                                        android:visibility="gone">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="当前还没关联聊天室哦，立即去关联吧~"
+                                            android:textSize="@dimen/text_size_12"
+                                            android:gravity="center_horizontal"/>
+
+                                        <TextView
+                                            android:layout_width="100dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:layout_marginTop="@dimen/margin_15"
+                                            android:layout_marginBottom="@dimen/margin_15"
+                                            android:gravity="center"
+                                            android:paddingTop="@dimen/margin_4"
+                                            android:paddingBottom="@dimen/margin_4"
+                                            android:text="关联聊天室"
+                                            android:textSize="@dimen/text_size_12"
+                                            android:textColor="@color/orange_line"
+                                            android:background="@drawable/corners_orange_1"/>
+                                    </LinearLayout>
+
+                                </RelativeLayout>
+                    -->
+
+                </LinearLayout>
+            </com.qingye.wtsyou.widget.ObservableScrollView>
+
             <RelativeLayout
-                android:id="@+id/ll_conversation"
+                android:id="@+id/rl_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_4"
-                android:background="@color/white"
-                android:orientation="vertical">
+                android:layout_alignParentBottom="true">
 
-                <RelativeLayout
-                    android:id="@+id/text"
+                <Button
+                    android:id="@+id/btn_crowd"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_5"
-                    android:layout_marginRight="@dimen/margin_6"
-                    android:layout_marginTop="@dimen/margin_12"
-                    android:orientation="horizontal">
+                    android:layout_height="44dp"
+                    android:background="@drawable/re_orange_shade_button"
+                    android:text="立即众筹"
+                    android:textSize="@dimen/text_size_14"
+                    android:textColor="@color/white"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:text="话题聊天室"
-                        android:textColor="@color/black_text"
-                        android:textSize="@dimen/text_size_13"/>
-
-                </RelativeLayout>
-
-                <FrameLayout
-                    android:layout_below="@+id/text"
-                    android:id="@+id/list_conversation"
+                <Button
+                    android:id="@+id/btn_crowd_end"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <LinearLayout
-                    android:id="@+id/ll_select_conversation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_15"
-                    android:layout_centerHorizontal="true"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="当前还没关联聊天室哦，立即去关联吧~"
-                        android:textSize="@dimen/text_size_12"
-                        android:gravity="center_horizontal"/>
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/margin_15"
-                        android:layout_marginBottom="@dimen/margin_15"
-                        android:gravity="center"
-                        android:paddingTop="@dimen/margin_4"
-                        android:paddingBottom="@dimen/margin_4"
-                        android:text="关联聊天室"
-                        android:textSize="@dimen/text_size_12"
-                        android:textColor="@color/orange_line"
-                        android:background="@drawable/corners_orange_1"/>
-                </LinearLayout>
+                    android:layout_height="44dp"
+                    android:background="@drawable/re_orange_white_transparent_shade_button"
+                    android:text="众筹结束"
+                    android:textSize="@dimen/text_size_14"
+                    android:textColor="@color/white"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
--->
 
-        </LinearLayout>
-    </com.qingye.wtsyou.widget.ObservableScrollView>
+        </RelativeLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/ll_head"

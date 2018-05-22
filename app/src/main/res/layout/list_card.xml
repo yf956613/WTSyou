@@ -154,18 +154,18 @@
 
                 <ImageView
                     android:id="@+id/iv_more"
-                    android:layout_width="40dp"
-                    android:layout_height="15dp"
-                    android:padding="@dimen/margin_4"
+                    android:layout_width="30dp"
+                    android:layout_height="28dp"
+                    android:padding="@dimen/margin_6"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:src="@mipmap/next_l"/>
 
                 <ImageView
                     android:id="@+id/iv_less"
-                    android:layout_width="40dp"
-                    android:layout_height="15dp"
-                    android:padding="@dimen/margin_4"
+                    android:layout_width="30dp"
+                    android:layout_height="28dp"
+                    android:padding="@dimen/margin_6"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:src="@mipmap/next_k"

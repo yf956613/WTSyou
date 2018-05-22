@@ -59,7 +59,7 @@ public class NumberCount extends LinearLayout implements View.OnClickListener{
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
                     if (s.toString().equals("0")) {
-                        showShortToast(getContext(),"数量不能为0");
+                        showShortToast(getContext(),R.string.noLess);
                         number = 1;
                         edtNumber.setText(Integer.toString(number));
                     } else {

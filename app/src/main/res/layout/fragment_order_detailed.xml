@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:layout_above="@+id/ll_message"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="14"
+        android:background="@color/alpha_6"/>
 
     <RelativeLayout
-        android:id="@+id/rlDetailed"
+        android:id="@+id/ll_message"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:background="@color/white">
 
         <LinearLayout
-            android:id="@+id/ll_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:orientation="vertical"
-            android:background="@color/white">
+            android:layout_centerVertical="true">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginLeft="@dimen/margin_18"
                 android:layout_marginRight="@dimen/margin_18">
 
@@ -169,7 +177,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_8"
-                android:layout_marginBottom="@dimen/margin_12"
                 android:layout_marginLeft="@dimen/margin_18"
                 android:layout_marginRight="@dimen/margin_18">
 
@@ -206,18 +213,12 @@
 
             </RelativeLayout>
 
-            <View
-                style="@style/divider_horizontal_1px"
-                android:layout_marginTop="@dimen/margin_8"/>
-
         </LinearLayout>
 
-        <Button
-            android:layout_above="@+id/ll_message"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/alpha_6"/>
+        <View
+            style="@style/divider_horizontal_1px"
+            android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

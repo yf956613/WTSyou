@@ -59,6 +59,16 @@ public class SearchCampaignActivity extends BaseActivity implements View.OnClick
         edtContent.setHint("搜索活动");
         rlCancel = findView(R.id.rl_btn);
 
+        edtContent.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == event.KEYCODE_ENTER) {
+                    // do some your things
+                }
+                return false;
+            }
+        });
+
         SearchCampaignShowFragment searchCampaignShowFragment = new SearchCampaignShowFragment();
         SearchCampaignSupportFragment searchCampaignSupportFragment = new SearchCampaignSupportFragment();
         //注意这里是调用getSupportFragmentManager()方法

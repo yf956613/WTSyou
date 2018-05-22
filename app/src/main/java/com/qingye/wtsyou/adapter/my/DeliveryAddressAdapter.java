@@ -1,6 +1,7 @@
 package com.qingye.wtsyou.adapter.my;
 
 import android.app.Activity;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.modle.DeliveryAddress;
@@ -14,17 +15,24 @@ import zuo.biao.library.base.BaseAdapter;
 
 public class DeliveryAddressAdapter extends BaseAdapter<DeliveryAddress,DeliveryAddressView> {
 
+    private DeliveryAddressView.OnItemChildClickListener onItemChildClickListener;
+
+    //给监听设置一个构造函数，用于main中调用
+    public void setOnItemChildClickListener(DeliveryAddressView.OnItemChildClickListener onItemChildClickListener) {
+        this.onItemChildClickListener = onItemChildClickListener;
+    }
+
     public DeliveryAddressAdapter(Activity context) {
         super(context);
     }
 
     @Override
     public DeliveryAddressView createView(int position, ViewGroup parent) {
-        return new DeliveryAddressView(context, parent);
+
+        DeliveryAddressView deliveryAddressView = new DeliveryAddressView(context, parent);
+        deliveryAddressView.setOnItemChildClickListener(onItemChildClickListener);
+
+        return deliveryAddressView;
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

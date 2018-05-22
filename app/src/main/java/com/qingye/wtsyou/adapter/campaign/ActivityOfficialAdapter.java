@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.campaign;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.Campaign;
+import com.qingye.wtsyou.modle.Officials;
 import com.qingye.wtsyou.view.campaign.ActivityOfficialView;
 
 import zuo.biao.library.base.BaseAdapter;
@@ -12,7 +12,7 @@ import zuo.biao.library.base.BaseAdapter;
  * Created by pm89 on 2018/3/6.
  */
 
-public class ActivityOfficialAdapter extends BaseAdapter<Campaign,ActivityOfficialView> {
+public class ActivityOfficialAdapter extends BaseAdapter<Officials,ActivityOfficialView> {
 
     public ActivityOfficialAdapter(Activity context) {
         super(context);

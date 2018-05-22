@@ -44,7 +44,9 @@
                     android:textColorHint="@color/gray_text2"
                     android:textColor="@color/black_text1"
                     android:textCursorDrawable="@drawable/color_cursor"
-                    android:background="@null"/>
+                    android:background="@null"
+                    android:imeOptions="actionSearch"
+                    android:singleLine="true"/>
 
             </LinearLayout>
 

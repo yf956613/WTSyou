@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.conversation.CollectionConversationActivity;
+import com.qingye.wtsyou.activity.conversation.CreateConversationActivity;
 import com.qingye.wtsyou.activity.conversation.MyConversationActivity;
+import com.qingye.wtsyou.activity.search.SearchConversationActivity;
 
 import zuo.biao.library.base.BaseFragment;
 import zuo.biao.library.ui.AlertDialog;
@@ -86,6 +88,8 @@ public class ConversationFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void initEvent() {
+        ivSearch.setOnClickListener(this);
+        ivCreate.setOnClickListener(this);
         ivMy.setOnClickListener(this);
         ivCollection.setOnClickListener(this);
     }
@@ -93,6 +97,12 @@ public class ConversationFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.iv_left:
+                toActivity(SearchConversationActivity.createIntent(context));
+                break;
+            case R.id.iv_right:
+                toActivity(CreateConversationActivity.createIntent(context));
+                break;
             case R.id.iv_my:
                 toActivity(MyConversationActivity.createIntent(context));
                 break;

@@ -68,7 +68,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/margin_15"
-                            android:text="微信充值"
+                            android:text="支付宝充值"
                             android:textSize="@dimen/text_size_13"
                             android:textColor="@color/blue_text"/>
 
@@ -133,7 +133,8 @@
                         <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1">
+                            android:gravity="right"
+                            android:layout_weight="2">
 
                             <TextView
                                 android:id="@+id/tv_diamond"

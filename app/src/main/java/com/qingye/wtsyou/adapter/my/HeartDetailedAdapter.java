@@ -25,8 +25,4 @@ public class HeartDetailedAdapter extends BaseAdapter<HeartDetailed,HeartDetaile
         return new HeartDetailedView(context, parent);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

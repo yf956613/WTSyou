@@ -1,16 +1,23 @@
 package com.qingye.wtsyou.activity.home;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyco.tablayout.CommonTabLayout;
@@ -21,11 +28,14 @@ import com.qingye.wtsyou.adapter.SlidingPagerAdapter;
 import com.qingye.wtsyou.entity.TabEntity;
 import com.qingye.wtsyou.fragment.home.HomeChartsFansFragment;
 import com.qingye.wtsyou.fragment.home.HomeChartsStarsFragment;
+import com.qingye.wtsyou.widget.CustomDialog;
+import com.qingye.wtsyou.widget.VpSwipeRefreshLayout;
 
 import java.util.ArrayList;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
+import zuo.biao.library.util.Log;
 
 public class ChartsActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -42,7 +52,13 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
             R.mipmap.conversation, R.mipmap.personal};
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private CommonTabLayout mTabLayout;
+    private SlidingPagerAdapter mViewPagerAdapter;
     private ViewPager mViewPager;
+
+    private LinearLayout linearLayout;
+    private VpSwipeRefreshLayout swipeRefresh;
+
+    private CustomDialog progressBar;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -67,18 +83,13 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charts,this);
 
-        HomeChartsStarsFragment homeChartsStarsFragment = new HomeChartsStarsFragment();
-        HomeChartsFansFragment homeChartsFansFragment = new HomeChartsFansFragment();
-
-        mFragments.add(homeChartsStarsFragment);
-        mFragments.add(homeChartsFansFragment);
-
-        for (int i = 0; i < mTitles.length; i++) {
-            mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
-        }
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
+        setView();
+        //刷新
+        initHrvsr();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
@@ -86,6 +97,9 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initView() {
+        swipeRefresh = findViewById(R.id.swipe_refresh_widget);
+        linearLayout = findViewById(R.id.linearlayout);
+
         ivBack = findViewById(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
         ivPast = findViewById(R.id.iv_right);
@@ -96,22 +110,109 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
         mTabLayout = findViewById(R.id.tab);
         mTabLayout.setUnderlineColor(Color.parseColor("#00dddddd"));
         mViewPager = findViewById(R.id.viewPager);
-        mViewPager.setAdapter(new SlidingPagerAdapter(getSupportFragmentManager(),mFragments,mTitles,context));
+
+    }
+
+    public void onResume() {
+
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
+        }
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
+    }
+
+    //刷新
+    private void initHrvsr(){
+        //设置刷新时动画的颜色，可以设置4个
+        swipeRefresh.setProgressBackgroundColorSchemeResource(android.R.color.white);
+        swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_light,
+                android.R.color.holo_red_light, android.R.color.holo_orange_light,
+                android.R.color.holo_green_light);
+        swipeRefresh.setProgressViewOffset(false, 0, (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
+                        .getDisplayMetrics()));
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.e("swipeRefresh", "invoke onRefresh...");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setView();
+                        showShortToast(R.string.getSuccess);
+                        swipeRefresh.setRefreshing(false);
+                    }
+                }, 1500);
+            }
+        });
+        // 设置子视图是否允许滚动到顶部
+        swipeRefresh.setOnChildScrollUpCallback(new SwipeRefreshLayout.OnChildScrollUpCallback() {
+            @Override
+            public boolean canChildScrollUp(SwipeRefreshLayout parent, @Nullable View child) {
+                return linearLayout.getScrollY() > 0;
+            }
+        });
+    }
+
+    public void setView() {
+        mTabEntities.clear();
+
+        //移除之前的Fragment
+        final FragmentManager fm = getSupportFragmentManager();
+        if (mFragments.size() > 0) {
+            FragmentTransaction ft = fm.beginTransaction();
+            for (Fragment f : this.mFragments) {
+                ft.remove(f);
+            }
+            ft.commit();
+            ft = null;
+            fm.executePendingTransactions();
+        }
+
+        mFragments.clear();
+
+        HomeChartsStarsFragment homeChartsStarsFragment = new HomeChartsStarsFragment();
+        HomeChartsFansFragment homeChartsFansFragment = new HomeChartsFansFragment();
+
+        mFragments.add(homeChartsStarsFragment);
+        mFragments.add(homeChartsFansFragment);
+
+        for (int i = 0; i < mTitles.length; i++) {
+            mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
+        }
+
+        if(mViewPagerAdapter != null){
+            mViewPagerAdapter = null;
+        }
+
+        mViewPagerAdapter = new SlidingPagerAdapter(fm,mFragments,mTitles,context);
+        mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setOffscreenPageLimit(2);//设置缓存界面个数
         tabLayout();
-    }
-
-    @Override
-    public void initData() {
-
-    }
-
-
-
-    @Override
-    public void initEvent() {
-        ivBack.setOnClickListener(this);
-        ivPast.setOnClickListener(this);
     }
 
     private void tabLayout() {
@@ -146,6 +247,17 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
         });
 
         mViewPager.setCurrentItem(0);
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public void initEvent() {
+        ivBack.setOnClickListener(this);
+        ivPast.setOnClickListener(this);
     }
 
     @Override
