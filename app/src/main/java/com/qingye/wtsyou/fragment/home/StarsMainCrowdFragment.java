@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.home.StarsMainCrowdAdapter;
-import com.qingye.wtsyou.modle.Crowd;
+import com.qingye.wtsyou.model.Crowd;
 import com.qingye.wtsyou.view.home.StarsMainCrowdView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 

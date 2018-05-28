@@ -38,7 +38,7 @@ public class FansMainActivity extends BaseActivity implements View.OnClickListen
      * @param id
      * @return
      */
-    public static Intent createIntent(Context context, long id) {
+    public static Intent createIntent(Context context) {
         return new Intent(context,FansMainActivity.class);
     }
 

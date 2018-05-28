@@ -11,8 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.Campaign;
-import com.qingye.wtsyou.modle.Supports;
+import com.qingye.wtsyou.model.Supports;
 
 import java.math.BigDecimal;
 
@@ -61,7 +60,7 @@ public class ActivityNewSupportView extends BaseView<Supports> implements View.O
     public void bindView(Supports data_){
         super.bindView(data_ != null ? data_ : new Supports());
         //图片
-        String url = data.getActivityIcon();
+        String url = data.getActivityPic();
         Glide.with(context)
                 .load(url)
                 .apply(bitmapTransform(new RoundedCornersTransformation(10, 0, RoundedCornersTransformation.CornerType.ALL)))

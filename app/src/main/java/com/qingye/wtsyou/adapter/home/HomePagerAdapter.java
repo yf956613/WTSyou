@@ -3,11 +3,10 @@ package com.qingye.wtsyou.adapter.home;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.fragment.home.FragmentFactory;
-import com.qingye.wtsyou.modle.RecommendStars;
+import com.qingye.wtsyou.model.RecommendStars;
 
 import java.util.ArrayList;
 import java.util.List;

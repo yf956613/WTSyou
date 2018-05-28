@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.Hots;
+import com.qingye.wtsyou.model.Hots;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import zuo.biao.library.base.BaseModel;

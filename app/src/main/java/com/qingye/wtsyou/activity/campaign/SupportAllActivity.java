@@ -29,7 +29,7 @@ import com.qingye.wtsyou.adapter.SlidingPagerAdapter;
 import com.qingye.wtsyou.entity.TabEntity;
 import com.qingye.wtsyou.fragment.campaign.SupportEndFragment;
 import com.qingye.wtsyou.fragment.campaign.SupportIngFragment;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.VpSwipeRefreshLayout;
 
 import java.util.ArrayList;

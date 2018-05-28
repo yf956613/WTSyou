@@ -7,10 +7,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.activity.campaign.DetailedActivity;
 import com.qingye.wtsyou.adapter.campaign.ActivityOfficialAdapter;
-import com.qingye.wtsyou.modle.Officials;
+import com.qingye.wtsyou.model.Officials;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.view.campaign.ActivityOfficialView;
 
@@ -20,6 +22,7 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
+import zuo.biao.library.ui.WebViewActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -144,5 +147,19 @@ public class ActivityOfficialFragment extends BaseHttpRecyclerFragment<Officials
     public void initEvent() {//必须调用
         super.initEvent();
 
+    }
+
+    //点击item
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, final long id) {
+        String title = officials.get(position).getActivityName();
+        if (officials.get(position).getType().equals("url")) {
+            String url = officials.get(position).getUrl();
+            toActivity(WebViewActivity.createIntent(context, title, url));
+        }
+        else if (officials.get(position).getType().equals("h5")){
+            String content = officials.get(position).getDetail();
+            toActivity(DetailedActivity.createIntent(context, title, content));
+        }
     }
 }

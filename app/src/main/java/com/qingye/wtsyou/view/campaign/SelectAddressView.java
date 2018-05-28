@@ -8,7 +8,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.DeliveryAddress;
+import com.qingye.wtsyou.model.DeliveryAddress;
 
 import zuo.biao.library.base.BaseView;
 

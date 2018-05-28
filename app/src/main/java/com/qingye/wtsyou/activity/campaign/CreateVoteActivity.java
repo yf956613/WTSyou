@@ -18,15 +18,15 @@ import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.gaode.activity.GaoDeAddressSelectActivity;
 import com.qingye.wtsyou.activity.search.SelectOneStarsActivity;
-import com.qingye.wtsyou.basemodel.EntityBase;
+import zuo.biao.library.model.EntityBase;
 import com.qingye.wtsyou.basemodel.POI;
 import com.qingye.wtsyou.fragment.campaign.AssociateConversationFragment;
 import com.qingye.wtsyou.fragment.campaign.AssociateStarsFragment;
-import com.qingye.wtsyou.modle.EntityStars;
+import com.qingye.wtsyou.model.EntityStars;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,7 +36,6 @@ import fj.edittextcount.lib.FJEditTextCount;
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.manager.HttpManager;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
 

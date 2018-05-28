@@ -13,15 +13,15 @@ import com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity;
 import com.qingye.wtsyou.activity.campaign.SaleDetailedActivity;
 import com.qingye.wtsyou.activity.campaign.SupportDetailedActivity;
 import com.qingye.wtsyou.activity.campaign.VoteDetailedActivity;
-import com.qingye.wtsyou.modle.EntityCrowdDetailed;
-import com.qingye.wtsyou.modle.EntityHomeContent;
-import com.qingye.wtsyou.modle.EntitySaleDetailed;
-import com.qingye.wtsyou.modle.EntitySupportDetailed;
-import com.qingye.wtsyou.modle.EntityVoteDetailed;
+import com.qingye.wtsyou.model.EntityCrowdDetailed;
+import com.qingye.wtsyou.model.EntityHomeContent;
+import com.qingye.wtsyou.model.EntitySaleDetailed;
+import com.qingye.wtsyou.model.EntitySupportDetailed;
+import com.qingye.wtsyou.model.EntityVoteDetailed;
 import com.qingye.wtsyou.utils.DateUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 
 import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
@@ -30,7 +30,7 @@ import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
 
 import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_2;
-import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_3;
+import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_6;
 
 /**
  * Created by pm89 on 2018/3/6.
@@ -110,7 +110,7 @@ public class HomeContentView extends BaseView<EntityHomeContent> implements View
         }
 
         if (data.getStartTime() != null) {
-            tvTime.setText(DateUtil.resverDate(data.getStartTime(),DATE_PATTERN_3,DATE_PATTERN_2));
+            tvTime.setText(DateUtil.resverDate(data.getStartTime(),DATE_PATTERN_2,DATE_PATTERN_6));
         }
 
         if (data.getActivityName() != null) {

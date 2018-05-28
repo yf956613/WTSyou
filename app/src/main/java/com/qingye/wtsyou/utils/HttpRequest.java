@@ -16,11 +16,11 @@ package com.qingye.wtsyou.utils;
 
 import com.qingye.wtsyou.basemodel.IdName;
 import com.qingye.wtsyou.basemodel.POI;
-import com.qingye.wtsyou.modle.CreateSupportRequest;
-import com.qingye.wtsyou.modle.CreateVoteRequest;
-import com.qingye.wtsyou.modle.DepositApplyRequest;
-import com.qingye.wtsyou.modle.FocusStars;
-import com.qingye.wtsyou.modle.OrderApply;
+import com.qingye.wtsyou.model.CreateSupportRequest;
+import com.qingye.wtsyou.model.CreateVoteRequest;
+import com.qingye.wtsyou.model.DepositApplyRequest;
+import com.qingye.wtsyou.model.FocusStars;
+import com.qingye.wtsyou.model.OrderApply;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -83,15 +83,26 @@ public class HttpRequest {
 	 * @param accountType
 	 * @param loginId
 	 * @param password
+	 * @param photo
+	 * @param nickname
 	 * @param listener
 	 */
 	public static void postLogin(final int requestCode ,final String accountType,final String loginId, final String password,
-							  final OnHttpResponseListener listener) {
+							  final String photo, final String nickname, final OnHttpResponseListener listener) {
 
 		Map<String,Object> params = new HashMap<>();
 		params.put(Constant.ACCOUNT_TYPE, accountType);
 		params.put(Constant.LOGIN_ID, loginId);
-		params.put(Constant.PASSWORD, password);
+		if (password != null) {
+			params.put(Constant.PASSWORD, password);
+		}
+		if (photo != null) {
+			params.put(Constant.PHOTO, photo);
+		}
+		if (nickname != null) {
+			params.put(Constant.NICKNAME, nickname);
+		}
+
 
 		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.LOGIN, requestCode, listener);
 	}
@@ -155,6 +166,18 @@ public class HttpRequest {
 		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.FOCUSSTARS, requestCode, listener);
 	}
 
+	/**取消关注明星
+	 * @param focusStarsRequestList
+	 * @param listener
+	 */
+	public static void postCancelStars(final int requestCode, final List<FocusStars> focusStarsRequestList, final OnHttpResponseListener listener) {
+
+		Map<String,Object> params = new HashMap<>();
+		params.put(Constant.FUNSLIST, focusStarsRequestList);
+
+		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.CANCELFOCUSSTARS, requestCode, listener);
+	}
+
 	/**已关注的明星
 	 * @param listener
 	 */
@@ -163,6 +186,35 @@ public class HttpRequest {
 		Map<String,Object> params = new HashMap<>();
 
 		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.FOCUEDSTARS, requestCode, listener);
+	}
+
+	/**明星排行榜
+	 * @param page
+	 * @param pageSize
+	 * @param desc
+	 * @param keywords
+	 * @param periods
+	 * @param maxPeriods
+	 * @param listener
+	 */
+	public static void postStarsRank(final int requestCode, int page, int pageSize, boolean desc, String keywords,
+									 String periods, String maxPeriods, final OnHttpResponseListener listener) {
+
+		Map<String,Object> params = new HashMap<>();
+		params.put(Constant.PAGE, page);
+		params.put(Constant.PAGESIZE, pageSize);
+		params.put(Constant.DESC, desc);
+		if (keywords != null) {
+			params.put(Constant.KEYWORDS, keywords);
+		}
+		if (periods != null) {
+			params.put(Constant.PERIODS, periods);
+		}
+		if (maxPeriods != null) {
+			params.put(Constant.MAXPERIODS, maxPeriods);
+		}
+
+		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.STARSRANKING, requestCode, listener);
 	}
 
 	/**粉丝贡献榜
@@ -194,7 +246,7 @@ public class HttpRequest {
 		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.FANSRANKING, requestCode, listener);
 	}
 
-	/**明星排行榜
+	/**明星周往期排行榜
 	 * @param page
 	 * @param pageSize
 	 * @param desc
@@ -203,8 +255,8 @@ public class HttpRequest {
 	 * @param maxPeriods
 	 * @param listener
 	 */
-	public static void postStarsRank(final int requestCode, int page, int pageSize, boolean desc, String keywords,
-									String periods, String maxPeriods, final OnHttpResponseListener listener) {
+	public static void postHistoryStarsWeekRank(final int requestCode, int page, int pageSize, boolean desc, String keywords,
+									 String periods, String maxPeriods, final OnHttpResponseListener listener) {
 
 		Map<String,Object> params = new HashMap<>();
 		params.put(Constant.PAGE, page);
@@ -220,7 +272,94 @@ public class HttpRequest {
 			params.put(Constant.MAXPERIODS, maxPeriods);
 		}
 
-		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.STARSRANKING, requestCode, listener);
+		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.HISTORYSTARSWEEKRANKING, requestCode, listener);
+	}
+
+	/**粉丝周往期贡献榜
+	 * @param page
+	 * @param pageSize
+	 * @param desc
+	 * @param keywords
+	 * @param periods
+	 * @param maxPeriods
+	 * @param listener
+	 */
+	public static void postHistoryFansWeekRank(final int requestCode, int page, int pageSize, boolean desc, String keywords,
+											String periods, String maxPeriods, final OnHttpResponseListener listener) {
+
+		Map<String,Object> params = new HashMap<>();
+		params.put(Constant.PAGE, page);
+		params.put(Constant.PAGESIZE, pageSize);
+		params.put(Constant.DESC, desc);
+		if (keywords != null) {
+			params.put(Constant.KEYWORDS, keywords);
+		}
+		if (periods != null) {
+			params.put(Constant.PERIODS, periods);
+		}
+		if (maxPeriods != null) {
+			params.put(Constant.MAXPERIODS, maxPeriods);
+		}
+
+		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.HISTORYFANSWEEKRANKING, requestCode, listener);
+	}
+
+	/**明星周往期排行榜详情
+	 * @param page
+	 * @param pageSize
+	 * @param desc
+	 * @param keywords
+	 * @param periods
+	 * @param maxPeriods
+	 * @param listener
+	 */
+	public static void postHistoryStarsRank(final int requestCode, int page, int pageSize, boolean desc, String keywords,
+												String periods, String maxPeriods, final OnHttpResponseListener listener) {
+
+		Map<String,Object> params = new HashMap<>();
+		params.put(Constant.PAGE, page);
+		params.put(Constant.PAGESIZE, pageSize);
+		params.put(Constant.DESC, desc);
+		if (keywords != null) {
+			params.put(Constant.KEYWORDS, keywords);
+		}
+		if (periods != null) {
+			params.put(Constant.PERIODS, periods);
+		}
+		if (maxPeriods != null) {
+			params.put(Constant.MAXPERIODS, maxPeriods);
+		}
+
+		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.HISTORYSTARSRANKING, requestCode, listener);
+	}
+
+	/**粉丝周往期排行榜详情
+	 * @param page
+	 * @param pageSize
+	 * @param desc
+	 * @param keywords
+	 * @param periods
+	 * @param maxPeriods
+	 * @param listener
+	 */
+	public static void postHistoryFansRank(final int requestCode, int page, int pageSize, boolean desc, String keywords,
+											String periods, String maxPeriods, final OnHttpResponseListener listener) {
+
+		Map<String,Object> params = new HashMap<>();
+		params.put(Constant.PAGE, page);
+		params.put(Constant.PAGESIZE, pageSize);
+		params.put(Constant.DESC, desc);
+		if (keywords != null) {
+			params.put(Constant.KEYWORDS, keywords);
+		}
+		if (periods != null) {
+			params.put(Constant.PERIODS, periods);
+		}
+		if (maxPeriods != null) {
+			params.put(Constant.MAXPERIODS, maxPeriods);
+		}
+
+		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.HISTORYFANSRANKING, requestCode, listener);
 	}
 
 	/**打榜
@@ -347,10 +486,11 @@ public class HttpRequest {
 	 * @param cityName
 	 * @param activityProperty
 	 * @param createUserId
+	 * @param parts
 	 * @param listener
 	 */
 	public static void postConcertQuery(final int requestCode, String activityStates, String relevanceStar, String cityName,
-								   String activityProperty, String createUserId, final OnHttpResponseListener listener) {
+								   String activityProperty, String createUserId, String parts, final OnHttpResponseListener listener) {
 
 		Map<String,Object> params = new HashMap<>();
 
@@ -368,6 +508,9 @@ public class HttpRequest {
 		}
 		if (createUserId != null) {
 			params.put(Constant.CREATEUSERID,createUserId);
+		}
+		if (parts != null) {
+			params.put(Constant.PARTS,parts);
 		}
 
 		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.CONCERTQUERY, requestCode, listener);
@@ -774,5 +917,64 @@ public class HttpRequest {
 		params.put(Constant.CONTENT, content);
 
 		HttpManager.getInstance().postByJsonStr(JSON.toJSONString(params), URL_BASE + URLConstant.FEEDBACK, requestCode, listener);
+	}
+
+	/**筹资列表
+	 * @param paymentState
+	 * @param activityId
+	 */
+	public static String postCrowdMoneyDetailed(String paymentState, String activityId) {
+
+		Map<String,Object> params = new HashMap<>();
+		params.put(Constant.PAYMENTSTATE, paymentState);
+		params.put(Constant.ACTIVITYID, activityId);
+
+		return JSON.toJSONString(params);
+	}
+
+	/**筹资参与列表
+	 * @param activityId
+	 */
+	public static String postCrowdFans(String activityId) {
+
+		Map<String,Object> params = new HashMap<>();
+		params.put(Constant.ACTIVITYID, activityId);
+
+		return JSON.toJSONString(params);
+	}
+
+	/**粉丝列表
+	 * @param starUuid
+	 */
+	public static String postFansList(String starUuid) {
+
+		Map<String,Object> params = new HashMap<>();
+		params.put(Constant.STARSUUID, starUuid);
+
+		return JSON.toJSONString(params);
+	}
+
+	/**查询优惠券
+	 * @param couponStates
+	 */
+	public static String postCardList(String[] couponStates) {
+
+		Map<String,Object> params = new HashMap<>();
+		params.put(Constant.CARDSTATES, couponStates);
+
+		return JSON.toJSONString(params);
+	}
+
+	/**查询门票
+	 * @param paymentState
+	 * @param parts
+	 */
+	public static String postTicketList(String paymentState, String parts) {
+
+		Map<String,Object> params = new HashMap<>();
+		params.put(Constant.PAYMENTSTATE, paymentState);
+		params.put(Constant.PARTS, parts);
+
+		return JSON.toJSONString(params);
 	}
 }

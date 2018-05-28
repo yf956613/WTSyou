@@ -1,14 +1,23 @@
 package com.qingye.wtsyou.fragment.my;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.my.CardAdapter;
-import com.qingye.wtsyou.modle.Card;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.model.Card;
+import com.qingye.wtsyou.model.EntityPageData;
+import com.qingye.wtsyou.model.Fans;
+import com.qingye.wtsyou.utils.GsonUtil;
+import com.qingye.wtsyou.utils.HttpRequest;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.my.CardView;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +25,20 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
+import zuo.biao.library.interfaces.IErrorCodeTool;
+import zuo.biao.library.model.EntityBase;
+import zuo.biao.library.util.HttpModel;
+import zuo.biao.library.widget.CustomDialog;
+
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 public class CardUnUsedFragment extends BaseHttpRecyclerFragment<Card,CardView,CardAdapter> implements CacheCallBack<Card> {
+
+    private CustomDialog progressBar;
+
+    private HttpModel<EntityPageData> mEntityPageDataHttpModel;
+
+    private List<Card> cardsList = new ArrayList<>();
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -38,6 +59,13 @@ public class CardUnUsedFragment extends BaseHttpRecyclerFragment<Card,CardView,C
         //类相关初始化，必须使用<<<<<<<<<<<<<<<<
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.fragment_card);
+
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+
+        //卡券列表
+        mEntityPageDataHttpModel = new HttpModel<>(EntityPageData.class);
+        cardsQuery();
+
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
         initCache(this);
@@ -49,10 +77,10 @@ public class CardUnUsedFragment extends BaseHttpRecyclerFragment<Card,CardView,C
         //功能归类分区方法，必须调用>>>>>>>>>>
 
         //srlBaseHttpRecycler.autoRefresh();
-        srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
-        srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
-        srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
+        srlBaseHttpRecycler.setEnableRefresh(true);//不启用下拉刷新
+        srlBaseHttpRecycler.setEnableLoadmore(true);//不启用上拉加载更多
+        srlBaseHttpRecycler.setEnableHeaderTranslationContent(true);//头部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部
 
         return view;
     }
@@ -62,15 +90,40 @@ public class CardUnUsedFragment extends BaseHttpRecyclerFragment<Card,CardView,C
         super.initView();
     }
 
+    public void onResume() {
+
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
+        }
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
+    }
+
     @Override
     public void setList(final List<Card> list) {
-        final List<Card> templist = new ArrayList<>();
-        for(int i = 1;i < 4;i ++) {
-            Card card = new Card();
-            card.setId(i);
-            templist.add(card);
-        }
-        //list.addAll(templist);
         setList(new AdapterCallBack<CardAdapter>() {
 
             @Override
@@ -80,7 +133,7 @@ public class CardUnUsedFragment extends BaseHttpRecyclerFragment<Card,CardView,C
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -131,5 +184,52 @@ public class CardUnUsedFragment extends BaseHttpRecyclerFragment<Card,CardView,C
     public void initEvent() {//必须调用
         super.initEvent();
 
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        super.onRefresh(refreshlayout);
+        cardsQuery();
+    }
+
+    @Override
+    public void onLoadmore(RefreshLayout refreshlayout) {
+        super.onLoadmore(refreshlayout);
+
+    }
+
+    public void cardsQuery() {
+        setProgressBar();
+        progressBar.show();
+
+        String[] states = {"used","overdue"};
+        String request = HttpRequest.postCardList(states);
+        //卡券列表
+        mEntityPageDataHttpModel.post(request, URL_BASE + URLConstant.CARDQUERY,1,this);
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                EntityPageData pageData = mEntityPageDataHttpModel.getData();
+                cardsList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(pageData.getContent().getData())
+                        ,new TypeToken<List<Card>>(){}.getType());
+                setList(cardsList);
+                srlBaseHttpRecycler.finishRefresh();
+                srlBaseHttpRecycler.setLoadmoreFinished(false);
+                break;
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
     }
 }

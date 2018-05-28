@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.campaign.ConversationAdapter;
 
-import com.qingye.wtsyou.modle.Conversation;
+import com.qingye.wtsyou.model.Conversation;
 import com.qingye.wtsyou.view.campaign.ConversationView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 

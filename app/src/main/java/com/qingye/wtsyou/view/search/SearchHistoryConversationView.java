@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.SearchContent;
+import com.qingye.wtsyou.model.SearchContent;
 
 import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;

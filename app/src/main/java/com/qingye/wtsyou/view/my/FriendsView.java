@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.Fans;
+import com.qingye.wtsyou.model.Fans;
 
 import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
@@ -35,8 +35,6 @@ public class FriendsView extends BaseView<Fans> implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
-        if (BaseModel.isCorrect(data) == false) {
-            return;
-        }
+
     }
 }

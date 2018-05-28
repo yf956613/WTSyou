@@ -3,7 +3,6 @@ package com.qingye.wtsyou.activity.my;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,10 +13,8 @@ import android.widget.TextView;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.home.FansMainActivity;
 import com.qingye.wtsyou.adapter.search.FriendsAdapter;
-import com.qingye.wtsyou.adapter.search.SearchFansAdapter;
-import com.qingye.wtsyou.modle.Fans;
+import com.qingye.wtsyou.model.Fans;
 import com.qingye.wtsyou.view.my.FriendsView;
-import com.qingye.wtsyou.view.search.SearchFansView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +77,6 @@ public class FriendsActivity extends BaseHttpRecyclerActivity<Fans,FriendsView,F
         final List<Fans> templist = new ArrayList<>();
         for(int i = 1;i < 5;i ++) {
             Fans fans = new Fans();
-            fans.setId(i);
             templist.add(fans);
         }
         //list.addAll(templist);
@@ -134,9 +130,7 @@ public class FriendsActivity extends BaseHttpRecyclerActivity<Fans,FriendsView,F
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (id > 0) {
-            toActivity(FansMainActivity.createIntent(context,id));
-        }
+        toActivity(FansMainActivity.createIntent(context));
     }
 
     @Override

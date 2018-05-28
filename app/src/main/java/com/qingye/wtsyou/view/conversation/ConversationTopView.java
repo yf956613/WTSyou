@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.Campaign;
-import com.qingye.wtsyou.modle.Conversation;
+import com.qingye.wtsyou.model.Conversation;
 
 import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;

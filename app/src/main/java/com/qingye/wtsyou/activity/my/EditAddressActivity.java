@@ -16,14 +16,14 @@ import android.widget.TextView;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.gaode.activity.GaoDeAddressSelectActivity;
-import com.qingye.wtsyou.basemodel.EntityBase;
+import zuo.biao.library.model.EntityBase;
 import com.qingye.wtsyou.basemodel.POI;
-import com.qingye.wtsyou.modle.DeliveryAddress;
+import com.qingye.wtsyou.model.DeliveryAddress;
 import com.qingye.wtsyou.utils.BroadcastAction;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;

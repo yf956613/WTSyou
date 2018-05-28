@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.qingye.wtsyou"
     android:versionCode="26"
-    android:versionName="@string/app_version" >
+    android:versionName="@string/app_version">
 
     <uses-sdk
         android:minSdkVersion="15"
@@ -53,11 +53,19 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <!-- QRCodeLibrary >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
 
+    <!--友盟-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--友盟-图片不压缩-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+
     <!-- 需要的权限和功能 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
-
-
     <application
         android:name=".application.DemoApplication"
         android:allowBackup="true"
@@ -66,14 +74,79 @@
         android:roundIcon="@mipmap/syp_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <service android:name="com.amap.api.location.APSService"></service>
+        <service android:name="com.amap.api.location.APSService" />
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="052db49f8b8b6da5cb9174b660361a37" />
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5aec10b7a40fa348ff000190"></meta-data>
 
-        <activity android:name=".activity.GuideActivity"
+        <!-- ======================友盟开始====================== -->
+
+        <!-- WeiXin >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- WeiXin >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+        <!-- QQ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="1105549191" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- QQ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+
+        <!-- Sina >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+        <activity
+            android:name="com.umeng.socialize.media.WBShareCallBackActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="false"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name="com.sina.weibo.sdk.web.WeiboSdkWebActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            >
+
+        </activity>
+        <activity
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:launchMode="singleTask"
+            android:name="com.sina.weibo.sdk.share.WbShareTransActivity">
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
+        <!-- Sina >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+
+        <!-- ======================友盟结束====================== -->
+
+        <activity
+            android:name=".activity.GuideActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -82,21 +155,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:theme="@style/AppThemeActionBar"
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
-        </activity>
-        <activity
             android:theme="@style/AppThemeActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+        <activity
             android:name="com.alipay.sdk.app.H5AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
-        </activity>
+            android:theme="@style/AppThemeActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
         <activity
             android:name=".activity.MainTabActivity"
             android:screenOrientation="portrait"
@@ -179,6 +250,10 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.campaign.ShowAllActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.campaign.DetailedActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
@@ -357,7 +432,8 @@
             android:name=".activity.my.EditSignatureActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activity.gaode.activity.GaoDeAddressSelectActivity"
+        <activity
+            android:name=".activity.gaode.activity.GaoDeAddressSelectActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- WTSyou >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
@@ -419,13 +495,6 @@
             android:theme="@style/Window"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <!-- ZBLibrary >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
-
-       <!-- <receiver android:name=".utils.BroadcastAction">
-            <intent-filter>
-                &lt;!&ndash;自定义广播中的action&ndash;&gt;
-                <action android:name="com.example.mu16jj.broadcastreceiver"></action>
-            </intent-filter>
-        </receiver>-->
 
     </application>
 

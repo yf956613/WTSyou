@@ -2,9 +2,6 @@ package com.qingye.wtsyou.fragment.login;
 
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -16,15 +13,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.basemodel.EntityBase;
+import zuo.biao.library.model.EntityBase;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.widget.CountButton;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.VerticalViewPager;
 
 import zuo.biao.library.base.BaseFragment;

@@ -2,7 +2,6 @@ package com.qingye.wtsyou.view.home;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.os.VibrationEffect;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.EntityStarsItem;
+import com.qingye.wtsyou.model.EntityStarsItem;
 
 import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;

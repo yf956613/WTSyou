@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.Ticket;
+import com.qingye.wtsyou.model.Ticket;
 
 import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;

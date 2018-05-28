@@ -26,16 +26,16 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
-import com.qingye.wtsyou.basemodel.EntityBase;
+import zuo.biao.library.model.EntityBase;
 import com.qingye.wtsyou.fragment.campaign.DetailedConversationFragment;
-import com.qingye.wtsyou.modle.EntityVoteDetailed;
+import com.qingye.wtsyou.model.EntityVoteDetailed;
 import com.qingye.wtsyou.utils.BroadcastAction;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.DateUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.widget.CircleProgress;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.ObservableScrollView;
 
 import java.math.BigDecimal;
@@ -50,7 +50,7 @@ import zuo.biao.library.util.StringUtil;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_1;
-import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_3;
+import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_2;
 
 public class VoteDetailedActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -70,6 +70,7 @@ public class VoteDetailedActivity extends BaseActivity implements View.OnClickLi
     private TextView tvCreatorName;
 
     private Button btnVote,btnVoteEnd;
+    private LinearLayout llMore;
 
     private CircleProgress mcircleProgressBar;
 
@@ -174,6 +175,7 @@ public class VoteDetailedActivity extends BaseActivity implements View.OnClickLi
 
         btnVote = findViewById(R.id.btn_vote);
         btnVoteEnd = findViewById(R.id.btn_vote_end);
+        llMore = findViewById(R.id.ll_detailed_more);
 
         mcircleProgressBar = findViewById(R.id.join_progressbar);
         mcircleProgressBar.setPercentColor(R.color.black_text1);
@@ -287,9 +289,9 @@ public class VoteDetailedActivity extends BaseActivity implements View.OnClickLi
                 + entityVoteDetailed.getContent().getAddress().getPcdt().getCity().toString();
         tvAddress.setText(address);
         //活动时间
-        tvTime.setText(DateUtil.resverDate(entityVoteDetailed.getContent().getStartTimeStr(),DATE_PATTERN_3,DATE_PATTERN_1));
+        tvTime.setText(DateUtil.resverDate(entityVoteDetailed.getContent().getStartTimeStr(),DATE_PATTERN_2,DATE_PATTERN_1));
         //截止时间
-        tvDeadline.setText(DateUtil.resverDate(entityVoteDetailed.getContent().getDeadlineStr(),DATE_PATTERN_3,DATE_PATTERN_1));
+        tvDeadline.setText(DateUtil.resverDate(entityVoteDetailed.getContent().getDeadlineStr(),DATE_PATTERN_2,DATE_PATTERN_1));
         //项目简介
         tvDescription.setText(entityVoteDetailed.getContent().getDescription());
 
@@ -369,6 +371,7 @@ public class VoteDetailedActivity extends BaseActivity implements View.OnClickLi
     public void initEvent() {
         ivBack.setOnClickListener(this);
         btnVote.setOnClickListener(this);
+        llMore.setOnClickListener(this);
     }
 
     @Override
@@ -381,6 +384,10 @@ public class VoteDetailedActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.btn_vote:
                 vote();
+                break;
+            case R.id.ll_detailed_more:
+                toActivity(DetailedActivity.createIntent(context, "项目详情",
+                        entityVoteDetailed.getContent().getDetail()));
                 break;
             default:
                 break;

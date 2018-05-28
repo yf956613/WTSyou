@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.search;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.City;
+import com.qingye.wtsyou.model.City;
 import com.qingye.wtsyou.view.search.SearchCityView;
 
 import zuo.biao.library.base.BaseAdapter;

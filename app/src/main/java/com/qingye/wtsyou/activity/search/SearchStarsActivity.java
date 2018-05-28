@@ -3,19 +3,16 @@ package com.qingye.wtsyou.activity.search;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.home.FansMainActivity;
 import com.qingye.wtsyou.adapter.search.SearchStarsAdapter;
-import com.qingye.wtsyou.modle.Stars;
+import com.qingye.wtsyou.model.Stars;
 import com.qingye.wtsyou.view.search.SearchStarsView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 

@@ -7,9 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.DiamondDetailed;
+import com.qingye.wtsyou.model.DiamondDetailed;
 
-import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
 
 /**

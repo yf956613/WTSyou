@@ -17,17 +17,17 @@ import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.gaode.activity.GaoDeAddressSelectActivity;
-import com.qingye.wtsyou.basemodel.EntityBase;
+import zuo.biao.library.model.EntityBase;
 import com.qingye.wtsyou.basemodel.POI;
-import com.qingye.wtsyou.modle.EntityPersonalMessage;
-import com.qingye.wtsyou.modle.EntityQiniuToken;
-import com.qingye.wtsyou.modle.QiniuMessage;
+import com.qingye.wtsyou.model.EntityPersonalMessage;
+import com.qingye.wtsyou.model.EntityQiniuToken;
+import com.qingye.wtsyou.model.QiniuMessage;
 import com.qingye.wtsyou.utils.BroadcastAction;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.widget.CustomDatePicker;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
@@ -87,6 +87,9 @@ public class DataActivity extends BaseActivity implements View.OnClickListener, 
 
     private String oldNickname = null;
     private String oldSignature = null;
+
+    private String pictureBackgroundPath;
+    private String pictureHeadPath;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -216,8 +219,6 @@ public class DataActivity extends BaseActivity implements View.OnClickListener, 
     private static final String[] SEX_ITEM = {"男", "女"};
 
     private String picturePath;
-    private String pictureBackgroundPath;
-    private String pictureHeadPath;
 
     /**选择图片
      */
@@ -443,8 +444,8 @@ public class DataActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-    private String headQiniu;
-    private String backgroundQiniu;
+    private String headQiniu = "";
+    private String backgroundQiniu = "";
 
     public void getQiNiuToken(final String path) {
 
@@ -554,13 +555,21 @@ public class DataActivity extends BaseActivity implements View.OnClickListener, 
             return;
         }
 
+        if (headQiniu.isEmpty()) {
+            headQiniu = pictureHeadPath;
+        }
+
+        if (backgroundQiniu.isEmpty()) {
+            backgroundQiniu = pictureBackgroundPath;
+        }
+
         //检查网络
         if (NetUtil.checkNetwork(context)) {
 
             setProgressBar();
             progressBar.show();
 
-            HttpRequest.postModifyPersonalMessage(0, entityPersonalMessage.getContent().getFullname(), nickname,
+            HttpRequest.postModifyPersonalMessage(0, nickname, nickname,
                     entityPersonalMessage.getContent().getMobile(), sex, headQiniu, signature,
                     birthday, backgroundQiniu, area, new OnHttpResponseListener() {
 

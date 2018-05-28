@@ -4,17 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.my.EditAddressActivity;
-import com.qingye.wtsyou.modle.DeliveryAddress;
+import com.qingye.wtsyou.model.DeliveryAddress;
 
-import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
 
 /**

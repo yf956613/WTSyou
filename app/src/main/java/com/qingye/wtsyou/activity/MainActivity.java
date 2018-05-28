@@ -13,6 +13,7 @@ import com.qingye.wtsyou.fragment.login.LoginFragment;
 import com.qingye.wtsyou.fragment.login.ModifyFragment;
 import com.qingye.wtsyou.fragment.login.RegisterFragment;
 import com.qingye.wtsyou.widget.VerticalViewPager;
+import com.umeng.socialize.UMShareAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,4 +125,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         return Id;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);
+    }
 }

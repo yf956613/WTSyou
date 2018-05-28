@@ -3,9 +3,7 @@ package com.qingye.wtsyou.adapter.my;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.DeliveryAddress;
-import com.qingye.wtsyou.modle.Ticket;
-import com.qingye.wtsyou.view.my.DeliveryAddressView;
+import com.qingye.wtsyou.model.Ticket;
 import com.qingye.wtsyou.view.my.TicketView;
 
 import zuo.biao.library.base.BaseAdapter;

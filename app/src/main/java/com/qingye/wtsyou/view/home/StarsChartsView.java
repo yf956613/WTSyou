@@ -9,19 +9,28 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.StarsCharts;
+import com.qingye.wtsyou.model.RankInfos;
 
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
-
-import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 /**
  * Created by pm89 on 2018/3/6.
  */
 
-public class StarsChartsView extends BaseView<StarsCharts> implements View.OnClickListener {
+public class StarsChartsView extends BaseView<RankInfos> implements View.OnClickListener {
+
+    private OnItemChildClickListener onItemChildClickListener;
+
+    //定义一个监听接口，里面有方法
+    public interface OnItemChildClickListener{
+        void onFocus(View view, int position, TextView focus, TextView rank);
+        void onHitClick(View view, int position, TextView focus, TextView rank);
+    }
+
+    //给监听设置一个构造函数，用于main中调用
+    public void setOnItemChildClickListener(OnItemChildClickListener onItemChildClickListener) {
+        this.onItemChildClickListener = onItemChildClickListener;
+    }
 
     private TextView tvNo;
     private TextView tvName;
@@ -50,8 +59,8 @@ public class StarsChartsView extends BaseView<StarsCharts> implements View.OnCli
     }
 
     @Override
-    public void bindView(StarsCharts data_){
-        super.bindView(data_ != null ? data_ : new StarsCharts());
+    public void bindView(RankInfos data_){
+        super.bindView(data_ != null ? data_ : new RankInfos());
 
         //名次
         tvNo.setText(Integer.toString(data.getRanking()));
@@ -73,7 +82,6 @@ public class StarsChartsView extends BaseView<StarsCharts> implements View.OnCli
         if (url != null) {
             Glide.with(context)
                     .load(url)
-                    .apply(bitmapTransform(new RoundedCornersTransformation(10, 0, RoundedCornersTransformation.CornerType.ALL)))
                     .into(ivImg);
         }
 
@@ -81,12 +89,16 @@ public class StarsChartsView extends BaseView<StarsCharts> implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_rank:
-                showShortToast("打榜成功~");
-                break;
-            default:
-                break;
+        if (onItemChildClickListener != null) {
+
+            switch (v.getId()) {
+                case R.id.tv_focus:
+                    onItemChildClickListener.onFocus(v, position, tvFocus, tvRank);
+                    break;
+                case R.id.tv_rank:
+                    onItemChildClickListener.onHitClick(v, position, tvFocus, tvRank);
+                    break;
+            }
         }
     }
 }

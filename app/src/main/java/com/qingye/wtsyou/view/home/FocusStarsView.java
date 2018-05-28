@@ -7,13 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.amap.api.maps.model.Text;
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.FocusStars;
-import com.qingye.wtsyou.modle.Stars;
+import com.qingye.wtsyou.model.FocusStars;
 
-import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
 
 /**
@@ -37,6 +34,7 @@ public class FocusStarsView extends BaseView<FocusStars> implements View.OnClick
     private TextView tvName;
     private ImageView ivImg;
     private TextView tvHit;
+    private TextView tvRanking;
 
     public FocusStarsView(Activity context, ViewGroup parent) {
         super(context, R.layout.list_focus_stars, parent);
@@ -47,7 +45,9 @@ public class FocusStarsView extends BaseView<FocusStars> implements View.OnClick
     public View createView() {
         tvName = findViewById(R.id.tv_name);
         ivImg = findViewById(R.id.iv_img);
-        tvHit = findViewById(R.id.tv_rank, this);
+        tvHit = findViewById(R.id.tv_hit, this);
+
+        tvRanking = findViewById(R.id.tv_ranking);
 
         return super.createView();
     }
@@ -62,6 +62,8 @@ public class FocusStarsView extends BaseView<FocusStars> implements View.OnClick
         Glide.with(context)
                 .load(url)
                 .into(ivImg);
+
+        tvRanking.setText("" + data.getRanking());
     }
 
     @Override
@@ -69,7 +71,7 @@ public class FocusStarsView extends BaseView<FocusStars> implements View.OnClick
         if (onItemChildClickListener != null) {
 
             switch (v.getId()) {
-                case R.id.ll_edit:
+                case R.id.tv_hit:
                     onItemChildClickListener.onHitClick(v, position);
                     break;
             }

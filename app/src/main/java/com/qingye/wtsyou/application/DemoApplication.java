@@ -14,8 +14,15 @@ limitations under the License.*/
 
 package com.qingye.wtsyou.application;
 
+import android.content.Context;
 import android.os.StrictMode;
+import android.support.multidex.MultiDex;
 import android.util.Log;
+
+import com.umeng.commonsdk.UMConfigure;
+import com.umeng.socialize.Config;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 
 import zuo.biao.library.base.BaseApplication;
 import zuo.biao.library.manager.HttpManager;
@@ -42,6 +49,21 @@ public class DemoApplication extends BaseApplication {
 
 		//初始化请求方法，主要添加context
 		new HttpManager(getApplicationContext());
+
+		UMShareAPI.get(this);
+
+		UMConfigure.init(this,"5aec10b7a40fa348ff000190"
+				,"umeng",UMConfigure.DEVICE_TYPE_PHONE,"");
+
+		PlatformConfig.setQQZone("1105549191","GjcAUP03KwEKwJYl");
+		PlatformConfig.setWeixin("wx9b9d665af16b3d63", "2f8753bd2d2f5179c9beb83dfe6d7cfa");
+		PlatformConfig.setSinaWeibo("3693555751","f62b50beef82d9aba2d520ac8cb3fc01", "https://api.weibo.com/oauth2/default.html");
 	}
+
+	protected void attachBaseContext(Context base) {
+		super.attachBaseContext(base);
+		MultiDex.install(this) ;
+	}
+
 
 }

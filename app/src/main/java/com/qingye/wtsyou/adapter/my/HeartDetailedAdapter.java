@@ -3,9 +3,7 @@ package com.qingye.wtsyou.adapter.my;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.HeartDetailed;
-import com.qingye.wtsyou.modle.Stars;
-import com.qingye.wtsyou.view.home.FansMainIdolView;
+import com.qingye.wtsyou.model.HeartDetailed;
 import com.qingye.wtsyou.view.my.HeartDetailedView;
 
 import zuo.biao.library.base.BaseAdapter;

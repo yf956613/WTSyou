@@ -1,5 +1,6 @@
 package com.qingye.wtsyou.fragment.home;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -7,11 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.home.PastStarsChartsDetailedActivity;
 import com.qingye.wtsyou.adapter.home.HomeStarsChartsPastAdapter;
-import com.qingye.wtsyou.modle.StarsCharts;
+import com.qingye.wtsyou.model.EntityPageData;
+import com.qingye.wtsyou.model.EntityRankInfo;
+import com.qingye.wtsyou.utils.GsonUtil;
+import com.qingye.wtsyou.utils.HttpRequest;
+import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.home.HomeStarsChartsPastView;
+import zuo.biao.library.widget.CustomDialog;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +28,25 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
+import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.util.JSON;
+import zuo.biao.library.util.StringUtil;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<StarsCharts,HomeStarsChartsPastView,HomeStarsChartsPastAdapter> implements CacheCallBack<StarsCharts> {
+public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<EntityRankInfo,HomeStarsChartsPastView,HomeStarsChartsPastAdapter> implements CacheCallBack<EntityRankInfo> {
 
-    int Position;
+    private int currentPage = 1;
+    private final int pageSize = 12;
+    private int totalPage = 0;
+    //是否降序
+    private final Boolean desc = false;
+
+    private CustomDialog progressBar;
+
+    private List<EntityRankInfo> rankInfoList = new ArrayList<>();
+
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     /**创建一个Fragment实例
@@ -46,9 +67,9 @@ public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<StarsC
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.fragment_home_charts_past);
 
-        /*//接收上一页传来的数据
-        Bundle bundle = getArguments();
-        Position = bundle.getInt(HomeChartsPastStarsFragment.ARGUMENT_POSITION);*/
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+
+        historyRankingQuery();
 
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
@@ -60,11 +81,12 @@ public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<StarsC
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
+
+        srlBaseHttpRecycler.setEnableRefresh(true);//启用下拉刷新
+        srlBaseHttpRecycler.setEnableLoadmore(true);//启用上拉加载更多
+        srlBaseHttpRecycler.setEnableHeaderTranslationContent(true);//头部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部
         //srlBaseHttpRecycler.autoRefresh();
-        srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
-        srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
-        srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
 
         return view;
     }
@@ -76,14 +98,41 @@ public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<StarsC
         super.initView();
     }
 
+    public void onResume() {
+
+        super.onResume();
+    }
+
     @Override
-    public void setList(final List<StarsCharts> list) {
-        final List<StarsCharts> templist = new ArrayList<>();
-        for(int i = 1;i < 4;i ++) {
-            StarsCharts charts = new StarsCharts();
-            templist.add(charts);
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
         }
-        //list.addAll(templist);
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
+    }
+
+    @Override
+    public void setList(final List<EntityRankInfo> list) {
+
         setList(new AdapterCallBack<HomeStarsChartsPastAdapter>() {
 
             @Override
@@ -93,7 +142,7 @@ public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<StarsC
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -109,7 +158,7 @@ public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<StarsC
     }
 
     @Override
-    public List<StarsCharts> parseArray(String json) {
+    public List<EntityRankInfo> parseArray(String json) {
         return null;
     }
 
@@ -119,7 +168,7 @@ public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<StarsC
     }
 
     @Override
-    public Class<StarsCharts> getCacheClass() {
+    public Class<EntityRankInfo> getCacheClass() {
         return null;
     }
 
@@ -129,7 +178,7 @@ public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<StarsC
     }
 
     @Override
-    public String getCacheId(StarsCharts data) {
+    public String getCacheId(EntityRankInfo data) {
         return null;
     }
 
@@ -138,10 +187,100 @@ public class HomeChartsPastStarsFragment extends BaseHttpRecyclerFragment<StarsC
         return 10;
     }
 
+    public void historyRankingQuery(){
+        historyRankingQuery(1);
+    }
+
+    public void historyRankingQuery(final int page) {
+        if (NetUtil.checkNetwork(getActivity())) {
+            setProgressBar();
+            progressBar.show();
+
+            String keywords = null;
+            String periods = null;
+            String maxPeriods = null;
+
+            HttpRequest.postHistoryStarsWeekRank(0, page, pageSize, desc, keywords, periods, maxPeriods, new OnHttpResponseListener() {
+
+                @Override
+                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+
+                    if(!StringUtil.isEmpty(resultJson)){
+
+                        EntityPageData entityPageData =  JSON.parseObject(resultJson,EntityPageData.class);
+
+                        if(entityPageData.isSuccess()){
+
+                            //成功
+                            //showShortToast(R.string.getSuccess);
+                            if (page == 1) {
+                                currentPage = 1;
+                                rankInfoList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageData.getContent().getData())
+                                        ,new TypeToken<List<EntityRankInfo>>(){}.getType());
+
+                                srlBaseHttpRecycler.finishRefresh();
+                                srlBaseHttpRecycler.setLoadmoreFinished(false);
+
+                            } else {
+
+                                List<EntityRankInfo> entityRankInfos = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageData.getContent().getData())
+                                        ,new TypeToken<List<EntityRankInfo>>(){}.getType());
+
+                                if (rankInfoList.size() == 0) {
+                                    srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+                                } else {
+                                    rankInfoList.addAll(entityRankInfos);
+                                    srlBaseHttpRecycler.finishLoadmore();
+                                }
+                            }
+
+                            progressBarDismiss();
+
+                            setList(rankInfoList);
+
+                            totalPage = entityPageData.getContent().getPageCount();
+
+                            currentPage ++;
+
+                        }else{//显示失败信息
+                            if (entityPageData.getCode().equals("401")) {
+                                showShortToast(R.string.tokenInvalid);
+                                toActivity(MainActivity.createIntent(context));
+                            } else {
+                                showShortToast(entityPageData.getMessage());
+                            }
+
+                            progressBarDismiss();
+                        }
+
+                    }else{
+                        showShortToast(R.string.noReturn);
+
+                        progressBarDismiss();
+                    }
+                }
+            });
+        } else {
+            showShortToast(R.string.checkNetwork);
+
+            progressBarDismiss();
+        }
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (id > 0) {
-            toActivity(PastStarsChartsDetailedActivity.createIntent(context, id, Position));
-        }
+        toActivity(PastStarsChartsDetailedActivity.createIntent(context,rankInfoList.get(position).getPeriods(), rankInfoList.get(position).getPeriodsZone()));
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        super.onRefresh(refreshlayout);
+        historyRankingQuery();
+    }
+
+    @Override
+    public void onLoadmore(RefreshLayout refreshlayout) {
+        super.onLoadmore(refreshlayout);
+        historyRankingQuery(currentPage);
     }
 }

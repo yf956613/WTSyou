@@ -23,15 +23,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.MainActivity;
-import com.qingye.wtsyou.modle.EntityCrowdDetailed;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.model.EntityCrowdDetailed;
 import com.qingye.wtsyou.utils.BroadcastAction;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.DateUtil;
-import com.qingye.wtsyou.utils.HttpRequest;
-import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.widget.CircleProgress;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.ObservableScrollView;
 
 import java.math.BigDecimal;
@@ -39,14 +38,16 @@ import java.math.BigDecimal;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import zuo.biao.library.base.BaseActivity;
+import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
-import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.util.JSON;
+import zuo.biao.library.model.EntityBase;
+import zuo.biao.library.util.HttpModel;
 import zuo.biao.library.util.StringUtil;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_1;
-import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_3;
+import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_2;
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 public class CrowdDetailedActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -70,6 +71,7 @@ public class CrowdDetailedActivity extends BaseActivity implements View.OnClickL
     private LinearLayout llParticipate;
     private LinearLayout llConversation;
     private LinearLayout llDetailed;
+    private LinearLayout llMore;
 
     private CircleProgress mcircleProgressBar;
 
@@ -83,13 +85,15 @@ public class CrowdDetailedActivity extends BaseActivity implements View.OnClickL
 
     private EntityCrowdDetailed entityCrowdDetailed;
 
+    private HttpModel<EntityCrowdDetailed> mEntityCrowdDetailedHttpModel;
+
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     /**启动这个Activity的Intent
      * @param context
      * @return
      */
-    public static Intent createIntent(Context context,EntityCrowdDetailed entityCrowdDetailed) {
+    public static Intent createIntent(Context context, EntityCrowdDetailed entityCrowdDetailed) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.CROWDDETAILED, entityCrowdDetailed);//放进数据流中
         return new Intent(context, CrowdDetailedActivity.class).putExtras(bundle);
@@ -106,7 +110,7 @@ public class CrowdDetailedActivity extends BaseActivity implements View.OnClickL
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastAction.ACTION_ADDRESS_REFRESH)) {
+            if (action.equals(BroadcastAction.ACTION_CROWD_REFRESH)) {
                 refresh();
             }
         }
@@ -122,6 +126,9 @@ public class CrowdDetailedActivity extends BaseActivity implements View.OnClickL
 
         intent = getIntent();
         entityCrowdDetailed = (EntityCrowdDetailed) intent.getSerializableExtra(Constant.CROWDDETAILED);
+
+        //获取详情
+        mEntityCrowdDetailedHttpModel = new HttpModel<>(EntityCrowdDetailed.class);
 
         IntentFilter myIntentFilter = new IntentFilter();
         myIntentFilter.addAction(BroadcastAction.ACTION_CROWD_REFRESH);
@@ -178,6 +185,7 @@ public class CrowdDetailedActivity extends BaseActivity implements View.OnClickL
         llParticipate = findViewById(R.id.ll_participate);
         llConversation = findViewById(R.id.ll_conversation);
         llDetailed = findViewById(R.id.ll_detailed);
+        llMore = findViewById(R.id.ll_detailed_more);
 
         mcircleProgressBar = findViewById(R.id.join_progressbar);
         mcircleProgressBar.setPercentColor(R.color.black_text1);
@@ -269,7 +277,7 @@ public class CrowdDetailedActivity extends BaseActivity implements View.OnClickL
             btnCrowdEnd.setVisibility(View.GONE);
         }
         //时间
-        tvTime.setText(DateUtil.resverDate(entityCrowdDetailed.getContent().getStartTimeStr(),DATE_PATTERN_3,DATE_PATTERN_1));
+        tvTime.setText(DateUtil.resverDate(entityCrowdDetailed.getContent().getStartTimeStr(),DATE_PATTERN_2,DATE_PATTERN_1));
         //地址
         /*String province = entityCrowdDetailed.getContent().getAddress().getPcdt().getProvince();
         String city = entityCrowdDetailed.getContent().getAddress().getPcdt().getCity();
@@ -403,6 +411,7 @@ public class CrowdDetailedActivity extends BaseActivity implements View.OnClickL
         llParticipate.setOnClickListener(this);
         llConversation.setOnClickListener(this);
         llDetailed.setOnClickListener(this);
+        llMore.setOnClickListener(this);
     }
 
     @Override
@@ -414,16 +423,20 @@ public class CrowdDetailedActivity extends BaseActivity implements View.OnClickL
             case R.id.iv_right:
                 break;
             case R.id.btn_crowd:
-                toActivity(CrowdOrderActivity.createIntent(context,entityCrowdDetailed));
+                toActivity(CrowdOrderActivity.createIntent(context, entityCrowdDetailed));
                 break;
             case R.id.ll_participate:
-                toActivity(CrowdFansActivity.createIntent(context));
+                toActivity(CrowdFansActivity.createIntent(context, entityCrowdDetailed));
                 break;
             case R.id.ll_conversation:
                 toActivity(CrowdConversationActivity.createIntent(context));
                 break;
             case R.id.ll_detailed:
-                toActivity(CrowdMoneyDetailedActivity.createIntent(context));
+                toActivity(CrowdMoneyDetailedActivity.createIntent(context, entityCrowdDetailed));
+                break;
+            case R.id.ll_detailed_more:
+                toActivity(DetailedActivity.createIntent(context, "项目详情",
+                        entityCrowdDetailed.getContent().getDetail()));
                 break;
             default:
                 break;
@@ -431,7 +444,7 @@ public class CrowdDetailedActivity extends BaseActivity implements View.OnClickL
     }
 
     public void refresh() {
-        String uuid = entityCrowdDetailed.getContent().getActivityId();
+        /*String uuid = entityCrowdDetailed.getContent().getActivityId();
 
         if (NetUtil.checkNetwork(this)) {
             setProgressBar();
@@ -465,7 +478,8 @@ public class CrowdDetailedActivity extends BaseActivity implements View.OnClickL
         } else {
             showShortToast(R.string.checkNetwork);
         }
-
+*/
+        mEntityCrowdDetailedHttpModel.get(entityCrowdDetailed.getContent().getActivityId(),URL_BASE + URLConstant.CROWDDETIALED,2,this);
         initData();
     }
 
@@ -488,5 +502,27 @@ public class CrowdDetailedActivity extends BaseActivity implements View.OnClickL
         }
 
         return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                setProgressBar();
+                progressBar.show();
+                entityCrowdDetailed = mEntityCrowdDetailedHttpModel.getData();
+                break;
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
     }
 }

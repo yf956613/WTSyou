@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.home.StarsMainVoteAdapter;
-import com.qingye.wtsyou.modle.Vote;
+import com.qingye.wtsyou.model.Vote;
 import com.qingye.wtsyou.view.home.StarsMainVoteView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 

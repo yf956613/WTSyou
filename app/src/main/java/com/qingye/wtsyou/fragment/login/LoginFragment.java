@@ -12,22 +12,38 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainTabActivity;
-import com.qingye.wtsyou.modle.EntityLogin;
+import com.qingye.wtsyou.activity.search.SelectStarsActivity;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.model.EntityFirstLogin;
+import com.qingye.wtsyou.model.EntityLogin;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-import com.qingye.wtsyou.widget.CustomDialog;
+import com.qingye.wtsyou.utils.URLConstant;
+import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.VerticalViewPager;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareConfig;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import java.util.Map;
 
 import zuo.biao.library.base.BaseFragment;
+import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.manager.HttpManager;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.ui.AlertDialog;
+import zuo.biao.library.util.HttpModel;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
+
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +57,13 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     private EditText edtPassword;//密码
     private Button btnLogin;//登录
 
+    private ImageView ivQQ;
+    private ImageView ivWeiXin;
+    private ImageView ivSina;
+
     private CustomDialog progressBar;
+
+    private HttpModel<EntityFirstLogin> mEntityFirstLogin;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -58,6 +80,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.fragment_login);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
+
+        //第一次登录
+        mEntityFirstLogin = new HttpModel<>(EntityFirstLogin.class);
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
@@ -97,11 +122,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         //TODO--DELETE
         edtLoginId.setText("18250711172");
         edtPassword.setText("123456");
-    }
 
-    @Override
-    public void initData() {
-
+        ivQQ = findViewById(R.id.iv_qq);
+        ivWeiXin = findViewById(R.id.iv_weixin);
+        ivSina = findViewById(R.id.iv_weibo);
     }
 
     @Override
@@ -132,20 +156,123 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     }
 
     @Override
+    public void initData() {
+
+    }
+
+    @Override
     public void initEvent() {
         tvModify.setOnClickListener(this);
         ivUpLeft.setOnClickListener(this);
         ivUpRight.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
+
+        ivQQ.setOnClickListener(this);
+        ivWeiXin.setOnClickListener(this);
+        ivSina.setOnClickListener(this);
     }
 
+    public void UMListener (final SHARE_MEDIA type) {
+
+        UMShareConfig config = new UMShareConfig();
+        config.isNeedAuthOnGetUserInfo(true);
+        UMShareAPI.get(getActivity()).setShareConfig(config);
+
+        String accountType = null;
+        if (type.equals(SHARE_MEDIA.QQ)) {
+            accountType = "qq";
+        }
+        else if (type.equals(SHARE_MEDIA.WEIXIN)) {
+            accountType = "weixin";
+        }
+        else if (type.equals(SHARE_MEDIA.SINA)) {
+            accountType = "weibo";
+        }
+
+        final String finalAccountType = accountType;
+
+        UMAuthListener authListener = new UMAuthListener() {
+            /**
+             * @param platform 平台名称
+             * @desc 授权开始的回调
+             */
+            @Override
+            public void onStart(SHARE_MEDIA platform) {
+            }
+
+            /**
+             * @param platform 平台名称
+             * @param action   行为序号，开发者用不上
+             * @param data     用户资料返回
+             * @desc 授权成功的回调
+             */
+            @Override
+            public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+                StringBuffer sb = new StringBuffer();
+                for (String key : data.keySet()) {
+                    sb.append(key + ":" + data.get(key) + ",");
+                }
+
+                String loginId = data.get("uid");
+                String photo = data.get("iconurl");
+                String nickname = data.get("name");
+                login(finalAccountType, loginId, null, photo, nickname);
+
+                Toast.makeText(getActivity(), "授权成功", Toast.LENGTH_SHORT).show();
+
+            }
+
+            /**
+             * @param platform 平台名称
+             * @param action   行为序号，开发者用不上
+             * @param t        错误原因
+             * @desc 授权失败的回调
+             */
+            @Override
+            public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+                Toast.makeText(getActivity(), "授权失败：" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            /**
+             * @param platform 平台名称
+             * @param action   行为序号，开发者用不上
+             * @desc 授权取消的回调
+             */
+            @Override
+            public void onCancel(SHARE_MEDIA platform, int action) {
+                Toast.makeText(getActivity(), "授权取消", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        UMShareAPI.get(getActivity()).deleteOauth(getActivity(), type,null);
+        UMShareAPI.get(getActivity()).getPlatformInfo(getActivity(), type, authListener);
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_login:
                 //toActivity(MainTabActivity.createIntent(context));
-                login();
+                String accountType = "mobile";
+                String loginId = edtLoginId.getText().toString().trim();
+                String password = edtPassword.getText().toString().trim();
+                String photo = null;
+                String nickname = null;
+                if (TextUtils.isEmpty(loginId)){
+                    showShortToast(R.string.editPhone);
+                    return;
+                } else {
+                    if (loginId.length() < 11) {
+                        showShortToast(R.string.checkPhone);
+                        return;
+                    }
+                }
+                if (TextUtils.isEmpty(password)){
+                    showShortToast(R.string.editPassword);
+                    return;
+                }
+
+                login(accountType, loginId, password, photo, nickname);
                 break;
             case R.id.tv_modify_pwd:
                 final MainActivity mainActivity1 = (MainActivity) getActivity();
@@ -180,33 +307,27 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                 });
                 mainActivity3.forSkip();
                 break;
+            case R.id.iv_qq:
+                UMListener(SHARE_MEDIA.QQ);
+                break;
+            case R.id.iv_weixin:
+                UMListener(SHARE_MEDIA.WEIXIN);
+                break;
+            case R.id.iv_weibo:
+                UMListener(SHARE_MEDIA.SINA);
+                break;
             default:
                 break;
         }
     }
 
-    public void login() {
-        String loginId = edtLoginId.getText().toString().trim();
-        String password = edtPassword.getText().toString().trim();
-        if (TextUtils.isEmpty(loginId)){
-            showShortToast(R.string.editPhone);
-            return;
-        } else {
-            if (loginId.length() < 11) {
-                showShortToast(R.string.checkPhone);
-                return;
-            }
-        }
-        if (TextUtils.isEmpty(password)){
-            showShortToast(R.string.editPassword);
-            return;
-        }
+    public void login(String accountType, String loginId, String password, String photo, String nickname) {
 
         if (NetUtil.checkNetwork(context)) {
             setProgressBar();
             progressBar.show();
 
-            HttpRequest.postLogin(0,"mobile", edtLoginId.getText().toString(),edtPassword.getText().toString(), new OnHttpResponseListener() {
+            HttpRequest.postLogin(0, accountType, loginId, password, photo, nickname,new OnHttpResponseListener() {
 
                 @Override
                 public void onHttpResponse(int requestCode, String resultJson, Exception e) {
@@ -216,8 +337,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                         if(entityLogin.isSuccess()){
                             //成功
                             showShortToast(R.string.loginSuccess);
-                            toActivity(MainTabActivity.createIntent(context));
                             HttpManager.getInstance().saveToken(entityLogin.getContent());//保存token信息
+
+                            //第一次登录请求判断
+                            mEntityFirstLogin.get(URL_BASE + URLConstant.ISFIRSTLOGIN,1,LoginFragment.this);
 
                             progressBarDismiss();
 
@@ -237,5 +360,24 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             showShortToast(R.string.checkNetwork);
         }
 
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                if (mEntityFirstLogin.getData().getContent()) {
+                    toActivity(SelectStarsActivity.createIntent(context, 2));
+                } else {
+                    toActivity(MainTabActivity.createIntent(context));
+                }
+                break;
+        }
     }
 }

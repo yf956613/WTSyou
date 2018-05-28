@@ -78,7 +78,7 @@ public class HomeMoreFragment extends BaseFragment implements View.OnClickListen
                 toActivity(FocusStarsActivity.createIntent(context));
                 break;
             case R.id.iv_all:
-                toActivity(SelectStarsActivity.createIntent(context));
+                toActivity(SelectStarsActivity.createIntent(context, 2));
                 break;
             default:
                 break;

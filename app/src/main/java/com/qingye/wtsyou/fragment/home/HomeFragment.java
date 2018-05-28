@@ -1,11 +1,8 @@
 package com.qingye.wtsyou.fragment.home;
 
 
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -17,10 +14,6 @@ import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.home.ChartsActivity;
 import com.qingye.wtsyou.activity.search.SelectStarsActivity;
 import com.qingye.wtsyou.adapter.home.HomePagerAdapter;
-import com.qingye.wtsyou.modle.RecommendStars;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
 import zuo.biao.library.base.BaseFragment;
@@ -149,7 +142,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 toActivity(ChartsActivity.createIntent(context));
                 break;
             case R.id.iv_right:
-                toActivity(SelectStarsActivity.createIntent(context));
+                toActivity(SelectStarsActivity.createIntent(context, 2));
                 break;
             default:
                 break;

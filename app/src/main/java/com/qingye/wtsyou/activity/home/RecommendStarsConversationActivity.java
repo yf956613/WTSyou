@@ -3,7 +3,6 @@ package com.qingye.wtsyou.activity.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.KeyEvent;
@@ -14,7 +13,7 @@ import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.conversation.ConversationHotAdapter;
-import com.qingye.wtsyou.modle.Conversation;
+import com.qingye.wtsyou.model.Conversation;
 import com.qingye.wtsyou.view.conversation.ConversationHotView;
 
 import java.util.ArrayList;

@@ -3,8 +3,6 @@ package com.qingye.wtsyou.activity.my;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -15,12 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.home.PastChartsRuleActivity;
-import com.qingye.wtsyou.adapter.my.CoinDetailedAdapter;
 import com.qingye.wtsyou.adapter.my.TicketAdapter;
-import com.qingye.wtsyou.modle.CoinDetailed;
-import com.qingye.wtsyou.modle.Ticket;
-import com.qingye.wtsyou.view.my.CoinDetailedView;
+import com.qingye.wtsyou.model.Ticket;
 import com.qingye.wtsyou.view.my.TicketView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 import com.qingye.wtsyou.widget.ObservableScrollView;
@@ -31,6 +25,7 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerActivity;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.OnBottomDragListener;
+import zuo.biao.library.widget.CustomDialog;
 
 public class TicketActivity extends BaseHttpRecyclerActivity<Ticket,TicketView,TicketAdapter> implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -41,6 +36,8 @@ public class TicketActivity extends BaseHttpRecyclerActivity<Ticket,TicketView,T
     private ObservableScrollView scrollView;
     private View line;
     private int headHeight;
+
+    private CustomDialog progressBar;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -87,6 +84,7 @@ public class TicketActivity extends BaseHttpRecyclerActivity<Ticket,TicketView,T
     @Override
     public void initView() {
         super.initView();
+
         ivBack = findViewById(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
         tvHead = findViewById(R.id.tv_head_title);
@@ -126,14 +124,8 @@ public class TicketActivity extends BaseHttpRecyclerActivity<Ticket,TicketView,T
     }
 
     @Override
-    public void setList(List<Ticket> list) {
-        final List<Ticket> templist = new ArrayList<>();
-        for(int i = 1;i < 6;i ++) {
-            Ticket ticket = new Ticket();
-            ticket.setId(i);
-            templist.add(ticket);
-        }
-        //list.addAll(templist);
+    public void setList(final List<Ticket> list) {
+
         setList(new AdapterCallBack<TicketAdapter>() {
 
             @Override
@@ -143,7 +135,7 @@ public class TicketActivity extends BaseHttpRecyclerActivity<Ticket,TicketView,T
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }

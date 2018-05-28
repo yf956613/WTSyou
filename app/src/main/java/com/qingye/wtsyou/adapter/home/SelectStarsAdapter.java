@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.home;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.EntityStarsItem;
+import com.qingye.wtsyou.model.EntityStarsItem;
 import com.qingye.wtsyou.view.home.SelectStarsView;
 
 import zuo.biao.library.base.BaseAdapter;

@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.campaign;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.Hots;
+import com.qingye.wtsyou.model.Hots;
 import com.qingye.wtsyou.view.campaign.ActivityHotShowView;
 
 import zuo.biao.library.base.BaseAdapter;

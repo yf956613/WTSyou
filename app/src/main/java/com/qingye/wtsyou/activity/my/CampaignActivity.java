@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -31,7 +30,7 @@ import com.qingye.wtsyou.fragment.my.MyCampaignCrowdFragment;
 import com.qingye.wtsyou.fragment.my.MyCampaignShowFragment;
 import com.qingye.wtsyou.fragment.my.MyCampaignSupportFragment;
 import com.qingye.wtsyou.fragment.my.MyCampaignVoteFragment;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.VpSwipeRefreshLayout;
 
 import java.util.ArrayList;

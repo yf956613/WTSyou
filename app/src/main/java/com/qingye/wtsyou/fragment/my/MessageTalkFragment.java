@@ -6,9 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.my.MessageAdapter;
 import com.qingye.wtsyou.adapter.my.TalkMessageAdapter;
-import com.qingye.wtsyou.modle.Message;
+import com.qingye.wtsyou.model.Message;
 import com.qingye.wtsyou.view.my.TalkMessageView;
 
 import java.util.ArrayList;

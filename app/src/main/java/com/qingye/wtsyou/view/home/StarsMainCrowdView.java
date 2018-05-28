@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.Crowd;
+import com.qingye.wtsyou.model.Crowd;
 import com.qingye.wtsyou.utils.DateUtil;
 
 import java.lang.reflect.Method;
@@ -146,7 +146,7 @@ public class StarsMainCrowdView extends BaseView<Crowd> implements View.OnClickL
             BigDecimal joinBig = data.getCrowdPrice();
             double joinDou = joinBig.doubleValue();
             int joinInt = (int) joinDou;
-            tvCrowdPrice.setText(Integer.toString(joinInt));
+            tvCrowdPrice.setText("" + joinDou);
             //众筹目标
             BigDecimal allBig = data.getSettingGoalsPrice();
             double allDou = allBig.doubleValue();

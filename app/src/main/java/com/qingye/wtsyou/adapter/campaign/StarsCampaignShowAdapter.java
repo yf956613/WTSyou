@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.campaign;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.Concert;
+import com.qingye.wtsyou.model.Concert;
 import com.qingye.wtsyou.view.campaign.StarsCampaignShowView;
 
 import zuo.biao.library.base.BaseAdapter;

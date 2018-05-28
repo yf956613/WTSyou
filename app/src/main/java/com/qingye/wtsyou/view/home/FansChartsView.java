@@ -9,10 +9,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.FansCharts;
+import com.qingye.wtsyou.model.RankInfos;
+import com.qingye.wtsyou.utils.DataUtil;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
@@ -21,7 +21,20 @@ import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
  * Created by pm89 on 2018/3/6.
  */
 
-public class FansChartsView extends BaseView<FansCharts> implements View.OnClickListener {
+public class FansChartsView extends BaseView<RankInfos> implements View.OnClickListener {
+
+    private OnItemChildClickListener onItemChildClickListener;
+
+    //定义一个监听接口，里面有方法
+    public interface OnItemChildClickListener{
+        void onFocus(View view, int position, TextView focus, TextView rank);
+        void onCancelFocus(View view, int position, TextView focus, TextView rank);
+    }
+
+    //给监听设置一个构造函数，用于main中调用
+    public void setOnItemChildClickListener(OnItemChildClickListener onItemChildClickListener) {
+        this.onItemChildClickListener = onItemChildClickListener;
+    }
 
     private TextView tvNo;
     private TextView tvName;
@@ -48,15 +61,15 @@ public class FansChartsView extends BaseView<FansCharts> implements View.OnClick
     }
 
     @Override
-    public void bindView(FansCharts data_){
-        super.bindView(data_ != null ? data_ : new FansCharts());
+    public void bindView(RankInfos data_){
+        super.bindView(data_ != null ? data_ : new RankInfos());
 
         //名次
         tvNo.setText(Integer.toString(data.getRanking()));
         //名字
         tvName.setText(data.getUserName());
         //贡献值
-        tvValue.setText(Integer.toString(data.getScore()));
+        tvValue.setText("贡献值   " + Integer.toString(data.getScore()));
         Boolean isFocus = data.getFollow();
         if (isFocus) {
             tvCancelFocus.setVisibility(View.VISIBLE);
@@ -79,17 +92,16 @@ public class FansChartsView extends BaseView<FansCharts> implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_focus:
-                tvCancelFocus.setVisibility(View.VISIBLE);
-                tvFocus.setVisibility(View.GONE);
-                break;
-            case R.id.tv_cancel_focus:
-                tvFocus.setVisibility(View.VISIBLE);
-                tvCancelFocus.setVisibility(View.GONE);
-                break;
-            default:
-                break;
+        if (onItemChildClickListener != null) {
+
+            switch (v.getId()) {
+                case R.id.tv_focus:
+                    onItemChildClickListener.onFocus(v, position, tvFocus, tvCancelFocus);
+                    break;
+                case R.id.tv_cancel_focus:
+                    onItemChildClickListener.onCancelFocus(v, position, tvFocus, tvCancelFocus);
+                    break;
+            }
         }
     }
 }

@@ -7,6 +7,14 @@ allprojects {
 }
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'dao'
+            keyPassword '123456'
+            storeFile file('/Users/pm89/Desktop/bincai.jks')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.see.you.plan"
@@ -17,13 +25,20 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
-            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","arm64-v8a","x86_64"
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "arm64-v8a", "x86_64"
         }
+
+        multiDexEnabled true
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //友盟（如果使用了QQ平台，需要在主工程（app module）的build.gradle中添加如下配置（如果在Library Module中配置无效）：）
+            manifestPlaceholders = [qqappid: "1105549191"]
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
     sourceSets {
@@ -38,7 +53,6 @@ android {
             }
         }
     }
-
 }
 
 dependencies {
@@ -66,4 +80,13 @@ dependencies {
     compile project(':pulltorefresh')
     compile files('libs/qiniu-android-sdk-7.3.12.jar')
     compile files('libs/happy-dns-0.2.3.2.jar')
+    implementation files('libs/umeng-common-1.5.1.jar')
+    implementation files('libs/umeng-debug-1.0.0.jar')
+    implementation files('libs/umeng-share-core-6.9.1.jar')
+    implementation files('libs/umeng-share-QQ-simplify-6.9.1.jar')
+    implementation files('libs/umeng-share-wechat-simplify-6.9.1.jar')
+    implementation files('libs/umeng-share-sina-simplify-6.9.1.jar')
+    implementation files('libs/umeng-sharetool-6.9.1.jar')
+    implementation files('libs/umeng-shareboard-widget-6.9.1.jar')
+    compile 'com.android.support:multidex:1.0.1'
 }

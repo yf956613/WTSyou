@@ -4,14 +4,13 @@ package com.qingye.wtsyou.fragment.conversation;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.conversation.ConversationHotAdapter;
-import com.qingye.wtsyou.modle.Conversation;
+import com.qingye.wtsyou.model.Conversation;
 import com.qingye.wtsyou.view.conversation.ConversationHotView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 

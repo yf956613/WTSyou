@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.home.SelectedStarsAdapter;
-import com.qingye.wtsyou.modle.EntityStars;
+import com.qingye.wtsyou.model.EntityStars;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.view.home.SelectedStarsView;
 

@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.Vote;
+import com.qingye.wtsyou.model.Vote;
 import com.qingye.wtsyou.utils.DateUtil;
 
 import java.lang.reflect.Method;

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.conversation.ConversationHotAdapter;
-import com.qingye.wtsyou.modle.Conversation;
+import com.qingye.wtsyou.model.Conversation;
 import com.qingye.wtsyou.view.conversation.ConversationHotView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 

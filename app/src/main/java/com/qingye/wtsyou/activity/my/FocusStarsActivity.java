@@ -23,14 +23,14 @@ import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.search.SelectStarsActivity;
 import com.qingye.wtsyou.adapter.home.FocusStarsAdapter;
-import com.qingye.wtsyou.basemodel.EntityBase;
-import com.qingye.wtsyou.modle.EntityPageData;
-import com.qingye.wtsyou.modle.FocusStars;
+import zuo.biao.library.model.EntityBase;
+import com.qingye.wtsyou.model.EntityPageData;
+import com.qingye.wtsyou.model.FocusStars;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.home.FocusStarsView;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -225,7 +225,7 @@ public class FocusStarsActivity extends BaseHttpRecyclerActivity<FocusStars,Focu
                 finish();
                 break;
             case R.id.iv_right:
-                toActivity(SelectStarsActivity.createIntent(context));
+                toActivity(SelectStarsActivity.createIntent(context,2));
                 break;
             default:
                 break;

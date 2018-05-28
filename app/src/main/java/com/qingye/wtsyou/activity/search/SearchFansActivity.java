@@ -1,9 +1,9 @@
 package com.qingye.wtsyou.activity.search;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,10 +12,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.home.FansMainActivity;
 import com.qingye.wtsyou.adapter.search.SearchFansAdapter;
-import com.qingye.wtsyou.modle.Fans;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.model.EntityPageData;
+import com.qingye.wtsyou.model.Fans;
+import com.qingye.wtsyou.model.RecommendStars;
+import com.qingye.wtsyou.utils.Constant;
+import com.qingye.wtsyou.utils.GsonUtil;
+import com.qingye.wtsyou.utils.HttpRequest;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.search.SearchFansView;
 
 import java.util.ArrayList;
@@ -23,7 +31,13 @@ import java.util.List;
 
 import zuo.biao.library.base.BaseHttpRecyclerActivity;
 import zuo.biao.library.interfaces.AdapterCallBack;
+import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
+import zuo.biao.library.model.EntityBase;
+import zuo.biao.library.util.HttpModel;
+import zuo.biao.library.widget.CustomDialog;
+
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 public class SearchFansActivity extends BaseHttpRecyclerActivity<Fans,SearchFansView,SearchFansAdapter> implements View.OnClickListener,OnBottomDragListener {
 
@@ -31,14 +45,24 @@ public class SearchFansActivity extends BaseHttpRecyclerActivity<Fans,SearchFans
     private TextView tvHead;
     private EditText edtSearch;
 
+    private CustomDialog progressBar;
+
+    private RecommendStars entityStars;
+
+    private HttpModel<EntityPageData> mEntityPageDataHttpModel;
+
+    private List<Fans> fansList = new ArrayList<>();
+
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     /**启动这个Activity的Intent
      * @param context
      * @return
      */
-    public static Intent createIntent(Context context) {
-            return new Intent(context, SearchFansActivity.class);
+    public static Intent createIntent(Context context, RecommendStars entityStars) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.SELECTED_STARS, entityStars);//放进数据流中
+        return new Intent(context, SearchFansActivity.class).putExtras(bundle);
     }
 
     //启动方法>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -53,6 +77,15 @@ public class SearchFansActivity extends BaseHttpRecyclerActivity<Fans,SearchFans
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_fans,this);
+
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+
+        intent = getIntent();
+        entityStars = (RecommendStars) intent.getSerializableExtra(Constant.SELECTED_STARS);
+
+        //筹资列表
+        mEntityPageDataHttpModel = new HttpModel<>(EntityPageData.class);
+        fansQuery();
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
@@ -87,15 +120,37 @@ public class SearchFansActivity extends BaseHttpRecyclerActivity<Fans,SearchFans
         });
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
+        }
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
+    }
+
     @Override
     public void setList(final List<Fans> list) {
-        final List<Fans> templist = new ArrayList<>();
-        for(int i = 1;i < 5;i ++) {
-            Fans fans = new Fans();
-            fans.setId(i);
-            templist.add(fans);
-        }
-        //list.addAll(templist);
+
         setList(new AdapterCallBack<SearchFansAdapter>() {
 
             @Override
@@ -105,7 +160,7 @@ public class SearchFansActivity extends BaseHttpRecyclerActivity<Fans,SearchFans
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -146,9 +201,7 @@ public class SearchFansActivity extends BaseHttpRecyclerActivity<Fans,SearchFans
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (id > 0) {
-            toActivity(FansMainActivity.createIntent(context,id));
-        }
+        toActivity(FansMainActivity.createIntent(context));
     }
 
     @Override
@@ -165,5 +218,37 @@ public class SearchFansActivity extends BaseHttpRecyclerActivity<Fans,SearchFans
         }
 
         return super.onKeyUp(keyCode, event);
+    }
+
+    public void fansQuery() {
+        setProgressBar();
+        progressBar.show();
+
+        String request = HttpRequest.postFansList(entityStars.getStarUuid());
+        //粉丝列表
+        mEntityPageDataHttpModel.post(request, URL_BASE + URLConstant.FANSLIST,1,this);
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                EntityPageData pageData = mEntityPageDataHttpModel.getData();
+                fansList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(pageData.getContent().getData())
+                        ,new TypeToken<List<Fans>>(){}.getType());
+                setList(fansList);
+                break;
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
     }
 }

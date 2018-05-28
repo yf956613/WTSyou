@@ -2,6 +2,8 @@ package com.qingye.wtsyou.fragment.campaign;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -26,20 +28,23 @@ import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.campaign.CreateSupportActivity;
 import com.qingye.wtsyou.activity.campaign.CreateVoteActivity;
+import com.qingye.wtsyou.activity.campaign.DetailedActivity;
 import com.qingye.wtsyou.activity.search.SearchCampaignActivity;
 import com.qingye.wtsyou.activity.campaign.ShowAllActivity;
 import com.qingye.wtsyou.activity.campaign.SupportAllActivity;
 import com.qingye.wtsyou.adapter.campaign.LoopShowContentAdapter;
-import com.qingye.wtsyou.modle.Banners;
-import com.qingye.wtsyou.modle.Embeds;
-import com.qingye.wtsyou.modle.EntityCampaignHome;
-import com.qingye.wtsyou.modle.Hots;
-import com.qingye.wtsyou.modle.Officials;
-import com.qingye.wtsyou.modle.Supports;
+import com.qingye.wtsyou.model.Banners;
+import com.qingye.wtsyou.model.Embeds;
+import com.qingye.wtsyou.model.EntityCampaignHome;
+import com.qingye.wtsyou.model.Hots;
+import com.qingye.wtsyou.model.Officials;
+import com.qingye.wtsyou.model.Supports;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-import com.qingye.wtsyou.widget.CustomDialog;
+
+import zuo.biao.library.ui.WebViewActivity;
+import zuo.biao.library.widget.CustomDialog;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -220,6 +225,7 @@ public class ActivityFragment extends BaseFragment implements View.OnClickListen
         llSearch.setOnClickListener(this);
         llShowMore.setOnClickListener(this);
         llSupportMore.setOnClickListener(this);
+        llAd.setOnClickListener(this);
     }
 
     @Override
@@ -262,6 +268,13 @@ public class ActivityFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.ll_support_more:
                 toActivity(SupportAllActivity.createIntent(context));
+                break;
+            case R.id.ll_ad:
+                if (embedsList.size() > 0) {
+                    String title = embedsList.get(0).getTitle();
+                    String url = embedsList.get(0).getAdvertUrl();
+                    toActivity(WebViewActivity.createIntent(context, title, url));
+                }
                 break;
             default:
                 break;
@@ -337,13 +350,14 @@ public class ActivityFragment extends BaseFragment implements View.OnClickListen
             context.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    for (int i = 0; i < bannersList.size(); i++) {
+                    for (int i = 0; i < bannersList.size(); i ++) {
                         View view = getLayoutInflater().inflate(R.layout.loop_show, null);
-                        //final int j = i;
+                        final String url = bannersList.get(i).getAdvertUrl();
+                        final String title = bannersList.get(i).getTitle();
                         view.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {//点击事件
-
+                                toActivity(WebViewActivity.createIntent(context, title, url));
                             }
                         });
                         viewList.add(view);

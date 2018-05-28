@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.my.OrderDetailedAdapter;
-import com.qingye.wtsyou.modle.OrderDetailed;
+import com.qingye.wtsyou.model.OrderDetailed;
 import com.qingye.wtsyou.view.my.OrderDetailedView;
 
 import java.util.ArrayList;

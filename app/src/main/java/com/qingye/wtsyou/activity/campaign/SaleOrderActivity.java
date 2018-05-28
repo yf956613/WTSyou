@@ -2,8 +2,10 @@ package com.qingye.wtsyou.activity.campaign;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,12 +36,13 @@ import com.qingye.wtsyou.activity.my.CreateAddressActivity;
 import com.qingye.wtsyou.adapter.campaign.SelectAddressAdapter;
 import com.qingye.wtsyou.basemodel.IdName;
 import com.qingye.wtsyou.basemodel.POI;
-import com.qingye.wtsyou.modle.DeliveryAddress;
-import com.qingye.wtsyou.modle.EntityContent;
-import com.qingye.wtsyou.modle.EntityPaymentConfig;
-import com.qingye.wtsyou.modle.EntitySaleDetailed;
-import com.qingye.wtsyou.modle.PriceList;
-import com.qingye.wtsyou.modle.PriceListItem;
+import com.qingye.wtsyou.model.DeliveryAddress;
+import com.qingye.wtsyou.model.EntityContent;
+import com.qingye.wtsyou.model.EntityPaymentConfig;
+import com.qingye.wtsyou.model.EntitySaleDetailed;
+import com.qingye.wtsyou.model.PriceList;
+import com.qingye.wtsyou.model.PriceListItem;
+import com.qingye.wtsyou.utils.BroadcastAction;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
@@ -47,7 +50,7 @@ import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.campaign.SelectAddressView;
 import com.qingye.wtsyou.view.campaign.SelectAddressView.OnItemChildClickListener;
 import com.qingye.wtsyou.widget.AutoLineFeedLayout;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -123,6 +126,7 @@ public class SaleOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress,
 
     //明细
     private LinearLayout llDetailed;
+    private Button btnGone;
 
     private Double crowdPrice = Double.valueOf(0);
 
@@ -147,12 +151,28 @@ public class SaleOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress,
         return this; //必须return this;
     }
 
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastAction.ACTION_ADDRESS_REFRESH)) {
+                getAddress();
+            }
+        }
+
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sale_order,this);
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+
+        IntentFilter myIntentFilter = new IntentFilter();
+        myIntentFilter.addAction(BroadcastAction.ACTION_ADDRESS_REFRESH);
+        // 注册广播
+        registerReceiver(mBroadcastReceiver, myIntentFilter);
 
         intent = getIntent();
         entitySaleDetailed = (EntitySaleDetailed) intent.getSerializableExtra(Constant.SALEDETAILED);
@@ -189,8 +209,9 @@ public class SaleOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress,
         price = priceListItem.get(0).getPriceList().getPrice();
         priceListItem.get(0).setSelector(true);
         currnetPriceList = priceListItem.get(0).getPriceList();
-        total = number.multiply(price).doubleValue();
-        tvTotal.setText(Double.toString(total));
+        /*total = number.multiply(price).doubleValue();
+        tvTotal.setText(Double.toString(total));*/
+        getTotalValue(number);
         selectPrice();
     }
 
@@ -302,6 +323,7 @@ public class SaleOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress,
         llBottom = findViewById(R.id.ll_bottom);
         ivArrow = findViewById(R.id.iv_arrow);
         llDetailed = findViewById(R.id.llDetailed);
+        btnGone = findViewById(R.id.gone);
 
         llAddress = findViewById(R.id.llAddress);
         //选择地址
@@ -328,6 +350,8 @@ public class SaleOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress,
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+
 
         if (progressBar != null) {
             if (progressBar.isShowing()) {
@@ -391,12 +415,12 @@ public class SaleOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress,
         //活动名称
         tvName.setText(entitySaleDetailed.getContent().getActivityName());
         //地址
-        String province = entitySaleDetailed.getContent().getAddress().getPcdt().getProvince();
+        /*String province = entitySaleDetailed.getContent().getAddress().getPcdt().getProvince();
         String city = entitySaleDetailed.getContent().getAddress().getPcdt().getCity();
         String district = entitySaleDetailed.getContent().getAddress().getPcdt().getDistrict();
         String township = entitySaleDetailed.getContent().getAddress().getPcdt().getTownship();
-        String address = entitySaleDetailed.getContent().getAddress().getAddress();
-        tvAddress.setText(province + city + district + township + address);
+        String address = entitySaleDetailed.getContent().getAddress().getAddress();*/
+        tvAddress.setText(entitySaleDetailed.getContent().getStadiumsName());
         //时间
         tvTime.setText(entitySaleDetailed.getContent().getStartTimeStr());
 
@@ -453,6 +477,7 @@ public class SaleOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress,
         super.initEvent();
         ivBack.setOnClickListener(this);
         btnDetailed.setOnClickListener(this);
+        btnGone.setOnClickListener(this);
         llAddress.setOnClickListener(this);
         llSelectAddress.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
@@ -482,6 +507,11 @@ public class SaleOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress,
                     ivArrow.setImageResource(R.mipmap.next_l);
                 }
                 break;
+            case R.id.gone:
+                llDetailed.setVisibility(View.GONE);
+                ivArrow.setImageResource(R.mipmap.next_k);
+                narrowCount ++;
+                break;
             case R.id.llAddress:
                 Animation animation2 = AnimationUtils.loadAnimation(context, R.anim.gradually);
                 llSelectAddress.setVisibility(View.VISIBLE);
@@ -496,6 +526,7 @@ public class SaleOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress,
                 break;
             case R.id.tv_create_new_address:
                 toActivity(CreateAddressActivity.createIntent(context));
+                break;
             case R.id.tv_create_address:
                 toActivity(CreateAddressActivity.createIntent(context));
                 break;

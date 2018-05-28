@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.Message;
+import com.qingye.wtsyou.model.Message;
 
 import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;

@@ -22,17 +22,17 @@ import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.home.RecommendStarsConversationActivity;
 import com.qingye.wtsyou.activity.search.SearchFansActivity;
 import com.qingye.wtsyou.adapter.home.HomeContentAdapter;
-import com.qingye.wtsyou.basemodel.EntityBase;
-import com.qingye.wtsyou.modle.EntityHomeContent;
-import com.qingye.wtsyou.modle.EntityHomeList;
-import com.qingye.wtsyou.modle.EntityPageData;
-import com.qingye.wtsyou.modle.FocusStars;
-import com.qingye.wtsyou.modle.RecommendStars;
+import zuo.biao.library.model.EntityBase;
+import com.qingye.wtsyou.model.EntityHomeContent;
+import com.qingye.wtsyou.model.EntityHomeList;
+import com.qingye.wtsyou.model.EntityPageData;
+import com.qingye.wtsyou.model.FocusStars;
+import com.qingye.wtsyou.model.RecommendStars;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.home.HomeContentView;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
@@ -241,7 +241,7 @@ public class HomeStarsTwoFragment extends BaseHttpRecyclerFragment<EntityHomeCon
 
                 break;
             case R.id.ll_fans:
-                toActivity(SearchFansActivity.createIntent(context));
+                toActivity(SearchFansActivity.createIntent(context, recommendStarsList.get(1)));
                 break;
             case R.id.ll_conversation:
                 toActivity(RecommendStarsConversationActivity.createIntent(context));

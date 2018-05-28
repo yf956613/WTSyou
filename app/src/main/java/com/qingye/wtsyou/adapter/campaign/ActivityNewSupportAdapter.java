@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.campaign;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.Supports;
+import com.qingye.wtsyou.model.Supports;
 import com.qingye.wtsyou.view.campaign.ActivityNewSupportView;
 
 import zuo.biao.library.base.BaseAdapter;

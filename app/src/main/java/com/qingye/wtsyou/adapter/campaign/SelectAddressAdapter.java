@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.campaign;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.DeliveryAddress;
+import com.qingye.wtsyou.model.DeliveryAddress;
 import com.qingye.wtsyou.view.campaign.SelectAddressView;
 
 import zuo.biao.library.base.BaseAdapter;

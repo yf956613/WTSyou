@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.home;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.Stars;
+import com.qingye.wtsyou.model.Stars;
 import com.qingye.wtsyou.view.home.FansMainIdolView;
 
 import zuo.biao.library.base.BaseAdapter;

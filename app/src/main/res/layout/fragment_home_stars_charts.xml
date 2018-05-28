@@ -36,8 +36,7 @@
                         android:id="@+id/iv_second_img"
                         android:layout_width="63dp"
                         android:layout_height="63dp"
-                        android:layout_gravity="center"
-                        android:src="@mipmap/head_d"/>
+                        android:layout_gravity="center"/>
 
                 </LinearLayout>
 
@@ -64,7 +63,7 @@
                     android:layout_gravity="center_horizontal"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:text="林宥嘉"
+                    android:text=""
                     android:textSize="@dimen/text_size_12"
                     android:textColor="@color/black_text1"/>
 
@@ -86,7 +85,7 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:text="3799"
+                        android:text=""
                         android:textSize="@dimen/text_size_10"
                         android:textColor="@color/gray_text1"/>
                 </LinearLayout>
@@ -145,18 +144,17 @@
 
                 <LinearLayout
                     android:id="@+id/ll_img2"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
                     android:layout_marginTop="@dimen/margin_15"
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/circle_white_orange_shadow">
 
                     <com.qingye.wtsyou.widget.CircleImageView
                         android:id="@+id/iv_first_img"
-                        android:layout_width="73dp"
-                        android:layout_height="73dp"
-                        android:layout_gravity="center"
-                        android:src="@mipmap/head_a"/>
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"/>
 
                 </LinearLayout>
 
@@ -176,7 +174,7 @@
                     android:layout_gravity="center_horizontal"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:text="鹿晗"
+                    android:text=""
                     android:textSize="@dimen/text_size_12"
                     android:textColor="@color/black_text1"/>
 
@@ -198,7 +196,7 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:text="3799"
+                        android:text=""
                         android:textSize="@dimen/text_size_10"
                         android:textColor="@color/gray_text1"/>
                 </LinearLayout>
@@ -258,8 +256,7 @@
                         android:id="@+id/iv_third_img"
                         android:layout_width="63dp"
                         android:layout_height="63dp"
-                        android:layout_gravity="center"
-                        android:src="@mipmap/head_d"/>
+                        android:layout_gravity="center"/>
 
                 </LinearLayout>
 
@@ -286,7 +283,7 @@
                     android:layout_gravity="center_horizontal"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:text="林宥嘉"
+                    android:text=""
                     android:textSize="@dimen/text_size_12"
                     android:textColor="@color/black_text1"/>
 
@@ -308,7 +305,7 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:text="3799"
+                        android:text=""
                         android:textSize="@dimen/text_size_10"
                         android:textColor="@color/gray_text1"/>
                 </LinearLayout>
@@ -328,7 +325,7 @@
                     android:textColor="@color/orange_text1"/>
 
                 <TextView
-                    android:id="@+id/tv_third_operator"
+                    android:id="@+id/tv_third_rank"
                     android:layout_width="48dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"

@@ -3,9 +3,7 @@ package com.qingye.wtsyou.adapter.home;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.Campaign;
-import com.qingye.wtsyou.modle.EntityVoteDetailed;
-import com.qingye.wtsyou.modle.Vote;
+import com.qingye.wtsyou.model.Vote;
 import com.qingye.wtsyou.view.home.StarsMainVoteView;
 
 import zuo.biao.library.base.BaseAdapter;

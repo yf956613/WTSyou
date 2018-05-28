@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.my;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.Message;
+import com.qingye.wtsyou.model.Message;
 import com.qingye.wtsyou.view.my.TalkMessageView;
 
 import zuo.biao.library.base.BaseAdapter;

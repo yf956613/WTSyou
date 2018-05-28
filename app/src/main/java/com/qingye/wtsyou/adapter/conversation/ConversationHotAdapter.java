@@ -3,9 +3,8 @@ package com.qingye.wtsyou.adapter.conversation;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.Conversation;
+import com.qingye.wtsyou.model.Conversation;
 import com.qingye.wtsyou.view.conversation.ConversationHotView;
-import com.qingye.wtsyou.view.conversation.ConversationTopView;
 
 import zuo.biao.library.base.BaseAdapter;
 

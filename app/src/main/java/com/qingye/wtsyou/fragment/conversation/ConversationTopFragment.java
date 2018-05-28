@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.conversation.ConversationTopAdapter;
 import com.qingye.wtsyou.fragment.campaign.ActivityHotShowFragment;
-import com.qingye.wtsyou.modle.Conversation;
+import com.qingye.wtsyou.model.Conversation;
 import com.qingye.wtsyou.view.conversation.ConversationTopView;
 
 import java.util.ArrayList;

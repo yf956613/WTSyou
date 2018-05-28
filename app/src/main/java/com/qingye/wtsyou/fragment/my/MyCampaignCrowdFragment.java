@@ -13,14 +13,14 @@ import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity;
 import com.qingye.wtsyou.adapter.home.StarsMainCrowdAdapter;
-import com.qingye.wtsyou.modle.Crowd;
-import com.qingye.wtsyou.modle.EntityCrowdDetailed;
-import com.qingye.wtsyou.modle.EntityPageData;
+import com.qingye.wtsyou.model.Crowd;
+import com.qingye.wtsyou.model.EntityCrowdDetailed;
+import com.qingye.wtsyou.model.EntityPageData;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.home.StarsMainCrowdView;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -35,6 +35,7 @@ public class Constant {
     public static final String KEYWORDS = "keywords";
     public static final String PERIODS = "periods";
     public static final String MAXPERIODS = "maxPeriods";
+    public static final String PERIODSZONE = "periodsZone";
 
     //根据条件查询活动列表
     public static final String ACTIVITYSTATES = "activityStates";
@@ -48,10 +49,13 @@ public class Constant {
     public static final String ACTIVITYPROPERTY = "activityProperty";
     public static final String CREATEUSERID = "createUserId";
 
+    public static final String PARTS = "parts";
+
     //活动首页数据
     public static final String OFFICIALS = "officials";
     public static final String HOTCAMPAIGN = "hotCampaign";
     public static final String SUPPORT = "support";
+    public static final String STARSUUID = "starUuid";
 
     public static final String VOTELIST = "voteList";
 
@@ -59,6 +63,8 @@ public class Constant {
     public static final String VOTEDETAILED = "voteDetailed";
     //众筹详情
     public static final String CROWDDETAILED = "crowdDetailed";
+    //筹资列表
+    public static final String PAYMENTSTATE = "paymentState";
     //售票详情
     public static final String SALEDETAILED = "saleDetailed";
     //售票详情
@@ -85,8 +91,14 @@ public class Constant {
     public static final String POI = "poi";
     public static final String ISDEFAULT = "isDefault";
     public static final String UUID = "uuid";
-
     public static final String DELIVERYADDRESS = "deliveryAddress";
+
+    //卡券
+    public static final String CARDSTATES = "couponStates";
+
+
+    //门票
+    public static final String PEYMENTSTAE = "paymentState";
 
     //支付宝支付
     public static final String AMOUNT =  "amount";
@@ -94,4 +106,8 @@ public class Constant {
 
     //反馈
     public static final String CONTENT = "content";
+    public static final String TITLE = "title";
+
+    //which
+    public static final String WHICH = "which";
 }

@@ -7,9 +7,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.campaign.SaleDetailedActivity;
 import com.qingye.wtsyou.adapter.home.StarsMainShowAdapter;
-import com.qingye.wtsyou.modle.Campaign;
+import com.qingye.wtsyou.model.Campaign;
 import com.qingye.wtsyou.view.home.StarsMainShowView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 

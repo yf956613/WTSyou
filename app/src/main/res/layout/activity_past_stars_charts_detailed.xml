@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_background"
+    android:orientation="vertical"
     tools:context="com.qingye.wtsyou.activity.home.PastStarsChartsDetailedActivity">
 
     <LinearLayout
@@ -16,25 +17,16 @@
     <LinearLayout
         android:id="@+id/ll_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_25">
+        android:layout_height="wrap_content">
         <include layout="@layout/head"></include>
     </LinearLayout>
 
-    <ScrollView
-        android:layout_below="@+id/ll_head"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_4"
-        android:overScrollMode="never"
-        android:scrollbars="none"
-        android:background="@color/white">
-
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:background="@color/white"
             android:orientation="vertical">
 
             <LinearLayout
@@ -67,8 +59,7 @@
                                 android:id="@+id/iv_second_img"
                                 android:layout_width="63dp"
                                 android:layout_height="63dp"
-                                android:layout_gravity="center"
-                                android:src="@mipmap/head_d"/>
+                                android:layout_gravity="center"/>
 
                         </LinearLayout>
 
@@ -93,11 +84,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:maxLines="1"
                             android:ellipsize="end"
-                            android:text="林宥嘉"
-                            android:textSize="@dimen/text_size_12"
-                            android:textColor="@color/black_text1"/>
+                            android:maxLines="1"
+                            android:text=""
+                            android:textColor="@color/black_text1"
+                            android:textSize="@dimen/text_size_12" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -117,7 +108,7 @@
                                 android:layout_height="wrap_content"
                                 android:maxLines="1"
                                 android:ellipsize="end"
-                                android:text="3799"
+                                android:text=""
                                 android:textSize="@dimen/text_size_10"
                                 android:textColor="@color/gray_text1"/>
                         </LinearLayout>
@@ -137,18 +128,18 @@
                             android:textColor="@color/orange_text1"/>
 
                         <TextView
-                            android:id="@+id/tv_second_rank"
+                            android:id="@+id/tv_second_cancel"
                             android:layout_width="48dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/margin_8"
-                            android:background="@drawable/corners_orange_1"
                             android:gravity="center_horizontal"
                             android:paddingTop="@dimen/margin_4"
                             android:paddingBottom="@dimen/margin_4"
-                            android:text="打 榜"
-                            android:textSize="@dimen/margin_10"
-                            android:textColor="@color/orange_text1"
+                            android:text="已关注"
+                            android:textSize="@dimen/text_size_11"
+                            android:textColor="@color/gray_text1"
+                            android:background="@drawable/corners_gray"
                             android:visibility="gone"/>
 
                     </LinearLayout>
@@ -176,18 +167,17 @@
 
                         <LinearLayout
                             android:id="@+id/ll_img2"
-                            android:layout_width="75dp"
-                            android:layout_height="75dp"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
                             android:layout_marginTop="@dimen/margin_15"
                             android:layout_centerHorizontal="true"
                             android:background="@drawable/circle_white_orange_shadow">
 
                             <com.qingye.wtsyou.widget.CircleImageView
                                 android:id="@+id/iv_first_img"
-                                android:layout_width="73dp"
-                                android:layout_height="73dp"
-                                android:layout_gravity="center"
-                                android:src="@mipmap/head_a"/>
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                android:layout_gravity="center"/>
 
                         </LinearLayout>
 
@@ -207,7 +197,7 @@
                             android:layout_gravity="center_horizontal"
                             android:maxLines="1"
                             android:ellipsize="end"
-                            android:text="鹿晗"
+                            android:text=""
                             android:textSize="@dimen/text_size_12"
                             android:textColor="@color/black_text1"/>
 
@@ -229,7 +219,7 @@
                                 android:layout_height="wrap_content"
                                 android:maxLines="1"
                                 android:ellipsize="end"
-                                android:text="3799"
+                                android:text=""
                                 android:textSize="@dimen/text_size_10"
                                 android:textColor="@color/gray_text1"/>
                         </LinearLayout>
@@ -249,18 +239,18 @@
                             android:textColor="@color/orange_text1"/>
 
                         <TextView
-                            android:id="@+id/tv_first_rank"
+                            android:id="@+id/tv_first_cancel"
                             android:layout_width="48dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/margin_8"
-                            android:background="@drawable/corners_orange_1"
                             android:gravity="center_horizontal"
                             android:paddingTop="@dimen/margin_4"
                             android:paddingBottom="@dimen/margin_4"
-                            android:text="打 榜"
-                            android:textSize="@dimen/margin_10"
-                            android:textColor="@color/orange_text1"
+                            android:text="已关注"
+                            android:textSize="@dimen/text_size_11"
+                            android:textColor="@color/gray_text1"
+                            android:background="@drawable/corners_gray"
                             android:visibility="gone"/>
 
                     </LinearLayout>
@@ -289,8 +279,7 @@
                                 android:id="@+id/iv_third_img"
                                 android:layout_width="63dp"
                                 android:layout_height="63dp"
-                                android:layout_gravity="center"
-                                android:src="@mipmap/head_d"/>
+                                android:layout_gravity="center"/>
 
                         </LinearLayout>
 
@@ -317,7 +306,7 @@
                             android:layout_gravity="center_horizontal"
                             android:maxLines="1"
                             android:ellipsize="end"
-                            android:text="林宥嘉"
+                            android:text=""
                             android:textSize="@dimen/text_size_12"
                             android:textColor="@color/black_text1"/>
 
@@ -339,7 +328,7 @@
                                 android:layout_height="wrap_content"
                                 android:maxLines="1"
                                 android:ellipsize="end"
-                                android:text="3799"
+                                android:text=""
                                 android:textSize="@dimen/text_size_10"
                                 android:textColor="@color/gray_text1"/>
                         </LinearLayout>
@@ -359,18 +348,18 @@
                             android:textColor="@color/orange_text1"/>
 
                         <TextView
-                            android:id="@+id/tv_third_operator"
+                            android:id="@+id/tv_third_cancel"
                             android:layout_width="48dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/margin_8"
-                            android:background="@drawable/corners_orange_1"
                             android:gravity="center_horizontal"
                             android:paddingTop="@dimen/margin_4"
                             android:paddingBottom="@dimen/margin_4"
-                            android:text="打 榜"
-                            android:textSize="@dimen/margin_10"
-                            android:textColor="@color/orange_text1"
+                            android:text="已关注"
+                            android:textSize="@dimen/text_size_11"
+                            android:textColor="@color/gray_text1"
+                            android:background="@drawable/corners_gray"
                             android:visibility="gone"/>
 
                     </LinearLayout>
@@ -379,18 +368,16 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/margin_8"
-                android:layout_marginBottom="@dimen/margin_3"
-                android:layout_marginLeft="@dimen/margin_6"
-                android:layout_marginRight="@dimen/margin_6">
-                <include layout="@layout/base_http_recycler_fragment"/>
-            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginBottom="@dimen/margin_3"
+            android:layout_marginLeft="@dimen/margin_6"
+            android:layout_marginRight="@dimen/margin_6">
+            <include layout="@layout/base_http_recycler_fragment"/>
+        </LinearLayout>
 
         </LinearLayout>
 
-    </ScrollView>
-
-</RelativeLayout>
+</LinearLayout>

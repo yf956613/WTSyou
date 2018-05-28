@@ -3,16 +3,14 @@ package com.qingye.wtsyou.fragment.conversation;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.campaign.AssociateConversationAdapter;
 import com.qingye.wtsyou.adapter.campaign.ConversationAdapter;
-import com.qingye.wtsyou.modle.Conversation;
+import com.qingye.wtsyou.model.Conversation;
 import com.qingye.wtsyou.view.campaign.ConversationView;
 
 import java.util.ArrayList;

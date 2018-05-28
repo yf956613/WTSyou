@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.home.FansMainIdolAdapter;
-import com.qingye.wtsyou.modle.Stars;
+import com.qingye.wtsyou.model.Stars;
 import com.qingye.wtsyou.view.home.FansMainIdolView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 

@@ -599,31 +599,29 @@
                                 android:textColor="@color/black_text"
                                 android:textSize="@dimen/text_size_13"/>
 
-                            <!--
-                                                <LinearLayout
-                                                    android:id="@+id/ll_detailed_more"
-                                                    android:layout_width="wrap_content"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_centerInParent="true"
-                                                    android:layout_alignParentRight="true">
+                            <LinearLayout
+                                android:id="@+id/ll_detailed_more"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:layout_alignParentRight="true">
 
-                                                    <TextView
-                                                        android:layout_width="wrap_content"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_gravity="center"
-                                                        android:text="更多"
-                                                        android:textColor="@color/gray_text1"
-                                                        android:textSize="@dimen/text_size_10"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="更多"
+                                    android:textColor="@color/gray_text1"
+                                    android:textSize="@dimen/text_size_10"/>
 
-                                                    <ImageView
-                                                        android:layout_width="4dp"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_marginLeft="@dimen/margin_4"
-                                                        android:layout_marginTop="@dimen/margin_1"
-                                                        android:layout_gravity="center"
-                                                        android:src="@mipmap/down_dd"/>
-                                                </LinearLayout>
-                            -->
+                                <ImageView
+                                    android:layout_width="4dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/margin_4"
+                                    android:layout_marginTop="@dimen/margin_1"
+                                    android:layout_gravity="center"
+                                    android:src="@mipmap/down_dd"/>
+                            </LinearLayout>
 
                         </RelativeLayout>
 
@@ -716,5 +714,15 @@
         </RelativeLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/support_order"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <include
+            layout="@layout/support_order_detailed"/>
+    </LinearLayout>
 
 </RelativeLayout>

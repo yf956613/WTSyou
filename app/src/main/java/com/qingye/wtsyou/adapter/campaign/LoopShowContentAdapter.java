@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.Banners;
+import com.qingye.wtsyou.model.Banners;
 
 import java.util.List;
 

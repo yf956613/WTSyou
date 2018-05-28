@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.qingye.wtsyou.R;
+
 /**
  * Created by pm89 on 2018/5/9.
  */

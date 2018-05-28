@@ -4,10 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.Campaign;
+import com.qingye.wtsyou.model.Campaign;
 
 import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;

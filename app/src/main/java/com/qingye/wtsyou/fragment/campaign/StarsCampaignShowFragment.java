@@ -2,10 +2,6 @@ package com.qingye.wtsyou.fragment.campaign;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +12,15 @@ import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.campaign.SaleDetailedActivity;
 import com.qingye.wtsyou.adapter.campaign.StarsCampaignShowAdapter;
-import com.qingye.wtsyou.modle.Concert;
-import com.qingye.wtsyou.modle.EntityPageData;
-import com.qingye.wtsyou.modle.EntitySaleDetailed;
+import com.qingye.wtsyou.model.Concert;
+import com.qingye.wtsyou.model.EntityPageData;
+import com.qingye.wtsyou.model.EntitySaleDetailed;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.campaign.StarsCampaignShowView;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -203,9 +199,10 @@ public class StarsCampaignShowFragment extends BaseHttpRecyclerFragment<Concert,
             String relevanceStar = null;
             String activityProperty = "concert";
             String createUserId = null;
+            String parts = "prices";
 
             HttpRequest.postConcertQuery(0, activityStates, relevanceStar, cityName, activityProperty,
-                    createUserId, new OnHttpResponseListener() {
+                    createUserId, parts, new OnHttpResponseListener() {
 
                         @Override
                         public void onHttpResponse(int requestCode, String resultJson, Exception e) {

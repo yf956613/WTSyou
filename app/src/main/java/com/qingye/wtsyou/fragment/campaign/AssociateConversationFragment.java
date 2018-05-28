@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.campaign.AssociateConversationAdapter;
-import com.qingye.wtsyou.modle.Conversation;
+import com.qingye.wtsyou.model.Conversation;
 import com.qingye.wtsyou.view.campaign.AssociateConversationView;
 
 import java.util.ArrayList;

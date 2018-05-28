@@ -2,8 +2,10 @@ package com.qingye.wtsyou.activity.campaign;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,9 +16,12 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -24,20 +29,27 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alipay.sdk.app.PayTask;
+import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
+import com.qingye.wtsyou.activity.my.CreateAddressActivity;
+import com.qingye.wtsyou.adapter.campaign.SelectAddressAdapter;
 import com.qingye.wtsyou.basemodel.IdName;
 import com.qingye.wtsyou.basemodel.POI;
-import com.qingye.wtsyou.modle.EntityCrowdDetailed;
-import com.qingye.wtsyou.modle.EntityPaymentConfig;
-import com.qingye.wtsyou.modle.PriceList;
-import com.qingye.wtsyou.modle.PriceListItem;
+import com.qingye.wtsyou.model.DeliveryAddress;
+import com.qingye.wtsyou.model.EntityContent;
+import com.qingye.wtsyou.model.EntityCrowdDetailed;
+import com.qingye.wtsyou.model.EntityPaymentConfig;
+import com.qingye.wtsyou.model.PriceList;
+import com.qingye.wtsyou.model.PriceListItem;
 import com.qingye.wtsyou.utils.BroadcastAction;
 import com.qingye.wtsyou.utils.Constant;
+import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.view.campaign.SelectAddressView;
 import com.qingye.wtsyou.widget.AutoLineFeedLayout;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -45,22 +57,27 @@ import java.util.List;
 import java.util.Map;
 
 import pub.devrel.easypermissions.EasyPermissions;
-import zuo.biao.library.base.BaseActivity;
+import zuo.biao.library.base.BaseHttpRecyclerActivity;
+import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
 
-public class CrowdOrderActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
+public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress,SelectAddressView,SelectAddressAdapter>
+        implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener, SelectAddressView.OnItemChildClickListener {
 
     private TextView tvHead;
     private ImageView ivBack;
+    private LinearLayout btnDetailed;
+    private LinearLayout llBottom;
+
     //活动名称
     private TextView tvName;
     private TextView tvAddress;
     private TextView tvTime;
 
-    //众筹信息
+    //购票信息
     private EditText edtNumber;
     private BigDecimal number = BigDecimal.ONE;
     private TextView tvTotal;
@@ -75,11 +92,42 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
     private RadioButton rbtWei,rbtAli;
     private TextView tvSelect;
 
+    //默认
+    private TextView tvDefaultName;
+    private TextView tvDefaultPhone;
+    private TextView tvDefaultAddress;
+    private TextView tvFare;
+    //运费
+    int fare = 10;
+
+    private SelectAddressAdapter selectAddressAdapter;
+
+    //地址显示区域
+    private LinearLayout llAddress;
+    //选择地址区域
+    private LinearLayout llSelectAddress;
+    private TextView tvCancel;
+    private TextView tvConfirm;
+    private TextView tvCreateNewAddress;
+    private TextView tvCreateAddress;
+    private List<DeliveryAddress> deliveryAddressList = new ArrayList<>();
+
+    DeliveryAddress defaultAddress = null;
+
+    private ImageView ivArrow;
+    private int narrowCount = 0;//记录明细是否显示
+
     //价格
     private EntityCrowdDetailed entityCrowdDetailed;
     private List<PriceListItem> priceListItem =  new ArrayList<>();
-    private PriceList currnetPriceList;
+    private PriceList currentPriceList;
     private AutoLineFeedLayout layout;
+
+    //明细
+    private LinearLayout llDetailed;
+    private Button btnGone;
+
+    private Double crowdPrice = Double.valueOf(0);
 
     private CustomDialog progressBar;
 
@@ -102,26 +150,49 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
         return this; //必须return this;
     }
 
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastAction.ACTION_ADDRESS_REFRESH)) {
+                getAddress();
+            }
+        }
+
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crowd_order,this);
+        setContentView(R.layout.activity_sale_order,this);
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+
+        IntentFilter myIntentFilter = new IntentFilter();
+        myIntentFilter.addAction(BroadcastAction.ACTION_ADDRESS_REFRESH);
+        // 注册广播
+        registerReceiver(mBroadcastReceiver, myIntentFilter);
+
+        intent = getIntent();
+        entityCrowdDetailed = (EntityCrowdDetailed) intent.getSerializableExtra(Constant.CROWDDETAILED);
 
         setProgressBar();
         progressBar.show();
 
-        intent = getIntent();
-        entityCrowdDetailed = (EntityCrowdDetailed) intent.getSerializableExtra(Constant.CROWDDETAILED);
+        getAddress();
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         //价格
         getPriceListItem();
-        initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
+
+        //srlBaseHttpRecycler.autoRefresh();
+        srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
+        srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
+        srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
 
     }
 
@@ -136,9 +207,10 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
         //初始第一个未选择的价格
         price = priceListItem.get(0).getPriceList().getPrice();
         priceListItem.get(0).setSelector(true);
-        currnetPriceList = priceListItem.get(0).getPriceList();
-        total = number.multiply(price).doubleValue();
-        tvTotal.setText(Double.toString(total));
+        currentPriceList = priceListItem.get(0).getPriceList();
+        getTotalValue(number);
+        /*total = number.multiply(price).doubleValue() + fare;
+        tvTotal.setText(Double.toString(total));*/
         selectPrice();
     }
 
@@ -165,7 +237,7 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
                             //设置选择的按钮为当前的价格
                             buttonList.get(j).setSelected(true);
                             priceListItem.get(j).setSelector(true);
-                            currnetPriceList = priceListItem.get(j).getPriceList();
+                            currentPriceList = priceListItem.get(j).getPriceList();
                             price = priceListItem.get(j).getPriceList().getPrice();
 
                             getTotalValue(new BigDecimal(edtNumber.getText().toString()));
@@ -183,12 +255,13 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
     }
 
     public void getTotalValue(BigDecimal number) {
-        total = number.multiply(price).doubleValue();
+        total = number.multiply(price).doubleValue() + fare;
         tvTotal.setText(Double.toString(total));
     }
 
     @Override
     public void initView() {
+        super.initView();
         ivBack = findViewById(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
         tvHead = findViewById(R.id.tv_head_title);
@@ -233,10 +306,33 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
         edtNumber.addTextChangedListener(watcher);
         edtNumber.setTag(watcher);
 
+        //默认
+        tvDefaultName = findViewById(R.id.tv_default_contact_name);
+        tvDefaultPhone = findViewById(R.id.tv_default_contact_phone);
+        tvDefaultAddress = findViewById(R.id.tv_default_delivery_address);
+        //运费
+        tvFare = findViewById(R.id.tv_fare);
+
         //总价
         tvTotal = findViewById(R.id.tv_total);
-
         layout = findViewById(R.id.al);
+
+        //查看明细
+        btnDetailed = findViewById(R.id.btn_detailed);
+        llBottom = findViewById(R.id.ll_bottom);
+        ivArrow = findViewById(R.id.iv_arrow);
+        llDetailed = findViewById(R.id.llDetailed);
+        btnGone = findViewById(R.id.gone);
+
+        llAddress = findViewById(R.id.llAddress);
+        //选择地址
+        llSelectAddress = findViewById(R.id.llSelectAddress);
+        tvCancel = findViewById(R.id.tv_cancel);
+        tvConfirm = findViewById(R.id.tv_confirm);
+        //没地址时添加地址
+        tvCreateAddress = findViewById(R.id.tv_create_address);
+        //添加新的地址
+        tvCreateNewAddress = findViewById(R.id.tv_create_new_address);
 
         tvPay = findViewById(R.id.tv_pay);
         popUpView = getLayoutInflater().inflate(R.layout.popupwindow_pay_way, null);
@@ -253,6 +349,8 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        unregisterReceiver(mBroadcastReceiver);
 
         if (progressBar != null) {
             if (progressBar.isShowing()) {
@@ -290,25 +388,101 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
+    public void setList(final List<DeliveryAddress> list) {
+
+        setList(new AdapterCallBack<SelectAddressAdapter>() {
+
+            @Override
+            public SelectAddressAdapter createAdapter() {
+
+                selectAddressAdapter = new SelectAddressAdapter(context);
+                selectAddressAdapter.setOnItemChildClickListener(CrowdOrderActivity.this);
+
+                return selectAddressAdapter;
+            }
+
+            @Override
+            public void refreshAdapter() {
+                adapter.refresh(list);
+            }
+        });
+    }
+
+    @Override
     public void initData() {
+        super.initData();
         //活动名称
         tvName.setText(entityCrowdDetailed.getContent().getActivityName());
         //地址
-        String province = entityCrowdDetailed.getContent().getAddress().getPcdt().getProvince();
+        /*String province = entityCrowdDetailed.getContent().getAddress().getPcdt().getProvince();
         String city = entityCrowdDetailed.getContent().getAddress().getPcdt().getCity();
         String district = entityCrowdDetailed.getContent().getAddress().getPcdt().getDistrict();
         String township = entityCrowdDetailed.getContent().getAddress().getPcdt().getTownship();
-        String address = entityCrowdDetailed.getContent().getAddress().getAddress();
-        tvAddress.setText(province + city + district + township + address);
+        String address = entityCrowdDetailed.getContent().getAddress().getAddress();*/
+        tvAddress.setText(entityCrowdDetailed.getContent().getAddress().getAddress());
         //时间
         tvTime.setText(entityCrowdDetailed.getContent().getStartTimeStr());
+
+        if (deliveryAddressList.size() > 0) {
+            tvCreateAddress.setVisibility(View.GONE);
+        } else {
+            tvCreateAddress.setVisibility(View.VISIBLE);
+        }
+
+        getSelectAddress();
+
+        tvFare.setText(Integer.toString(fare));
 
         progressBarDismiss();
     }
 
+    public void getSelectAddress() {
+
+        for (DeliveryAddress deliveryAddress : deliveryAddressList) {
+            if (deliveryAddress.getDefault()) {
+                defaultAddress = deliveryAddress;
+            }
+        }
+
+        //名字
+        tvDefaultName.setText(defaultAddress.getName());
+        //联系电话
+        tvDefaultPhone.setText(defaultAddress.getMobile());
+        //省
+        String defaultProvince = defaultAddress.getPoi().getPcdt().getProvince();
+        //市
+        String defaultCity = defaultAddress.getPoi().getPcdt().getCity();
+        //区
+        String defaultDistrict = defaultAddress.getPoi().getPcdt().getDistrict();
+        //街道
+        String defaultTownship = defaultAddress.getPoi().getPcdt().getTownship();
+        //详细
+        String defaultDetail = defaultAddress.getPoi().getAddress();
+        //地址
+        tvDefaultAddress.setText(defaultProvince + defaultCity + defaultDistrict + defaultTownship + defaultDetail);
+    }
+    @Override
+    public void getListAsync(int page) {
+
+    }
+
+    @Override
+    public List<DeliveryAddress> parseArray(String json) {
+        return null;
+    }
+
     @Override
     public void initEvent() {
+        super.initEvent();
         ivBack.setOnClickListener(this);
+        btnDetailed.setOnClickListener(this);
+        btnGone.setOnClickListener(this);
+        llAddress.setOnClickListener(this);
+        llSelectAddress.setOnClickListener(this);
+        tvCancel.setOnClickListener(this);
+        tvConfirm.setOnClickListener(this);
+        tvCreateAddress.setOnClickListener(this);
+        tvCreateNewAddress.setOnClickListener(this);
 
         tvPay.setOnClickListener(this);
         tvSelect.setOnClickListener(this);
@@ -320,6 +494,41 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
             case R.id.iv_left:
                 finish();
                 break;
+            case R.id.btn_detailed:
+                Animation animation1 = AnimationUtils.loadAnimation(context, R.anim.gradually);
+                narrowCount ++;
+                if (narrowCount % 2 == 0) {
+                    llDetailed.setVisibility(View.GONE);
+                    ivArrow.setImageResource(R.mipmap.next_k);
+                } else {
+                    llDetailed.setVisibility(View.VISIBLE);
+                    llDetailed.startAnimation(animation1);
+                    ivArrow.setImageResource(R.mipmap.next_l);
+                }
+                break;
+            case R.id.gone:
+                llDetailed.setVisibility(View.GONE);
+                ivArrow.setImageResource(R.mipmap.next_k);
+                narrowCount ++;
+                break;
+            case R.id.llAddress:
+                Animation animation2 = AnimationUtils.loadAnimation(context, R.anim.gradually);
+                llSelectAddress.setVisibility(View.VISIBLE);
+                llSelectAddress.setAnimation(animation2);
+                break;
+            case R.id.tv_cancel:
+                llSelectAddress.setVisibility(View.GONE);
+                break;
+            case R.id.tv_confirm:
+                getSelectAddress();
+                llSelectAddress.setVisibility(View.GONE);
+                break;
+            case R.id.tv_create_new_address:
+                toActivity(CreateAddressActivity.createIntent(context));
+                break;
+            case R.id.tv_create_address:
+                toActivity(CreateAddressActivity.createIntent(context));
+                break;
             case R.id.tv_pay:
                 payWayWin.showAtLocation(v, Gravity.BOTTOM, 0, 0);
                 payWayWin.update(0, 0, RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -329,7 +538,7 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
                 if (rbtWei.isChecked()) {
 
                 }
-                else if (rbtAli.isChecked()){
+                else if (rbtAli.isChecked()) {
                     IdName idName = new IdName();
                     idName.setId("alipay_app");
                     idName.setName("支付宝支付");
@@ -351,10 +560,24 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
         String[] perms = {android.Manifest.permission.READ_PHONE_STATE,};
         String uuid = entityCrowdDetailed.getContent().getActivityId();
         BigDecimal carrieFree = BigDecimal.ZERO;
-        final POI poi = new POI();
-        String receiver = "陈佩斯";
-        String phone = "18250711172";
-        String SkuId = currnetPriceList.getUuid();
+        POI poi = new POI();
+        poi = defaultAddress.getPoi();
+		/*LngLat lanLat = new LngLat();
+		lanLat.setLng(new BigDecimal(118.109204));
+		lanLat.setLat(new BigDecimal(24.490974));
+        poi.setLngLat(lanLat);
+		PCDT pcdt = new PCDT();
+		pcdt.setProvince("福建省");
+		pcdt.setProvinceCode("350000");
+		pcdt.setCity("厦门市");
+		pcdt.setCityCode("0592");
+		pcdt.setDistrict("思明区");
+		pcdt.setDistrictCode("350203");
+		pcdt.setTownship("筼筜街道");
+        poi.setPcdt(pcdt);*/
+        String phone = defaultAddress.getMobile();
+        String receiver = defaultAddress.getName();
+        String SkuId = currentPriceList.getUuid();
         if (EasyPermissions.hasPermissions(this, perms)) {
 
             //检查网络
@@ -362,7 +585,7 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
                 setProgressBar();
                 progressBar.show();
 
-                HttpRequest.postGetPaymentConfigOrder(0, uuid, carrieFree, price, number,
+                HttpRequest.postGetPaymentConfigOrder(0, uuid, carrieFree, price ,number,
                         channel, phone, poi, receiver, SkuId, new OnHttpResponseListener() {
 
                             @Override
@@ -394,6 +617,7 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
             } else {
                 showShortToast(R.string.checkNetwork);
             }
+
         } else {
             EasyPermissions.requestPermissions(this, "支付需要手机。。。。权限",
                     0, perms);
@@ -416,6 +640,48 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
         }
     };
 
+    public void getAddress() {
+        if (NetUtil.checkNetwork(this)) {
+            setProgressBar();
+            progressBar.show();
+
+            HttpRequest.postGetAddress(0, new OnHttpResponseListener() {
+                @Override
+                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+                    if(!StringUtil.isEmpty(resultJson)){
+                        EntityContent entityContent =  JSON.parseObject(resultJson,EntityContent.class);
+                        if(entityContent.isSuccess()){
+                            //成功
+                            //showShortToast(R.string.getSuccess);
+                            deliveryAddressList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityContent.getContent())
+                                    ,new TypeToken<List<DeliveryAddress>>(){}.getType());
+
+                            initData();
+
+                            setList(deliveryAddressList);
+
+                            progressBarDismiss();
+                        }else{//显示失败信息
+                            if (entityContent.getCode().equals("401")) {
+                                showShortToast(R.string.tokenInvalid);
+                                toActivity(MainActivity.createIntent(context));
+                            } else {
+                                showShortToast(entityContent.getMessage());
+                            }
+
+                            progressBarDismiss();
+                        }
+                    }else{
+                        showShortToast(R.string.noReturn);
+
+                        progressBarDismiss();
+                    }
+                }
+            });
+        } else {
+            showShortToast(R.string.checkNetwork);
+        }
+    }
 
     private void aliPay(EntityPaymentConfig object) {
         final EntityPaymentConfig entity = object;
@@ -434,11 +700,6 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
                     PayTask alipay = new PayTask(CrowdOrderActivity.this);
                     Map<String, String> result = alipay.payV2(payInfo, true);
 
-                    Intent intent = new Intent(
-                            BroadcastAction.ACTION_CROWD_REFRESH);
-                    // 发送广播
-                    sendBroadcast(intent);
-
                     Message msg = new Message();
                     msg.what = SDK_PAY_FLAG;
                     msg.obj = result;
@@ -451,6 +712,18 @@ public class CrowdOrderActivity extends BaseActivity implements View.OnClickList
         // 必须异步调用
         Thread payThread = new Thread(payRunnable);
         payThread.start();
+    }
+
+    @Override
+    public void onSelectClick(View view, int position) {
+        for (int i = 0;i < deliveryAddressList.size();i ++) {
+            if (i == position) {
+                deliveryAddressList.get(i).setDefault(true);
+            } else {
+                deliveryAddressList.get(i).setDefault(false);
+            }
+        }
+        setList(deliveryAddressList);
     }
 
     @Override

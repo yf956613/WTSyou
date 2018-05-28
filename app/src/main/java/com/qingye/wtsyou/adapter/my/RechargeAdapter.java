@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.my;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.Recharge;
+import com.qingye.wtsyou.model.Recharge;
 import com.qingye.wtsyou.view.my.RechargeView;
 
 import zuo.biao.library.base.BaseAdapter;

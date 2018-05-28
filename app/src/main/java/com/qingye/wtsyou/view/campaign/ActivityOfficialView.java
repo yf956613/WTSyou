@@ -5,15 +5,11 @@ import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.Campaign;
-import com.qingye.wtsyou.modle.Officials;
-
-import org.w3c.dom.Text;
+import com.qingye.wtsyou.model.Officials;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import zuo.biao.library.base.BaseModel;
@@ -70,8 +66,6 @@ public class ActivityOfficialView extends BaseView<Officials> implements View.On
 
     @Override
     public void onClick(View v) {
-        if (BaseModel.isCorrect(data) == false) {
-            return;
-        }
+
     }
 }

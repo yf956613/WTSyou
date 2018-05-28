@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.search.SearchHistoryConversationAdapter;
-import com.qingye.wtsyou.modle.SearchContent;
+import com.qingye.wtsyou.model.SearchContent;
 import com.qingye.wtsyou.view.search.SearchHistoryConversationView;
 
 import java.util.ArrayList;

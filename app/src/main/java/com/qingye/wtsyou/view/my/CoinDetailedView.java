@@ -7,10 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.CoinDetailed;
-import com.qingye.wtsyou.modle.HeartDetailed;
+import com.qingye.wtsyou.model.CoinDetailed;
 
-import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
 
 /**

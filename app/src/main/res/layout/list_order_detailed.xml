@@ -49,6 +49,7 @@
                 android:id="@+id/iv_order_img"
                 android:layout_width="95dp"
                 android:layout_height="60dp"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/img_w"/>
         </LinearLayout>
 

@@ -35,11 +35,13 @@ public class DateUtil {
 	public static final String THE_DAY_BEFORE_YESTERDAY_2 = "前天";
 	public static final String WEEK_PATTERN_2 = "EE";// 星期几
 
-	public static final String DATE_PATTERN_1 = "yyyy-MM-dd HH:mm";
-	public static final String DATE_PATTERN_2 = "yyyy-MM-dd";
-	public static final String DATE_PATTERN_3 = "yyyy-MM-dd HH:mm:ss";
-	public static final String DATE_PATTERN_4 = "yyyyMMddHHmmss";
-	public static final String DATE_PATTERN_5 = "MM-dd HH:mm";
+	public static final String DATE_PATTERN_1 = "yyyy.MM.dd HH:mm";
+	public static final String DATE_PATTERN_2 = "yyyy-MM-dd HH:mm:ss";
+	public static final String DATE_PATTERN_3 = "yyyyMMddHHmmss";
+	public static final String DATE_PATTERN_4 = "MM-dd HH:mm";
+	public static final String DATE_PATTERN_5 = "yyyy.MM.dd";
+	public static final String DATE_PATTERN_6 = "yyyy/MM/dd";
+	public static final String DATE_PATTERN_7 = "yyyy-MM-dd";
 	public static final Integer THIS_YEAR = Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date(System.currentTimeMillis())));
 
 	/**

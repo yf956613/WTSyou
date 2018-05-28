@@ -6,14 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,14 +24,12 @@ import com.qingye.wtsyou.adapter.SlidingPagerAdapter;
 import com.qingye.wtsyou.entity.TabEntity;
 import com.qingye.wtsyou.fragment.home.HomeChartsFansFragment;
 import com.qingye.wtsyou.fragment.home.HomeChartsStarsFragment;
-import com.qingye.wtsyou.widget.CustomDialog;
-import com.qingye.wtsyou.widget.VpSwipeRefreshLayout;
+import zuo.biao.library.widget.CustomDialog;
 
 import java.util.ArrayList;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
-import zuo.biao.library.util.Log;
 
 public class ChartsActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -56,7 +50,7 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
     private ViewPager mViewPager;
 
     private LinearLayout linearLayout;
-    private VpSwipeRefreshLayout swipeRefresh;
+    //private VpSwipeRefreshLayout swipeRefresh;
 
     private CustomDialog progressBar;
 
@@ -89,7 +83,7 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
         initView();
         setView();
         //刷新
-        initHrvsr();
+        //initHrvsr();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
@@ -97,7 +91,7 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initView() {
-        swipeRefresh = findViewById(R.id.swipe_refresh_widget);
+        //swipeRefresh = findViewById(R.id.swipe_refresh_widget);
         linearLayout = findViewById(R.id.linearlayout);
 
         ivBack = findViewById(R.id.iv_left);
@@ -146,7 +140,7 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
     }
 
     //刷新
-    private void initHrvsr(){
+    /*private void initHrvsr(){
         //设置刷新时动画的颜色，可以设置4个
         swipeRefresh.setProgressBackgroundColorSchemeResource(android.R.color.white);
         swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_light,
@@ -169,6 +163,9 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
                 }, 1500);
             }
         });
+
+
+
         // 设置子视图是否允许滚动到顶部
         swipeRefresh.setOnChildScrollUpCallback(new SwipeRefreshLayout.OnChildScrollUpCallback() {
             @Override
@@ -176,7 +173,7 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
                 return linearLayout.getScrollY() > 0;
             }
         });
-    }
+    }*/
 
     public void setView() {
         mTabEntities.clear();

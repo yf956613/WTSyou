@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.search.SearchHotConversationAdapter;
-import com.qingye.wtsyou.modle.SearchContent;
+import com.qingye.wtsyou.model.SearchContent;
 import com.qingye.wtsyou.view.search.SearchHotConversationView;
 
 import java.util.ArrayList;

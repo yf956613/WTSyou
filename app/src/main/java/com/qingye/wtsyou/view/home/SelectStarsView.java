@@ -10,8 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.EntityStarsItem;
-import com.qingye.wtsyou.modle.Stars;
+import com.qingye.wtsyou.model.EntityStarsItem;
 
 import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;

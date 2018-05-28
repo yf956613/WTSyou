@@ -31,25 +31,14 @@ import com.qingye.wtsyou.entity.TabEntity;
 import com.qingye.wtsyou.fragment.campaign.StarsCampaignCrowdFragment;
 import com.qingye.wtsyou.fragment.campaign.StarsCampaignShowFragment;
 import com.qingye.wtsyou.fragment.campaign.StarsCampaignVoteFragment;
-import com.qingye.wtsyou.modle.Crowd;
-import com.qingye.wtsyou.modle.EntityPageData;
-import com.qingye.wtsyou.modle.Vote;
 import com.qingye.wtsyou.utils.Constant;
-import com.qingye.wtsyou.utils.GsonUtil;
-import com.qingye.wtsyou.utils.HttpRequest;
-import com.qingye.wtsyou.utils.NetUtil;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.VpSwipeRefreshLayout;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
-import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.util.JSON;
-import zuo.biao.library.util.StringUtil;
 
 public class ShowAllActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 

@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.campaign;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.Conversation;
+import com.qingye.wtsyou.model.Conversation;
 import com.qingye.wtsyou.view.campaign.ConversationView;
 
 import zuo.biao.library.base.BaseAdapter;

@@ -16,13 +16,12 @@ import android.widget.TextView;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.adapter.my.QuestionAdapter;
-import com.qingye.wtsyou.basemodel.EntityBase;
-import com.qingye.wtsyou.modle.Question;
-import com.qingye.wtsyou.utils.BroadcastAction;
+import zuo.biao.library.model.EntityBase;
+import com.qingye.wtsyou.model.Question;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.my.QuestionView;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;

@@ -7,11 +7,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.campaign.ActivityOfficialAdapter;
-import com.qingye.wtsyou.modle.Officials;
+import com.qingye.wtsyou.model.Officials;
 import com.qingye.wtsyou.view.campaign.ActivityOfficialView;
 
 import java.util.ArrayList;
@@ -80,7 +79,6 @@ public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Officials
         final List<Officials> templist = new ArrayList<>();
         for(int i = 0;i < size;i ++) {
             Officials campaign = new Officials();
-            campaign.setId(i);
             templist.add(campaign);
         }
         //list.addAll(templist);

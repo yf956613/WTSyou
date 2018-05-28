@@ -39,17 +39,19 @@ import com.qingye.wtsyou.activity.my.OrderActivity;
 import com.qingye.wtsyou.activity.my.SettingActivity;
 import com.qingye.wtsyou.activity.my.SignInActivity;
 import com.qingye.wtsyou.activity.my.TicketActivity;
-import com.qingye.wtsyou.modle.EntityPersonalMessage;
+import com.qingye.wtsyou.model.EntityPersonalMessage;
 import com.qingye.wtsyou.utils.BroadcastAction;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 
 import zuo.biao.library.base.BaseFragment;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.ui.AlertDialog;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
+
+import static android.support.v4.content.LocalBroadcastManager.getInstance;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,6 +106,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(BroadcastAction.ACTION_MESSAGE_REFRESH)) {
+
                 getPersonalMessage();
                 progressBarDismiss();
             }
@@ -123,8 +126,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         IntentFilter myIntentFilter = new IntentFilter();
         myIntentFilter.addAction(BroadcastAction.ACTION_MESSAGE_REFRESH);
         // 注册广播
-        context.registerReceiver(mBroadcastReceiver, myIntentFilter);
-        getPersonalMessage();
+        getActivity().registerReceiver(mBroadcastReceiver, myIntentFilter);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
@@ -132,6 +134,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         initHrvsr();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
+        getPersonalMessage();
 
         return view;
     }
@@ -170,7 +173,6 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     }
 
     public void onResume() {
-        //getPersonalMessage();
         super.onResume();
     }
 
@@ -178,7 +180,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     public void onDestroy() {
         super.onDestroy();
 
-        context.unregisterReceiver(mBroadcastReceiver);
+        getActivity().unregisterReceiver(mBroadcastReceiver);
 
         if (progressBar != null) {
             if (progressBar.isShowing()) {
@@ -244,14 +246,14 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         //头像
         if (entityPersonalMessage.getContent().getPhoto() != null) {
             String url = entityPersonalMessage.getContent().getPhoto();
-            Glide.with(context)
+            Glide.with(getActivity())
                     .load(url)
                     .into(ivHead);
         }
         //背景
         if (entityPersonalMessage.getContent().getPhoto() != null) {
             String url = entityPersonalMessage.getContent().getBackgruoud();
-            Glide.with(context)
+            Glide.with(getActivity())
                     .load(url)
                     .into(ivBackground);
         }

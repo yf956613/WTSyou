@@ -24,19 +24,20 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
+import com.qingye.wtsyou.activity.MainTabActivity;
 import com.qingye.wtsyou.adapter.home.SelectStarsAdapter;
-import com.qingye.wtsyou.basemodel.EntityBase;
+import zuo.biao.library.model.EntityBase;
 import com.qingye.wtsyou.fragment.home.SelectedStarsFragment;
-import com.qingye.wtsyou.modle.EntityPageData;
-import com.qingye.wtsyou.modle.EntityStars;
-import com.qingye.wtsyou.modle.EntityStarsItem;
-import com.qingye.wtsyou.modle.FocusStars;
+import com.qingye.wtsyou.model.EntityPageData;
+import com.qingye.wtsyou.model.EntityStars;
+import com.qingye.wtsyou.model.EntityStarsItem;
+import com.qingye.wtsyou.model.FocusStars;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.home.SelectStarsView;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -61,10 +62,15 @@ public class SelectStarsActivity extends BaseHttpRecyclerActivity <EntityStarsIt
     //选择的明星
     private Map<String,EntityStars> MapselectedStars = new HashMap<>();
     private List<EntityStars> selectedStars = new ArrayList<>();
+    //取消关注的明星
+    private Map<String,EntityStars> MapcancelStars = new HashMap<>();
+    private List<EntityStars> cancelStars = new ArrayList<>();
 
     private LinearLayout listview;
     private SwipeRefreshLayout swipeRefresh;
     private CustomDialog progressBar;
+
+    private int WHICH;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -72,8 +78,8 @@ public class SelectStarsActivity extends BaseHttpRecyclerActivity <EntityStarsIt
      * @param context
      * @return
      */
-    public static Intent createIntent(Context context) {
-        return new Intent(context,SelectStarsActivity.class);
+    public static Intent createIntent(Context context, int which) {
+        return new Intent(context,SelectStarsActivity.class).putExtra(Constant.WHICH, which);
     }
 
     //启动方法>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -88,6 +94,9 @@ public class SelectStarsActivity extends BaseHttpRecyclerActivity <EntityStarsIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_stars,this);
+
+        intent = getIntent();
+        WHICH = intent.getIntExtra(Constant.WHICH, 0);
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
@@ -240,6 +249,7 @@ public class SelectStarsActivity extends BaseHttpRecyclerActivity <EntityStarsIt
                 break;
             case R.id.tv_confirm:
                 focusStars();
+                cancelStars();
                 break;
             default:
                 break;
@@ -319,10 +329,19 @@ public class SelectStarsActivity extends BaseHttpRecyclerActivity <EntityStarsIt
 
     //更新选择的明星
     public void getSelectedStars() {
-        //selectedStars更新后的map
+
         selectedStars.clear();
         for (Map.Entry<String, EntityStars> entry : MapselectedStars.entrySet()) {
             selectedStars.add(entry.getValue());
+        }
+    }
+
+    //取消关注的明星
+    public void getCancelStars() {
+
+        cancelStars.clear();
+        for (Map.Entry<String, EntityStars> entry : MapcancelStars.entrySet()) {
+            cancelStars.add(entry.getValue());
         }
     }
 
@@ -343,17 +362,21 @@ public class SelectStarsActivity extends BaseHttpRecyclerActivity <EntityStarsIt
         //选择的明星
         if (starsItem.get(position).getSelector()) {
             MapselectedStars.put(starsItem.get(position).getEntityStars().getUuid(),starsItem.get(position).getEntityStars());
+            MapcancelStars.remove(starsItem.get(position).getEntityStars().getUuid());
         } else {
             MapselectedStars.remove(starsItem.get(position).getEntityStars().getUuid());
+            MapcancelStars.put(starsItem.get(position).getEntityStars().getUuid(),starsItem.get(position).getEntityStars());
         }
 
         //判断选择数量
         if (MapselectedStars.size() < 1) {
             showShortToast(R.string.leastOne);
             MapselectedStars.put(starsItem.get(position).getEntityStars().getUuid(),starsItem.get(position).getEntityStars());
+            MapselectedStars.remove(starsItem.get(position).getEntityStars().getUuid());
         }
 
         getSelectedStars();
+        getCancelStars();
         selectedStars(selectedStars);
 
     }
@@ -380,6 +403,62 @@ public class SelectStarsActivity extends BaseHttpRecyclerActivity <EntityStarsIt
                         if(entityBase.isSuccess()){
                             //成功
                             showShortToast(R.string.focusSuccess);
+
+                            progressBarDismiss();
+
+                            if (WHICH == 1) {
+                                finish();
+                            }
+                            else if (WHICH == 2) {
+                                toActivity(MainTabActivity.createIntent(context));
+                                finish();
+                            }
+
+                        }else{//显示失败信息
+                            if (entityBase.getCode().equals("401")) {
+                                showShortToast(R.string.tokenInvalid);
+                                toActivity(MainActivity.createIntent(context));
+                            } else {
+                                showShortToast(entityBase.getMessage());
+                            }
+
+                            progressBarDismiss();
+                        }
+                    }else{
+                        showShortToast(R.string.noReturn);
+
+                        progressBarDismiss();
+                    }
+                }
+            });
+
+        } else {
+            showProgressDialog(R.string.checkNetwork);
+        }
+    }
+
+    public void cancelStars() {
+        List<FocusStars> cancelStarsRequestList = new ArrayList<>();
+        for (int i = 0;i < cancelStars.size(); i ++) {
+            FocusStars cancelStarsRequest = new FocusStars();
+            cancelStarsRequest.setStarUuid(cancelStars.get(i).getUuid());
+            cancelStarsRequest.setStarName(cancelStars.get(i).getName());
+            cancelStarsRequest.setStarPhoto(cancelStars.get(i).getPhoto());
+            cancelStarsRequestList.add(cancelStarsRequest);
+        }
+
+        if (NetUtil.checkNetwork(this)) {
+            setProgressBar();
+            progressBar.show();
+
+            HttpRequest.postCancelStars(0, cancelStarsRequestList, new OnHttpResponseListener() {
+                @Override
+                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+                    if(!StringUtil.isEmpty(resultJson)){
+                        EntityBase entityBase =  zuo.biao.library.util.JSON.parseObject(resultJson,EntityBase.class);
+                        if(entityBase.isSuccess()){
+                            //成功
+                            showShortToast(R.string.cancelFocusSuccess);
 
                             progressBarDismiss();
 

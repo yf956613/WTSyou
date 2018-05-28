@@ -1,11 +1,14 @@
 package com.qingye.wtsyou.activity.home;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,6 +23,7 @@ import com.qingye.wtsyou.adapter.SlidingPagerAdapter;
 import com.qingye.wtsyou.entity.TabEntity;
 import com.qingye.wtsyou.fragment.home.HomeChartsPastFansFragment;
 import com.qingye.wtsyou.fragment.home.HomeChartsPastStarsFragment;
+import zuo.biao.library.widget.CustomDialog;
 
 import java.util.ArrayList;
 
@@ -41,7 +45,10 @@ public class PastChartsActivity extends BaseActivity implements View.OnClickList
             R.mipmap.conversation, R.mipmap.personal};
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private CommonTabLayout mTabLayout;
+    private SlidingPagerAdapter mViewPagerAdapter;
     private ViewPager mViewPager;
+
+    private CustomDialog progressBar;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -65,18 +72,11 @@ public class PastChartsActivity extends BaseActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_charts,this);
 
-        HomeChartsPastStarsFragment homeChartsPastStarsFragment = new HomeChartsPastStarsFragment();
-        HomeChartsPastFansFragment homeChartsPastFansFragment = new HomeChartsPastFansFragment();
-
-        mFragments.add(homeChartsPastStarsFragment);
-        mFragments.add(homeChartsPastFansFragment);
-
-        for (int i = 0; i < mTitles.length; i++) {
-            mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
-        }
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
+        setView();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
@@ -94,14 +94,75 @@ public class PastChartsActivity extends BaseActivity implements View.OnClickList
         mTabLayout = findViewById(R.id.tab);
         mTabLayout.setUnderlineColor(Color.parseColor("#00dddddd"));
         mViewPager = findViewById(R.id.viewPager);
-        mViewPager.setAdapter(new SlidingPagerAdapter(getSupportFragmentManager(),mFragments,mTitles,context));
-        mViewPager.setOffscreenPageLimit(2);//设置缓存界面个数
-        tabLayout();
+    }
+
+    public void onResume() {
+
+        super.onResume();
     }
 
     @Override
-    public void initData() {
+    public void onDestroy() {
+        super.onDestroy();
 
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
+        }
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
+    }
+
+    public void setView() {
+        mTabEntities.clear();
+
+        //移除之前的Fragment
+        final FragmentManager fm = getSupportFragmentManager();
+        if (mFragments.size() > 0) {
+            FragmentTransaction ft = fm.beginTransaction();
+            for (Fragment f : this.mFragments) {
+                ft.remove(f);
+            }
+            ft.commit();
+            ft = null;
+            fm.executePendingTransactions();
+        }
+
+        mFragments.clear();
+
+        HomeChartsPastStarsFragment homeChartsPastStarsFragment = new HomeChartsPastStarsFragment();
+        HomeChartsPastFansFragment homeChartsPastFansFragment = new HomeChartsPastFansFragment();
+
+        mFragments.add(homeChartsPastStarsFragment);
+        mFragments.add(homeChartsPastFansFragment);
+
+        for (int i = 0; i < mTitles.length; i++) {
+            mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
+        }
+
+        if(mViewPagerAdapter != null){
+            mViewPagerAdapter = null;
+        }
+
+        mViewPagerAdapter = new SlidingPagerAdapter(fm,mFragments,mTitles,context);
+        mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.setOffscreenPageLimit(2);//设置缓存界面个数
+        tabLayout();
     }
 
     private void tabLayout() {
@@ -136,6 +197,11 @@ public class PastChartsActivity extends BaseActivity implements View.OnClickList
         });
 
         mViewPager.setCurrentItem(0);
+    }
+
+    @Override
+    public void initData() {
+
     }
 
     @Override

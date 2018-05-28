@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.search;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.Fans;
+import com.qingye.wtsyou.model.Fans;
 import com.qingye.wtsyou.view.search.SearchFansView;
 
 import zuo.biao.library.base.BaseAdapter;
@@ -23,8 +23,4 @@ public class SearchFansAdapter extends BaseAdapter<Fans,SearchFansView> {
         return new SearchFansView(context, parent);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

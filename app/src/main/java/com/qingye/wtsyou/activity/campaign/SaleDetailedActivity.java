@@ -25,13 +25,13 @@ import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.fragment.campaign.DetailedConversationFragment;
-import com.qingye.wtsyou.modle.EntitySaleDetailed;
-import com.qingye.wtsyou.modle.PriceList;
+import com.qingye.wtsyou.model.EntitySaleDetailed;
+import com.qingye.wtsyou.model.PriceList;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.DateUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.ObservableScrollView;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ import zuo.biao.library.util.StringUtil;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_1;
-import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_3;
+import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_2;
 
 public class SaleDetailedActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -64,6 +64,7 @@ public class SaleDetailedActivity extends BaseActivity implements View.OnClickLi
     private TextView tvMax;
 
     private Button btnBuy,btnBuyEnd;
+    private LinearLayout llMore;
 
     private LinearLayout llHead;
     private ObservableScrollView scrollView;
@@ -145,6 +146,7 @@ public class SaleDetailedActivity extends BaseActivity implements View.OnClickLi
 
         btnBuy = findViewById(R.id.btn_buy);
         btnBuyEnd = findViewById(R.id.btn_buy_end);
+        llMore = findViewById(R.id.ll_detailed_more);
 
         DetailedConversationFragment campaignDetailedConversationFragment = new DetailedConversationFragment();
         //注意这里是调用getSupportFragmentManager()方法
@@ -230,7 +232,7 @@ public class SaleDetailedActivity extends BaseActivity implements View.OnClickLi
         String address = entitySaleDetailed.getContent().getAddress().getAddress();
         tvAddress.setText(entitySaleDetailed.getContent().getStadiumsName());*/
         //时间
-        tvTime.setText(DateUtil.resverDate(entitySaleDetailed.getContent().getStartTimeStr(),DATE_PATTERN_3,DATE_PATTERN_1));
+        tvTime.setText(DateUtil.resverDate(entitySaleDetailed.getContent().getStartTimeStr(),DATE_PATTERN_2,DATE_PATTERN_1));
         //项目简介
         tvDescription.setText(entitySaleDetailed.getContent().getDescription());
 
@@ -332,6 +334,7 @@ public class SaleDetailedActivity extends BaseActivity implements View.OnClickLi
     public void initEvent() {
         ivBack.setOnClickListener(this);
         btnBuy.setOnClickListener(this);
+        llMore.setOnClickListener(this);
     }
 
     @Override
@@ -345,6 +348,9 @@ public class SaleDetailedActivity extends BaseActivity implements View.OnClickLi
             case R.id.btn_buy:
                 toActivity(SaleOrderActivity.createIntent(context, entitySaleDetailed));
                 break;
+            case R.id.ll_detailed_more:
+                toActivity(DetailedActivity.createIntent(context, "项目详情",
+                        entitySaleDetailed.getContent().getDetail()));
             default:
                 break;
         }

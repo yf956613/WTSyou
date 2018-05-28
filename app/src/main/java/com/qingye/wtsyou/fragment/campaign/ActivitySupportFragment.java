@@ -13,14 +13,13 @@ import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.campaign.SupportDetailedActivity;
 import com.qingye.wtsyou.adapter.campaign.ActivityNewSupportAdapter;
-import com.qingye.wtsyou.modle.EntitySupportDetailed;
-import com.qingye.wtsyou.modle.Hots;
-import com.qingye.wtsyou.modle.Supports;
+import com.qingye.wtsyou.model.EntitySupportDetailed;
+import com.qingye.wtsyou.model.Supports;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.campaign.ActivityNewSupportView;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;

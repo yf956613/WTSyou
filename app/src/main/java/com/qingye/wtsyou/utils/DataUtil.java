@@ -154,4 +154,30 @@ public class DataUtil {
 			return df.format(size / (1024.0 * 1024.0)) + "MB";
 		return df.format(size / (1024.0 * 1024.0 * 1024.0)) + "TB";
 	}
+
+	/**
+	 * @七牛云图片路径更改
+	 * @param url
+	 * @return
+	 */
+	public static String urlAdded(String url) {
+		String s = url;
+		int http = s.indexOf("http://");
+		int https = s.indexOf("https://");
+		if (http < 0 && https < 0) {
+			String original = null;
+			String replacement = null;
+			if (s.indexOf("http:/") >= 0) {
+				original = "http:/";
+				replacement = "http://";
+			} else if (s.indexOf("https:/") >= 0) {
+				original = "https:/";
+				replacement = "https://";
+			}
+			if (original != null) {
+				s = s.replace(original, replacement);
+			}
+		}
+		return s;
+	}
 }

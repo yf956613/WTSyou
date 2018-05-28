@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.search;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.SearchContent;
+import com.qingye.wtsyou.model.SearchContent;
 import com.qingye.wtsyou.view.search.SearchHotConversationView;
 
 import zuo.biao.library.base.BaseAdapter;

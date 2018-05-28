@@ -1,10 +1,9 @@
 package com.qingye.wtsyou.adapter.my;
 
 import android.app.Activity;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.DeliveryAddress;
+import com.qingye.wtsyou.model.DeliveryAddress;
 import com.qingye.wtsyou.view.my.DeliveryAddressView;
 
 import zuo.biao.library.base.BaseAdapter;

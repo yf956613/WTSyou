@@ -3,7 +3,6 @@ package com.qingye.wtsyou.activity.search;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -17,7 +16,7 @@ import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.search.SearchCityAdapter;
-import com.qingye.wtsyou.modle.City;
+import com.qingye.wtsyou.model.City;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.widget.QuickIndexBar;
 

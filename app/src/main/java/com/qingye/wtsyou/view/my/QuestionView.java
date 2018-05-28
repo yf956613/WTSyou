@@ -8,8 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.modle.Question;
-import com.qingye.wtsyou.modle.Ticket;
+import com.qingye.wtsyou.model.Question;
 
 import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;

@@ -2,9 +2,6 @@ package com.qingye.wtsyou.fragment.campaign;
 
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,16 +16,15 @@ import com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity;
 import com.qingye.wtsyou.activity.campaign.SaleDetailedActivity;
 import com.qingye.wtsyou.activity.campaign.VoteDetailedActivity;
 import com.qingye.wtsyou.adapter.campaign.ActivityHotShowAdapter;
-import com.qingye.wtsyou.modle.EntityCampaignHome;
-import com.qingye.wtsyou.modle.EntityCrowdDetailed;
-import com.qingye.wtsyou.modle.EntitySaleDetailed;
-import com.qingye.wtsyou.modle.EntityVoteDetailed;
-import com.qingye.wtsyou.modle.Hots;
+import com.qingye.wtsyou.model.EntityCrowdDetailed;
+import com.qingye.wtsyou.model.EntitySaleDetailed;
+import com.qingye.wtsyou.model.EntityVoteDetailed;
+import com.qingye.wtsyou.model.Hots;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.campaign.ActivityHotShowView;
-import com.qingye.wtsyou.widget.CustomDialog;
+import zuo.biao.library.widget.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -15,8 +15,10 @@
     <string name="getSuccess">数据刷新</string>
     <string name="noReturn">连接服务器超时，请稍候</string>
     <string name="focusSuccess">关注成功</string>
+    <string name="cancelFocusSuccess">取消关注成功</string>
     <string name="createVoteSuccess">发起投票成功，请等待审核</string>
     <string name="voteSuccess">参与投票成功，请等待结果</string>
+    <string name="supportSuccess">参与应援成功，请等待结果</string>
     <string name="getLocationFailed">获取位置信息失败</string>
     <string name="uploadFailed">图片上传失败</string>
     <string name="noPicture">请选择图片</string>
@@ -45,6 +47,7 @@
     <string name="feedbackSuccess">感谢您的反馈，我们会再接再厉的！</string>
     <string name="leastOne">最少选择一个明星！</string>
     <string name="mostThree">最多选择三个明星！</string>
+    <string name="loading">正在加载…</string>
 
     <string name="cancel">取消</string>
     <string name="title">请选择时间</string>

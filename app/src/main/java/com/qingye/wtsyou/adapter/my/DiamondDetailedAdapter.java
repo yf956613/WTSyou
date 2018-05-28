@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.my;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.modle.DiamondDetailed;
+import com.qingye.wtsyou.model.DiamondDetailed;
 import com.qingye.wtsyou.view.my.DiamondDetailedView;
 
 import zuo.biao.library.base.BaseAdapter;
