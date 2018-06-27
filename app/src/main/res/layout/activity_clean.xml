@@ -27,22 +27,46 @@
         android:background="@color/white"
         android:layout_marginTop="@dimen/margin_4">
 
-        <com.qingye.wtsyou.widget.CircleProgress
-            android:id="@+id/join_progressbar"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:layout_marginTop="@dimen/margin_50"
+        <RelativeLayout
+            android:id="@+id/rl1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            app:progress_color1="@color/orange_2"
-            app:progress_color2="@color/orange_3"
-            app:progress_color3="@color/orange_4"
-            app:circle_width="5dp"
-            app:circle_color="@color/gray_background"
-            app:current_progress_text_size="@dimen/text_size_18"
-            app:progress_width="5.5dp"/>
+            android:layout_marginTop="@dimen/margin_50">
+
+            <com.qingye.wtsyou.widget.CircleProgress
+                android:id="@+id/join_progressbar"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_centerInParent="true"
+                app:progress_color1="@color/orange_2"
+                app:progress_color2="@color/orange_3"
+                app:progress_color3="@color/orange_4"
+                app:circle_width="5dp"
+                app:circle_color="@color/gray_background"
+                app:current_progress_text_size="@dimen/text_size_18"
+                app:progress_width="5.5dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerInParent="true"
+                android:background="@color/white">
+
+                <TextView
+                    android:id="@+id/tvProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_18"
+                    android:textColor="@color/black_text1"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
         <Button
-            android:layout_below="@+id/join_progressbar"
+            android:layout_below="@+id/rl1"
             android:id="@+id/btn_clean"
             android:layout_width="match_parent"
             android:layout_height="35dp"

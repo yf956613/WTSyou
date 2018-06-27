@@ -39,7 +39,7 @@ public class LoopShowContentAdapter extends PagerAdapter {
         ViewHolder holder = (ViewHolder) view.getTag();
         if (holder == null) {
             holder = new ViewHolder();
-            holder.ivPic = view.findViewById(R.id.iv_pic);
+            holder.ivPic = (ImageView) view.findViewById(R.id.iv_pic);
             view.setTag(holder);
         }
         if (position < contentList.size()) {

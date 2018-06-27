@@ -552,7 +552,7 @@ public class StringUtil {
 		String single;
 		for (int i = 0; i < s.length(); i++) {
 			single = s.substring(i, i + 1);
-			if (isNumer(single)) {
+			if (isNumer(single) || single.equals(".")) {
 				numberString += single;
 			}
 		}
@@ -733,5 +733,32 @@ public class StringUtil {
 
 
 	//校正（自动补全等）字符串>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+	public static int stringToInt(String string){
+
+		String str = string.substring(0, string.indexOf(".")) + string.substring(string.indexOf(".") + 1);
+
+		int intgeo = Integer.parseInt(str);
+
+		return intgeo;
+	}
+
+	/**
+	 * 提取字符串中为字母的字符
+	 */
+	public static String returnResultMultiple(String str) {
+		String string = "";
+		if (str.equals("")) {
+			return "";
+		}
+		for (int i = 0; i < str.length(); i++) {
+			char ch = str.charAt(i);
+			if (Character.isLetter(ch)) {
+				string = string + ch;
+			}
+		}
+		return string;
+	}
 
 }

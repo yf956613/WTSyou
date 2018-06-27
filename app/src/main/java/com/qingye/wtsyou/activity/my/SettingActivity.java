@@ -18,33 +18,60 @@ import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
-import zuo.biao.library.model.EntityBase;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpManager;
+import com.qingye.wtsyou.manager.HttpModel;
+import com.qingye.wtsyou.model.EntityPersonalMessage;
+import com.qingye.wtsyou.utils.CacheUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-import zuo.biao.library.widget.CustomDialog;
+import com.qingye.wtsyou.utils.URLConstant;
+import com.qingye.wtsyou.widget.SwitchView;
 
 import zuo.biao.library.base.BaseActivity;
+import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
+
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 public class SettingActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
     private ImageView ivLeft;
     private TextView tvHead;
     private RelativeLayout rlPhone;
+    private TextView tvPhone;
     private RelativeLayout rlEmail;
+    private TextView tvEmail;
     private RelativeLayout rlIdentify;
+    private TextView tvReal;
+    private RelativeLayout rlGesture;
     private RelativeLayout rlClean;
+    private TextView tvCache;
     private RelativeLayout rlFeedBack;
     private RelativeLayout rlContact;
     private RelativeLayout rlAbout;
     private RelativeLayout rlQuit;
 
+    private SwitchView switchView;
+    private boolean isGesture = false;
+
     private String mobile;
+    private String cache = "0";
+
+    private String phone;
+    private String email;
+    private String real;
 
     private CustomDialog progressBar;
+
+    private EntityPersonalMessage entityPersonalMessage;
+
+    private HttpModel<EntityPersonalMessage> mEntityPersonalMessageHttpModel;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -71,28 +98,47 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
+        //获取个人信息
+        mEntityPersonalMessageHttpModel = new HttpModel<>(EntityPersonalMessage.class);
+        getPersonalMessage();
+
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
-        initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
     }
 
     @Override
     public void initView() {
-        ivLeft = findViewById(R.id.iv_left);
+        ivLeft = findView(R.id.iv_left);
         ivLeft.setImageResource(R.mipmap.back_a);
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("设置");
 
-        rlPhone = findViewById(R.id.rlPhone);
-        rlEmail = findViewById(R.id.rlEmail);
-        rlIdentify = findViewById(R.id.rlIdentify);
-        rlClean = findViewById(R.id.rlClean);
-        rlFeedBack = findViewById(R.id.rlFeedBack);
-        rlContact = findViewById(R.id.rlContact);
-        rlAbout = findViewById(R.id.rlAbout);
-        rlQuit = findViewById(R.id.rlQuit);
+        rlPhone = findView(R.id.rlPhone);
+        tvPhone = findView(R.id.tv_phone);
+        rlEmail = findView(R.id.rlEmail);
+        tvEmail = findView(R.id.tv_email);
+        rlIdentify = findView(R.id.rlIdentify);
+        tvReal = findView(R.id.tv_real);
+        rlGesture = findView(R.id.rlGesture);
+        rlClean = findView(R.id.rlClean);
+        tvCache = findView(R.id.tv_cache);
+        rlFeedBack = findView(R.id.rlFeedBack);
+        rlContact = findView(R.id.rlContact);
+        rlAbout = findView(R.id.rlAbout);
+        rlQuit = findView(R.id.rlQuit);
+
+        switchView = findView(R.id.switch_gesture);
+        switchView.setColor(0xFFFF7554, 0xFFFF7554);
+        isGesture = HttpManager.getInstance().getGesture();
+        switchView.setOpened(isGesture);
+        switchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HttpManager.getInstance().saveGesture(switchView.isOpened());
+            }
+        });
     }
 
     public void onResume() {
@@ -130,7 +176,33 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void initData() {
+        try {
+            cache = CacheUtil.getTotalCacheSize(context);
+            tvCache.setText(cache);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        phone = entityPersonalMessage.getContent().getMobile();
+        if (phone == null) {
+            tvPhone.setText(R.string.noBind);
+        } else {
+            tvPhone.setText(phone);
+        }
+
+        email = entityPersonalMessage.getContent().getEmail();
+        if (email == null) {
+            tvEmail.setText(R.string.noBind);
+        } else {
+            tvEmail.setText(R.string.bind);
+        }
+
+        real = entityPersonalMessage.getContent().getRealInfo();
+        if (real == null) {
+            tvReal.setText(R.string.noReal);
+        } else {
+            tvReal.setText(R.string.real);
+        }
     }
 
     @Override
@@ -139,6 +211,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         rlPhone.setOnClickListener(this);
         rlEmail.setOnClickListener(this);
         rlIdentify.setOnClickListener(this);
+        rlGesture.setOnClickListener(this);
         rlClean.setOnClickListener(this);
         rlFeedBack.setOnClickListener(this);
         rlContact.setOnClickListener(this);
@@ -153,16 +226,30 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 finish();
                 break;
             case R.id.rlPhone:
-                toActivity(ChangePhoneActivity.createIntent(context));
+                if (phone == null) {
+                    toActivity(BindingPhoneActivity.createIntent(context));
+                } else {
+                    toActivity(ChangePhoneActivity.createIntent(context));
+                }
                 break;
             case R.id.rlEmail:
-                toActivity(BindingEmailActivity.createIntent(context));
+                if (email == null) {
+                    toActivity(BindingEmailActivity.createIntent(context));
+                } else {
+                    toActivity(ChangeEmailActivity.createIntent(context));
+                }
                 break;
             case R.id.rlIdentify:
                 toActivity(IdentifyActivity.createIntent(context));
                 break;
+            case R.id.rlGesture:
+                Intent intent = new Intent();
+                intent.setClass(SettingActivity.this, GestureActivity.class);
+                SettingActivity.this.startActivity(intent);
+                //toActivity(GestureActivity.createIntent(context));
+                break;
             case R.id.rlClean:
-                toActivity(CleanActivity.createIntent(context));
+                toActivity(CleanActivity.createIntent(context, cache));
                 break;
             case R.id.rlFeedBack:
                 toActivity(QuestionActivity.createIntent(context));
@@ -229,13 +316,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                             toActivity(MainActivity.createIntent(context));
 
                             progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entityBase.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityBase.getMessage());
-                            }
+                        }else{
 
                             progressBarDismiss();
                         }
@@ -259,11 +340,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
     @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
-    }
-
-    @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch(keyCode){
             case KeyEvent.KEYCODE_BACK:
@@ -272,5 +348,33 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         }
 
         return super.onKeyUp(keyCode, event);
+    }
+
+    public void getPersonalMessage() {
+        setProgressBar();
+        progressBar.show();
+
+        mEntityPersonalMessageHttpModel.get(URL_BASE + URLConstant.GETPERSONALMESSAGE,1,this);
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                entityPersonalMessage = mEntityPersonalMessageHttpModel.getData();
+                initData();
+                break;
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
     }
 }

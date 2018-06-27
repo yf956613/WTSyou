@@ -29,9 +29,9 @@ public class HeartDetailedView extends BaseView<HeartDetailed> implements View.O
     @Override
     public View createView() {
 
-        tvType = findViewById(R.id.tv_type);
-        tvTime = findViewById(R.id.tv_time);
-        tvValue = findViewById(R.id.tv_value);
+        tvType = findView(R.id.tv_type);
+        tvTime = findView(R.id.tv_time);
+        tvValue = findView(R.id.tv_value);
 
         return super.createView();
     }
@@ -40,13 +40,8 @@ public class HeartDetailedView extends BaseView<HeartDetailed> implements View.O
     public void bindView(HeartDetailed data_){
         super.bindView(data_ != null ? data_ : new HeartDetailed());
 
-        //签到
-        if (data.getBizType().equals("sign")) {
-            tvType.setText("签到");
-        }
-        //打榜
-        if (data.getBizType().equals("hit")) {
-            tvType.setText("打榜");
+        if (data.getRemark() != null) {
+            tvType.setText(data.getRemark());
         }
         if (data.getLoveValue() < 0) {
             //数量

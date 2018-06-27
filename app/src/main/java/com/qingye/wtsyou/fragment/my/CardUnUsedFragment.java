@@ -5,14 +5,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.my.CardAdapter;
 import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpPageModel;
 import com.qingye.wtsyou.model.Card;
 import com.qingye.wtsyou.model.EntityPageData;
-import com.qingye.wtsyou.model.Fans;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.URLConstant;
@@ -26,17 +27,19 @@ import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
 import zuo.biao.library.interfaces.IErrorCodeTool;
-import zuo.biao.library.model.EntityBase;
-import zuo.biao.library.util.HttpModel;
+import zuo.biao.library.interfaces.OnHttpPageCallBack;
 import zuo.biao.library.widget.CustomDialog;
 
 import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
-public class CardUnUsedFragment extends BaseHttpRecyclerFragment<Card,CardView,CardAdapter> implements CacheCallBack<Card> {
+public class CardUnUsedFragment extends BaseHttpRecyclerFragment<Card,CardView,CardAdapter>
+        implements CacheCallBack<Card>, OnHttpPageCallBack<EntityPageData,Card> {
+
+    private LinearLayout noMessage;
 
     private CustomDialog progressBar;
 
-    private HttpModel<EntityPageData> mEntityPageDataHttpModel;
+    private HttpPageModel<EntityPageData,Card> mEntityPageDataHttpModel;
 
     private List<Card> cardsList = new ArrayList<>();
 
@@ -63,7 +66,7 @@ public class CardUnUsedFragment extends BaseHttpRecyclerFragment<Card,CardView,C
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
         //卡券列表
-        mEntityPageDataHttpModel = new HttpModel<>(EntityPageData.class);
+        mEntityPageDataHttpModel = new HttpPageModel<>(EntityPageData.class);
         cardsQuery();
 
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
@@ -76,11 +79,11 @@ public class CardUnUsedFragment extends BaseHttpRecyclerFragment<Card,CardView,C
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        //srlBaseHttpRecycler.autoRefresh();
-        srlBaseHttpRecycler.setEnableRefresh(true);//不启用下拉刷新
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(true);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(true);//不启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(true);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部*/
 
         return view;
     }
@@ -88,6 +91,8 @@ public class CardUnUsedFragment extends BaseHttpRecyclerFragment<Card,CardView,C
     @Override
     public void initView() {
         super.initView();
+
+        noMessage = findView(R.id.noMessage);
     }
 
     public void onResume() {
@@ -186,26 +191,12 @@ public class CardUnUsedFragment extends BaseHttpRecyclerFragment<Card,CardView,C
 
     }
 
-    @Override
-    public void onRefresh(RefreshLayout refreshlayout) {
-        super.onRefresh(refreshlayout);
-        cardsQuery();
-    }
-
-    @Override
-    public void onLoadmore(RefreshLayout refreshlayout) {
-        super.onLoadmore(refreshlayout);
-
-    }
-
     public void cardsQuery() {
-        setProgressBar();
-        progressBar.show();
+        /*setProgressBar();
+        progressBar.show();*/
 
-        String[] states = {"used","overdue"};
-        String request = HttpRequest.postCardList(states);
         //卡券列表
-        mEntityPageDataHttpModel.post(request, URL_BASE + URLConstant.CARDQUERY,1,this);
+        mEntityPageDataHttpModel.refreshPost( URL_BASE + URLConstant.CARDQUERY,this);
     }
 
     @Override
@@ -214,22 +205,112 @@ public class CardUnUsedFragment extends BaseHttpRecyclerFragment<Card,CardView,C
     }
 
     @Override
-    public void Success(String url, int RequestCode, EntityBase entityBase) {
-        super.Success(url, RequestCode, entityBase);
-        switch (RequestCode) {
-            case 1:
-                EntityPageData pageData = mEntityPageDataHttpModel.getData();
-                cardsList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(pageData.getContent().getData())
-                        ,new TypeToken<List<Card>>(){}.getType());
-                setList(cardsList);
-                srlBaseHttpRecycler.finishRefresh();
-                srlBaseHttpRecycler.setLoadmoreFinished(false);
-                break;
+    public List<Card> getList(EntityPageData data) {
+        return GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(data.getContent().getData())
+                ,new TypeToken<List<Card>>(){}.getType());
+    }
+
+    @Override
+    public String getRequestJsonStr(int page, int pageSize) {
+        String[] states = {"unuse"};
+        String request = HttpRequest.postCardList(states, page, pageSize);
+
+        return request;
+    }
+
+    @Override
+    public void emptyPagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishRefresh();
+
+        if (cardsList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void refreshSuccessPagingList(List<Card> list) {
+        cardsList.clear();
+
+        cardsList.addAll(list);
+        srlBaseHttpRecycler.finishRefresh();
+        srlBaseHttpRecycler.setLoadmoreFinished(false);
+
+        setList(cardsList);
+
+        if (cardsList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void noMorePagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+
+        if (cardsList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void loadMoreSuccessPagingList(List<Card> list) {
+        cardsList.addAll(list);
+        srlBaseHttpRecycler.finishLoadmore();
+
+        setList(cardsList);
+
+        if (cardsList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void refreshErrorPagingList() {
+        showShortToast(R.string.noReturn);
+
+        if (cardsList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void loadMoreErrorPagingList() {
+        showShortToast(R.string.noReturn);
+
+        if (cardsList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void ProgressDismiss(String url, int RequestCode) {
         progressBarDismiss();
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        super.onRefresh(refreshlayout);
+        //卡券列表
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.CARDQUERY, this);
+    }
+
+    @Override
+    public void onLoadmore(RefreshLayout refreshlayout) {
+        super.onLoadmore(refreshlayout);
+        //卡券列表
+        mEntityPageDataHttpModel.loadMorePost(URL_BASE + URLConstant.CARDQUERY, this);
     }
 }

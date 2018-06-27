@@ -84,16 +84,16 @@ public class PastChartsActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void initView() {
-        ivBack = findViewById(R.id.iv_left);
+        ivBack = findView(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
-        ivRules = findViewById(R.id.iv_right);
+        ivRules = findView(R.id.iv_right);
         ivRules.setImageResource(R.mipmap.rule);
         tvHead = findView(R.id.tv_head_title);
         tvHead.setText("往期排行榜");
 
-        mTabLayout = findViewById(R.id.tab);
+        mTabLayout = findView(R.id.tab);
         mTabLayout.setUnderlineColor(Color.parseColor("#00dddddd"));
-        mViewPager = findViewById(R.id.viewPager);
+        mViewPager = findView(R.id.viewPager);
     }
 
     public void onResume() {
@@ -217,7 +217,7 @@ public class PastChartsActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.iv_right:
-                toActivity(PastChartsRuleActivity.createIntent(context));
+                toActivity(RuleActivity.createIntent(context, "ranking", "排行榜规则"));
                 break;
             default:
                 break;
@@ -228,11 +228,6 @@ public class PastChartsActivity extends BaseActivity implements View.OnClickList
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override

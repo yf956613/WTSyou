@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="AppThemeActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
 
     <!-- 以后新增的任何系统组件(View)名都用简写（取单词首字母，SurfaceView简写为sfv）；其它都不简写 -->
 
@@ -19,12 +26,6 @@
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
 
     <style name="wrap_wrap">
         <item name="android:layout_width">wrap_content</item>
@@ -640,7 +641,7 @@
     <style name="topbar_bg">
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">44dp</item>
     </style>
 
     <style name="topbar_top_simple">
@@ -657,8 +658,8 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:layout_centerHorizontal">true</item>
     </style>
 
@@ -672,17 +673,16 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">@dimen/topbar_height</item>
-        <item name="android:minWidth">@dimen/topbar_btn_min_width</item>
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:padding">4dp</item>
         <item name="android:background">@drawable/to_alpha</item>
     </style>
 
     <style name="topbar_left_btn" parent="topbar_btn">
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:gravity">center</item>
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingRight">10dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
         <item name="android:text"></item>
         <item name="android:textColor">@color/white</item>
         <item name="android:onClick">onReturnClick</item>
@@ -708,7 +708,7 @@
     </style>
 
     <style name="topbar_return_img" parent="topbar_left_btn">
-        <item name="android:src">@drawable/back2</item>
+        <item name="android:src">@drawable/back_a</item>
     </style>
 
     <style name="topbar_right_img" parent="topbar_right_btn">
@@ -825,7 +825,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/btn_bottom_padding</item>
         <item name="android:background">@drawable/to_alpha</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:gravity">center</item>
     </style>
@@ -1148,5 +1148,15 @@
     </style>
 
     <!-- window >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+    <!-- mypopwindow <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< -->
+    <style name="mypopwindow_anim_style">
+        <item name="android:windowEnterAnimation">@anim/bottom_push_in</item>
+        <!-- 指定显示的动画xml -->
+
+        <item name="android:windowExitAnimation">@anim/bottom_push_out</item>
+        <!-- 指定消失的动画xml -->
+    </style>
+    <!-- mypopwindow <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< -->
 
 </resources>

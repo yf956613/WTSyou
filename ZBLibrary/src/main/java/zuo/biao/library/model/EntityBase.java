@@ -1,16 +1,16 @@
-package com.qingye.wtsyou.basemodel;
+package zuo.biao.library.model;
 
-import zuo.biao.library.base.BaseModel;
+import java.io.Serializable;
 
 /**
  * Created by pm89 on 2018/4/27.
  */
 
-public class EntityBase extends BaseModel {
+public class EntityBase implements Serializable {
 
     private boolean success;
     private String code;
-    private String message;
+    private String message = "";
 
     public boolean isSuccess() {
         return success;
@@ -36,8 +36,4 @@ public class EntityBase extends BaseModel {
         this.message = message;
     }
 
-    @Override
-    protected boolean isCorrect() {
-        return true;
-    }
 }

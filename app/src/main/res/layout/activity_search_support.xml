@@ -25,11 +25,11 @@
     <View
         style="@style/divider_horizontal_1px"/>
 
-    <ScrollView
+    <!--<ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
-        android:scrollbars="none">
+        android:scrollbars="none">-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,11 +39,13 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/llSupport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_4"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -51,6 +53,7 @@
                     android:layout_marginLeft="@dimen/margin_5"
                     android:layout_marginRight="@dimen/margin_6"
                     android:layout_marginTop="@dimen/margin_8"
+                    android:layout_marginBottom="@dimen/margin_8"
                     android:orientation="horizontal">
 
                     <TextView
@@ -64,14 +67,11 @@
 
                 </RelativeLayout>
 
-                <FrameLayout
-                    android:id="@+id/list_support"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                <include layout="@layout/base_http_recycler_fragment" />
 
             </LinearLayout>
         </LinearLayout>
 
-    </ScrollView>
+    <!--</ScrollView>-->
 
 </LinearLayout>

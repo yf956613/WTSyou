@@ -22,89 +22,99 @@
             layout="@layout/head"/>
     </LinearLayout>
 
-    <ScrollView
+    <com.qingye.wtsyou.widget.VpSwipeRefreshLayout
+        android:layout_below="@+id/head"
+        android:id="@+id/swipe_refresh_widget"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_4"
-        android:overScrollMode="never"
-        android:scrollbars="none">
+        android:layout_marginTop="@dimen/margin_4">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/scrollview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_4"
+            android:overScrollMode="never"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:orientation="vertical">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_5"
-                    android:layout_marginRight="@dimen/margin_6"
-                    android:layout_marginTop="@dimen/margin_8"
-                    android:orientation="horizontal">
+                    android:background="@color/white"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="我创建的聊天室"
-                        android:textColor="@color/black_text"
-                        android:textSize="@dimen/text_size_13"/>
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:layout_marginRight="@dimen/margin_6"
+                        android:layout_marginTop="@dimen/margin_8"
+                        android:orientation="horizontal">
 
-                </RelativeLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_alignParentLeft="true"
+                            android:text="我创建的聊天室"
+                            android:textColor="@color/black_text"
+                            android:textSize="@dimen/text_size_13"/>
 
-                <FrameLayout
-                    android:id="@+id/list_my"
+                    </RelativeLayout>
+
+                    <FrameLayout
+                        android:id="@+id/list_my"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_6"
+                        android:layout_marginRight="@dimen/margin_6"/>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_6"
-                    android:layout_marginRight="@dimen/margin_6"/>
+                    android:layout_marginTop="@dimen/margin_4"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:layout_marginRight="@dimen/margin_6"
+                        android:layout_marginTop="@dimen/margin_8"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_alignParentLeft="true"
+                            android:text="我管理的聊天室"
+                            android:textColor="@color/black_text"
+                            android:textSize="@dimen/text_size_13"/>
+
+                    </RelativeLayout>
+
+                    <FrameLayout
+                        android:id="@+id/list_manage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_4"
-                android:background="@color/white"
-                android:orientation="vertical">
+        </ScrollView>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_5"
-                    android:layout_marginRight="@dimen/margin_6"
-                    android:layout_marginTop="@dimen/margin_8"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="我管理的聊天室"
-                        android:textColor="@color/black_text"
-                        android:textSize="@dimen/text_size_13"/>
-
-                </RelativeLayout>
-
-                <FrameLayout
-                    android:id="@+id/list_manage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </ScrollView>
+    </com.qingye.wtsyou.widget.VpSwipeRefreshLayout>>
 
 </LinearLayout>

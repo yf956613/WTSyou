@@ -1,10 +1,12 @@
 package com.qingye.wtsyou.model;
 
+import java.io.Serializable;
+
 /**
  * Created by pm89 on 2018/3/6.
  */
 
-public class Card {
+public class Card implements Serializable {
 
     private String uuid;
     private String created;
@@ -17,8 +19,8 @@ public class Card {
     private String startTime;
     private String deadline;
     private String type;
-    private int discountAmount;
-    private int minAmount;
+    private double discountAmount;
+    private double minAmount;
     private String restriction;
     private String state;
     private int couponNumber;
@@ -124,19 +126,19 @@ public class Card {
         this.type = type;
     }
 
-    public int getDiscountAmount() {
+    public double getDiscountAmount() {
         return discountAmount;
     }
 
-    public void setDiscountAmount(int discountAmount) {
+    public void setDiscountAmount(double discountAmount) {
         this.discountAmount = discountAmount;
     }
 
-    public int getMinAmount() {
+    public double getMinAmount() {
         return minAmount;
     }
 
-    public void setMinAmount(int minAmount) {
+    public void setMinAmount(double minAmount) {
         this.minAmount = minAmount;
     }
 

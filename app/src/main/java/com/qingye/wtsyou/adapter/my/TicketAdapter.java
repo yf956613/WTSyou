@@ -23,8 +23,4 @@ public class TicketAdapter extends BaseAdapter<Ticket,TicketView> {
         return new TicketView(context, parent);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

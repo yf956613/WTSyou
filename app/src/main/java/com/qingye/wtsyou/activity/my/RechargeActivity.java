@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +12,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -23,12 +26,19 @@ import com.alipay.sdk.app.PayTask;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.adapter.my.RechargeAdapter;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
 import com.qingye.wtsyou.basemodel.IdName;
+import com.qingye.wtsyou.manager.HttpModel;
 import com.qingye.wtsyou.model.EntityPaymentConfig;
+import com.qingye.wtsyou.model.EntityRule;
 import com.qingye.wtsyou.model.Recharge;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.my.RechargeView;
+
+import zuo.biao.library.interfaces.IErrorCodeTool;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
@@ -44,6 +54,8 @@ import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
 
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
+
 public class RechargeActivity extends BaseHttpRecyclerActivity<Recharge,RechargeView,RechargeAdapter> implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
     private ImageView ivLeft;
@@ -56,6 +68,9 @@ public class RechargeActivity extends BaseHttpRecyclerActivity<Recharge,Recharge
     private RadioGroup radioGroup;
     private RadioButton rbtWei,rbtAli;
     private TextView tvSelect;
+    private WebView webView;
+
+    private HttpModel<EntityRule> mEntityRuleHttpModel;
 
     private CustomDialog progressBar;
 
@@ -80,6 +95,10 @@ public class RechargeActivity extends BaseHttpRecyclerActivity<Recharge,Recharge
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rechage,this);
+
+        //规则
+        mEntityRuleHttpModel = new HttpModel<>(EntityRule.class);
+        ruleQuery();
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
@@ -107,22 +126,23 @@ public class RechargeActivity extends BaseHttpRecyclerActivity<Recharge,Recharge
     @Override
     public void initView() {
         super.initView();
-        ivLeft = findViewById(R.id.iv_left);
+        ivLeft = findView(R.id.iv_left);
         ivLeft.setImageResource(R.mipmap.back_a);
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("钻石充值");
-        btnRecharge = findViewById(R.id.btn_recharge);
+        btnRecharge = findView(R.id.btn_recharge);
 
-        tvPayWay = findViewById(R.id.tv_way);
+        tvPayWay = findView(R.id.tv_way);
         popUpView = getLayoutInflater().inflate(R.layout.popupwindow_pay_way, null);
         payWayWin = new PopupWindow(popUpView, RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
         payWayWin.setOutsideTouchable(true);
-        radioGroup = popUpView.findViewById(R.id.radio_group);
-        rbtWei = popUpView.findViewById(R.id.rbtn_wei);
-        rbtAli = popUpView.findViewById(R.id.rbtn_ali);
-        tvSelect = popUpView.findViewById(R.id.tv_select);
+        radioGroup = (RadioGroup) popUpView.findViewById(R.id.radio_group);
+        rbtWei = (RadioButton) popUpView.findViewById(R.id.rbtn_wei);
+        rbtAli = (RadioButton) popUpView.findViewById(R.id.rbtn_ali);
+        tvSelect = (TextView) popUpView.findViewById(R.id.tv_select);
         radioGroup.setOnCheckedChangeListener(new WayGrouplistener());
+        webView = findView(R.id.webView);
     }
 
     @Override
@@ -170,7 +190,6 @@ public class RechargeActivity extends BaseHttpRecyclerActivity<Recharge,Recharge
         final List<Recharge> templist = new ArrayList<>();
         for(int i = 1;i < 7;i ++) {
             Recharge recharge = new Recharge();
-            recharge.setId(i);
             templist.add(recharge);
         }
         //list.addAll(templist);
@@ -348,11 +367,6 @@ public class RechargeActivity extends BaseHttpRecyclerActivity<Recharge,Recharge
     }
 
     @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
-    }
-
-    @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch(keyCode){
             case KeyEvent.KEYCODE_BACK:
@@ -361,5 +375,51 @@ public class RechargeActivity extends BaseHttpRecyclerActivity<Recharge,Recharge
         }
 
         return super.onKeyUp(keyCode, event);
+    }
+
+    public void ruleQuery() {
+        mEntityRuleHttpModel.get( URL_BASE + URLConstant.RULE + "cash",2,this);
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                //成功
+                showShortToast(R.string.createVoteSuccess);
+                finish();
+                break;
+            case 2:
+                WebSettings settings = webView.getSettings();
+                settings.setJavaScriptEnabled(true);
+                settings.setDomStorageEnabled(true);
+                settings.setUseWideViewPort(true);
+                settings.setLoadWithOverviewMode(true);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+                } else {
+                    settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+                }
+
+                settings.setDefaultFontSize(30);
+                settings.setDefaultFixedFontSize(30);
+
+                EntityRule entityRule = mEntityRuleHttpModel.getData();
+                webView.setBackgroundColor(0); // 设置背景色
+                webView.loadData(entityRule.getContent().getRuleDescription(), "text/html;charset=utf-8","utf-8");
+                break;
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
     }
 }

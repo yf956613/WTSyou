@@ -23,8 +23,4 @@ public class ActivityNewSupportAdapter extends BaseAdapter<Supports,ActivityNewS
         return new ActivityNewSupportView(context, parent);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

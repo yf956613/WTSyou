@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.home.StarsMainShowAdapter;
-import com.qingye.wtsyou.model.Campaign;
+import com.qingye.wtsyou.model.Activitys;
 import com.qingye.wtsyou.view.home.StarsMainShowView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
@@ -19,7 +19,7 @@ import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
 
-public class StarsMainShowFragment extends BaseHttpRecyclerFragment<Campaign,StarsMainShowView,StarsMainShowAdapter> implements CacheCallBack<Campaign> {
+public class StarsMainShowFragment extends BaseHttpRecyclerFragment<Activitys,StarsMainShowView,StarsMainShowAdapter> implements CacheCallBack<Activitys> {
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -71,11 +71,10 @@ public class StarsMainShowFragment extends BaseHttpRecyclerFragment<Campaign,Sta
     }
 
     @Override
-    public void setList(final List<Campaign> list) {
-        final List<Campaign> templist = new ArrayList<>();
+    public void setList(final List<Activitys> list) {
+        final List<Activitys> templist = new ArrayList<>();
         for(int i = 1;i < 11;i ++) {
-            Campaign campaign = new Campaign();
-            campaign.setId(i);
+            Activitys campaign = new Activitys();
             templist.add(campaign);
         }
         //list.addAll(templist);
@@ -107,12 +106,12 @@ public class StarsMainShowFragment extends BaseHttpRecyclerFragment<Campaign,Sta
     }
 
     @Override
-    public List<Campaign> parseArray(String json) {
+    public List<Activitys> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Campaign> getCacheClass() {
+    public Class<Activitys> getCacheClass() {
         return null;
     }
 
@@ -122,7 +121,7 @@ public class StarsMainShowFragment extends BaseHttpRecyclerFragment<Campaign,Sta
     }
 
     @Override
-    public String getCacheId(Campaign data) {
+    public String getCacheId(Activitys data) {
         return null;
     }
 

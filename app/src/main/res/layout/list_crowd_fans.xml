@@ -23,8 +23,7 @@
                 android:id="@+id/iv_img"
                 android:layout_width="73dp"
                 android:layout_height="73dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/head_a"/>
+                android:layout_gravity="center"/>
 
         </LinearLayout>
 
@@ -39,7 +38,7 @@
         android:gravity="center"
         android:maxLines="1"
         android:ellipsize="end"
-        android:text="鹿晗"
+        android:text=""
         android:textColor="@color/black_text1"
         android:textSize="@dimen/text_size_11"/>
 

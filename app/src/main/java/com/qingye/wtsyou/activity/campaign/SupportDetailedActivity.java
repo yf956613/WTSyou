@@ -4,9 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,22 +35,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
+import com.qingye.wtsyou.activity.home.FansMainActivity;
+import com.qingye.wtsyou.activity.home.RuleActivity;
 import com.qingye.wtsyou.basemodel.ErrorCodeTool;
 import com.qingye.wtsyou.basemodel.IdName;
 import com.qingye.wtsyou.basemodel.POI;
 import com.qingye.wtsyou.fragment.campaign.DetailedConversationFragment;
+import com.qingye.wtsyou.manager.HttpManager;
+import com.qingye.wtsyou.manager.HttpModel;
+import com.qingye.wtsyou.model.ChatingRoom;
 import com.qingye.wtsyou.model.EntityPaymentConfig;
+import com.qingye.wtsyou.model.EntityStars;
 import com.qingye.wtsyou.model.EntitySupportDetailed;
 import com.qingye.wtsyou.model.PriceList;
 import com.qingye.wtsyou.model.PriceListItem;
@@ -55,28 +65,36 @@ import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.DateUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-
-import pub.devrel.easypermissions.EasyPermissions;
-import zuo.biao.library.interfaces.IErrorCodeTool;
-import zuo.biao.library.model.EntityBase;
-import zuo.biao.library.util.HttpModel;
-import zuo.biao.library.widget.CustomDialog;
-
 import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.widget.AutoLineFeedLayout;
 import com.qingye.wtsyou.widget.ObservableScrollView;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
+import com.umeng.socialize.shareboard.ShareBoardConfig;
+import com.umeng.socialize.shareboard.SnsPlatform;
+import com.umeng.socialize.utils.ShareBoardlistener;
 
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import pub.devrel.easypermissions.EasyPermissions;
 import zuo.biao.library.base.BaseActivity;
+import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
 
 import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
@@ -103,8 +121,14 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
     private TextView tvCrowdNum;
     //目标人数
     private TextView tvCrowdGoalNum;
-    //发起人名字
+    //发起人
     private TextView tvCreatorName;
+    private ImageView ivImg;
+    private TextView tvFollow;
+    private TextView tvFans;
+    private TextView tvFocus;
+    private TextView tvCancelFocus;
+    private RelativeLayout rlCreator;
 
     //进行中
     private LinearLayout llIng;
@@ -130,6 +154,12 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
     private int imageHeight;
     private View line;
 
+    private RelativeLayout llConversation;
+    private LinearLayout llAssociationConversation;
+
+
+    private TextView tvAgreement;
+
     private SwipeRefreshLayout swipeRefresh;
     private CustomDialog progressBar;
 
@@ -138,10 +168,11 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
     private BigDecimal number = BigDecimal.ONE;
     private TextView tvTotal;
     private double total;
-    private BigDecimal price;
+    private double price;
 
     //价格
     private EntitySupportDetailed entitySupportDetailed;
+    private List<ChatingRoom> chatingRoomList = new ArrayList<>();
     private List<PriceListItem> priceListItem =  new ArrayList<>();
     private PriceList currentPriceList;
     private AutoLineFeedLayout layout;
@@ -151,10 +182,15 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
     private RadioGroup radioGroup;
     private RadioButton rbtWei,rbtAli;
 
+    private String uuid;
+    private HttpModel<EntitySupportDetailed> mDetailedHttpModel;
     private HttpModel<EntityBase> mEntityBaseHttpModel;
 
     //类型
     private String type;
+
+    private UMShareListener mShareListener;
+    private ShareAction mShareAction;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -162,10 +198,8 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
      * @param context
      * @return
      */
-    public static Intent createIntent(Context context, EntitySupportDetailed entitySupportDetailed) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(Constant.SUPPORTDETAILED, entitySupportDetailed);//放进数据流中
-        return new Intent(context, SupportDetailedActivity.class).putExtras(bundle);
+    public static Intent createIntent(Context context, String uuid) {
+        return new Intent(context, SupportDetailedActivity.class).putExtra(Constant.UUID,uuid);
     }
 
     //启动方法>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -193,12 +227,12 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
-        setProgressBar();
-        progressBar.show();
-
         intent = getIntent();
-        entitySupportDetailed = (EntitySupportDetailed) intent.getSerializableExtra(Constant.SUPPORTDETAILED);
+        uuid = intent.getStringExtra(Constant.UUID);
 
+        //获取详情
+        mDetailedHttpModel = new HttpModel<>(EntitySupportDetailed.class);
+        refresh();
         //参与应援
         mEntityBaseHttpModel = new HttpModel<>(EntityBase.class);
 
@@ -211,7 +245,6 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
         initView();
         //刷新
         initHrvsr();
-        initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
     }
@@ -219,6 +252,12 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
     public void getPriceListItem() {
         priceListItem.clear();
         List<PriceList> priceLists = entitySupportDetailed.getContent().getPriceList();
+        if (priceLists == null) {
+            return;
+        }
+        if (priceLists.size() == 0 ) {
+            return;
+        }
         for (PriceList priceList : priceLists) {
             PriceListItem priceItem = new PriceListItem();
             priceItem.setPriceList(priceList);
@@ -237,13 +276,14 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
 
     public void selectPrice() {
         View view;
-        final List<Button> buttonList = new ArrayList<>();
+        layout.removeAllViews();
+        final List<TextView> buttonList = new ArrayList<>();
         for (int i = 0; i < priceListItem.size(); i ++) {
             view = LayoutInflater.from(SupportDetailedActivity.this).inflate(R.layout.list_radiobutton, null);
-            final Button button = view.findViewById(R.id.btn);
+            final TextView button = (TextView) view.findViewById(R.id.btn);
             button.setTag(i);
-            BigDecimal allBig = priceListItem.get(i).getPriceList().getPrice();
-            double allDou = allBig.doubleValue();
+            double allBig = priceListItem.get(i).getPriceList().getPrice();
+            double allDou = allBig;
             button.setText("￥" + Double.toString(allDou));
             boolean isSelect = priceListItem.get(i).getSelector();
             if (isSelect) {
@@ -276,79 +316,82 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
     }
 
     public void getTotalValue(BigDecimal number) {
-        total = number.multiply(price).doubleValue();
+        total = number.multiply(new BigDecimal(price)).doubleValue();
         //tvTotal.setText(Double.toString(total));
     }
 
     @Override
     public void initView() {
-        swipeRefresh = findViewById(R.id.swipe_refresh_widget);
+        swipeRefresh = findView(R.id.swipe_refresh_widget);
 
-        ivBack = findViewById(R.id.iv_left);
+        ivBack = findView(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
-        ivShare = findViewById(R.id.iv_right);
+        ivShare = findView(R.id.iv_right);
         ivShare.setImageResource(R.mipmap.share_g);
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("应援详情");
 
         //图片
-        ivBackground = findViewById(R.id.iv_campaign_background_img);
+        ivBackground = findView(R.id.iv_campaign_background_img);
         //名称
-        tvName = findViewById(R.id.tv_campaign_name);
+        tvName = findView(R.id.tv_campaign_name);
         //集资
-        llRaise = findViewById(R.id.ll_raise);
+        llRaise = findView(R.id.ll_raise);
         //其他
-        llOther = findViewById(R.id.ll_other);
+        llOther = findView(R.id.ll_other);
         //项目详情
-        tvDescription = findViewById(R.id.tv_suport_content);
+        tvDescription = findView(R.id.tv_suport_content);
         //已筹集
-        tvCrowdPrice = findViewById(R.id.tv_crowded_value);
+        tvCrowdPrice = findView(R.id.tv_crowded_value);
         //目标金额
-        tvCrowdGoalPrice = findViewById(R.id.tv_target_price_value);
+        tvCrowdGoalPrice = findView(R.id.tv_target_price_value);
         //参与人数
-        tvCrowdNum = findViewById(R.id.tv_join_value);
+        tvCrowdNum = findView(R.id.tv_join_value);
         //目标人数
-        tvCrowdGoalNum = findViewById(R.id.tv_target_value);
+        tvCrowdGoalNum = findView(R.id.tv_target_value);
 
         //进行中
-        llIng = findViewById(R.id.ll_ing);
-        tvTimeDown = findViewById(R.id.tv_campaign_end_time);
+        llIng = findView(R.id.ll_ing);
+        tvTimeDown = findView(R.id.tv_campaign_end_time);
         //已结束
-        llEnd = findViewById(R.id.ll_end);
+        llEnd = findView(R.id.ll_end);
 
-        btnSupport = findViewById(R.id.btn_support);
-        btnSupportEnd = findViewById(R.id.btn_support_end);
-        llMore = findViewById(R.id.ll_detailed_more);
+        btnSupport = findView(R.id.btn_support);
+        btnSupportEnd = findView(R.id.btn_support_end);
+        llMore = findView(R.id.ll_detailed_more);
 
         //进度条
-        joinProgressBar = findViewById(R.id.join_progressbar);
+        joinProgressBar = findView(R.id.join_progressbar);
         //气泡
-        tvProgressValue = findViewById(R.id.text_value);
-        ivBubble = findViewById(R.id.iv_bubble);
-        tvProgress = findViewById(R.id.progress_value);
+        tvProgressValue = findView(R.id.text_value);
+        ivBubble = findView(R.id.iv_bubble);
+        tvProgress = findView(R.id.progress_value);
 
-        llHead = findViewById(R.id.ll_head);
-        backImageView = findViewById(R.id.iv_campaign_background_img);
-        scrollView = findViewById(R.id.scrollview);
-        line = findViewById(R.id.line);
+        llHead = findView(R.id.ll_head);
+        backImageView = findView(R.id.iv_campaign_background_img);
+        scrollView = findView(R.id.scrollview);
+        line = findView(R.id.line);
         initListeners();
 
-        DetailedConversationFragment campaignDetailedConversationFragment = new DetailedConversationFragment();
-        //注意这里是调用getSupportFragmentManager()方法
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        //把碎片添加到碎片中
-        transaction.replace(R.id.list_conversation,campaignDetailedConversationFragment);
-        transaction.commit();
-
         //发起人名字
-        tvCreatorName = findViewById(R.id.tv_creator_name);
+        tvCreatorName = findView(R.id.tv_creator_name);
+        //头像
+        ivImg = findView(R.id.iv_creator);
+        //关注
+        tvFollow = findView(R.id.tv_focus_num);
+        //粉丝
+        tvFans = findView(R.id.tv_fans_num);
+        //是否关注
+        tvFocus = findView(R.id.tv_focus);
+        tvCancelFocus = findView(R.id.tv_cancel_focus);
+        rlCreator = findView(R.id.rlCreator);
+
         //应援订单
-        supportOrder = findViewById(R.id.support_order);
+        supportOrder = findView(R.id.support_order);
         //隐藏订单
-        btnGone = findViewById(R.id.gone);
+        btnGone = findView(R.id.gone);
         //数量
-        edtNumber = findViewById(R.id.edt_number_count);
+        edtNumber = findView(R.id.edt_number_count);
         if (edtNumber.getTag() instanceof TextWatcher) {
             edtNumber.removeTextChangedListener((TextWatcher) edtNumber.getTag());
         }
@@ -380,14 +423,20 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
         edtNumber.addTextChangedListener(watcher);
         edtNumber.setTag(watcher);
         //价格列表
-        layout = findViewById(R.id.al);
+        layout = findView(R.id.al);
         //付款按钮
-        btnPay = findViewById(R.id.btn_pay);
+        btnPay = findView(R.id.btn_pay);
 
-        radioGroup = findViewById(R.id.radio_group);
-        rbtWei = findViewById(R.id.rbtn_wei);
-        rbtAli = findViewById(R.id.rbtn_ali);
+        radioGroup = findView(R.id.radio_group);
+        rbtWei = findView(R.id.rbtn_wei);
+        rbtAli = findView(R.id.rbtn_ali);
         radioGroup.setOnCheckedChangeListener(new WayGrouplistener());
+
+        //聊天室
+        llConversation = findView(R.id.ll_conversation);
+        llAssociationConversation = findView(R.id.ll_select_conversation);
+
+        tvAgreement = findView(R.id.tv_agreement);
     }
 
     //radiobutton按钮监听
@@ -489,131 +538,178 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void initData() {
-        //图片
-        String url = entitySupportDetailed.getContent().getActivityPic();
-        Glide.with(context)
-                .load(url)
-                .into(ivBackground);
-        //名称
-        tvName.setText(entitySupportDetailed.getContent().getActivityName());
-        //项目详情
-        tvDescription.setText(entitySupportDetailed.getContent().getDescription());
-        type = entitySupportDetailed.getContent().getActivityTypeName();
-        //显示已参与、目标
-        if (type.equals("集资")) {
-            llRaise.setVisibility(View.VISIBLE);
-            llOther.setVisibility(View.GONE);
+        if(isAlive()) {
+            //图片
+            String url = entitySupportDetailed.getContent().getActivityPic();
+            Glide.with(context)
+                    .load(url)
+                    .into(ivBackground);
+            //名称
+            tvName.setText(entitySupportDetailed.getContent().getActivityName());
+            //项目详情
+            tvDescription.setText(entitySupportDetailed.getContent().getDescription());
+            type = entitySupportDetailed.getContent().getActivityTypeName();
+            //显示已参与、目标
+            if (type.equals("集资")) {
+                llRaise.setVisibility(View.VISIBLE);
+                llOther.setVisibility(View.GONE);
 
-            if (entitySupportDetailed.getContent().getSettingGoalsPrice() != null) {
-                //筹集金额
-                BigDecimal joinBig = entitySupportDetailed.getContent().getSupportPrice();
-                double joinDou = joinBig.doubleValue();
-                int joinInt = (int) joinDou;
-                tvCrowdPrice.setText(Double.toString(joinDou));
-                //目标金额
-                BigDecimal allBig = entitySupportDetailed.getContent().getSettingGoalsPrice();
-                double allDou = allBig.doubleValue();
-                int allInt = (int) allDou;
-                tvCrowdGoalPrice.setText(Double.toString(allDou));
-                int progressValueInt = 0;
-                if (allDou > 0) {
-                    //进度条
-                    BigDecimal progressValueBig = new BigDecimal(joinDou/allDou);
-                    String progressValueStr = StringUtil.getPrice(progressValueBig);
-                    progressValueInt = StringUtil.stringToInt(progressValueStr);
+                if (entitySupportDetailed.getContent().getSettingGoalsPrice() != null) {
+                    //筹集金额
+                    BigDecimal joinBig = entitySupportDetailed.getContent().getSupportPrice();
+                    double joinDou = joinBig.doubleValue();
+                    int joinInt = (int) joinDou;
+                    tvCrowdPrice.setText(Double.toString(joinDou));
+                    //目标金额
+                    BigDecimal allBig = entitySupportDetailed.getContent().getSettingGoalsPrice();
+                    double allDou = allBig.doubleValue();
+                    int allInt = (int) allDou;
+                    tvCrowdGoalPrice.setText(Double.toString(allDou));
+                    int progressValueInt = 0;
+                    if (allDou > 0) {
+                        //进度条
+                        BigDecimal progressValueBig = new BigDecimal(joinDou / allDou);
+                        String progressValueStr = StringUtil.getPrice(progressValueBig);
+                        progressValueInt = StringUtil.stringToInt(progressValueStr);
+                    }
+                    joinProgressBar.setProgress(progressValueInt);
+
+                    //气泡位置
+                    setProgressText(progressValueInt);
                 }
-                joinProgressBar.setProgress(progressValueInt);
 
-                //气泡位置
-                setProgressText(progressValueInt);
-            }
+                getPriceListItem();
 
-            getPriceListItem();
+            } else {
+                llRaise.setVisibility(View.GONE);
+                llOther.setVisibility(View.VISIBLE);
 
-        } else {
-            llRaise.setVisibility(View.GONE);
-            llOther.setVisibility(View.VISIBLE);
+                if (entitySupportDetailed.getContent().getSettingGoalsNum() != null) {
+                    //参与人数
+                    BigDecimal joinBig = entitySupportDetailed.getContent().getSupportNum();
+                    double joinDou = joinBig.doubleValue();
+                    int joinInt = (int) joinDou;
+                    tvCrowdNum.setText(Integer.toString(joinInt));
+                    //目标人数
+                    BigDecimal allBig = entitySupportDetailed.getContent().getSettingGoalsNum();
+                    double allDou = allBig.doubleValue();
+                    int allInt = (int) allDou;
+                    tvCrowdGoalNum.setText(Integer.toString(allInt));
 
-            if (entitySupportDetailed.getContent().getSettingGoalsNum() != null) {
-                //参与人数
-                BigDecimal joinBig = entitySupportDetailed.getContent().getSupportNum();
-                double joinDou = joinBig.doubleValue();
-                int joinInt = (int) joinDou;
-                tvCrowdNum.setText(Integer.toString(joinInt));
-                //目标人数
-                BigDecimal allBig = entitySupportDetailed.getContent().getSettingGoalsNum();
-                double allDou = allBig.doubleValue();
-                int allInt = (int) allDou;
-                tvCrowdGoalNum.setText(Integer.toString(allInt));
+                    int progressValueInt = 0;
+                    if (allDou > 0) {
+                        //进度条
+                        BigDecimal progressValueBig = new BigDecimal(joinDou / allDou);
+                        String progressValueStr = StringUtil.getPrice(progressValueBig);
+                        progressValueInt = StringUtil.stringToInt(progressValueStr);
+                    }
+                    joinProgressBar.setProgress(progressValueInt);
 
-                int progressValueInt = 0;
-                if (allDou > 0) {
-                    //进度条
-                    BigDecimal progressValueBig = new BigDecimal(joinDou/allDou);
-                    String progressValueStr = StringUtil.getPrice(progressValueBig);
-                    progressValueInt = StringUtil.stringToInt(progressValueStr);
+                    //气泡位置
+                    setProgressText(progressValueInt);
                 }
-                joinProgressBar.setProgress(progressValueInt);
 
-                //气泡位置
-                setProgressText(progressValueInt);
             }
+            //判断是否已经结束，显示不一样的样式
+            String state = entitySupportDetailed.getContent().getState();
+            if (state.equals("supporting")) {
+                //进度条
+                setProgressDrawable(joinProgressBar, R.drawable.progress_horizontal2);
+                //气泡
+                ivBubble.setImageResource(R.mipmap.combined_shape);
 
-        }
-        //判断是否已经结束，显示不一样的样式
-        String state = entitySupportDetailed.getContent().getState();
-        if (state.equals("supporting")) {
-            //进度条
-            setProgressDrawable(joinProgressBar, R.drawable.progress_horizontal2);
-            //气泡
-            ivBubble.setImageResource(R.mipmap.combined_shape);
+                //按钮
+                btnSupport.setVisibility(View.VISIBLE);
+                btnSupportEnd.setVisibility(View.GONE);
 
-            //按钮
-            btnSupport.setVisibility(View.VISIBLE);
-            btnSupportEnd.setVisibility(View.GONE);
-
-            //倒计时
-            llIng.setVisibility(View.VISIBLE);
-            //获取当前时间
-            long currentTime = System.currentTimeMillis();
-            if (entitySupportDetailed.getContent().getDeadline() != null) {
-                long endTime = DateUtil.dateToLong(entitySupportDetailed.getContent().getDeadline());
-                //时间之差
-                long betweenTime = DateUtil.calculateTimeDifference(endTime, currentTime);
-                if (betweenTime > 0) {
-                    DateUtil.downTime( tvTimeDown, betweenTime, 1000, 0 + "天" + 0 + "小时" + 0 + "分钟"
-                            + 0 + "秒");
+                //倒计时
+                llIng.setVisibility(View.VISIBLE);
+                //获取当前时间
+                long currentTime = System.currentTimeMillis();
+                if (entitySupportDetailed.getContent().getDeadline() != null) {
+                    long endTime = DateUtil.dateToLong(entitySupportDetailed.getContent().getDeadline());
+                    //时间之差
+                    long betweenTime = DateUtil.calculateTimeDifference(endTime, currentTime);
+                    if (betweenTime > 0) {
+                        DateUtil.downTime(tvTimeDown, betweenTime, 1000, 0 + "天" + 0 + "小时" + 0 + "分钟"
+                                + 0 + "秒");
+                    } else {
+                        tvTimeDown.setText(0 + "天" + 0 + "小时" + 0 + "分钟"
+                                + 0 + "秒");
+                    }
                 } else {
                     tvTimeDown.setText(0 + "天" + 0 + "小时" + 0 + "分钟"
                             + 0 + "秒");
                 }
+                llEnd.setVisibility(View.GONE);
             } else {
-                tvTimeDown.setText(0 + "天" + 0 + "小时" + 0 + "分钟"
-                        + 0 + "秒");
+                //进度条
+                setProgressDrawable(joinProgressBar, R.drawable.progress_horizontal3);
+                //气泡
+                ivBubble.setImageResource(R.mipmap.qipaohui);
+
+                //按钮
+                btnSupport.setVisibility(View.GONE);
+                btnSupportEnd.setVisibility(View.VISIBLE);
+
+                //倒计时
+                llIng.setVisibility(View.GONE);
+                llEnd.setVisibility(View.VISIBLE);
             }
-            llEnd.setVisibility(View.GONE);
-        } else {
-            //进度条
-            setProgressDrawable(joinProgressBar, R.drawable.progress_horizontal3);
-            //气泡
-            ivBubble.setImageResource(R.mipmap.qipaohui);
-
-            //按钮
-            btnSupport.setVisibility(View.GONE);
-            btnSupportEnd.setVisibility(View.VISIBLE);
-
-            //倒计时
-            llIng.setVisibility(View.VISIBLE);
-            llEnd.setVisibility(View.GONE);
 
             //发起人姓名
             tvCreatorName.setText(entitySupportDetailed.getContent().getCreateUserName());
-        }
+            //头像
+            String headUrl = entitySupportDetailed.getContent().getCreateUserPic();
+            if (headUrl != null) {
+                Glide.with(context)
+                        .load(headUrl)
+                        .into(ivImg);
+            }
+            //关注
+            tvFollow.setText("" + entitySupportDetailed.getContent().getFollowNumber());
+            //粉丝
+            tvFans.setText("" + entitySupportDetailed.getContent().getFunsNumber());
+            if (entitySupportDetailed.getContent().getFollowCreatetUser()) {
+                tvFocus.setVisibility(View.GONE);
+                tvCancelFocus.setVisibility(View.VISIBLE);
+            } else {
+                tvFocus.setVisibility(View.VISIBLE);
+                tvCancelFocus.setVisibility(View.GONE);
+            }
 
-        progressBarDismiss();
+            if (entitySupportDetailed.getContent().getChartRoomList() == null || entitySupportDetailed.getContent().getChartRoomList().isEmpty()) {
+                llConversation.setVisibility(View.GONE);
+                String currentUserId = HttpManager.getInstance().getUserId();
+                if (currentUserId.equals(entitySupportDetailed.getContent().getCreateUserId())) {
+                    llAssociationConversation.setVisibility(View.VISIBLE);
+                    llConversation.setVisibility(View.VISIBLE);
+                } else {
+                    llConversation.setVisibility(View.GONE);
+                }
+            } else {
+                llConversation.setVisibility(View.VISIBLE);
+                chatingRoomList = entitySupportDetailed.getContent().getChartRoomList();
+                //注意这里是调用getSupportFragmentManager()方法
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                DetailedConversationFragment campaignDetailedConversationFragment = new DetailedConversationFragment();
+                if (chatingRoomList.size() > 0) {
+                    Bundle bundleConversation = new Bundle();
+                    bundleConversation.putSerializable(Constant.CHATINTROOMLIST, (Serializable) chatingRoomList);
+                    campaignDetailedConversationFragment.setArguments(bundleConversation);
+                    transaction.replace(R.id.list_conversation, campaignDetailedConversationFragment);
+
+                    transaction.commit();
+                }
+            }
+
+            progressBarDismiss();
+        }
     }
 
     public void onResume() {
+        refresh();
 
         super.onResume();
     }
@@ -684,49 +780,131 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
     @Override
     public void initEvent() {
         ivBack.setOnClickListener(this);
+        ivShare.setOnClickListener(this);
         btnSupport.setOnClickListener(this);
         btnGone.setOnClickListener(this);
         btnPay.setOnClickListener(this);
         llMore.setOnClickListener(this);
+        llRaise.setOnClickListener(this);
+        llOther.setOnClickListener(this);
+        tvFocus.setOnClickListener(this);
+        tvCancelFocus.setOnClickListener(this);
+        rlCreator.setOnClickListener(this);
+        llAssociationConversation.setOnClickListener(this);
+        tvAgreement.setOnClickListener(this);
     }
 
-    public void refresh() {
-        String uuid = entitySupportDetailed.getContent().getActivityId();
+    public void share() {
+        final String url ="http://mobile.umeng.com/social";
+        mShareListener = new CustomShareListener(this);
+        /*增加自定义按钮的分享面板*/
+        mShareAction = new ShareAction(SupportDetailedActivity.this).setDisplayList(
+                SHARE_MEDIA.SINA, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE,
+                SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE)
+                .addButton("复制链接", "复制链接", "umeng_socialize_copyurl", "umeng_socialize_copyurl")
+                .setShareboardclickCallback(new ShareBoardlistener() {
+                    @Override
+                    public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
+                        if (snsPlatform.mShowWord.equals("复制链接")) {
+                            ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                            //创建ClipData对象
+                            ClipData clipData = ClipData.newPlainText("simple text copy", url);
+                            //添加ClipData对象到剪切板中
+                            clipboardManager.setPrimaryClip(clipData);
+                            Toast.makeText(SupportDetailedActivity.this, "复制链接成功", Toast.LENGTH_LONG).show();
 
-        if (NetUtil.checkNetwork(this)) {
-            setProgressBar();
-            progressBar.show();
-
-            HttpRequest.getSupportDetailed(0, uuid, new OnHttpResponseListener() {
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                    if(!StringUtil.isEmpty(resultJson)){
-                        EntitySupportDetailed entitySupportDetailed =  JSON.parseObject(resultJson,EntitySupportDetailed.class);
-                        if(entitySupportDetailed.isSuccess()){
-                            //成功
-                            //showShortToast(R.string.getSuccess);
-
-                            progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entitySupportDetailed.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entitySupportDetailed.getMessage());
-                            }
+                        } else {
+                            UMWeb web = new UMWeb(url);
+                            web.setTitle("来自分享面板标题");
+                            web.setDescription("来自分享面板内容");
+                            web.setThumb(new UMImage(SupportDetailedActivity.this, R.mipmap.syp_icon));
+                            new ShareAction(SupportDetailedActivity.this).withMedia(web)
+                                    .setPlatform(share_media)
+                                    .setCallback(mShareListener)
+                                    .share();
                         }
-                    }else{
-                        showShortToast(R.string.noReturn);
-
-                        progressBarDismiss();
                     }
-                }
-            });
-        } else {
-            showShortToast(R.string.checkNetwork);
+                });
+    }
+
+    private static class CustomShareListener implements UMShareListener {
+
+        private WeakReference<SupportDetailedActivity> mActivity;
+
+        private CustomShareListener(SupportDetailedActivity activity) {
+            mActivity = new WeakReference(activity);
         }
 
-        initData();
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+
+            if (platform.name().equals("WEIXIN_FAVORITE")) {
+                Toast.makeText(mActivity.get(), platform + " 收藏成功啦", Toast.LENGTH_SHORT).show();
+            } else {
+                if (platform != SHARE_MEDIA.MORE && platform != SHARE_MEDIA.SMS
+                        && platform != SHARE_MEDIA.EMAIL
+                        && platform != SHARE_MEDIA.FLICKR
+                        && platform != SHARE_MEDIA.FOURSQUARE
+                        && platform != SHARE_MEDIA.TUMBLR
+                        && platform != SHARE_MEDIA.POCKET
+                        && platform != SHARE_MEDIA.PINTEREST
+
+                        && platform != SHARE_MEDIA.INSTAGRAM
+                        && platform != SHARE_MEDIA.GOOGLEPLUS
+                        && platform != SHARE_MEDIA.YNOTE
+                        && platform != SHARE_MEDIA.EVERNOTE) {
+                    Toast.makeText(mActivity.get(), platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            if (platform != SHARE_MEDIA.MORE && platform != SHARE_MEDIA.SMS
+                    && platform != SHARE_MEDIA.EMAIL
+                    && platform != SHARE_MEDIA.FLICKR
+                    && platform != SHARE_MEDIA.FOURSQUARE
+                    && platform != SHARE_MEDIA.TUMBLR
+                    && platform != SHARE_MEDIA.POCKET
+                    && platform != SHARE_MEDIA.PINTEREST
+
+                    && platform != SHARE_MEDIA.INSTAGRAM
+                    && platform != SHARE_MEDIA.GOOGLEPLUS
+                    && platform != SHARE_MEDIA.YNOTE
+                    && platform != SHARE_MEDIA.EVERNOTE) {
+                Toast.makeText(mActivity.get(), platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+
+            Toast.makeText(mActivity.get(), platform + " 分享取消了", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /** attention to this below ,must add this**/
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * 屏幕横竖屏切换时避免出现window leak的问题
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mShareAction.close();
     }
 
     @Override
@@ -736,6 +914,11 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
                 finish();
                 break;
             case R.id.iv_right:
+                ShareBoardConfig config = new ShareBoardConfig();
+                config.setMenuItemBackgroundShape(ShareBoardConfig.BG_SHAPE_NONE);
+                config.setShareboardBackgroundColor(Color.WHITE);
+                share();
+                mShareAction.open(config);
                 break;
             case R.id.btn_support:
                 if (type.equals("集资")) {
@@ -767,19 +950,132 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
                 toActivity(DetailedActivity.createIntent(context, "应援详情",
                         entitySupportDetailed.getContent().getDetail()));
                 break;
+            case R.id.ll_raise:
+                toActivity(SupportMoneyDetailedActivity.createIntent(context, entitySupportDetailed.getContent().getActivityId()));
+                break;
+            case R.id.ll_other:
+                toActivity(SupportFansActivity.createIntent(context, entitySupportDetailed.getContent().getActivityId()));
+                break;
+            case R.id.tv_focus:
+                focusFans(entitySupportDetailed.getContent().getCreateUserId(),tvFocus,tvCancelFocus);
+                break;
+            case R.id.tv_cancel:
+                cancelFans(entitySupportDetailed.getContent().getCreateUserId(),tvFocus,tvCancelFocus);
+                break;
+            case R.id.rlCreator:
+                toActivity(FansMainActivity.createIntent(context, entitySupportDetailed.getContent().getCreateUserId()));
+                break;
+            case R.id.ll_select_conversation:
+                List<EntityStars> selectStars = entitySupportDetailed.getContent().getRelevanceStars();
+                String[] relevanceStar = new String[selectStars.size()];
+                for (int i = 0;i < selectStars.size();i ++) {
+                    relevanceStar[i] = selectStars.get(i).getUuid();
+                }
+                toActivity(CreatorAssociateConversationActivity.createIntent(context, relevanceStar, "support",
+                        entitySupportDetailed.getContent().getActivityId()));
+                break;
+            case R.id.tv_agreement:
+                toActivity(RuleActivity.createIntent(context, "supportPay", "应援服务条款"));
+                break;
             default:
                 break;
+        }
+    }
+
+    public void focusFans(String userId, final TextView focus, final TextView can) {
+
+        if (NetUtil.checkNetwork(getActivity())) {
+            setProgressBar();
+            progressBar.show();
+
+            HttpRequest.getGetFocusFriend(0, userId, new OnHttpResponseListener() {
+                @Override
+                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+                    if(!StringUtil.isEmpty(resultJson)){
+                        EntityBase entityBase =  zuo.biao.library.util.JSON.parseObject(resultJson,EntityBase.class);
+                        if(entityBase.isSuccess()){
+                            //成功
+                            showShortToast(R.string.focusSuccess);
+
+                            focus.setVisibility(View.GONE);
+                            can.setVisibility(View.VISIBLE);
+
+                            progressBarDismiss();
+
+                        }else{//显示失败信息
+                            if (entityBase.getCode().equals("401")) {
+                                showShortToast(R.string.tokenInvalid);
+                                toActivity(MainActivity.createIntent(context));
+                            } else {
+                                showShortToast(entityBase.getMessage());
+                            }
+
+                            progressBarDismiss();
+                        }
+                    }else{
+                        showShortToast(R.string.noReturn);
+
+                        progressBarDismiss();
+                    }
+                }
+            });
+
+        } else {
+            showProgressDialog(R.string.checkNetwork);
+        }
+    }
+
+    public void cancelFans(String userId, final TextView focus, final TextView can) {
+
+        if (NetUtil.checkNetwork(context)) {
+            setProgressBar();
+            progressBar.show();
+
+            HttpRequest.getGetCancelFocusFriend(0, userId, new OnHttpResponseListener() {
+                @Override
+                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+                    if(!StringUtil.isEmpty(resultJson)){
+                        EntityBase entityBase =  zuo.biao.library.util.JSON.parseObject(resultJson,EntityBase.class);
+                        if(entityBase.isSuccess()){
+                            //成功
+                            showShortToast(R.string.cancelFocusSuccess);
+
+                            focus.setVisibility(View.VISIBLE);
+                            can.setVisibility(View.GONE);
+
+                            Intent intent = new Intent(
+                                    BroadcastAction.ACTION_FRIEND_REFRESH);
+                            // 发送广播
+                            sendBroadcast(intent);
+
+                            progressBarDismiss();
+
+                        }else{//显示失败信息
+                            if (entityBase.getCode().equals("401")) {
+                                showShortToast(R.string.tokenInvalid);
+                                toActivity(MainActivity.createIntent(context));
+                            } else {
+                                showShortToast(entityBase.getMessage());
+                            }
+
+                            progressBarDismiss();
+                        }
+                    }else{
+                        showShortToast(R.string.noReturn);
+
+                        progressBarDismiss();
+                    }
+                }
+            });
+
+        } else {
+            showProgressDialog(R.string.checkNetwork);
         }
     }
 
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override
@@ -822,7 +1118,7 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
                 setProgressBar();
                 progressBar.show();
 
-                HttpRequest.postGetPaymentConfigOrder(0, uuid, carrieFree, price ,number,
+                HttpRequest.postGetPaymentConfigOrder(0, uuid, carrieFree, new BigDecimal(price) ,number,
                         channel, phone, poi, receiver, SkuId, new OnHttpResponseListener() {
 
                             @Override
@@ -832,6 +1128,15 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
                                     EntityPaymentConfig entityPaymentConfig = JSON.parseObject(resultJson,EntityPaymentConfig.class);
                                     if(entityPaymentConfig.isSuccess()) {
                                         aliPay(entityPaymentConfig);
+
+                                        Intent intent1 = new Intent(
+                                                BroadcastAction.ACTION_SHOWALL_REFRESH);
+                                        // 发送广播
+                                        sendBroadcast(intent1);
+                                        Intent intent2 = new Intent(
+                                                BroadcastAction.ACTION_SUPPORT_REFRESH);
+                                        // 发送广播
+                                        sendBroadcast(intent2);
 
                                         progressBarDismiss();
                                     } else {
@@ -908,6 +1213,14 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
         payThread.start();
     }
 
+    public void refresh() {
+
+        setProgressBar();
+        progressBar.show();
+
+        mDetailedHttpModel.get(uuid,URL_BASE + URLConstant.SUPPORTDETIALED,1,this);
+    }
+
     public void support() {
         setProgressBar();
         progressBar.show();
@@ -924,9 +1237,11 @@ public class SupportDetailedActivity extends BaseActivity implements View.OnClic
     public void Success(String url, int RequestCode, EntityBase entityBase) {
         super.Success(url, RequestCode, entityBase);
         switch (RequestCode) {
+            case 1:
+                entitySupportDetailed = mDetailedHttpModel.getData();
+                initData();
+                break;
             case 2:
-                setProgressBar();
-                progressBar.show();
                 showShortToast(R.string.supportSuccess);
 
                 Intent intent = new Intent(

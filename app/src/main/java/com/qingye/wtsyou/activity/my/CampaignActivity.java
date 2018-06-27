@@ -5,19 +5,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyco.tablayout.CommonTabLayout;
@@ -30,13 +24,12 @@ import com.qingye.wtsyou.fragment.my.MyCampaignCrowdFragment;
 import com.qingye.wtsyou.fragment.my.MyCampaignShowFragment;
 import com.qingye.wtsyou.fragment.my.MyCampaignSupportFragment;
 import com.qingye.wtsyou.fragment.my.MyCampaignVoteFragment;
-import zuo.biao.library.widget.CustomDialog;
-import com.qingye.wtsyou.widget.VpSwipeRefreshLayout;
 
 import java.util.ArrayList;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
+import zuo.biao.library.widget.CustomDialog;
 
 public class CampaignActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -44,7 +37,7 @@ public class CampaignActivity extends BaseActivity implements View.OnClickListen
     private TextView tvHead;
 
     private ArrayList<Fragment> mFragments = new ArrayList<>();
-    private String[] mTitles = {"演出", "众筹", "投票", "应援"};
+    private String[] mTitles = {"投票", "众筹", "演唱会", "应援"};
     private int[] mIconUnselectIds = {
             R.mipmap.home_b, R.mipmap.activity_b,
             R.mipmap.conversation_b, R.mipmap.personal_b};
@@ -55,9 +48,6 @@ public class CampaignActivity extends BaseActivity implements View.OnClickListen
     private CommonTabLayout mTabLayout;
     private SlidingPagerAdapter mViewPagerAdapter;
     private ViewPager mViewPager;
-
-    private LinearLayout linearLayout;
-    private VpSwipeRefreshLayout swipeRefresh;
 
     private CustomDialog progressBar;
 
@@ -89,8 +79,6 @@ public class CampaignActivity extends BaseActivity implements View.OnClickListen
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         setView();
-        //刷新
-        initHrvsr();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
@@ -98,16 +86,13 @@ public class CampaignActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void initView() {
-        swipeRefresh = findViewById(R.id.swipe_refresh_widget);
-        linearLayout = findViewById(R.id.linearlayout);
-
-        ivBack = findViewById(R.id.iv_left);
+        ivBack = findView(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("我的活动");
 
-        mTabLayout = findViewById(R.id.tab);
-        mViewPager = findViewById(R.id.viewPager);
+        mTabLayout = findView(R.id.tab);
+        mViewPager = findView(R.id.viewPager);
     }
 
     public void onResume() {
@@ -142,39 +127,6 @@ public class CampaignActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    //刷新
-    private void initHrvsr(){
-        //设置刷新时动画的颜色，可以设置4个
-        swipeRefresh.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_light,
-                android.R.color.holo_red_light, android.R.color.holo_orange_light,
-                android.R.color.holo_green_light);
-        swipeRefresh.setProgressViewOffset(false, 0, (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
-                        .getDisplayMetrics()));
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.e("swipeRefresh", "invoke onRefresh...");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        setView();
-                        showShortToast(R.string.getSuccess);
-                        swipeRefresh.setRefreshing(false);
-                    }
-                }, 1500);
-            }
-        });
-        // 设置子视图是否允许滚动到顶部
-        swipeRefresh.setOnChildScrollUpCallback(new SwipeRefreshLayout.OnChildScrollUpCallback() {
-            @Override
-            public boolean canChildScrollUp(SwipeRefreshLayout parent, @Nullable View child) {
-                return linearLayout.getScrollY() > 0;
-            }
-        });
-    }
-
     public void setView() {
         mTabEntities.clear();
 
@@ -185,21 +137,21 @@ public class CampaignActivity extends BaseActivity implements View.OnClickListen
             for (Fragment f : this.mFragments) {
                 ft.remove(f);
             }
-            ft.commit();
+            ft.commitAllowingStateLoss();
             ft = null;
             fm.executePendingTransactions();
         }
 
         mFragments.clear();
 
-        MyCampaignShowFragment myCampaignShowFragment = new MyCampaignShowFragment();
-        MyCampaignCrowdFragment myCampaignCrowdFragment = new MyCampaignCrowdFragment();
         MyCampaignVoteFragment myCampaignVoteFragment = new MyCampaignVoteFragment();
+        MyCampaignCrowdFragment myCampaignCrowdFragment = new MyCampaignCrowdFragment();
+        MyCampaignShowFragment myCampaignShowFragment = new MyCampaignShowFragment();
         MyCampaignSupportFragment myCampaignSupportFragment = new MyCampaignSupportFragment();
 
-        mFragments.add(myCampaignShowFragment);
-        mFragments.add(myCampaignCrowdFragment);
         mFragments.add(myCampaignVoteFragment);
+        mFragments.add(myCampaignCrowdFragment);
+        mFragments.add(myCampaignShowFragment);
         mFragments.add(myCampaignSupportFragment);
 
         for (int i = 0; i < mTitles.length; i++) {
@@ -275,11 +227,6 @@ public class CampaignActivity extends BaseActivity implements View.OnClickListen
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override

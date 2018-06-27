@@ -150,8 +150,9 @@
 
                     <ImageView
                         android:id="@+id/iv_select_img"
-                        android:layout_width="80dp"
-                        android:layout_height="110dp"
+                        android:layout_width="100dp"
+                        android:layout_height="75dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/margin_15"
                         android:layout_marginTop="@dimen/margin_15"
                         android:layout_marginBottom="@dimen/margin_15"/>
@@ -278,52 +279,25 @@
                         android:padding="@dimen/margin_15"
                         android:background="@drawable/corners_gray_stroke_solid">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <WebView
+                            android:id="@+id/webView"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="一、申请投票需要什么条件"
-                            android:textSize="@dimen/text_size_13"
-                            android:textColor="@color/black_text1"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1.等级达到6级以上"
-                            android:layout_marginTop="@dimen/margin_6"
-                            android:textSize="@dimen/text_size_11"
-                            android:textColor="@color/gray_text1"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="2.填写对应投票资料"
-                            android:layout_marginTop="@dimen/margin_4"
-                            android:textSize="@dimen/text_size_11"
-                            android:textColor="@color/gray_text1"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="二、申请投票需要审核多久"
-                            android:layout_marginTop="@dimen/margin_6"
-                            android:textSize="@dimen/text_size_13"
-                            android:textColor="@color/black_text1"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="在三个工作日内给予答复"
-                            android:layout_marginTop="@dimen/margin_6"
-                            android:textSize="@dimen/text_size_11"
-                            android:textColor="@color/gray_text1"/>
+                            android:layout_centerInParent="true"
+                            android:text="这是规则!!!!"
+                            android:textSize="@dimen/text_size_15"
+                            android:textColor="@color/black_text1"
+                            tools:ignore="WebViewLayout" />
 
                     </LinearLayout>
 
                     <TextView
-                        android:layout_width="55dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="@dimen/margin_2"
-                        android:layout_marginBottom="@dimen/margin_2"
+                        android:paddingBottom="@dimen/margin_2"
+                        android:paddingLeft="@dimen/margin_6"
+                        android:paddingRight="@dimen/margin_6"
                         android:gravity="center"
                         android:text="应援须知"
                         android:textSize="@dimen/text_size_11"
@@ -422,7 +396,7 @@
                                 android:id="@+id/list_associate_stars"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
+                                android:layout_gravity="center_vertical|right"
                                 android:layout_marginLeft="@dimen/margin_28"
                                 android:layout_marginRight="@dimen/margin_6"/>
 
@@ -476,7 +450,7 @@
                                 android:id="@+id/list_associate_conversation"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
+                                android:layout_gravity="center_vertical|right"
                                 android:layout_marginLeft="@dimen/margin_28"
                                 android:layout_marginRight="@dimen/margin_6"/>
 

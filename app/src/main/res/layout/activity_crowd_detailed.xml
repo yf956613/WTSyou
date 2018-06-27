@@ -79,7 +79,7 @@
                                     android:layout_height="wrap_content"
                                     android:maxLines="2"
                                     android:ellipsize="end"
-                                    android:text="薛之谦[我好像在哪里见过你]全国巡回演唱会"
+                                    android:text=""
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/text_size_14"/>
 
@@ -113,7 +113,7 @@
                                             android:id="@+id/tv_campaign_value"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="7000"
+                                            android:text=""
                                             android:textSize="@dimen/text_size_16"
                                             android:textColor="@color/white"/>
 
@@ -166,7 +166,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
                                 android:gravity="center"
-                                android:text="2018年4月12日"
+                                android:text=""
                                 android:textColor="@color/black_text1"
                                 android:textSize="@dimen/text_size_13" />
 
@@ -177,7 +177,7 @@
                                 android:layout_gravity="center_horizontal"
                                 android:layout_marginTop="@dimen/margin_2"
                                 android:gravity="center"
-                                android:text="厦门嘉庚体育馆"
+                                android:text=""
                                 android:textColor="@color/black_text1"
                                 android:textSize="@dimen/text_size_13"/>
                         </LinearLayout>
@@ -216,7 +216,7 @@
                                     android:layout_marginTop="@dimen/margin_2"
                                     android:maxLines="1"
                                     android:ellipsize="end"
-                                    android:text="8,976"
+                                    android:text=""
                                     android:textSize="@dimen/text_size_16"
                                     android:textColor="@color/orange_text2"/>
 
@@ -246,7 +246,7 @@
                                     android:layout_marginTop="@dimen/margin_2"
                                     android:maxLines="1"
                                     android:ellipsize="end"
-                                    android:text="108"
+                                    android:text=""
                                     android:textSize="@dimen/text_size_16"
                                     android:textColor="@color/orange_text2"/>
 
@@ -276,7 +276,7 @@
                                     android:layout_gravity="center_horizontal"
                                     android:maxLines="1"
                                     android:ellipsize="end"
-                                    android:text="200 W"
+                                    android:text=""
                                     android:textSize="@dimen/text_size_16"
                                     android:textColor="@color/orange_text2"/>
 
@@ -438,9 +438,8 @@
                             android:layout_marginRight="@dimen/margin_6"
                             android:maxLines="8"
                             android:ellipsize="end"
-                            android:text="众筹须知
-            付款成功后即可成功参与投票。"
-                            android:textSize="@dimen/text_size_12"
+                            android:text=""
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text2"/>
 
                     </LinearLayout>

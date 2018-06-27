@@ -35,10 +35,10 @@ public class NumberCount extends LinearLayout implements View.OnClickListener{
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.layout_number_count, this, true);
 
-        tvReduce = findViewById(R.id.tv_reduce);
-        tvAdd = findViewById(R.id.tv_add);
+        tvReduce = (TextView) findViewById(R.id.tv_reduce);
+        tvAdd = (TextView) findViewById(R.id.tv_add);
 
-        edtNumber = findViewById(R.id.edt_number_count);
+        edtNumber = (EditText) findViewById(R.id.edt_number_count);
         if (edtNumber.getTag() instanceof TextWatcher) {
             edtNumber.removeTextChangedListener((TextWatcher) edtNumber.getTag());
         }

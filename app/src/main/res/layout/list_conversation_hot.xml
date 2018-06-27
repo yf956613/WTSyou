@@ -8,11 +8,10 @@
     android:background="@drawable/corners_white_shadow">
 
     <ImageView
-        android:id="@+id/iv_conversation_cover"
+        android:id="@+id/iv_background_img"
         android:layout_width="match_parent"
         android:layout_height="106dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/img_t" />
+        android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/tv_star_name"
@@ -34,7 +33,7 @@
         android:textSize="@dimen/text_size_9"
         android:visibility="gone"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_img"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -42,14 +41,13 @@
         android:layout_marginTop="@dimen/margin_65"
         android:background="@drawable/circle_white">
 
-        <ImageView
-            android:id="@+id/iv_personal"
+        <com.qingye.wtsyou.widget.CircleImageView
+            android:id="@+id/iv_head_img"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:src="@mipmap/head_d"/>
+            android:layout_centerInParent="true"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:layout_below="@+id/ll_img"
@@ -61,7 +59,7 @@
         android:layout_marginTop="@dimen/margin_4"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="又又又宥嘉"
+        android:text=""
         android:textColor="@color/black_text1"
         android:textSize="@dimen/text_size_9" />
 
@@ -76,7 +74,7 @@
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="2"
-        android:text="林宥嘉福州演唱会应援活动"
+        android:text=""
         android:textColor="@color/black_text1"
         android:textSize="@dimen/text_size_12" />
 
@@ -102,7 +100,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:text="1789"
+            android:text=""
             android:textColor="@color/gray_text3"
             android:textSize="@dimen/text_size_10" />
 

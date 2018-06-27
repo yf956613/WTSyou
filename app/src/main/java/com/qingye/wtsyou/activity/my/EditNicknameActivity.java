@@ -58,18 +58,18 @@ public class EditNicknameActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void initView() {
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("设置昵称");
-        tvLeft = findViewById(R.id.tv_left);
+        tvLeft = findView(R.id.tv_left);
         tvLeft.setVisibility(View.VISIBLE);
         tvLeft.setTextColor(getResources().getColor(R.color.black_text));
         tvLeft.setText("取消");
-        tvRight = findViewById(R.id.tv_add_temp);
+        tvRight = findView(R.id.tv_add_temp);
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setTextColor(getResources().getColor(R.color.black_text));
         tvRight.setText("保存");
 
-        edtNickname = findViewById(R.id.edt_nickname);
+        edtNickname = findView(R.id.edt_nickname);
     }
 
     @Override
@@ -106,11 +106,6 @@ public class EditNicknameActivity extends BaseActivity implements View.OnClickLi
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override

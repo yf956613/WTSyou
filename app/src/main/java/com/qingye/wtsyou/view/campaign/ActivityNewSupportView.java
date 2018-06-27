@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.model.Supports;
+import com.qingye.wtsyou.utils.DateUtil;
 
 import java.math.BigDecimal;
 
@@ -21,6 +22,8 @@ import zuo.biao.library.base.BaseView;
 import zuo.biao.library.util.StringUtil;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_2;
+import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_8;
 
 /**
  * Created by pm89 on 2018/3/6.
@@ -44,14 +47,14 @@ public class ActivityNewSupportView extends BaseView<Supports> implements View.O
     @SuppressLint("InflateParams")
     @Override
     public View createView() {
-        ivImg = findViewById(R.id.iv_new_support_img);
-        tvTag = findViewById(R.id.tv_tag);
-        tvName = findViewById(R.id.tv_support_name);
-        tvEndTime = findViewById(R.id.tv_end_time);
-        joinProgressBar = findViewById(R.id.join_progressbar);
-        llPeople = findViewById(R.id.ll_people);
-        tvJoin = findViewById(R.id.tv_join);
-        tvAll = findViewById(R.id.tv_all);
+        ivImg = findView(R.id.iv_new_support_img);
+        tvTag = findView(R.id.tv_tag);
+        tvName = findView(R.id.tv_support_name);
+        tvEndTime = findView(R.id.tv_end_time);
+        joinProgressBar = findView(R.id.join_progressbar);
+        llPeople = findView(R.id.ll_people);
+        tvJoin = findView(R.id.tv_join);
+        tvAll = findView(R.id.tv_all);
 
         return super.createView();
     }
@@ -82,8 +85,10 @@ public class ActivityNewSupportView extends BaseView<Supports> implements View.O
 
         //活动名称
         tvName.setText(data.getActivityName());
-        //截止时间
-        tvEndTime.setText(data.getDeadlineStr());
+        if (data.getDeadlineStr() != null) {
+            //截止时间
+            tvEndTime.setText(DateUtil.resverDate(data.getDeadlineStr(), DATE_PATTERN_2, DATE_PATTERN_8));
+        }
 
         if (data.getSettingGoalsPrice() != null) {
             llPeople.setVisibility(View.GONE);
@@ -134,8 +139,6 @@ public class ActivityNewSupportView extends BaseView<Supports> implements View.O
 
     @Override
     public void onClick(View v) {
-        if (BaseModel.isCorrect(data) == false) {
-            return;
-        }
+
     }
 }

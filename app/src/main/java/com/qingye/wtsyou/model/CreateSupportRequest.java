@@ -1,6 +1,7 @@
 package com.qingye.wtsyou.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by THINK on 2018/4/16.
@@ -12,8 +13,9 @@ public class CreateSupportRequest {
     private String activityIcon;
     private String name;
     private String detail;
-    private String relevanceStar;
+    private List<Id> relevanceStars;
     private BigDecimal settingGoalsPrice;
+    private String[] chatingRooms;
 
     public String getActivityName() {
         return activityName;
@@ -47,12 +49,12 @@ public class CreateSupportRequest {
         this.detail = detail;
     }
 
-    public String getRelevanceStar() {
-        return relevanceStar;
+    public List<Id> getRelevanceStars() {
+        return relevanceStars;
     }
 
-    public void setRelevanceStar(String relevanceStar) {
-        this.relevanceStar = relevanceStar;
+    public void setRelevanceStars(List<Id> relevanceStars) {
+        this.relevanceStars = relevanceStars;
     }
 
     public BigDecimal getSettingGoalsPrice() {
@@ -61,5 +63,13 @@ public class CreateSupportRequest {
 
     public void setSettingGoalsPrice(BigDecimal settingGoalsPrice) {
         this.settingGoalsPrice = settingGoalsPrice;
+    }
+
+    public String[] getChatingRooms() {
+        return chatingRooms;
+    }
+
+    public void setChatingRooms(String[] chatingRooms) {
+        this.chatingRooms = chatingRooms;
     }
 }

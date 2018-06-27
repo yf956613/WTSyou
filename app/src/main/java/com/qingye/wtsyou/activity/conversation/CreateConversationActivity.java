@@ -17,17 +17,19 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
-import com.qingye.wtsyou.activity.campaign.SelectStarsConversationActivity;
 import com.qingye.wtsyou.activity.search.SelectThreeStarsActivity;
-import com.qingye.wtsyou.fragment.campaign.AssociateConversationFragment;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
 import com.qingye.wtsyou.fragment.campaign.AssociateStarsFragment;
+import com.qingye.wtsyou.manager.HttpModel;
 import com.qingye.wtsyou.model.EntityQiniuToken;
 import com.qingye.wtsyou.model.EntityStars;
+import com.qingye.wtsyou.model.EntityStringContent;
+import com.qingye.wtsyou.model.Id;
 import com.qingye.wtsyou.model.QiniuMessage;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-import zuo.biao.library.widget.CustomDialog;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
@@ -40,14 +42,19 @@ import java.util.List;
 
 import fj.edittextcount.lib.FJEditTextCount;
 import zuo.biao.library.base.BaseActivity;
+import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.ui.CutPictureActivity;
 import zuo.biao.library.ui.SelectPictureActivity;
 import zuo.biao.library.util.DataKeeper;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.Log;
 import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
+
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 public class CreateConversationActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -58,6 +65,7 @@ public class CreateConversationActivity extends BaseActivity implements View.OnC
     private RelativeLayout rlPicture;
     private ImageView ivSelectPicture;
 
+    private HttpModel<EntityStringContent> mCreateChatRoomHttpModel;
     //关联明星
     private List<EntityStars> selectStars = new ArrayList<>();
 
@@ -86,6 +94,8 @@ public class CreateConversationActivity extends BaseActivity implements View.OnC
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
+        mCreateChatRoomHttpModel = new HttpModel<>(EntityStringContent.class);
+
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
@@ -95,33 +105,24 @@ public class CreateConversationActivity extends BaseActivity implements View.OnC
 
     @Override
     public void initView() {
-        tvLeft = findViewById(R.id.tv_left);
+        tvLeft = findView(R.id.tv_left);
         tvLeft.setVisibility(View.VISIBLE);
         tvLeft.setText("取消");
-        tvRight = findViewById(R.id.tv_add_temp);
+        tvRight = findView(R.id.tv_add_temp);
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText("发起");
         tvRight.setTextColor(getResources().getColor(R.color.orange_text2));
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("创建聊天室");
 
-        edtName = findViewById(R.id.edt_support_name);
-        edtContent = findViewById(R.id.edt_support_content);
+        edtName = findView(R.id.edt_support_name);
+        edtContent = findView(R.id.edt_support_content);
 
-        //关联聊天室
-        AssociateConversationFragment associateConversationFragment = new AssociateConversationFragment();
-        //注意这里是调用getChildFragmentManager()方法
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        //把碎片添加到碎片中
-        transaction.replace(R.id.list_associate_conversation,associateConversationFragment);
-        transaction.commit();
-
-        llAssociationStars = findViewById(R.id.ll_associate_star);
+        llAssociationStars = findView(R.id.ll_associate_star);
 
         //添加图片
-        rlPicture = findViewById(R.id.rl_picture);
-        ivSelectPicture = findViewById(R.id.iv_select_img);
+        rlPicture = findView(R.id.rl_picture);
+        ivSelectPicture = findView(R.id.iv_select_img);
     }
 
     @Override
@@ -182,7 +183,7 @@ public class CreateConversationActivity extends BaseActivity implements View.OnC
         this.picturePath = path;
 
         toActivity(CutPictureActivity.createIntent(context, path
-                , DataKeeper.imagePath, "photo" + System.currentTimeMillis(), 200)
+                , DataKeeper.imagePath, "photo" + System.currentTimeMillis(), 400, 300, 4, 3)
                 , REQUEST_TO_CUT_PICTURE);
     }
 
@@ -208,9 +209,6 @@ public class CreateConversationActivity extends BaseActivity implements View.OnC
                 break;
             case R.id.ll_associate_star:
                 toActivity(SelectThreeStarsActivity.createIntent(context,selectStars),REQUEST_TO_SELECT_STARS);
-                break;
-            case R.id.ll_associate_conversation:
-                toActivity(SelectStarsConversationActivity.createIntent(context));
                 break;
             case R.id.rl_picture:
                 selectPicture();
@@ -296,6 +294,22 @@ public class CreateConversationActivity extends BaseActivity implements View.OnC
 
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        return false;
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch(keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                finish();
+                return true;
+        }
+
+        return super.onKeyUp(keyCode, event);
+    }
+
     public void getQiNiuToken() {
 
         //setProgressBar();
@@ -328,7 +342,7 @@ public class CreateConversationActivity extends BaseActivity implements View.OnC
                                                 QiniuMessage qiniuMessage =  JSON.parseObject(res.toString(),QiniuMessage.class);
                                                 String hash = qiniuMessage.getHash();
                                                 String backKey = qiniuMessage.getKey();
-                                                createSupport( url, hash, backKey);
+                                                createChatRoom( url, hash, backKey);
 
                                                 //progressBarDismiss();
                                             } else {
@@ -362,42 +376,40 @@ public class CreateConversationActivity extends BaseActivity implements View.OnC
         });
     }
 
-    public void createSupport(String url, String hash, String key) {
-        String activityName = edtName.getText().toString().trim();
-        String activityIcon = url + "/" + key;
-
-
-        //检查网络
-        if (NetUtil.checkNetwork(this)) {
-
-            setProgressBar();
-            progressBar.show();
-
-        } else {
-            showShortToast(R.string.checkNetwork);
-
-            progressBarDismiss();
+    public void createChatRoom(String url, String hash, String key) {
+        String name = edtName.getText().toString().trim();
+        String coverImage = url + "/" + key;
+        String notice = edtContent.getText().toString().trim();
+        List<Id> stars = new ArrayList<>();
+        for (int i = 0;i < selectStars.size();i ++) {
+            Id id = new Id();
+            id.setId(selectStars.get(i).getUuid());
+            stars.add(id);
         }
+
+        String request = HttpRequest.postCreateChatRoom(name, coverImage, coverImage, notice, stars);
+        mCreateChatRoomHttpModel.post(request, URL_BASE + URLConstant.CREATECHATROOM,1,this);
     }
 
     @Override
-    public boolean onLongClick(View v) {
-        return false;
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
     }
 
     @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        switch(keyCode){
-            case KeyEvent.KEYCODE_BACK:
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                //成功
+                showShortToast(R.string.createChatRoomSuccess);
                 finish();
-                return true;
+                break;
         }
+    }
 
-        return super.onKeyUp(keyCode, event);
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
     }
 }

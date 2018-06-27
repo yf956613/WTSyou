@@ -24,8 +24,4 @@ public class PriceListItem extends PriceList {
         isSelector = selector;
     }
 
-    @Override
-    protected boolean isCorrect() {
-        return false;
-    }
 }

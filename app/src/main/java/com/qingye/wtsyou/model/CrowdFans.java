@@ -1,10 +1,12 @@
 package com.qingye.wtsyou.model;
 
+import java.io.Serializable;
+
 /**
  * Created by pm89 on 2018/5/25.
  */
 
-public class CrowdFans {
+public class CrowdFans implements Serializable {
 
     private String created;
     private String modified;

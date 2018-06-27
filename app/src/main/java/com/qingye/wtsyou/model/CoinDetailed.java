@@ -1,16 +1,19 @@
 package com.qingye.wtsyou.model;
 
 
+import java.io.Serializable;
+
 /**
  * Created by pm89 on 2018/3/6.
  */
 
-public class CoinDetailed {
+public class CoinDetailed implements Serializable {
 
     private String uuid;
     private String bizType;
     private int goldCount;
     private String occurTime;
+    private String remark;
 
     public String getUuid() {
         return uuid;
@@ -42,5 +45,13 @@ public class CoinDetailed {
 
     public void setOccurTime(String occurTime) {
         this.occurTime = occurTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -71,7 +71,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="厦门"
+            android:text="定位中"
             android:textSize="@dimen/text_size_14"/>
 
         <LinearLayout
@@ -144,7 +144,7 @@
             android:background="@color/white"
             android:visibility="gone">
 
-            <ListView
+            <!--<ListView
                 android:id="@+id/listView_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -160,7 +160,7 @@
                 android:layout_marginRight="@dimen/margin_4"
                 android:text="关闭"
                 android:textSize="@dimen/text_size_13"
-                android:textColor="@color/gray_text4"/>
+                android:textColor="@color/gray_text4"/>-->
 
         </RelativeLayout>
 

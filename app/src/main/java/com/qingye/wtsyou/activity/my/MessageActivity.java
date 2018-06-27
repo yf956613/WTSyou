@@ -3,9 +3,10 @@ package com.qingye.wtsyou.activity.my;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
@@ -41,6 +42,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
             R.mipmap.home, R.mipmap.activity,
             R.mipmap.conversation, R.mipmap.personal};
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
+    private SlidingPagerAdapter mViewPagerAdapter;
     private CommonTabLayout mTabLayout;
     private ViewPager mViewPager;
 
@@ -67,6 +69,42 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message,this);
 
+        //功能归类分区方法，必须调用<<<<<<<<<<
+        initView();
+        setView();
+        initData();
+        initEvent();
+        //功能归类分区方法，必须调用>>>>>>>>>>
+    }
+
+    @Override
+    public void initView() {
+        ivBack = findView(R.id.iv_left);
+        ivBack.setImageResource(R.mipmap.back_a);
+        tvHead = findView(R.id.tv_head_title);
+        tvHead.setText("消息");
+
+        mTabLayout = findView(R.id.tab);
+        mViewPager = findView(R.id.viewPager);
+    }
+
+    public void setView() {
+        mTabEntities.clear();
+
+        //移除之前的Fragment
+        final FragmentManager fm = getSupportFragmentManager();
+        if (mFragments.size() > 0) {
+            FragmentTransaction ft = fm.beginTransaction();
+            for (Fragment f : this.mFragments) {
+                ft.remove(f);
+            }
+            ft.commit();
+            ft = null;
+            fm.executePendingTransactions();
+        }
+
+        mFragments.clear();
+
         MessageOfficialFragment messageOfficialFragment = new MessageOfficialFragment();
         MessageShowFragment messageShowFragment = new MessageShowFragment();
         MessageTalkFragment messageTalkFragment = new MessageTalkFragment();
@@ -79,22 +117,11 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
             mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
         }
 
-        //功能归类分区方法，必须调用<<<<<<<<<<
-        initView();
-        initData();
-        initEvent();
-        //功能归类分区方法，必须调用>>>>>>>>>>
-    }
+        if(mViewPagerAdapter != null){
+            mViewPagerAdapter = null;
+        }
 
-    @Override
-    public void initView() {
-        ivBack = findViewById(R.id.iv_left);
-        ivBack.setImageResource(R.mipmap.back_a);
-        tvHead = findViewById(R.id.tv_head_title);
-        tvHead.setText("消息");
-
-        mTabLayout = findViewById(R.id.tab);
-        mViewPager = findViewById(R.id.viewPager);
+        mViewPagerAdapter = new SlidingPagerAdapter(fm,mFragments,mTitles,context);
         mViewPager.setAdapter(new SlidingPagerAdapter(getSupportFragmentManager(),mFragments,mTitles,context));
         mViewPager.setOffscreenPageLimit(3);//设置缓存界面
         tabLayout();
@@ -160,10 +187,6 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         return false;
     }
 
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
-    }
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch(keyCode){

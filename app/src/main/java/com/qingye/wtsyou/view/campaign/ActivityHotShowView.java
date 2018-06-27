@@ -13,7 +13,6 @@ import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.model.Hots;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
@@ -36,10 +35,10 @@ public class ActivityHotShowView extends BaseView<Hots> implements View.OnClickL
     @SuppressLint("InflateParams")
     @Override
     public View createView() {
-        joinProgressBar = findViewById(R.id.join_progressbar);
-        ivImg = findViewById(R.id.iv_hot_show_img);
-        tvTag = findViewById(R.id.tv_tag);
-        tvName = findViewById(R.id.tv_hot_show_name);
+        joinProgressBar = findView(R.id.join_progressbar);
+        ivImg = findView(R.id.iv_hot_show_img);
+        tvTag = findView(R.id.tv_tag);
+        tvName = findView(R.id.tv_hot_show_name);
 
         return super.createView();
     }
@@ -51,10 +50,13 @@ public class ActivityHotShowView extends BaseView<Hots> implements View.OnClickL
         joinProgressBar.setProgress((0));
         //图片
         String url = data.getActivityIcon();
-        Glide.with(context)
-                .load(url)
-                .apply(bitmapTransform(new RoundedCornersTransformation(10, 0, RoundedCornersTransformation.CornerType.ALL)))
-                .into(ivImg);
+        if (url != null) {
+            Glide.with(context)
+                    .load(url)
+                    .apply(bitmapTransform(new RoundedCornersTransformation(10, 0, RoundedCornersTransformation.CornerType.ALL)))
+                    .into(ivImg);
+        }
+
         //标签
         String tag = data.getActivityState();
         tvTag.setText(data.getActivityStateName());
@@ -65,7 +67,7 @@ public class ActivityHotShowView extends BaseView<Hots> implements View.OnClickL
         }
         //投票中
         if (tag.equals("voting")) {
-            tvTag.setBackground(getResources().getDrawable(R.drawable.re_corners_pink));
+            tvTag.setBackground(getResources().getDrawable(R.drawable.re_corners_red));
         }
         //众筹中
         if (tag.equals("crowding")) {
@@ -73,7 +75,7 @@ public class ActivityHotShowView extends BaseView<Hots> implements View.OnClickL
         }
         //售票中
         if (tag.equals("saling")) {
-            tvTag.setBackground(getResources().getDrawable(R.drawable.re_corners_red));
+            tvTag.setBackground(getResources().getDrawable(R.drawable.re_corners_orange));
         }
 
         //活动名称
@@ -82,8 +84,6 @@ public class ActivityHotShowView extends BaseView<Hots> implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        if (BaseModel.isCorrect(data) == false) {
-            return;
-        }
+
     }
 }

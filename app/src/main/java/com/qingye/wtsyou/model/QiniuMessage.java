@@ -1,12 +1,14 @@
 package com.qingye.wtsyou.model;
 
+import java.io.Serializable;
+
 import zuo.biao.library.base.BaseModel;
 
 /**
  * Created by pm89 on 2018/5/12.
  */
 
-public class QiniuMessage extends BaseModel {
+public class QiniuMessage implements Serializable {
 
     private String hash;
     private String key;
@@ -25,10 +27,5 @@ public class QiniuMessage extends BaseModel {
 
     public void setKey(String key) {
         this.key = key;
-    }
-
-    @Override
-    protected boolean isCorrect() {
-        return true;
     }
 }

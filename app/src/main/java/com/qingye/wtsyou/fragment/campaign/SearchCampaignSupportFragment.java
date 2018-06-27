@@ -1,6 +1,7 @@
 package com.qingye.wtsyou.fragment.campaign;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,9 +10,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.activity.MainActivity;
+import com.qingye.wtsyou.activity.campaign.SupportDetailedActivity;
 import com.qingye.wtsyou.adapter.campaign.ActivityNewSupportAdapter;
+import com.qingye.wtsyou.model.EntitySupportDetailed;
 import com.qingye.wtsyou.model.Supports;
+import com.qingye.wtsyou.utils.Constant;
+import com.qingye.wtsyou.utils.HttpRequest;
+import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.campaign.ActivityNewSupportView;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +27,19 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
+import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.util.JSON;
+import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SearchCampaignSupportFragment extends BaseHttpRecyclerFragment<Supports,ActivityNewSupportView,ActivityNewSupportAdapter> implements CacheCallBack<Supports> {
+
+    private  List<Supports> supports =  new ArrayList<>();
+
+    private CustomDialog progressBar;
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -46,6 +62,12 @@ public class SearchCampaignSupportFragment extends BaseHttpRecyclerFragment<Supp
         setContentView(R.layout.fragment_search_campaign_support);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+
+        //获取传来的数据
+        Bundle bundle = getArguments();
+        supports = (List<Supports>) bundle.getSerializable(Constant.SUPPORTLIST);
+
         initCache(this);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
@@ -54,11 +76,19 @@ public class SearchCampaignSupportFragment extends BaseHttpRecyclerFragment<Supp
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
+        //禁止滑动
+        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
+        linearLayoutManager.setScrollEnabled(false);
+        rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
+        rvBaseRecycler.setLayoutManager(linearLayoutManager);
+
         //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
         srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
+
+        setList(supports);
 
         return view;
     }
@@ -70,13 +100,7 @@ public class SearchCampaignSupportFragment extends BaseHttpRecyclerFragment<Supp
 
     @Override
     public void setList(final List<Supports> list) {
-        final List<Supports> templist = new ArrayList<>();
-        for(int i = 1;i < 4;i ++) {
-            Supports campaign = new Supports();
-            campaign.setId(i);
-            templist.add(campaign);
-        }
-        //list.addAll(templist);
+
         setList(new AdapterCallBack<ActivityNewSupportAdapter>() {
 
             @Override
@@ -86,7 +110,7 @@ public class SearchCampaignSupportFragment extends BaseHttpRecyclerFragment<Supp
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -97,6 +121,33 @@ public class SearchCampaignSupportFragment extends BaseHttpRecyclerFragment<Supp
     }
 
     //Data数据区(存在数据获取或处理代码，但不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
+        }
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
+    }
 
     @Override
     public void initData() {//必须调用
@@ -142,7 +193,8 @@ public class SearchCampaignSupportFragment extends BaseHttpRecyclerFragment<Supp
     //点击item
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //toActivity(SupportDetailedActivity.createIntent(context,id));
+
+        toActivity(SupportDetailedActivity.createIntent(context, supports.get(position).getActivityId()));
     }
 
 }

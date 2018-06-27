@@ -74,17 +74,12 @@ public class DetailedActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
-    }
-
-    @Override
     public void initView() {
-        ivBack = findViewById(R.id.iv_left);
+        ivBack = findView(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
         tvHead = findView(R.id.tv_head_title);
 
-        webView = findViewById(R.id.webView);
+        webView = findView(R.id.webView);
     }
 
     @Override

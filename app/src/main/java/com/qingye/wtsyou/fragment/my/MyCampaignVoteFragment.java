@@ -10,17 +10,17 @@ import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.campaign.VoteDetailedActivity;
 import com.qingye.wtsyou.adapter.home.StarsMainVoteAdapter;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpPageModel;
 import com.qingye.wtsyou.model.EntityPageData;
-import com.qingye.wtsyou.model.EntityVoteDetailed;
 import com.qingye.wtsyou.model.Vote;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
-import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.home.StarsMainVoteView;
-import zuo.biao.library.widget.CustomDialog;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +28,20 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
-import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.util.JSON;
-import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.interfaces.IErrorCodeTool;
+import zuo.biao.library.interfaces.OnHttpPageCallBack;
+import zuo.biao.library.widget.CustomDialog;
 
-public class MyCampaignVoteFragment extends BaseHttpRecyclerFragment<Vote,StarsMainVoteView,StarsMainVoteAdapter> implements CacheCallBack<Vote> {
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
+
+public class MyCampaignVoteFragment extends BaseHttpRecyclerFragment<Vote,StarsMainVoteView,StarsMainVoteAdapter>
+        implements CacheCallBack<Vote>, OnHttpPageCallBack<EntityPageData, Vote> {
 
     private LinearLayout noMessage;
 
     private CustomDialog progressBar;
+
+    private HttpPageModel<EntityPageData, Vote> mEntityPageDataHttpModel;
 
     private List<Vote> voteList = new ArrayList<>();
 
@@ -63,20 +68,23 @@ public class MyCampaignVoteFragment extends BaseHttpRecyclerFragment<Vote,StarsM
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
+        ///投票列表
+        mEntityPageDataHttpModel = new HttpPageModel<>(EntityPageData.class);
+        voteQuery();
+
         initCache(this);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
-        voteQuery();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        //srlBaseHttpRecycler.autoRefresh();
-        srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部*/
 
         return view;
     }
@@ -185,98 +193,136 @@ public class MyCampaignVoteFragment extends BaseHttpRecyclerFragment<Vote,StarsM
 
     }
 
-    public void voteQuery() {
-        if (NetUtil.checkNetwork(getActivity())) {
-            setProgressBar();
-            progressBar.show();
-
-            HttpRequest.postMyVote(0, new OnHttpResponseListener() {
-
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-
-                    if(!StringUtil.isEmpty(resultJson)){
-
-                        EntityPageData entityPageData =  JSON.parseObject(resultJson,EntityPageData.class);
-
-                        if(entityPageData.isSuccess()){
-                            //成功
-                            //showShortToast(R.string.getSuccess);
-                            voteList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageData.getContent().getData())
-                                    ,new TypeToken<List<Vote>>(){}.getType());
-
-                            if (voteList.size() > 0) {
-                                setList(voteList);
-                                 noMessage.setVisibility(View.GONE);
-                            } else {
-                                noMessage.setVisibility(View.VISIBLE);
-                            }
-
-                            progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entityPageData.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityPageData.getMessage());
-                            }
-
-                            progressBarDismiss();
-                        }
-
-                    }else{
-                        showShortToast(R.string.noReturn);
-
-                        progressBarDismiss();
-                    }
-                }
-            });
-        } else {
-            showShortToast(R.string.checkNetwork);
-
-            progressBarDismiss();
-        }
-    }
-
     //点击item
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //检查网络
-        if (NetUtil.checkNetwork(context)) {
-            String uuid = voteList.get(position).getActivityId();
 
-            setProgressBar();
-            progressBar.show();
+        toActivity(VoteDetailedActivity.createIntent(context, voteList.get(position).getActivityId()));
+    }
 
-            HttpRequest.getVoteDetailed(0, uuid, new OnHttpResponseListener() {
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                    if(!StringUtil.isEmpty(resultJson)){
-                        EntityVoteDetailed entityVoteDetailed =  JSON.parseObject(resultJson,EntityVoteDetailed.class);
-                        if(entityVoteDetailed.isSuccess()){
-                            //成功//showShortToast(R.string.getSuccess);
-                            toActivity(VoteDetailedActivity.createIntent(context, entityVoteDetailed));
+    public void voteQuery() {
+        /*setProgressBar();
+        progressBar.show();*/
 
-                            progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entityVoteDetailed.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityVoteDetailed.getMessage());
-                            }
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.MYVOTEQUERY, this);
+    }
 
-                            progressBarDismiss();
-                        }
-                    }else{
-                        showShortToast(R.string.noReturn);
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
 
-                        progressBarDismiss();
-                    }
-                }
-            });
+    @Override
+    public List<Vote> getList(EntityPageData data) {
+        return GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(data.getContent().getData())
+                ,new TypeToken<List<Vote>>(){}.getType());
+    }
+
+    @Override
+    public String getRequestJsonStr(int page, int pageSize) {
+
+        String activityProperty = "vote";
+        String parts = null;
+        String request = HttpRequest.postMyCampaign(activityProperty, parts, page, pageSize);
+        return request;
+    }
+
+    @Override
+    public void emptyPagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishRefresh();
+        noMessage.setVisibility(View.VISIBLE);
+
+        if (voteList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
         } else {
-            showShortToast(R.string.checkNetwork);
+            noMessage.setVisibility(View.VISIBLE);
         }
     }
+
+    @Override
+    public void refreshSuccessPagingList(List<Vote> list) {
+        voteList.clear();
+
+        voteList.addAll(list);
+        srlBaseHttpRecycler.finishRefresh();
+        srlBaseHttpRecycler.setLoadmoreFinished(false);
+
+        noMessage.setVisibility(View.GONE);
+        setList(voteList);
+
+        if (voteList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void noMorePagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+
+        if (voteList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void loadMoreSuccessPagingList(List<Vote> list) {
+        voteList.addAll(list);
+        srlBaseHttpRecycler.finishLoadmore();
+
+        setList(voteList);
+
+        if (voteList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void refreshErrorPagingList() {
+        showShortToast(R.string.noReturn);
+
+        if (voteList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void loadMoreErrorPagingList() {
+        showShortToast(R.string.noReturn);
+
+        if (voteList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        super.onRefresh(refreshlayout);
+        //投票列表
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.MYVOTEQUERY, this);
+    }
+
+    @Override
+    public void onLoadmore(RefreshLayout refreshlayout) {
+        super.onLoadmore(refreshlayout);
+        //投票列表
+        mEntityPageDataHttpModel.loadMorePost(URL_BASE + URLConstant.MYVOTEQUERY, this);
+    }
+
 }

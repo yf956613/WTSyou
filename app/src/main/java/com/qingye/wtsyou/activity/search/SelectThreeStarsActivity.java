@@ -6,35 +6,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.MainActivity;
-import com.qingye.wtsyou.adapter.home.SelectOneStarsAdapter;
+import com.qingye.wtsyou.adapter.home.SelectStarsAdapter;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
 import com.qingye.wtsyou.fragment.home.SelectedStarsFragment;
+import com.qingye.wtsyou.manager.HttpPageModel;
 import com.qingye.wtsyou.model.EntityPageData;
 import com.qingye.wtsyou.model.EntityStars;
-import com.qingye.wtsyou.model.EntityStarsItem;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
-import com.qingye.wtsyou.utils.NetUtil;
-import com.qingye.wtsyou.view.home.SelectOneStarsView;
-import zuo.biao.library.widget.CustomDialog;
+import com.qingye.wtsyou.utils.URLConstant;
+import com.qingye.wtsyou.view.home.SelectStarsView;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,24 +38,28 @@ import java.util.Map;
 
 import zuo.biao.library.base.BaseHttpRecyclerActivity;
 import zuo.biao.library.interfaces.AdapterCallBack;
+import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
-import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.interfaces.OnHttpPageCallBack;
+import zuo.biao.library.widget.CustomDialog;
 
-public class SelectThreeStarsActivity extends BaseHttpRecyclerActivity <EntityStarsItem,SelectOneStarsView,SelectOneStarsAdapter> implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
+
+public class SelectThreeStarsActivity extends BaseHttpRecyclerActivity <EntityStars,SelectStarsView,SelectStarsAdapter> implements
+        View.OnClickListener, View.OnLongClickListener, OnBottomDragListener, OnHttpPageCallBack<EntityPageData, EntityStars> {
 
     private ImageView ivBack,ivSearch;
     private TextView tvHead;
     private TextView tvConfirm;
 
+    private HttpPageModel<EntityPageData, EntityStars> mEntityPageDataHttpModel;
+
     //全部明星
-    private List<EntityStarsItem> starsItem = new ArrayList<>();
+    private List<EntityStars> starsList = new ArrayList<>();
     //选择的明星，包含重新选择
     private Map<String,EntityStars> MapselectedStars = new HashMap<>();
     private List<EntityStars> selectedStars = new ArrayList<>();
 
-    private LinearLayout listview;
-    private SwipeRefreshLayout swipeRefresh;
     private CustomDialog progressBar;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -94,41 +92,40 @@ public class SelectThreeStarsActivity extends BaseHttpRecyclerActivity <EntitySt
         intent = getIntent();
         selectedStars = (List<EntityStars>) intent.getSerializableExtra(Constant.SELECTED_STARS);
 
+        //明星列表
+        mEntityPageDataHttpModel = new HttpPageModel<>(EntityPageData.class);
+        mEntityPageDataHttpModel.setPageSize(24);
         allStars();
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
-        //刷新
-        initHrvsr();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
-        srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
-        srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(true);//不启用下拉刷新
+        srlBaseHttpRecycler.setEnableLoadmore(true);//不启用上拉加载更多
+        srlBaseHttpRecycler.setEnableHeaderTranslationContent(true);//头部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部*/
 
         //实例化一个GridLayoutManager，列数为3
         final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
         rvBaseRecycler.setLayoutManager(layoutManager);
 
-        srlBaseHttpRecycler.autoRefresh();
     }
 
     @Override
     public void initView() {
         super.initView();
-        listview = findView(R.id.list_all_stars);
-        swipeRefresh = findViewById(R.id.swipe_refresh_widget);
 
-        ivBack = findViewById(R.id.iv_left);
+        ivBack = findView(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.backwirtih);
-        ivSearch = findViewById(R.id.iv_right);
+        ivSearch = findView(R.id.iv_right);
         ivSearch.setImageResource(R.mipmap.search);
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("选择明星");
-        tvConfirm = findViewById(R.id.tv_confirm);
+        tvConfirm = findView(R.id.tv_confirm);
     }
 
     @Override
@@ -158,47 +155,14 @@ public class SelectThreeStarsActivity extends BaseHttpRecyclerActivity <EntitySt
         }
     }
 
-    //刷新
-    private void initHrvsr(){
-        //设置刷新时动画的颜色，可以设置4个
-        swipeRefresh.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_light,
-                android.R.color.holo_red_light, android.R.color.holo_orange_light,
-                android.R.color.holo_green_light);
-        swipeRefresh.setProgressViewOffset(false, 0, (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
-                        .getDisplayMetrics()));
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.e("swipeRefresh", "invoke onRefresh...");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        allStars();
-                        showShortToast(R.string.getSuccess);
-                        swipeRefresh.setRefreshing(false);
-                    }
-                }, 1500);
-            }
-        });
-        // 设置子视图是否允许滚动到顶部
-        swipeRefresh.setOnChildScrollUpCallback(new SwipeRefreshLayout.OnChildScrollUpCallback() {
-            @Override
-            public boolean canChildScrollUp(SwipeRefreshLayout parent, @Nullable View child) {
-                return listview.getScrollY() > 0;
-            }
-        });
-    }
-
     @Override
-    public void setList(final List<EntityStarsItem> list) {
+    public void setList(final List<EntityStars> list) {
 
-        setList(new AdapterCallBack<SelectOneStarsAdapter>() {
+        setList(new AdapterCallBack<SelectStarsAdapter>() {
 
             @Override
-            public SelectOneStarsAdapter createAdapter() {
-                return new SelectOneStarsAdapter(context);
+            public SelectStarsAdapter createAdapter() {
+                return new SelectStarsAdapter(context);
             }
 
             @Override
@@ -225,8 +189,8 @@ public class SelectThreeStarsActivity extends BaseHttpRecyclerActivity <EntitySt
     }
 
     @Override
-    public List<EntityStarsItem> parseArray(String json) {
-        return starsItem;
+    public List<EntityStars> parseArray(String json) {
+        return starsList;
     }
 
     @Override
@@ -248,14 +212,17 @@ public class SelectThreeStarsActivity extends BaseHttpRecyclerActivity <EntitySt
                 toActivity(SearchStarsActivity.createIntent(context));
                 break;
             case R.id.tv_confirm:
-                Intent intent = new Intent();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Constant.SELECTED_STARS, (Serializable) selectedStars);//放进数据流中
+                if (MapselectedStars.size() > 0 && MapselectedStars.size() < 4) {
+                    Intent intent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Constant.SELECTED_STARS, (Serializable) selectedStars);//放进数据流中
 
-                intent.putExtras(bundle);
-                setResult(RESULT_OK, intent);
+                    intent.putExtras(bundle);
+                    setResult(RESULT_OK, intent);
 
-                finish();
+                    finish();
+                }
+
                 break;
             default:
                 break;
@@ -263,66 +230,28 @@ public class SelectThreeStarsActivity extends BaseHttpRecyclerActivity <EntitySt
 
     }
 
-    public void allStars() {
+    //类相关监听<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        if (NetUtil.checkNetwork(this)) {
-            setProgressBar();
-            progressBar.show();
+    private static final int REQUEST_TO_SELECT_STARS = 1;
 
-            HttpRequest.postAllStars(0, new OnHttpResponseListener() {
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                    if(!StringUtil.isEmpty(resultJson)){
-                        EntityPageData entityPageData =  JSON.parseObject(resultJson,EntityPageData.class);
-                        if(entityPageData.isSuccess()){
-                            //成功
-                            //showShortToast(R.string.getSuccess);
-                            List<EntityStars> stars = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageData.getContent().getData())
-                                    ,new TypeToken<List<EntityStars>>(){}.getType());
-                            starsItem.clear();
-                            for (EntityStars entityStars : stars) {
-                                EntityStarsItem entityStarsItem = new EntityStarsItem();
-                                entityStarsItem.setEntityStars(entityStars);
-                                entityStarsItem.setSelector(false);
-                                starsItem.add(entityStarsItem);
-                            }
-
-                            if (selectedStars.size() > 0){
-                                for (EntityStarsItem starsitem : starsItem) {
-                                    for (EntityStars selectstars : selectedStars) {
-                                        if (starsitem.getEntityStars().getUuid().equals(selectstars.getUuid())) {
-                                            starsitem.setSelector(true);
-                                            //上个界面的放入map
-                                            MapselectedStars.put(starsitem.getEntityStars().getUuid(),starsitem.getEntityStars());
-                                        }
-                                    }
-                                }
-                                selectedStars(selectedStars);
-                            }
-
-                            setList(starsItem);
-
-                            progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entityPageData.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityPageData.getMessage());
-                            }
-
-                            progressBarDismiss();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case REQUEST_TO_SELECT_STARS:
+                if (data != null) {
+                    EntityStars stars = (EntityStars) data.getExtras().getSerializable(Constant.SELECTED_STARS);
+                    for (int i = 0;i < starsList.size();i ++) {
+                        if (starsList.get(i).getUuid().equals(stars.getUuid())) {
+                            rvBaseRecycler.scrollToPosition(i);
                         }
-                    }else{
-                        showShortToast(R.string.noReturn);
-
-                        progressBarDismiss();
                     }
                 }
-            });
-
-        } else {
-            showShortToast(R.string.checkNetwork);
+                break;
+            default:
+                break;
         }
     }
 
@@ -337,7 +266,7 @@ public class SelectThreeStarsActivity extends BaseHttpRecyclerActivity <EntitySt
         selectedStarsFragment.setArguments(bundle);
         //把碎片添加到碎片中
         transaction.replace(R.id.list_selected_stars,selectedStarsFragment);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 
     //更新选择的明星
@@ -352,33 +281,34 @@ public class SelectThreeStarsActivity extends BaseHttpRecyclerActivity <EntitySt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //此处可选择多个明星
-        if (starsItem.get(position).getSelector()) {
-            starsItem.get(position).setSelector(false);
+        if (starsList.get(position).getIsFollow()) {
+            starsList.get(position).setIsFollow(false);
         } else {
-            starsItem.get(position).setSelector(true);
+            starsList.get(position).setIsFollow(true);
         }
 
         //更新界面
-        setList(starsItem);
+        setList(starsList);
 
         //选择的明星
-        if (starsItem.get(position).getSelector()) {
-            MapselectedStars.put(starsItem.get(position).getEntityStars().getUuid(),starsItem.get(position).getEntityStars());
+        if (starsList.get(position).getIsFollow()) {
+            MapselectedStars.put(starsList.get(position).getUuid(),starsList.get(position));
         } else {//移除的时候看看有没有已经在里面，因为上一个界面会传值过来
-            MapselectedStars.remove(starsItem.get(position).getEntityStars().getUuid());
+            MapselectedStars.remove(starsList.get(position).getUuid());
         }
 
         if (MapselectedStars.size() < 1) {
             showShortToast(R.string.leastOne);
-            starsItem.get(position).setSelector(true);
-            MapselectedStars.put(starsItem.get(position).getEntityStars().getUuid(),starsItem.get(position).getEntityStars());
+            starsList.get(position).setIsFollow(true);
+            MapselectedStars.put(starsList.get(position).getUuid(),starsList.get(position));
         }
         else if (MapselectedStars.size() > 3){
             showShortToast(R.string.mostThree);
-            starsItem.get(position).setSelector(false);
-            MapselectedStars.remove(starsItem.get(position).getEntityStars().getUuid());
+            starsList.get(position).setIsFollow(false);
+            MapselectedStars.remove(starsList.get(position).getUuid());
         }
 
+        putSelectedMap(starsList);
         getSelectedStars();
         selectedStars(selectedStars);
     }
@@ -402,5 +332,121 @@ public class SelectThreeStarsActivity extends BaseHttpRecyclerActivity <EntitySt
         }
 
         return super.onKeyUp(keyCode, event);
+    }
+
+    private void putSelectedMap(List<EntityStars> list) {
+        for (EntityStars entityStars : list) {
+
+            if (entityStars.getIsFollow()) {
+                MapselectedStars.put(entityStars.getUuid(),entityStars);
+            }
+        }
+    }
+
+    public void allStars() {
+        /*setProgressBar();
+        progressBar.show();*/
+
+        //明星列表
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.ALLSTARS, this);
+    }
+
+    public List<EntityStars> setDefault(List<EntityStars> starsList) {
+        for (int i = 0;i < starsList.size();i ++) {
+            starsList.get(i).setIsFollow(false);
+
+            if (selectedStars.size() > 0) {
+                for (int j = 0;j < selectedStars.size();j ++) {
+                    if (selectedStars.get(j).getUuid().equals(starsList.get(i).getUuid())) {
+                        starsList.get(i).setIsFollow(true);
+                        MapselectedStars.put(starsList.get(i).getUuid(),starsList.get(i));
+                    }
+                }
+            }
+        }
+
+        return starsList;
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public List<EntityStars> getList(EntityPageData data) {
+        return GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(data.getContent().getData())
+                ,new TypeToken<List<EntityStars>>(){}.getType());
+    }
+
+    @Override
+    public String getRequestJsonStr(int page, int pageSize) {
+        String keywords = null;
+        String request = HttpRequest.postKeywordsPageData(keywords, page, pageSize);
+        return request;
+    }
+
+    @Override
+    public void emptyPagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishRefresh();
+    }
+
+    @Override
+    public void refreshSuccessPagingList(List<EntityStars> list) {
+        starsList.clear();
+
+        starsList.addAll(setDefault(list));
+        srlBaseHttpRecycler.finishRefresh();
+        srlBaseHttpRecycler.setLoadmoreFinished(false);
+
+        setList(starsList);
+        selectedStars(selectedStars);
+
+    }
+
+    @Override
+    public void noMorePagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+    }
+
+    @Override
+    public void loadMoreSuccessPagingList(List<EntityStars> list) {
+        starsList.addAll(setDefault(list));
+        srlBaseHttpRecycler.finishLoadmore();
+
+        setList(starsList);
+        selectedStars(selectedStars);
+
+    }
+
+    @Override
+    public void refreshErrorPagingList() {
+        showShortToast(R.string.noReturn);
+    }
+
+    @Override
+    public void loadMoreErrorPagingList() {
+        showShortToast(R.string.noReturn);
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        super.onRefresh(refreshlayout);
+        //明星列表
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.ALLSTARS, this);
+    }
+
+    @Override
+    public void onLoadmore(RefreshLayout refreshlayout) {
+        super.onLoadmore(refreshlayout);
+        //明星列表
+        mEntityPageDataHttpModel.loadMorePost(URL_BASE + URLConstant.ALLSTARS, this);
     }
 }

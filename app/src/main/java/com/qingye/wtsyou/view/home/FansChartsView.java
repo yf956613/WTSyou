@@ -50,12 +50,12 @@ public class FansChartsView extends BaseView<RankInfos> implements View.OnClickL
     @SuppressLint("InflateParams")
     @Override
     public View createView() {
-        tvNo = findViewById(R.id.tv_No);
-        tvName = findViewById(R.id.tv_stars_name);
-        tvValue = findViewById(R.id.tv_value);
-        tvFocus = findViewById(R.id.tv_focus,this);
-        tvCancelFocus = findViewById(R.id.tv_cancel_focus,this);
-        ivImg = findViewById(R.id.iv_stars_img);
+        tvNo = findView(R.id.tv_No);
+        tvName = findView(R.id.tv_stars_name);
+        tvValue = findView(R.id.tv_value);
+        tvFocus = findView(R.id.tv_focus,this);
+        tvCancelFocus = findView(R.id.tv_cancel_focus,this);
+        ivImg = findView(R.id.iv_img);
 
         return super.createView();
     }
@@ -84,7 +84,11 @@ public class FansChartsView extends BaseView<RankInfos> implements View.OnClickL
         if (url != null) {
             Glide.with(context)
                     .load(url)
-                    .apply(bitmapTransform(new RoundedCornersTransformation(10, 0, RoundedCornersTransformation.CornerType.ALL)))
+                    .into(ivImg);
+        } else {
+            int defaultHead = R.mipmap.head;
+            Glide.with(context)
+                    .load(defaultHead)
                     .into(ivImg);
         }
 

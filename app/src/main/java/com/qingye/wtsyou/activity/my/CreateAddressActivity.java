@@ -16,19 +16,19 @@ import android.widget.TextView;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.gaode.activity.GaoDeAddressSelectActivity;
-import zuo.biao.library.model.EntityBase;
 import com.qingye.wtsyou.basemodel.POI;
 import com.qingye.wtsyou.utils.BroadcastAction;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-import zuo.biao.library.widget.CustomDialog;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
 
 public class CreateAddressActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -79,20 +79,20 @@ public class CreateAddressActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void initView() {
-        ivLeft = findViewById(R.id.iv_left);
+        ivLeft = findView(R.id.iv_left);
         ivLeft.setImageResource(R.mipmap.back_a);
-        tvRight = findViewById(R.id.tv_add_temp);
+        tvRight = findView(R.id.tv_add_temp);
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText("保存");
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("新增收货地址");
 
-        edtContactName = findViewById(R.id.edt_contact_name);
-        edtContactPhone = findViewById(R.id.edt_contact_phone);
-        edtDetail = findViewById(R.id.edt_detail);
+        edtContactName = findView(R.id.edt_contact_name);
+        edtContactPhone = findView(R.id.edt_contact_phone);
+        edtDetail = findView(R.id.edt_detail);
 
-        llAddress = findViewById(R.id.ll_address);
-        tvArea = findViewById(R.id.tv_area);
+        llAddress = findView(R.id.ll_address);
+        tvArea = findView(R.id.tv_area);
     }
 
     @Override
@@ -268,11 +268,6 @@ public class CreateAddressActivity extends BaseActivity implements View.OnClickL
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override

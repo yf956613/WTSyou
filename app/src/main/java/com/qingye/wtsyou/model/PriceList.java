@@ -1,5 +1,6 @@
 package com.qingye.wtsyou.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import zuo.biao.library.base.BaseModel;
@@ -8,17 +9,18 @@ import zuo.biao.library.base.BaseModel;
  * Created by pm89 on 2018/5/10.
  */
 
-public class PriceList extends BaseModel {
+public class PriceList implements Serializable {
     private String uuid;
     private String created;
     private String modified;
     private String creator;
     private String modifier;
     private String activityId;
-    private BigDecimal price;
+    private double price;
     private int number;
     private int surplus;
     private int ticketNumber;
+    private int ticketSurplus;
 
     public String getUuid() {
         return uuid;
@@ -68,11 +70,11 @@ public class PriceList extends BaseModel {
         this.activityId = activityId;
     }
 
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -100,8 +102,11 @@ public class PriceList extends BaseModel {
         this.ticketNumber = ticketNumber;
     }
 
-    @Override
-    protected boolean isCorrect() {
-        return false;
+    public int getTicketSurplus() {
+        return ticketSurplus;
+    }
+
+    public void setTicketSurplus(int ticketSurplus) {
+        this.ticketSurplus = ticketSurplus;
     }
 }

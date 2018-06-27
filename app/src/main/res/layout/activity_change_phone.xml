@@ -55,7 +55,7 @@
                 android:id="@+id/tv_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="18659847929"
+                android:text=""
                 android:textSize="@dimen/text_size_14"
                 android:textColor="@color/black_text1"/>
 

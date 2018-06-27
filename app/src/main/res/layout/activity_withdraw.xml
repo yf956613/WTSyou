@@ -98,7 +98,7 @@
                             android:src="@mipmap/jinbi"/>
 
                         <EditText
-                            android:id="@+id/edt_feedback"
+                            android:id="@+id/edt_withdraw"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -152,52 +152,25 @@
                     android:padding="@dimen/margin_15"
                     android:background="@drawable/corners_white_3">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <WebView
+                        android:id="@+id/webView"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="一、提现需要什么条件"
-                        android:textSize="@dimen/text_size_13"
-                        android:textColor="@color/black_text1"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1.等级达到6级以上"
-                        android:layout_marginTop="@dimen/margin_6"
-                        android:textSize="@dimen/text_size_11"
-                        android:textColor="@color/gray_text1"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2.播主持续在线8小时以上"
-                        android:layout_marginTop="@dimen/margin_4"
-                        android:textSize="@dimen/text_size_11"
-                        android:textColor="@color/gray_text1"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="二、申请提现需要审核多久"
-                        android:layout_marginTop="@dimen/margin_6"
-                        android:textSize="@dimen/text_size_13"
-                        android:textColor="@color/black_text1"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="在三个工作日内给予答复"
-                        android:layout_marginTop="@dimen/margin_6"
-                        android:textSize="@dimen/text_size_11"
-                        android:textColor="@color/gray_text1"/>
+                        android:layout_centerInParent="true"
+                        android:text="这是规则!!!!"
+                        android:textSize="@dimen/text_size_15"
+                        android:textColor="@color/black_text1"
+                        tools:ignore="WebViewLayout" />
 
                 </LinearLayout>
 
                 <TextView
-                    android:layout_width="55dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/margin_2"
-                    android:layout_marginBottom="@dimen/margin_2"
+                    android:paddingBottom="@dimen/margin_2"
+                    android:paddingLeft="@dimen/margin_6"
+                    android:paddingRight="@dimen/margin_6"
                     android:gravity="center"
                     android:text="提现须知"
                     android:textSize="@dimen/text_size_11"

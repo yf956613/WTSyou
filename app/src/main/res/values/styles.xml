@@ -1,19 +1,26 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="AppTheme.Base">
 
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
-    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+
+    <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <!--toolbar (action Bar)颜色 EE7C1C-->
         <item name="colorPrimary">@color/colorPrimary</item>
         <!--状态栏颜色 -->
-        <item name="colorPrimaryDark">#ffffff</item>
+        <item name="colorPrimaryDark">#00ffffff</item>
         <item name="android:statusBarColor">#00ffffff</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:clipToPadding">false</item>
-
+        <item name="android:windowTranslucentStatus">false</item>
     </style>
 
     <style name="bottom_tab_ll" parent="ll_vertical_match_match">
@@ -59,7 +66,7 @@
         <item name="android:windowBackground">@color/white</item>
     </style>
 
-    <style name="CustomDialog" parent="AppTheme">
+    <style name="CustomDialog" parent="AppThemeNoActionBar">
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>

@@ -8,6 +8,7 @@
     android:background="@drawable/corners_white_shadow">
 
     <ImageView
+        android:id="@+id/iv_selected"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_alignParentBottom="true"
@@ -41,7 +42,7 @@
         android:textSize="@dimen/text_size_9"
         android:visibility="gone"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_img"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -49,14 +50,14 @@
         android:layout_marginTop="@dimen/margin_65"
         android:background="@drawable/circle_white">
 
-        <ImageView
+        <com.qingye.wtsyou.widget.CircleImageView
             android:id="@+id/iv_personal"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:src="@mipmap/head_d"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:layout_below="@+id/ll_img"

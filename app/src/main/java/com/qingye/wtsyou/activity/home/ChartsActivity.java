@@ -91,19 +91,19 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initView() {
-        //swipeRefresh = findViewById(R.id.swipe_refresh_widget);
-        linearLayout = findViewById(R.id.linearlayout);
+        //swipeRefresh = findView(R.id.swipe_refresh_widget);
+        linearLayout = findView(R.id.linearlayout);
 
-        ivBack = findViewById(R.id.iv_left);
+        ivBack = findView(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
-        ivPast = findViewById(R.id.iv_right);
+        ivPast = findView(R.id.iv_right);
         ivPast.setImageResource(R.mipmap.calendar);
         tvHead = findView(R.id.tv_head_title);
         tvHead.setText("排行榜");
 
-        mTabLayout = findViewById(R.id.tab);
+        mTabLayout = findView(R.id.tab);
         mTabLayout.setUnderlineColor(Color.parseColor("#00dddddd"));
-        mViewPager = findViewById(R.id.viewPager);
+        mViewPager = findView(R.id.viewPager);
 
     }
 
@@ -274,11 +274,6 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override

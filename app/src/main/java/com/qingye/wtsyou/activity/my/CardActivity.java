@@ -3,9 +3,10 @@ package com.qingye.wtsyou.activity.my;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,7 +21,6 @@ import com.qingye.wtsyou.adapter.SlidingPagerAdapter;
 import com.qingye.wtsyou.entity.TabEntity;
 import com.qingye.wtsyou.fragment.my.CardUnUsedFragment;
 import com.qingye.wtsyou.fragment.my.CardUsedFragment;
-
 
 import java.util.ArrayList;
 
@@ -41,6 +41,7 @@ public class CardActivity extends BaseActivity implements View.OnClickListener, 
             R.mipmap.home, R.mipmap.activity,
             R.mipmap.conversation, R.mipmap.personal};
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
+    private SlidingPagerAdapter mViewPagerAdapter;
     private CommonTabLayout mTabLayout;
     private ViewPager mViewPager;
 
@@ -66,6 +67,42 @@ public class CardActivity extends BaseActivity implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card,this);
 
+        //功能归类分区方法，必须调用<<<<<<<<<<
+        initView();
+        setView();
+        initData();
+        initEvent();
+        //功能归类分区方法，必须调用>>>>>>>>>>
+    }
+
+    @Override
+    public void initView() {
+        ivBack = findView(R.id.iv_left);
+        ivBack.setImageResource(R.mipmap.back_a);
+        tvHead = findView(R.id.tv_head_title);
+        tvHead.setText("我的卡券");
+
+        mTabLayout = findView(R.id.tab);
+        mViewPager = findView(R.id.viewPager);
+    }
+
+    public void setView() {
+        mTabEntities.clear();
+
+        //移除之前的Fragment
+        final FragmentManager fm = getSupportFragmentManager();
+        if (mFragments.size() > 0) {
+            FragmentTransaction ft = fm.beginTransaction();
+            for (Fragment f : this.mFragments) {
+                ft.remove(f);
+            }
+            ft.commit();
+            ft = null;
+            fm.executePendingTransactions();
+        }
+
+        mFragments.clear();
+
         CardUnUsedFragment cardUnUsedFragment = new CardUnUsedFragment();
         CardUsedFragment cardUsedFragment = new CardUsedFragment();
 
@@ -76,22 +113,11 @@ public class CardActivity extends BaseActivity implements View.OnClickListener, 
             mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
         }
 
-        //功能归类分区方法，必须调用<<<<<<<<<<
-        initView();
-        initData();
-        initEvent();
-        //功能归类分区方法，必须调用>>>>>>>>>>
-    }
+        if(mViewPagerAdapter != null){
+            mViewPagerAdapter = null;
+        }
 
-    @Override
-    public void initView() {
-        ivBack = findViewById(R.id.iv_left);
-        ivBack.setImageResource(R.mipmap.back_a);
-        tvHead = findViewById(R.id.tv_head_title);
-        tvHead.setText("我的卡券");
-
-        mTabLayout = findViewById(R.id.tab);
-        mViewPager = findViewById(R.id.viewPager);
+        mViewPagerAdapter = new SlidingPagerAdapter(fm,mFragments,mTitles,context);
         mViewPager.setAdapter(new SlidingPagerAdapter(getSupportFragmentManager(),mFragments,mTitles,context));
         mViewPager.setOffscreenPageLimit(2);//设置缓存界面
         tabLayout();
@@ -155,11 +181,6 @@ public class CardActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override

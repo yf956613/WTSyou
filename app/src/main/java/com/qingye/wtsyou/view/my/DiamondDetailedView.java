@@ -29,9 +29,9 @@ public class DiamondDetailedView extends BaseView<DiamondDetailed> implements Vi
     @Override
     public View createView() {
 
-        tvType = findViewById(R.id.tv_type);
-        tvTime = findViewById(R.id.tv_time);
-        tvValue = findViewById(R.id.tv_value);
+        tvType = findView(R.id.tv_type);
+        tvTime = findView(R.id.tv_time);
+        tvValue = findView(R.id.tv_value);
 
         return super.createView();
     }
@@ -40,10 +40,10 @@ public class DiamondDetailedView extends BaseView<DiamondDetailed> implements Vi
     public void bindView(DiamondDetailed data_){
         super.bindView(data_ != null ? data_ : new DiamondDetailed());
 
-        //充值
-        if (data.getBizType().equals("sign")) {
-            tvType.setText("充值");
+        if(data.getRemark() != null) {
+            tvType.setText(data.getRemark());
         }
+
         //时间
         tvTime.setText(data.getOccurTime());
         //数量

@@ -9,10 +9,16 @@ public class URLConstant {
     public static final String LOGIN = "AppLoginService/login";
     //注册
     public static final String REGISTER = "AppLoginService/register";
+    //忘记密码
+    public static final String MODIFY = "AppAccountService/changePassword";
     //注销登录
     public static final String LOGINOUT =  "AppLoginService/logout";
     //验证码
     public static final String VERIFYCODE = "AppLoginService/getAuthCode/";
+    //其他验证码
+    public static final String OTHERVERIFYCODE = "AppAccountService/sendMessage4Bind";
+    //邮箱验证码
+    public static final String MAILVERIFYCODE = "AppAccountService/sendEmail4Bind";
     //第一次登录
     public static final String ISFIRSTLOGIN = "AppMemberService/isFirstLogin";
 
@@ -20,11 +26,21 @@ public class URLConstant {
     //全部明星
     public static final String ALLSTARS = "AppStarService/query";
     //粉丝关注明星
-    public static final String FOCUSSTARS = "AppFunsService/follows";
+    public static final String FOCUSSTARS = "AppFunsService/follow/";
     //粉丝取消关注
-    public static final String CANCELFOCUSSTARS = "AppFunsService/cancel";
+    public static final String CANCELFOCUSSTARS = "AppFunsService/cancel/";
+    //粉丝覆盖关注明星
+    public static final String STARSOVERLAP = "AppFunsService/overlap";
     //粉丝已关注的明星
-    public static final String FOCUEDSTARS = "AppFunsService/query";
+    public static final String FOCUEDSTARS = "AppFunsService/queryStars";
+    //好友关注
+    public static final String FOCUSFRIEND = "AppFriendShipService/addFriend/";
+    //取消好友关注
+    public static final String CANCELFOCUSFRIEND = "AppFriendShipService/cancelFriend/";
+    //我关注的用户
+    public static final String MYFOCUSFRIEND = "AppFriendShipService/queryByFromUser";
+    //关注我的用户
+    public static final String BEFOCUSFRIEND = "AppFriendShipService/getByToUser";
 
 
     //获取实时明星排行榜
@@ -46,11 +62,13 @@ public class URLConstant {
     //首页
     public static final String HOMELIST = "AppHomeService/getHomeList";
     //首页明星粉丝列表
-    public static final String FANSLIST = "AppFunsService/query";
+    public static final String FANSLIST = "AppFunsService/queryFuns";
 
 
     //根据条件查询活动
     public static final String CAMPAIGNQUERY = "AppActivityService/query";
+    //关键词搜索活动
+    public static final String SEARCHCAMPAIGN = "AppActivityService/query";
     //活动首页
     public static final String CAMPAIGNHOME = "AppActivityService/getActivityHome";
     //投票查询
@@ -82,7 +100,24 @@ public class URLConstant {
     //获取应援类型
     public static final String SUPPORTTYPE = "AppActivityService/getActivityType/";
     //获取指定应援详情
-    public static final String SUPPORTETIALED = "AppSupportActivityService/get/";
+    public static final String SUPPORTDETIALED = "AppSupportActivityService/get/";
+    //获取应援人数明细
+    public static final String SUPPORTFANSDETAILED = "AppSupportActivityService/querySupportDetail";
+    //获取集资金钱明细
+    public static final String SUPPORTMONEYDETAILED = "AppOrderService/querySupportList";
+    //发起人重新关联聊天室
+    //投票
+    public static final String VOTEASSOCIATECONVERSATION = "AppVoteActivityService/save";
+    //应援
+    public static final String SUPPORTASSOCIATECONVERSATION = "AppSupportActivityService/save";
+
+
+    //聊天室查询
+    public static final String CONVERSATIONQUERY = "AppChatRoomSerice/query";
+    //热门搜索
+    public static final String CONVERSATIONHOTTOPIC = "AppChatRoomSerice/getHotTopic";
+    //创建聊天室
+    public static final String CREATECHATROOM = "AppChatRoomSerice/create";
 
 
     //充值前获取后台获取配置信息
@@ -115,6 +150,8 @@ public class URLConstant {
     public static final String GETPERSONALMESSAGE = "AppMemberService/get";
     //修改个人资料
     public static final String MODIFYPERSONALMESSAGE = "AppMemberService/modify";
+    //个人主页
+    public static final String PERSONALHOMEPAGE= "AppMemberService/getPersonalHomePage/";
 
 
     //获取收货地址
@@ -128,6 +165,20 @@ public class URLConstant {
     //删除收货地址
     public static final String DELETERECEIVEADDRESS = "AppReceivingAddressService/remove";
 
+
+    //订单
+    //订单查询
+    public static final String ORDERQUERY = "AppOrderService/query";
+    //订单取消
+    public static final String ORDERCANCEL = "AppOrderService/cancel";
+    //重新支付
+    public static final String ORDERREPAY = "AppOrderService/reApply/";
+    //确认收货
+    public static final String ORDERTAKE = "AppOrderService/confirm/";
+    //订单详情
+    public static final String ORDERDETAILED = "AppOrderService/get/";
+
+
     //卡券
     public static final String CARDQUERY = "AppCouponService/queryCoupons";
 
@@ -135,6 +186,10 @@ public class URLConstant {
     //门票
     public static final String TICKETQUERY = "AppOrderService/query";
 
+    //绑定手机
+    public static final String BINDPHONE = "AppAccountService/bindPhone";
+    //绑定邮箱
+    public static final String BINDMAIL = "AppAccountService/bindEmail";
 
     //反馈
     public static final String FEEDBACK = "AppFeedbackService/feedback";
@@ -142,4 +197,15 @@ public class URLConstant {
 
     //获取七牛token
     public static final String GETQINIUTOKEN = "AppQiniuService/st";
+
+    //获取规则
+    public static final String RULE = "AppActivityRuleService/getByType/";
+    //免token
+    public static final String RULES = "AppShareService/getByType/";
+
+    //热门城市
+    public static final String HOTCITIES = "AppHotCityService/getAll";
+
+    //通知信息
+    public static final String MESSAGEQUERY = "AppNoticeService/query";
 }

@@ -35,8 +35,6 @@ public class RechargeView extends BaseView<Recharge> implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (BaseModel.isCorrect(data) == false) {
-            return;
-        }
+
     }
 }

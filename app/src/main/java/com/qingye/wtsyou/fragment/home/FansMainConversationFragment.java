@@ -11,7 +11,8 @@ import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.conversation.ConversationHotAdapter;
-import com.qingye.wtsyou.model.Conversation;
+import com.qingye.wtsyou.model.ChatingRoom;
+import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.view.conversation.ConversationHotView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
@@ -25,11 +26,11 @@ import zuo.biao.library.interfaces.CacheCallBack;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conversation,ConversationHotView,ConversationHotAdapter> implements View.OnClickListener , CacheCallBack<Conversation> {
+public class FansMainConversationFragment extends BaseHttpRecyclerFragment<ChatingRoom,ConversationHotView,ConversationHotAdapter> implements View.OnClickListener , CacheCallBack<ChatingRoom> {
 
     private TextView tvMore,tvLess;
 
-    private int size = 2;
+    private  List<ChatingRoom> chatingRoomList =  new ArrayList<>();
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -49,10 +50,14 @@ public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conve
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //类相关初始化，必须使用<<<<<<<<<<<<<<<<
         super.onCreateView(inflater, container, savedInstanceState);
-        setContentView(R.layout.fragment_fans_main_conversation);
+        setContentView(R.layout.fragment_fans_main);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
         initCache(this);
+
+        //获取传来的数据
+        Bundle bundle = getArguments();
+        chatingRoomList = (List<ChatingRoom>) bundle.getSerializable(Constant.CONVERSATIONLIST);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
@@ -75,25 +80,37 @@ public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conve
         final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         rvBaseRecycler.setLayoutManager(layoutManager);
 
+        List<ChatingRoom> fansIdolList = new ArrayList<>();
+        if (chatingRoomList != null) {
+            if (chatingRoomList.size() > 2) {
+                for (int i = 0;i < 2;i ++) {
+                    fansIdolList.add(chatingRoomList.get(i));
+                }
+                setList(fansIdolList);
+                tvMore.setEnabled(true);
+            } else {
+                fansIdolList.addAll(chatingRoomList);
+                setList(fansIdolList);
+                tvMore.setEnabled(false);
+            }
+        } else {
+            tvMore.setEnabled(false);
+        }
+
+
         return view;
     }
 
     @Override
     public void initView() {
         super.initView();
-        tvMore = findViewById(R.id.tv_conversation_more);
-        tvLess = findViewById(R.id.tv_conversation_less);
+        tvMore = findViewById(R.id.tv_more);
+        tvLess = findViewById(R.id.tv_less);
     }
 
     @Override
-    public void setList(final List<Conversation> list) {
-        final List<Conversation> templist = new ArrayList<>();
-        for(int i = 0;i < size;i ++) {
-            Conversation conversation = new Conversation();
-            conversation.setId(i);
-            templist.add(conversation);
-        }
-        //list.addAll(templist);
+    public void setList(final List<ChatingRoom> list) {
+
         setList(new AdapterCallBack<ConversationHotAdapter>() {
 
             @Override
@@ -103,7 +120,7 @@ public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conve
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -122,12 +139,12 @@ public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conve
     }
 
     @Override
-    public List<Conversation> parseArray(String json) {
+    public List<ChatingRoom> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Conversation> getCacheClass() {
+    public Class<ChatingRoom> getCacheClass() {
         return null;
     }
 
@@ -137,7 +154,7 @@ public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conve
     }
 
     @Override
-    public String getCacheId(Conversation data) {
+    public String getCacheId(ChatingRoom data) {
         return null;
     }
 
@@ -157,32 +174,41 @@ public class FansMainConversationFragment extends BaseHttpRecyclerFragment<Conve
         tvLess.setOnClickListener(this);
     }
 
+    public void setMoreConversationList(int size) {
+        List<ChatingRoom> chatingRooms = new ArrayList<>();
+        if (size > 2) {
+            chatingRooms.addAll(chatingRoomList);
+            setList(chatingRooms);
+        } else {
+            tvMore.setEnabled(false);
+        }
+    }
+
+    public void setLessConversationList(int size) {
+        List<ChatingRoom> chatingRooms = new ArrayList<>();
+        if (size > 2) {
+            for (int i = 0;i < 2;i ++) {
+                chatingRooms.add(chatingRoomList.get(i));
+            }
+            setList(chatingRooms);
+        } else {
+            chatingRooms.addAll(chatingRoomList);
+            setList(chatingRooms);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_conversation_more:
+            case R.id.tv_more:
                 tvMore.setVisibility(View.GONE);
                 tvLess.setVisibility(View.VISIBLE);
-                size = 6;
-                final List<Conversation> templist1 = new ArrayList<>();
-                for(int i = 0;i < size;i ++) {
-                    Conversation conversation = new Conversation();
-                    conversation.setId(i);
-                    templist1.add(conversation);
-                }
-                setList(templist1);
+                setMoreConversationList(chatingRoomList.size());
                 break;
-            case R.id.tv_conversation_less:
+            case R.id.tv_less:
                 tvMore.setVisibility(View.VISIBLE);
                 tvLess.setVisibility(View.GONE);
-                size = 2;
-                final List<Conversation> templist2 = new ArrayList<>();
-                for(int i = 0;i < size;i ++) {
-                    Conversation conversation = new Conversation();
-                    conversation.setId(i);
-                    templist2.add(conversation);
-                }
-                setList(templist2);
+                setLessConversationList(chatingRoomList.size());
                 break;
             default:
                 break;

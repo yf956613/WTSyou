@@ -10,7 +10,7 @@
 
         <TextView
             android:id="@id/tvBaseTitle"
-            style="@style/text_big_black"
+            style="@style/text_middle_black"
             android:layout_width="match_parent"
             android:padding="12dp"
             android:text="tvBottomMenuTitle"

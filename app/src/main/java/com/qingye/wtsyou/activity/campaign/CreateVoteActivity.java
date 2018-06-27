@@ -4,29 +4,34 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.gaode.activity.GaoDeAddressSelectActivity;
 import com.qingye.wtsyou.activity.search.SelectOneStarsActivity;
-import zuo.biao.library.model.EntityBase;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
 import com.qingye.wtsyou.basemodel.POI;
 import com.qingye.wtsyou.fragment.campaign.AssociateConversationFragment;
 import com.qingye.wtsyou.fragment.campaign.AssociateStarsFragment;
+import com.qingye.wtsyou.manager.HttpModel;
+import com.qingye.wtsyou.model.ChatingRoom;
+import com.qingye.wtsyou.model.EntityRule;
 import com.qingye.wtsyou.model.EntityStars;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-import zuo.biao.library.widget.CustomDialog;
+import com.qingye.wtsyou.utils.URLConstant;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,10 +39,12 @@ import java.util.List;
 
 import fj.edittextcount.lib.FJEditTextCount;
 import zuo.biao.library.base.BaseActivity;
+import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
-import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.util.JSON;
-import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.model.EntityBase;
+import zuo.biao.library.widget.CustomDialog;
+
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 public class CreateVoteActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -48,11 +55,18 @@ public class CreateVoteActivity extends BaseActivity implements View.OnClickList
     private RelativeLayout llAssociationStars;
     private RelativeLayout llAssociateConversation;
     private Button btnCreate;
+    private WebView webView;
 
     //关联明星
     private List<EntityStars> selectStars = new ArrayList<>();
+    //关联聊天室
+    private List<ChatingRoom> selectConversation = new ArrayList<>();
+
     //活动地点
     private POI selectedCity = new POI();
+
+    private HttpModel<EntityBase> mEntityBaseHttpModel;
+    private HttpModel<EntityRule> mEntityRuleHttpModel;
 
     private CustomDialog progressBar;
 
@@ -80,6 +94,11 @@ public class CreateVoteActivity extends BaseActivity implements View.OnClickList
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
+        mEntityBaseHttpModel = new HttpModel<>(EntityBase.class);
+        //规则
+        mEntityRuleHttpModel = new HttpModel<>(EntityRule.class);
+        ruleQuery();
+
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
@@ -89,31 +108,23 @@ public class CreateVoteActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void initView() {
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("发起投票");
-        tvRight = findViewById(R.id.tv_add_temp);
+        tvRight = findView(R.id.tv_add_temp);
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setTextColor(getResources().getColor(R.color.black_text));
         tvRight.setText("取消");
 
-        edtName = findViewById(R.id.edt_vote_name);
-        edtContent = findViewById(R.id.edt_vote_content);
+        edtName = findView(R.id.edt_vote_name);
+        edtContent = findView(R.id.edt_vote_content);
 
-        llAssociationStars = findViewById(R.id.ll_associate_star);
-        llAssociateAddress = findViewById(R.id.ll_associate_address);
-        associateAddress = findViewById(R.id.tv_associate_address);
-        llAssociateConversation = findViewById(R.id.ll_associate_conversation);
+        llAssociationStars = findView(R.id.ll_associate_star);
+        llAssociateAddress = findView(R.id.ll_associate_address);
+        associateAddress = findView(R.id.tv_associate_address);
+        llAssociateConversation = findView(R.id.ll_associate_conversation);
 
-        //关联聊天室
-        AssociateConversationFragment associateConversationFragment = new AssociateConversationFragment();
-        //注意这里是调用getChildFragmentManager()方法
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        //把碎片添加到碎片中
-        transaction.replace(R.id.list_associate_conversation,associateConversationFragment);
-        transaction.commit();
-
-        btnCreate = findViewById(R.id.btn_create);
+        btnCreate = findView(R.id.btn_create);
+        webView = findView(R.id.webView);
     }
 
     @Override
@@ -164,13 +175,21 @@ public class CreateVoteActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.ll_associate_star:
-                toActivity(SelectOneStarsActivity.createIntent(context, selectStars),REQUEST_TO_SELECT_STARS);
+                toActivity(SelectOneStarsActivity.createIntent(context, selectStars), REQUEST_TO_SELECT_STARS);
                 break;
             case R.id.ll_associate_address:
-                toActivity(GaoDeAddressSelectActivity.createIntent(context),REQUEST_TO_SELECT_AREA);
+                toActivity(GaoDeAddressSelectActivity.createIntent(context), REQUEST_TO_SELECT_AREA);
                 break;
             case R.id.ll_associate_conversation:
-                toActivity(SelectStarsConversationActivity.createIntent(context));
+                if (selectStars.isEmpty()) {
+                    showShortToast(R.string.associateStars);
+                    return;
+                }
+                String[] relevanceStar = new String[selectStars.size()];
+                for (int i = 0;i < selectStars.size();i ++) {
+                    relevanceStar[i] = selectStars.get(i).getUuid();
+                }
+                toActivity(SelectStarsConversationActivity.createIntent(context, relevanceStar, selectConversation), REQUEST_TO_SELECT_CONVERSATION);
                 break;
             case R.id.btn_create:
                 //检查网络
@@ -186,6 +205,7 @@ public class CreateVoteActivity extends BaseActivity implements View.OnClickList
 
     private static final int REQUEST_TO_SELECT_STARS = 1;
     private static final int REQUEST_TO_SELECT_AREA = 2;
+    private static final int REQUEST_TO_SELECT_CONVERSATION = 3;
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -216,6 +236,23 @@ public class CreateVoteActivity extends BaseActivity implements View.OnClickList
                     associateAddress.setText(selectedCity.getAddress().toString());
                 }
                 break;
+            case REQUEST_TO_SELECT_CONVERSATION:
+                if (data != null) {
+                    selectConversation = (List<ChatingRoom>) data.getExtras().getSerializable(Constant.SELECTED_CONVERSATION);
+
+                    //关联聊天室
+                    AssociateConversationFragment associateConversationFragment = new AssociateConversationFragment();
+                    //注意这里是调用getChildFragmentManager()方法
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction transaction = manager.beginTransaction();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Constant.SELECTED_CONVERSATION, (Serializable) selectConversation);
+                    associateConversationFragment.setArguments(bundle);
+                    //把碎片添加到碎片中
+                    transaction.replace(R.id.list_associate_conversation,associateConversationFragment);
+                    transaction.commit();
+                }
+                break;
             default:
                 break;
         }
@@ -239,58 +276,24 @@ public class CreateVoteActivity extends BaseActivity implements View.OnClickList
 
         String relevanceStar = selectStars.get(0).getUuid();
 
-        //检查网络
-        if (NetUtil.checkNetwork(context)) {
-            setProgressBar();
-            progressBar.show();
+        String[] chatingRooms = new String[selectConversation.size()];
+        if (selectConversation.size() > 0) {
 
-            HttpRequest.postCreateVote(0, campaignName, relevanceStar,
-                    selectedCity, description, new OnHttpResponseListener() {
-
-                        @Override
-                        public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-
-                            if(!StringUtil.isEmpty(resultJson)){
-                                EntityBase entityBase =  JSON.parseObject(resultJson,EntityBase.class);
-                                if(entityBase.isSuccess()){
-                                    //成功
-                                    showShortToast(R.string.createVoteSuccess);
-                                    finish();
-
-                                    progressBarDismiss();
-                                }else{//显示失败信息
-                                    if (entityBase.getCode().equals("401")) {
-                                        showShortToast(R.string.tokenInvalid);
-                                        toActivity(MainActivity.createIntent(context));
-                                    } else {
-                                        showShortToast(entityBase.getMessage());
-                                    }
-
-                                    progressBarDismiss();
-                                }
-
-                            }else{
-                                showShortToast(R.string.noReturn);
-
-                                progressBarDismiss();
-                            }
-                        }
-                    });
+            for (int i = 0;i < selectConversation.size();i ++) {
+                chatingRooms[i] = selectConversation.get(i).getId();
+            }
         } else {
-            showShortToast(R.string.checkNetwork);
+            chatingRooms = null;
         }
 
-
+        String request = HttpRequest.postCreateVote(campaignName, relevanceStar,
+                selectedCity, description, chatingRooms);
+        mEntityBaseHttpModel.post(request, URL_BASE + URLConstant.CREATEVOTE,1,this);
     }
 
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override
@@ -302,5 +305,51 @@ public class CreateVoteActivity extends BaseActivity implements View.OnClickList
         }
 
         return super.onKeyUp(keyCode, event);
+    }
+
+    public void ruleQuery() {
+        mEntityRuleHttpModel.get( URL_BASE + URLConstant.RULE + "vote",2,this);
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                //成功
+                showShortToast(R.string.createVoteSuccess);
+                finish();
+                break;
+            case 2:
+                WebSettings settings = webView.getSettings();
+                settings.setJavaScriptEnabled(true);
+                settings.setDomStorageEnabled(true);
+                settings.setUseWideViewPort(true);
+                settings.setLoadWithOverviewMode(true);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+                } else {
+                    settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+                }
+
+                settings.setDefaultFontSize(30);
+                settings.setDefaultFixedFontSize(30);
+
+                EntityRule entityRule = mEntityRuleHttpModel.getData();
+                webView.setBackgroundColor(0); // 设置背景色
+                webView.loadData(entityRule.getContent().getRuleDescription(), "text/html;charset=utf-8","utf-8");
+                break;
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
     }
 }

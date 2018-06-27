@@ -14,17 +14,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.MainTabActivity;
 import com.qingye.wtsyou.activity.search.SelectStarsActivity;
 import com.qingye.wtsyou.basemodel.ErrorCodeTool;
-import com.qingye.wtsyou.model.EntityFirstLogin;
+import com.qingye.wtsyou.manager.HttpManager;
+import com.qingye.wtsyou.manager.HttpModel;
+import com.qingye.wtsyou.model.EntityBooleanContent;
 import com.qingye.wtsyou.model.EntityLogin;
+import com.qingye.wtsyou.model.EntityPersonalMessage;
 import com.qingye.wtsyou.utils.HttpRequest;
-import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.utils.URLConstant;
-import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.VerticalViewPager;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
@@ -35,13 +36,9 @@ import java.util.Map;
 
 import zuo.biao.library.base.BaseFragment;
 import zuo.biao.library.interfaces.IErrorCodeTool;
-import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.manager.HttpManager;
 import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.ui.AlertDialog;
-import zuo.biao.library.util.HttpModel;
-import zuo.biao.library.util.JSON;
-import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
 
 import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
@@ -63,7 +60,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
     private CustomDialog progressBar;
 
-    private HttpModel<EntityFirstLogin> mEntityFirstLogin;
+    private HttpModel<EntityLogin> mEntityLoginHttpModel;
+    private HttpModel<EntityBooleanContent> mEntityFirstLoginHttpModel;
+    private HttpModel<EntityPersonalMessage> mEntityPersonalMessageHttpModel;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -81,8 +80,12 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         setContentView(R.layout.fragment_login);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
+        //登录
+        mEntityLoginHttpModel = new HttpModel<>(EntityLogin.class);
         //第一次登录
-        mEntityFirstLogin = new HttpModel<>(EntityFirstLogin.class);
+        mEntityFirstLoginHttpModel = new HttpModel<>(EntityBooleanContent.class);
+        //获取个人信息
+        mEntityPersonalMessageHttpModel = new HttpModel<>(EntityPersonalMessage.class);
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
@@ -120,7 +123,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         btnLogin = findViewById(R.id.btn_login);
 
         //TODO--DELETE
-        edtLoginId.setText("18250711172");
+        edtLoginId.setText("17788173219");
         edtPassword.setText("123456");
 
         ivQQ = findViewById(R.id.iv_qq);
@@ -323,42 +326,11 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
     public void login(String accountType, String loginId, String password, String photo, String nickname) {
 
-        if (NetUtil.checkNetwork(context)) {
-            setProgressBar();
-            progressBar.show();
+        setProgressBar();
+        progressBar.show();
 
-            HttpRequest.postLogin(0, accountType, loginId, password, photo, nickname,new OnHttpResponseListener() {
-
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-
-                    if(!StringUtil.isEmpty(resultJson)){
-                        EntityLogin entityLogin =  JSON.parseObject(resultJson,EntityLogin.class);
-                        if(entityLogin.isSuccess()){
-                            //成功
-                            showShortToast(R.string.loginSuccess);
-                            HttpManager.getInstance().saveToken(entityLogin.getContent());//保存token信息
-
-                            //第一次登录请求判断
-                            mEntityFirstLogin.get(URL_BASE + URLConstant.ISFIRSTLOGIN,1,LoginFragment.this);
-
-                            progressBarDismiss();
-
-                        }else{//显示失败信息
-                            showShortToast(entityLogin.getMessage());
-
-                            progressBarDismiss();
-                        }
-                    }else{
-                        showShortToast(R.string.noReturn);
-
-                        progressBarDismiss();
-                    }
-                }
-            });
-        } else {
-            showShortToast(R.string.checkNetwork);
-        }
+        String request = HttpRequest.postLogin(accountType, loginId, password, photo, nickname);
+        mEntityLoginHttpModel.post( request, URL_BASE + URLConstant.LOGIN,1,LoginFragment.this);
 
     }
 
@@ -372,12 +344,34 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         super.Success(url, RequestCode, entityBase);
         switch (RequestCode) {
             case 1:
-                if (mEntityFirstLogin.getData().getContent()) {
+                EntityLogin entityLogin = mEntityLoginHttpModel.getData();
+                //成功
+                showShortToast(R.string.loginSuccess);
+                //保存token信息
+                HttpManager.getInstance().saveToken(entityLogin.getContent());
+
+                //第一次登录请求判断
+                mEntityFirstLoginHttpModel.get(URL_BASE + URLConstant.ISFIRSTLOGIN,2,LoginFragment.this);
+                mEntityPersonalMessageHttpModel.get(URL_BASE + URLConstant.GETPERSONALMESSAGE,3,this);
+                break;
+            case 2:
+                if (mEntityFirstLoginHttpModel.getData().getContent()) {
                     toActivity(SelectStarsActivity.createIntent(context, 2));
                 } else {
                     toActivity(MainTabActivity.createIntent(context));
                 }
                 break;
+            case 3:
+                EntityPersonalMessage entityPersonalMessage = mEntityPersonalMessageHttpModel.getData();
+                //保存userId
+                HttpManager.getInstance().saveUserId(entityPersonalMessage.getContent().getUserId());
+                break;
         }
+    }
+
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
     }
 }

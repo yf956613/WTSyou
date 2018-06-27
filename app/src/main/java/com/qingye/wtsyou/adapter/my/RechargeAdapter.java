@@ -23,8 +23,4 @@ public class RechargeAdapter extends BaseAdapter<Recharge,RechargeView> {
         return new RechargeView(context, parent);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

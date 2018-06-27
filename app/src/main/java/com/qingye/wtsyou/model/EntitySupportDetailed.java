@@ -22,7 +22,6 @@ public class EntitySupportDetailed extends EntityBase {
         private String modified;
         private String creator;
         private String modifier;
-        private String relevanceStar;
         private String activityName;
         private String activityPic;
         private String activityIcon;
@@ -31,14 +30,12 @@ public class EntitySupportDetailed extends EntityBase {
         private Date startTime;
         private Date endTime;
         private String state;
-        private String createUserId;
         private String activityType;
         private String activityProperty;
         private String activityId;
         private POI address;
-        private String relevanceStarName;
+        private List<String> relevanceStarName;
         private String activityTypeName;
-        private String createUserName;
         private String startTimeStr;
         private String endTimeStr;
         private int chatroomNumber;
@@ -49,6 +46,14 @@ public class EntitySupportDetailed extends EntityBase {
         private Date deadline;
         private String deadlineStr;
         private List<PriceList> priceList;
+        private String createUserId;
+        private String createUserName;
+        private Boolean isFollowCreatetUser;
+        private String createUserPic;
+        private Integer funsNumber;
+        private Integer followNumber;
+        private List<ChatingRoom> chartRoomList;
+        private List<EntityStars> relevanceStars;
 
         public String getUuid() {
             return uuid;
@@ -88,14 +93,6 @@ public class EntitySupportDetailed extends EntityBase {
 
         public void setModifier(String modifier) {
             this.modifier = modifier;
-        }
-
-        public String getRelevanceStar() {
-            return relevanceStar;
-        }
-
-        public void setRelevanceStar(String relevanceStar) {
-            this.relevanceStar = relevanceStar;
         }
 
         public String getActivityName() {
@@ -162,14 +159,6 @@ public class EntitySupportDetailed extends EntityBase {
             this.state = state;
         }
 
-        public String getCreateUserId() {
-            return createUserId;
-        }
-
-        public void setCreateUserId(String createUserId) {
-            this.createUserId = createUserId;
-        }
-
         public String getActivityType() {
             return activityType;
         }
@@ -202,11 +191,11 @@ public class EntitySupportDetailed extends EntityBase {
             this.address = address;
         }
 
-        public String getRelevanceStarName() {
+        public List<String> getRelevanceStarName() {
             return relevanceStarName;
         }
 
-        public void setRelevanceStarName(String relevanceStarName) {
+        public void setRelevanceStarName(List<String> relevanceStarName) {
             this.relevanceStarName = relevanceStarName;
         }
 
@@ -216,14 +205,6 @@ public class EntitySupportDetailed extends EntityBase {
 
         public void setActivityTypeName(String activityTypeName) {
             this.activityTypeName = activityTypeName;
-        }
-
-        public String getCreateUserName() {
-            return createUserName;
-        }
-
-        public void setCreateUserName(String createUserName) {
-            this.createUserName = createUserName;
         }
 
         public String getStartTimeStr() {
@@ -306,6 +287,69 @@ public class EntitySupportDetailed extends EntityBase {
             this.priceList = priceList;
         }
 
+        public String getCreateUserId() {
+            return createUserId;
+        }
+
+        public void setCreateUserId(String createUserId) {
+            this.createUserId = createUserId;
+        }
+
+        public String getCreateUserName() {
+            return createUserName;
+        }
+
+        public void setCreateUserName(String createUserName) {
+            this.createUserName = createUserName;
+        }
+
+        public Boolean getFollowCreatetUser() {
+            return isFollowCreatetUser;
+        }
+
+        public void setFollowCreatetUser(Boolean followCreatetUser) {
+            isFollowCreatetUser = followCreatetUser;
+        }
+
+        public String getCreateUserPic() {
+            return createUserPic;
+        }
+
+        public void setCreateUserPic(String createUserPic) {
+            this.createUserPic = createUserPic;
+        }
+
+        public Integer getFunsNumber() {
+            return funsNumber;
+        }
+
+        public void setFunsNumber(Integer funsNumber) {
+            this.funsNumber = funsNumber;
+        }
+
+        public Integer getFollowNumber() {
+            return followNumber;
+        }
+
+        public void setFollowNumber(Integer followNumber) {
+            this.followNumber = followNumber;
+        }
+
+        public List<ChatingRoom> getChartRoomList() {
+            return chartRoomList;
+        }
+
+        public void setChartRoomList(List<ChatingRoom> chartRoomList) {
+            this.chartRoomList = chartRoomList;
+        }
+
+        public List<EntityStars> getRelevanceStars() {
+            return relevanceStars;
+        }
+
+        public void setRelevanceStars(List<EntityStars> relevanceStars) {
+            this.relevanceStars = relevanceStars;
+        }
     }
 
     public Content getContent() {

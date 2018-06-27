@@ -29,7 +29,7 @@ public class SimpleCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fr_simple_card, null);
-        card_title_tv = v.findViewById(R.id.card_title_tv);
+        card_title_tv = (TextView) v.findViewById(R.id.card_title_tv);
         card_title_tv.setText(mTitle);
 
         return v;

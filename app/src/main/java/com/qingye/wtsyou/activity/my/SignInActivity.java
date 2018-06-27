@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,22 +12,31 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
-import zuo.biao.library.model.EntityBase;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpModel;
+import com.qingye.wtsyou.model.EntityRule;
 import com.qingye.wtsyou.model.EntitySignRecord;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-import zuo.biao.library.widget.CustomDialog;
+import com.qingye.wtsyou.utils.URLConstant;
 
 import zuo.biao.library.base.BaseActivity;
+import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
+
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 public class SignInActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -38,10 +48,15 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     private TextView tvContinuityDay,tvWeekDay;
 
     private EntitySignRecord entitySignRecord;
-    private int continuityDay,weekDay;
+    private int continuityDay = 0;
+    private int weekDay = 0;
 
     private SwipeRefreshLayout swipeRefresh;
     private CustomDialog progressBar;
+    private WebView webView;
+
+    private HttpModel<EntityBase> mSignInHttpModel;
+    private HttpModel<EntityRule> mEntityRuleHttpModel;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -67,7 +82,11 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
-        getSignRecord();
+        //签到
+        mSignInHttpModel = new HttpModel<>(EntityBase.class);
+        //规则
+        mEntityRuleHttpModel = new HttpModel<>(EntityRule.class);
+        ruleQuery();
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
@@ -79,34 +98,37 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initView() {
-        swipeRefresh = findViewById(R.id.swipe_refresh_widget);
+        swipeRefresh = findView(R.id.swipe_refresh_widget);
 
-        ivLeft = findViewById(R.id.iv_left);
+        ivLeft = findView(R.id.iv_left);
         ivLeft.setImageResource(R.mipmap.back_a);
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("签到");
 
-        tvContinuityDay = findViewById(R.id.tv_continuity_day);
-        tvWeekDay = findViewById(R.id.tv_week);
+        tvContinuityDay = findView(R.id.tv_continuity_day);
+        tvWeekDay = findView(R.id.tv_week);
 
-        tvSignIn = findViewById(R.id.tv_signIn);
+        tvSignIn = findView(R.id.tv_signIn);
+        webView = findView(R.id.webView);
 
         //圆圈
-        tvMon = findViewById(R.id.tv_monday);
-        tvTue = findViewById(R.id.tv_tuesday);
-        tvWed = findViewById(R.id.tv_wednesday);
-        tvThu = findViewById(R.id.tv_thursday);
-        tvFri = findViewById(R.id.tv_friday);
-        tvSat = findViewById(R.id.tv_saturday);
-        tvSun = findViewById(R.id.tv_sunday);
+        tvMon = findView(R.id.tv_monday);
+        tvTue = findView(R.id.tv_tuesday);
+        tvWed = findView(R.id.tv_wednesday);
+        tvThu = findView(R.id.tv_thursday);
+        tvFri = findView(R.id.tv_friday);
+        tvSat = findView(R.id.tv_saturday);
+        tvSun = findView(R.id.tv_sunday);
 
         //线
-        lineTue = findViewById(R.id.tue_line);
-        lineWed = findViewById(R.id.wed_line);
-        lineThu = findViewById(R.id.thu_line);
-        lineFri = findViewById(R.id.fri_line);
-        lineSat = findViewById(R.id.sat_line);
-        lineSun = findViewById(R.id.sun_line);
+        lineTue = findView(R.id.tue_line);
+        lineWed = findView(R.id.wed_line);
+        lineThu = findView(R.id.thu_line);
+        lineFri = findView(R.id.fri_line);
+        lineSat = findView(R.id.sat_line);
+        lineSun = findView(R.id.sun_line);
+
+        getSignRecord();
     }
 
     public void onResume() {
@@ -169,17 +191,23 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initData() {
-        tvContinuityDay.setText(Integer.toString(entitySignRecord.getContent().getContinuousCount()));
-        tvWeekDay.setText(Integer.toString(entitySignRecord.getContent().getContinuousCount()));
+        if (entitySignRecord.getContent() != null) {
 
-        continuityDay = entitySignRecord.getContent().getContinuousCount();
-        weekDay = entitySignRecord.getContent().getSignCount();
+            tvContinuityDay.setText(Integer.toString(entitySignRecord.getContent().getContinuousCount()));
+            tvWeekDay.setText(Integer.toString(entitySignRecord.getContent().getContinuousCount()));
 
-        changeColor(weekDay);
+            continuityDay = entitySignRecord.getContent().getContinuousCount();
+            weekDay = entitySignRecord.getContent().getSignCount();
+        }
+
+        int continuity = continuityDay % 7;
+        changeColor(continuity);
     }
 
     public void changeColor(int day) {
         switch (day) {
+            case 0:
+                break;
             case 1:
                 tvMon.setTextColor(getResources().getColor(R.color.orange_line));
                 tvMon.setBackground(getResources().getDrawable(R.drawable.circle_orange_1));
@@ -357,55 +385,20 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void sign() {
-        if (NetUtil.checkNetwork(this)) {
-            setProgressBar();
-            progressBar.show();
+        setProgressBar();
+        progressBar.show();
 
-            HttpRequest.postSign(0, new OnHttpResponseListener() {
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                    if(!StringUtil.isEmpty(resultJson)){
-                        EntityBase entityBase =  JSON.parseObject(resultJson,EntityBase.class);
-                        if(entityBase.isSuccess()){
-                            //成功
-                            //showShortToast(R.string.getSuccess);
+        String request = HttpRequest.postSign();
+        mSignInHttpModel.post( request, URL_BASE + URLConstant.SIGN,1,this);
+    }
 
-                            //continuityDay = + 1;
-                            //weekDay = + 1;
-
-                            getSignRecord();
-
-                            progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entityBase.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityBase.getMessage());
-                            }
-
-                            progressBarDismiss();
-                        }
-                    }else{
-                        showShortToast(R.string.noReturn);
-
-                        progressBarDismiss();
-                    }
-                }
-            });
-        } else {
-            showShortToast(R.string.checkNetwork);
-        }
+    public void ruleQuery() {
+        mEntityRuleHttpModel.get( URL_BASE + URLConstant.RULE + "sign",2,this);
     }
 
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override
@@ -417,5 +410,45 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
 
         return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                getSignRecord();
+                break;
+            case 2:
+                WebSettings settings = webView.getSettings();
+                settings.setJavaScriptEnabled(true);
+                settings.setDomStorageEnabled(true);
+                settings.setUseWideViewPort(true);
+                settings.setLoadWithOverviewMode(true);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+                } else {
+                    settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+                }
+
+                settings.setDefaultFontSize(30);
+                settings.setDefaultFixedFontSize(30);
+
+                EntityRule entityRule = mEntityRuleHttpModel.getData();
+                webView.setBackgroundColor(0); // 设置背景色
+                webView.loadData(entityRule.getContent().getRuleDescription(), "text/html;charset=utf-8","utf-8");
+                break;
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
     }
 }

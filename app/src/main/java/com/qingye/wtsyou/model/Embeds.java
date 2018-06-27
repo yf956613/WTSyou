@@ -1,5 +1,6 @@
 package com.qingye.wtsyou.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import zuo.biao.library.base.BaseModel;
@@ -8,7 +9,7 @@ import zuo.biao.library.base.BaseModel;
  * Created by pm89 on 2018/5/7.
  */
 
-public class Embeds extends BaseModel {
+public class Embeds implements Serializable {
     private String uuid;
     private String created;
     private String modified;
@@ -118,8 +119,4 @@ public class Embeds extends BaseModel {
         this.state = state;
     }
 
-    @Override
-    protected boolean isCorrect() {
-        return true;
-    }
 }

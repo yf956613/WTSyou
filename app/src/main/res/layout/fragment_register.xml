@@ -309,7 +309,7 @@
                     android:textColor="@color/orange_text3"/>
 
                 <View
-                    android:layout_width="66dp"
+                    android:layout_width="70dp"
                     android:layout_height="1px"
                     android:background="@color/orange_text3"/>
             </LinearLayout>

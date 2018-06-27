@@ -1,8 +1,8 @@
 package com.qingye.wtsyou.model;
 
-import zuo.biao.library.model.EntityBase;
-
 import java.io.Serializable;
+
+import zuo.biao.library.model.EntityBase;
 
 /**
  * Created by pm89 on 2018/3/6.
@@ -13,6 +13,7 @@ public class EntityPersonalMessage extends EntityBase {
     private Content content;
 
     public class Content implements Serializable {
+        private String userId;
         private String uuid;
         private String created;
         private String modified;
@@ -21,7 +22,6 @@ public class EntityPersonalMessage extends EntityBase {
         private String id;
         private String fullname;
         private String nickname;
-        private String mobile;
         private String sex;
         private String photo;
         private String autograph;
@@ -33,6 +33,17 @@ public class EntityPersonalMessage extends EntityBase {
         private int loveCount;
         private int diamondCount;
         private int goldCount;
+        private String email;
+        private String mobile;
+        private String realInfo;
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
 
         public String getUuid() {
             return uuid;
@@ -96,14 +107,6 @@ public class EntityPersonalMessage extends EntityBase {
 
         public void setNickname(String nickname) {
             this.nickname = nickname;
-        }
-
-        public String getMobile() {
-            return mobile;
-        }
-
-        public void setMobile(String mobile) {
-            this.mobile = mobile;
         }
 
         public String getSex() {
@@ -192,6 +195,30 @@ public class EntityPersonalMessage extends EntityBase {
 
         public void setGoldCount(int goldCount) {
             this.goldCount = goldCount;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getMobile() {
+            return mobile;
+        }
+
+        public void setMobile(String mobile) {
+            this.mobile = mobile;
+        }
+
+        public String getRealInfo() {
+            return realInfo;
+        }
+
+        public void setRealInfo(String realInfo) {
+            this.realInfo = realInfo;
         }
     }
 

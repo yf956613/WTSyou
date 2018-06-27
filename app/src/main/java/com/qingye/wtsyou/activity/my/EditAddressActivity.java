@@ -88,24 +88,24 @@ public class EditAddressActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void initView() {
-        ivLeft = findViewById(R.id.iv_left);
+        ivLeft = findView(R.id.iv_left);
         ivLeft.setImageResource(R.mipmap.back_a);
-        tvRight = findViewById(R.id.tv_add_temp);
+        tvRight = findView(R.id.tv_add_temp);
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText("保存");
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("修改收货地址");
 
         //联系人名称
-        edtContactName = findViewById(R.id.edt_contact_name);
+        edtContactName = findView(R.id.edt_contact_name);
         //联系电话
-        edtContactPhone = findViewById(R.id.edt_contact_phone);
+        edtContactPhone = findView(R.id.edt_contact_phone);
         //详细地址
-        edtDetail = findViewById(R.id.edt_detail);
+        edtDetail = findView(R.id.edt_detail);
 
-        llAddress = findViewById(R.id.ll_address);
+        llAddress = findView(R.id.ll_address);
         //所在区域
-        tvArea = findViewById(R.id.tv_area);
+        tvArea = findView(R.id.tv_area);
     }
 
     @Override
@@ -297,11 +297,6 @@ public class EditAddressActivity extends BaseActivity implements View.OnClickLis
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override

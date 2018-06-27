@@ -22,24 +22,16 @@
             layout="@layout/head"/>
     </LinearLayout>
 
-
-    <android.support.v4.widget.SwipeRefreshLayout
+    <LinearLayout
+        android:id="@+id/list_all_stars"
         android:layout_below="@+id/ll_head"
-        android:id="@+id/swipe_refresh_widget"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/margin_18"
+        android:layout_marginRight="@dimen/margin_18">
 
-        <LinearLayout
-            android:id="@+id/list_all_stars"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/margin_18"
-            android:layout_marginRight="@dimen/margin_18">
-
-            <include layout="@layout/base_http_recycler_fragment"/>
-        </LinearLayout>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+        <include layout="@layout/base_http_recycler_fragment"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -10,10 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.model.CrowdFans;
-import com.qingye.wtsyou.model.Fans;
-import com.qingye.wtsyou.utils.DataUtil;
 
-import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
 
 /**
@@ -32,8 +29,8 @@ public class CrowdFansView extends BaseView<CrowdFans> implements View.OnClickLi
     @SuppressLint("InflateParams")
     @Override
     public View createView() {
-        ivImg = findViewById(R.id.iv_img);
-        tvName = findViewById(R.id.tv_name);
+        ivImg = findView(R.id.iv_img);
+        tvName = findView(R.id.tv_name);
 
         return super.createView();
     }
@@ -47,6 +44,11 @@ public class CrowdFansView extends BaseView<CrowdFans> implements View.OnClickLi
         if (url != null) {
             Glide.with(context)
                     .load(url)
+                    .into(ivImg);
+        } else {
+            int defaultHead = R.mipmap.head;
+            Glide.with(context)
+                    .load(defaultHead)
                     .into(ivImg);
         }
 

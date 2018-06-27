@@ -28,6 +28,7 @@ import zuo.biao.library.util.Log;
 import zuo.biao.library.util.StringUtil;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+import static com.qingye.wtsyou.utils.DateUtil.DATE_PATTERN_2;
 import static com.qingye.wtsyou.utils.DateUtil.DAY_TIME_MILLIS;
 import static com.qingye.wtsyou.utils.DateUtil.HOUR_TIME_MILLIS;
 import static com.qingye.wtsyou.utils.DateUtil.MINUTE_TIME_MILLIS;
@@ -102,13 +103,13 @@ public class StarsMainCrowdView extends BaseView<Crowd> implements View.OnClickL
     @SuppressLint("InflateParams")
     @Override
     public View createView() {
-        tvName = findViewById(R.id.tv_campaign_name);
-        tvTag = findViewById(R.id.tv_tag);
-        ivImg = findViewById(R.id.iv_campaign_img);
-        tvCrowdPrice = findViewById(R.id.tv_campaign_value);
-        tvPercentage = findViewById(R.id.tv_percentage);
-        joinProgressBar = findViewById(R.id.join_progressbar);
-        tvTimeDown = findViewById(R.id.tv_campaign_end_time);
+        tvName = findView(R.id.tv_campaign_name);
+        tvTag = findView(R.id.tv_tag);
+        ivImg = findView(R.id.iv_campaign_img);
+        tvCrowdPrice = findView(R.id.tv_campaign_value);
+        tvPercentage = findView(R.id.tv_percentage);
+        joinProgressBar = findView(R.id.join_progressbar);
+        tvTimeDown = findView(R.id.tv_campaign_end_time);
 
         return super.createView();
     }
@@ -171,8 +172,8 @@ public class StarsMainCrowdView extends BaseView<Crowd> implements View.OnClickL
 
         //获取当前时间
         long currentTime = System.currentTimeMillis();
-        if (data.getDeadline() != null) {
-            long endTime = DateUtil.dateToLong(data.getDeadline());
+        if (data.getDeadlineStr() != null) {
+            long endTime = DateUtil.dateToLong(DateUtil.strToDate(data.getDeadlineStr(), DATE_PATTERN_2));
             //时间之差
             long betweenTime = DateUtil.calculateTimeDifference(endTime, currentTime);
             if (betweenTime > 0) {

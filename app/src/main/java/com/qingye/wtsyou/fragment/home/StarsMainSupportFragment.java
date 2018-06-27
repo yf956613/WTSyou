@@ -80,7 +80,6 @@ public class StarsMainSupportFragment extends BaseHttpRecyclerFragment<Supports,
         final List<Supports> templist = new ArrayList<>();
         for(int i = 1;i < 4;i ++) {
             Supports campaign = new Supports();
-            campaign.setId(i);
             templist.add(campaign);
         }
         //list.addAll(templist);

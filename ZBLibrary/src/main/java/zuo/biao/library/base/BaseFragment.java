@@ -16,6 +16,9 @@ package zuo.biao.library.base;
 
 import zuo.biao.library.R;
 import zuo.biao.library.interfaces.FragmentPresenter;
+import zuo.biao.library.interfaces.IErrorCodeTool;
+import zuo.biao.library.interfaces.OnHttpCallBack;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.util.Log;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,7 +41,7 @@ import android.view.ViewGroup;
  * @see #onDestroy
  * @use extends BaseFragment, 具体参考.DemoFragment
  */
-public abstract class BaseFragment extends Fragment implements FragmentPresenter {
+public abstract class BaseFragment extends Fragment implements FragmentPresenter, OnHttpCallBack {
 	private static final String TAG = "BaseFragment";
 
 	/**
@@ -388,5 +391,40 @@ public abstract class BaseFragment extends Fragment implements FragmentPresenter
 		context = null;
 
 		Log.d(TAG, "onDestroy >>>>>>>>>>>>>>>>>>>>>>>>\n");
+	}
+
+	@Override
+	public void Success(String url, int RequestCode, EntityBase entityBase) {
+		IErrorCodeTool iErrorCodeTool = getErrorCodeTool();
+		if (isAdded()) {
+			iErrorCodeTool.Success(getActivity(), entityBase);
+			ProgressDismiss(url, RequestCode);
+		}
+	}
+
+	@Override
+	public void Error(String url, int RequestCode, Exception e) {
+		IErrorCodeTool iErrorCodeTool = getErrorCodeTool();
+		if (isAdded()) {
+			iErrorCodeTool.Error(getActivity(), e);
+			ProgressDismiss(url, RequestCode);
+		}
+	}
+
+	@Override
+	public void CodeError(String url, int RequestCode, EntityBase entityBase) {
+		IErrorCodeTool iErrorCodeTool = getErrorCodeTool();
+		if (isAdded()) {
+			iErrorCodeTool.errorCode(getActivity(), entityBase);
+			ProgressDismiss(url, RequestCode);
+		}
+	}
+
+	public IErrorCodeTool getErrorCodeTool() {
+		return null;
+	}
+
+	public void ProgressDismiss(String url, int RequestCode) {
+
 	}
 }

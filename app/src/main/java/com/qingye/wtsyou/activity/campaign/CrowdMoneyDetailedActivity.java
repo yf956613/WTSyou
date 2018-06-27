@@ -15,14 +15,16 @@ import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.campaign.CrowdMoneyDetailedAdapter;
 import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpPageModel;
 import com.qingye.wtsyou.model.CrowdMoneyDetailed;
-import com.qingye.wtsyou.model.EntityCrowdDetailed;
 import com.qingye.wtsyou.model.EntityPageData;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.campaign.CrowdMoneyDetailedView;
+
+import zuo.biao.library.interfaces.OnHttpPageCallBack;
 import zuo.biao.library.widget.CustomDialog;
 
 import java.util.ArrayList;
@@ -33,20 +35,22 @@ import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.model.EntityBase;
-import zuo.biao.library.util.HttpModel;
+import com.qingye.wtsyou.manager.HttpModel;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
-public class CrowdMoneyDetailedActivity extends BaseHttpRecyclerActivity<CrowdMoneyDetailed,CrowdMoneyDetailedView,CrowdMoneyDetailedAdapter> implements View.OnClickListener,OnBottomDragListener {
+public class CrowdMoneyDetailedActivity extends BaseHttpRecyclerActivity<CrowdMoneyDetailed,CrowdMoneyDetailedView,CrowdMoneyDetailedAdapter>
+        implements View.OnClickListener, OnBottomDragListener, OnHttpPageCallBack<EntityPageData, CrowdMoneyDetailed> {
 
     private ImageView ivBack;
     private TextView tvHead;
 
     private CustomDialog progressBar;
 
-    private EntityCrowdDetailed entityCrowdDetailed;
+    private String activityId;
 
-    private HttpModel<EntityPageData> mEntityPageDataHttpModel;
+    private HttpPageModel<EntityPageData,CrowdMoneyDetailed> mEntityPageDataHttpModel;
 
     private List<CrowdMoneyDetailed> crowdMoneyDetailedList = new ArrayList<>();
 
@@ -56,10 +60,8 @@ public class CrowdMoneyDetailedActivity extends BaseHttpRecyclerActivity<CrowdMo
      * @param context
      * @return
      */
-    public static Intent createIntent(Context context, EntityCrowdDetailed entityCrowdDetailed) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(Constant.CROWDDETAILED, entityCrowdDetailed);//放进数据流中
-        return new Intent(context, CrowdMoneyDetailedActivity.class).putExtras(bundle);
+    public static Intent createIntent(Context context, String activityId) {
+        return new Intent(context, CrowdMoneyDetailedActivity.class).putExtra(Constant.ACTIVITYID, activityId);
     }
 
     //启动方法>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -78,10 +80,10 @@ public class CrowdMoneyDetailedActivity extends BaseHttpRecyclerActivity<CrowdMo
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
         intent = getIntent();
-        entityCrowdDetailed = (EntityCrowdDetailed) intent.getSerializableExtra(Constant.CROWDDETAILED);
+        activityId = intent.getStringExtra(Constant.ACTIVITYID);
 
         //筹资列表
-        mEntityPageDataHttpModel = new HttpModel<>(EntityPageData.class);
+        mEntityPageDataHttpModel = new HttpPageModel<>(EntityPageData.class);
         moneyDetailedQuery();
 
         //功能归类分区方法，必须调用<<<<<<<<<<
@@ -90,11 +92,11 @@ public class CrowdMoneyDetailedActivity extends BaseHttpRecyclerActivity<CrowdMo
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        //srlBaseHttpRecycler.autoRefresh();
-        srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部*/
     }
 
     @Override
@@ -102,7 +104,7 @@ public class CrowdMoneyDetailedActivity extends BaseHttpRecyclerActivity<CrowdMo
         super.initView();
         ivBack = findView(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("筹资列表");
     }
 
@@ -190,11 +192,6 @@ public class CrowdMoneyDetailedActivity extends BaseHttpRecyclerActivity<CrowdMo
     }
 
     @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
-    }
-
-    @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch(keyCode){
             case KeyEvent.KEYCODE_BACK:
@@ -209,9 +206,8 @@ public class CrowdMoneyDetailedActivity extends BaseHttpRecyclerActivity<CrowdMo
         setProgressBar();
         progressBar.show();
 
-        String request = HttpRequest.postCrowdMoneyDetailed("payed",entityCrowdDetailed.getContent().getActivityId());
         //筹资明细
-        mEntityPageDataHttpModel.post(request, URL_BASE + URLConstant.CROWDMONEYDETAILED,1,this);
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.CROWDMONEYDETAILED,this);
     }
 
     @Override
@@ -220,20 +216,74 @@ public class CrowdMoneyDetailedActivity extends BaseHttpRecyclerActivity<CrowdMo
     }
 
     @Override
-    public void Success(String url, int RequestCode, EntityBase entityBase) {
-        super.Success(url, RequestCode, entityBase);
-        switch (RequestCode) {
-            case 1:
-                EntityPageData pageData = mEntityPageDataHttpModel.getData();
-                crowdMoneyDetailedList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(pageData.getContent().getData())
-                        ,new TypeToken<List<CrowdMoneyDetailed>>(){}.getType());
-                setList(crowdMoneyDetailedList);
-                break;
-        }
+    public List<CrowdMoneyDetailed> getList(EntityPageData data) {
+        return GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(data.getContent().getData())
+                ,new TypeToken<List<CrowdMoneyDetailed>>(){}.getType());
+    }
+
+    @Override
+    public String getRequestJsonStr(int page, int pageSize) {
+        String request = HttpRequest.postCrowdMoneyDetailed("payed", activityId, page, pageSize);
+        return request;
+    }
+
+    @Override
+    public void emptyPagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishRefresh();
+    }
+
+    @Override
+    public void refreshSuccessPagingList(List<CrowdMoneyDetailed> list) {
+        crowdMoneyDetailedList.clear();
+
+        crowdMoneyDetailedList.addAll(list);
+        setList(crowdMoneyDetailedList);
+        srlBaseHttpRecycler.finishRefresh();
+        srlBaseHttpRecycler.setLoadmoreFinished(false);
+    }
+
+    @Override
+    public void noMorePagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+    }
+
+    @Override
+    public void loadMoreSuccessPagingList(List<CrowdMoneyDetailed> list) {
+        crowdMoneyDetailedList.addAll(list);
+        srlBaseHttpRecycler.finishLoadmore();
+
+        setList(crowdMoneyDetailedList);
+
+    }
+
+    @Override
+    public void refreshErrorPagingList() {
+        showShortToast(R.string.noReturn);
+    }
+
+    @Override
+    public void loadMoreErrorPagingList() {
+        showShortToast(R.string.noReturn);
     }
 
     @Override
     public void ProgressDismiss(String url, int RequestCode) {
         progressBarDismiss();
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        super.onRefresh(refreshlayout);
+        //参与列表
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.CROWDMONEYDETAILED, this);
+    }
+
+    @Override
+    public void onLoadmore(RefreshLayout refreshlayout) {
+        super.onLoadmore(refreshlayout);
+        //参与列表
+        mEntityPageDataHttpModel.loadMorePost(URL_BASE + URLConstant.CROWDMONEYDETAILED, this);
     }
 }

@@ -10,9 +10,11 @@
     <string name="editPassword">请输入密码</string>
     <string name="editVerifyCode">请输入验证码</string>
     <string name="checkPhone">请检查手机号是否输入正确</string>
+    <string name="checkMail">请检查邮箱是否输入正确</string>
     <string name="checkNetwork">请检查网络连接</string>
     <string name="checkAgree">请检查是否同意相关协议</string>
     <string name="getSuccess">数据刷新</string>
+    <string name="noMoreData">没有更多数据了</string>
     <string name="noReturn">连接服务器超时，请稍候</string>
     <string name="focusSuccess">关注成功</string>
     <string name="cancelFocusSuccess">取消关注成功</string>
@@ -26,7 +28,7 @@
     <string name="noContent">请输入内容</string>
     <string name="noStar">请选择关联明星</string>
     <string name="noTarget">请输入目标金额</string>
-    <string name="createSuppoertSuccess">发起应援成功，请等待审核</string>
+    <string name="createSupportSuccess">发起应援成功，请等待审核</string>
     <string name="noHead">请选择头像</string>
     <string name="noBackground">请选择个人主页背景</string>
     <string name="noNickName">请输入昵称</string>
@@ -45,9 +47,34 @@
     <string name="noLess">不能再少了！</string>
     <string name="noMore">不能再多了！</string>
     <string name="feedbackSuccess">感谢您的反馈，我们会再接再厉的！</string>
-    <string name="leastOne">最少选择一个明星！</string>
-    <string name="mostThree">最多选择三个明星！</string>
+    <string name="leastOne">最少选择一个明星</string>
+    <string name="moreOne">最多选择一个明星</string>
+    <string name="mostThree">最多选择三个明星</string>
+    <string name="associateStars">请选择关联的明星</string>
     <string name="loading">正在加载…</string>
+    <string name="noWithdraw">请输入提现金额</string>
+    <string name="moreThanZero">提现金额必须大于0</string>
+    <string name="noWithdrawEnough">您的金币余额不足</string>
+    <string name="withdrawSuccess">您的提现申请成功</string>
+    <string name="leastOneConversation">最少选择一个聊天室</string>
+    <string name="mostThreeConversation">最多选择三个聊天室</string>
+    <string name="associateConversationSuccess">关联聊天室成功</string>
+    <string name="cancelSelect">取消选择</string>
+    <string name="bindSuccess">绑定成功</string>
+    <string name="cancelOrderSuccess">取消订单成功</string>
+    <string name="remindSuccess">提醒成功，请耐心等待~</string>
+    <string name="createCampaignFail">等级不足7级，无法发起活动</string>
+    <string name="createChatRoomFail">等级不足2级，无法创建聊天室</string>
+    <string name="createChatRoomSuccess">创建房间成功，请等待审核</string>
+    <string name="agreementFail">请阅读并同意想见你服务协议</string>
+    <string name="takeSuccess">确认收货成功</string>
+    <string name="noDeliveryAddress">没有选择收货地址，货物将无法送达哦</string>
+    <string name="noBind">未绑定</string>
+    <string name="bind">已绑定</string>
+    <string name="noReal">未认证</string>
+    <string name="real">已认证</string>
+    <string name="detailStadiums">场馆信息详见邮寄门票</string>
+    <string name="detailTime">活动时间详见邮寄门票</string>
 
     <string name="cancel">取消</string>
     <string name="title">请选择时间</string>
@@ -62,5 +89,8 @@
     <string name="current_date">当前日期</string>
     <string name="select_time">选择时间</string>
     <string name="current_time">当前时间</string>
+
+    <string name="search_hint">输入城市名称或拼音</string>
+    <string name="location_city_lodding">获取位置中...</string>
 
 </resources>

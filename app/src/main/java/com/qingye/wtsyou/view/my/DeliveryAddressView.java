@@ -47,12 +47,12 @@ public class DeliveryAddressView extends BaseView<DeliveryAddress> implements Vi
     @SuppressLint("InflateParams")
     @Override
     public View createView() {
-        tvContactName = findViewById(R.id.tv_contact_name);
-        tvContactPhone = findViewById(R.id.tv_contact_phone);
-        tvAddress = findViewById(R.id.tv_delivery_address);
-        isDefault = findViewById(R.id.cbtn_default_address, this);
-        llEdit = findViewById(R.id.ll_edit,this);
-        llDelete = findViewById(R.id.ll_delete,this);
+        tvContactName = findView(R.id.tv_contact_name);
+        tvContactPhone = findView(R.id.tv_contact_phone);
+        tvAddress = findView(R.id.tv_delivery_address);
+        isDefault = findView(R.id.cbtn_default_address, this);
+        llEdit = findView(R.id.ll_edit,this);
+        llDelete = findView(R.id.ll_delete,this);
 
         return super.createView();
     }

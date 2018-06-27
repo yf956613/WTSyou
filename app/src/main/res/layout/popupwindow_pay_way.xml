@@ -3,38 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:background="@color/alpha_6">
 
-    <LinearLayout
+    <Button
         android:layout_above="@+id/rl_content"
+        android:id="@+id/btn_close"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_select"
-            android:paddingLeft="@dimen/margin_10"
-            android:paddingRight="@dimen/margin_10"
-            android:paddingTop="@dimen/margin_6"
-            android:paddingBottom="@dimen/margin_6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="选择"
-            android:textSize="@dimen/text_size_14"
-            android:background="@color/white"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray_background2"/>
-
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:background="@color/alpha_6"/>
 
     <RelativeLayout
+        android:layout_above="@+id/ll"
         android:id="@+id/rl_content"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -58,16 +39,30 @@
                     android:layout_gravity="center_vertical"
                     android:src="@mipmap/wechat"/>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/margin_15"
                     android:paddingBottom="@dimen/margin_15"
                     android:paddingLeft="@dimen/margin_20"
                     android:paddingRight="@dimen/margin_20"
-                    android:text="微信支付"
-                    android:textColor="@color/black_text1"
-                    android:textSize="@dimen/text_size_14"/>
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="微信支付"
+                        android:textColor="@color/black_text1"
+                        android:textSize="@dimen/text_size_14"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_4"
+                        android:text="推荐微信用户使用"
+                        android:textColor="@color/gray_text5"
+                        android:textSize="@dimen/text_size_12"/>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -82,17 +77,30 @@
                     android:layout_gravity="center_vertical"
                     android:src="@mipmap/zhifubao"/>
 
-                <TextView
-                    android:id="@+id/text"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/margin_15"
                     android:paddingBottom="@dimen/margin_15"
                     android:paddingLeft="@dimen/margin_20"
                     android:paddingRight="@dimen/margin_20"
-                    android:text="支付宝支付"
-                    android:textColor="@color/black_text1"
-                    android:textSize="@dimen/text_size_14"/>
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="支付宝支付"
+                        android:textColor="@color/black_text1"
+                        android:textSize="@dimen/text_size_14"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_4"
+                        android:text="推荐安装支付宝客户端的用户使用"
+                        android:textColor="@color/gray_text5"
+                        android:textSize="@dimen/text_size_12"/>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -135,7 +143,7 @@
                     android:layout_below="@+id/rbtn_wei"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_35"
                     android:layout_gravity="center_horizontal"
                     android:focusable="false"
                     android:scaleX="0.6"
@@ -147,4 +155,24 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_select"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="立即购买"
+            android:textSize="@dimen/text_size_14"
+            android:background="@drawable/re_orange_shade_button"/>
+
+    </LinearLayout>
+
 </RelativeLayout>

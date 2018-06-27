@@ -5,10 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,45 +16,47 @@ import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.my.CardAdapter;
 import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpPageModel;
 import com.qingye.wtsyou.model.Card;
 import com.qingye.wtsyou.model.EntityPageData;
+import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.my.CardView;
-import com.qingye.wtsyou.widget.ObservableScrollView;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import zuo.biao.library.base.BaseHttpRecyclerActivity;
-import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
 import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
-import zuo.biao.library.model.EntityBase;
-import zuo.biao.library.util.HttpModel;
+import zuo.biao.library.interfaces.OnHttpPageCallBack;
 import zuo.biao.library.widget.CustomDialog;
 
 import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
-public class CardCanUseActivity extends BaseHttpRecyclerActivity<Card,CardView,CardAdapter> implements CacheCallBack<Card>, OnBottomDragListener {
+public class CardCanUseActivity extends BaseHttpRecyclerActivity<Card,CardView,CardAdapter>
+        implements View.OnClickListener, View.OnLongClickListener, CacheCallBack<Card>, OnBottomDragListener, OnHttpPageCallBack<EntityPageData,Card> {
 
     private ImageView ivBack;
     private TextView tvHead;
 
     private LinearLayout llHead;
-    private ObservableScrollView scrollView;
+    /*private ObservableScrollView scrollView;*/
     private View line;
     private int headHeight;
 
     private CustomDialog progressBar;
 
-    private HttpModel<EntityPageData> mEntityPageDataHttpModel;
+    private HttpPageModel<EntityPageData,Card> mEntityPageDataHttpModel;
 
     private List<Card> cardsList = new ArrayList<>();
+
+    private double minAmount = 0;
 
    //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -63,8 +64,8 @@ public class CardCanUseActivity extends BaseHttpRecyclerActivity<Card,CardView,C
      * @param context
      * @return
      */
-    public static Intent createIntent(Context context) {
-        return new Intent(context,CardCanUseActivity.class);
+    public static Intent createIntent(Context context, double minAmount) {
+        return new Intent(context,CardCanUseActivity.class).putExtra(Constant.MINAMOUNT, minAmount);
     }
 
     //启动方法>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -83,8 +84,11 @@ public class CardCanUseActivity extends BaseHttpRecyclerActivity<Card,CardView,C
 
         progressBar = new CustomDialog(getActivity(), R.style.CustomDialog);
 
+        intent = getIntent();
+        minAmount = intent.getDoubleExtra(Constant.MINAMOUNT, 0);
+
         //卡券列表
-        mEntityPageDataHttpModel = new HttpModel<>(EntityPageData.class);
+        mEntityPageDataHttpModel = new HttpPageModel<>(EntityPageData.class);
         cardsQuery();
 
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
@@ -95,29 +99,29 @@ public class CardCanUseActivity extends BaseHttpRecyclerActivity<Card,CardView,C
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        //srlBaseHttpRecycler.autoRefresh();
-        srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部*/
     }
 
     @Override
     public void initView() {
         super.initView();
 
-        ivBack = findViewById(R.id.iv_left);
+        ivBack = findView(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("可选择的优惠券");
 
-        llHead = findViewById(R.id.ll_head);
+        llHead = findView(R.id.ll_head);
         line = findView(R.id.line);
-        scrollView = findViewById(R.id.scrollview);
-        initListeners();
+        /*scrollView = findView(R.id.scrollview);
+        initListeners();*/
     }
 
-    private void initListeners() {
+    /*private void initListeners() {
         // 获取顶部图片高度后，设置滚动监听
         ViewTreeObserver vto = llHead.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -142,7 +146,7 @@ public class CardCanUseActivity extends BaseHttpRecyclerActivity<Card,CardView,C
         });
 
 
-    }
+    }*/
 
     public void onResume() {
 
@@ -238,34 +242,53 @@ public class CardCanUseActivity extends BaseHttpRecyclerActivity<Card,CardView,C
     public void initEvent() {//必须调用
         super.initEvent();
 
-    }
-
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
+        ivBack.setOnClickListener(this);
 
     }
-
     @Override
-    public void onRefresh(RefreshLayout refreshlayout) {
-        super.onRefresh(refreshlayout);
-        cardsQuery();
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_left:
+                finish();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
-    public void onLoadmore(RefreshLayout refreshlayout) {
-        super.onLoadmore(refreshlayout);
+    public boolean onLongClick(View v) {
+        return false;
+    }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constant.SELECTCARD, cardsList.get(position));//放进数据流中
+
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch(keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                finish();
+                return true;
+        }
+
+        return super.onKeyUp(keyCode, event);
     }
 
     public void cardsQuery() {
         setProgressBar();
         progressBar.show();
 
-        String[] states = {"unuse"};
-        String request = HttpRequest.postCardList(states);
         //卡券列表
-        mEntityPageDataHttpModel.post(request, URL_BASE + URLConstant.CARDQUERY,1,this);
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.CARDQUERY,this);
     }
 
     @Override
@@ -274,23 +297,78 @@ public class CardCanUseActivity extends BaseHttpRecyclerActivity<Card,CardView,C
     }
 
     @Override
-    public void Success(String url, int RequestCode, EntityBase entityBase) {
-        super.Success(url, RequestCode, entityBase);
-        switch (RequestCode) {
-            case 1:
-                EntityPageData pageData = mEntityPageDataHttpModel.getData();
-                cardsList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(pageData.getContent().getData())
-                        ,new TypeToken<List<Card>>(){}.getType());
-                setList(cardsList);
-                srlBaseHttpRecycler.finishRefresh();
-                srlBaseHttpRecycler.setLoadmoreFinished(false);
-                break;
-        }
+    public List<Card> getList(EntityPageData data) {
+        return GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(data.getContent().getData())
+                ,new TypeToken<List<Card>>(){}.getType());
+    }
+
+    @Override
+    public String getRequestJsonStr(int page, int pageSize) {
+        String[] states = {"used","overdue"};
+        String request = HttpRequest.postCardList(states, page, pageSize);
+
+        return request;
+    }
+
+    @Override
+    public void emptyPagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishRefresh();
+    }
+
+    @Override
+    public void refreshSuccessPagingList(List<Card> list) {
+        cardsList.clear();
+
+        cardsList.addAll(list);
+        srlBaseHttpRecycler.finishRefresh();
+        srlBaseHttpRecycler.setLoadmoreFinished(false);
+
+        setList(cardsList);
+    }
+
+    @Override
+    public void noMorePagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+    }
+
+    @Override
+    public void loadMoreSuccessPagingList(List<Card> list) {
+        cardsList.addAll(list);
+        srlBaseHttpRecycler.finishLoadmore();
+
+        setList(cardsList);
+
+    }
+
+    @Override
+    public void refreshErrorPagingList() {
+        showShortToast(R.string.noReturn);
+    }
+
+    @Override
+    public void loadMoreErrorPagingList() {
+        showShortToast(R.string.noReturn);
     }
 
     @Override
     public void ProgressDismiss(String url, int RequestCode) {
         progressBarDismiss();
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        super.onRefresh(refreshlayout);
+        //卡券列表
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.CARDQUERY, this);
+    }
+
+    @Override
+    public void onLoadmore(RefreshLayout refreshlayout) {
+        super.onLoadmore(refreshlayout);
+        //卡券列表
+        mEntityPageDataHttpModel.loadMorePost(URL_BASE + URLConstant.CARDQUERY, this);
     }
 
 }

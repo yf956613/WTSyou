@@ -31,10 +31,10 @@ public class QuestionView extends BaseView<Question> implements View.OnClickList
     @SuppressLint("InflateParams")
     @Override
     public View createView() {
-        tvTitle = findViewById(R.id.tv_title);
-        tvContent = findViewById(R.id.tv_content);
-        ivMore = findViewById(R.id.iv_more,this);
-        ivLess = findViewById(R.id.iv_less,this);
+        tvTitle = findView(R.id.tv_title);
+        tvContent = findView(R.id.tv_content);
+        ivMore = findView(R.id.iv_more,this);
+        ivLess = findView(R.id.iv_less,this);
 
         return super.createView();
     }
@@ -48,9 +48,7 @@ public class QuestionView extends BaseView<Question> implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (BaseModel.isCorrect(data) == false) {
-            return;
-        }
+
         switch (v.getId()) {
             case R.id.iv_more:
                 ivMore.setVisibility(View.GONE);

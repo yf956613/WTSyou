@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.search.SearchHotConversationAdapter;
-import com.qingye.wtsyou.model.SearchContent;
+import com.qingye.wtsyou.model.HotTopic;
 import com.qingye.wtsyou.view.search.SearchHotConversationView;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
 
-public class SearchHotConversationFragment extends BaseHttpRecyclerFragment<SearchContent,SearchHotConversationView,SearchHotConversationAdapter>implements CacheCallBack<SearchContent> {
+public class SearchHotConversationFragment extends BaseHttpRecyclerFragment<HotTopic,SearchHotConversationView,SearchHotConversationAdapter>implements CacheCallBack<HotTopic> {
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -68,11 +68,10 @@ public class SearchHotConversationFragment extends BaseHttpRecyclerFragment<Sear
     }
 
     @Override
-    public void setList(final List<SearchContent> list) {
-        final List<SearchContent> templist = new ArrayList<>();
+    public void setList(final List<HotTopic> list) {
+        final List<HotTopic> templist = new ArrayList<>();
         for(int i = 1;i < 9;i ++) {
-            SearchContent conversation = new SearchContent();
-            conversation.setId(i);
+            HotTopic conversation = new HotTopic();
             templist.add(conversation);
         }
         //list.addAll(templist);
@@ -104,12 +103,12 @@ public class SearchHotConversationFragment extends BaseHttpRecyclerFragment<Sear
     }
 
     @Override
-    public List<SearchContent> parseArray(String json) {
+    public List<HotTopic> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<SearchContent> getCacheClass() {
+    public Class<HotTopic> getCacheClass() {
         return null;
     }
 
@@ -119,7 +118,7 @@ public class SearchHotConversationFragment extends BaseHttpRecyclerFragment<Sear
     }
 
     @Override
-    public String getCacheId(SearchContent data) {
+    public String getCacheId(HotTopic data) {
         return null;
     }
 

@@ -83,27 +83,39 @@ public class StarsCampaignShowView extends BaseView<Concert> implements View.OnC
         }
         //售票中
         if (tag.equals("saling")) {
-            tvTag.setBackground(getResources().getDrawable(R.drawable.re_corners_red));
+            tvTag.setBackground(getResources().getDrawable(R.drawable.re_corners_orange));
         }
         //时间
-        tvTime.setText(DateUtil.resverDate(data.getStartTimeStr(),DATE_PATTERN_2,DATE_PATTERN_5));
+        if (data.getStartTimeStr() != null) {
+            tvTime.setText(DateUtil.resverDate(data.getStartTimeStr(),DATE_PATTERN_2,DATE_PATTERN_5));
+        }
         //地址
         tvAddress.setText(data.getStadiumsName());
 
         //排序
-        priceLists = data.getPriceList();
-        double[] priceList = new double[priceLists.size()];
-        for (int i = 0;i < priceLists.size();i ++) {
-            priceList[i] = priceLists.get(i).getPrice().doubleValue();
+        if (data.getPriceList() != null && !data.getPriceList().isEmpty()) {
+            priceLists = data.getPriceList();
+
+            double[] priceList = new double[priceLists.size()];
+            for (int i = 0;i < priceLists.size();i ++) {
+                priceList[i] = priceLists.get(i).getPrice();
+            }
+
+            sortInsert(priceList);
+            //最小值
+            if (priceLists.size() == 1) {
+                double min = priceList[0];
+                tvMin.setText(String.valueOf(min));
+                tvMax.setText("");
+            } else {
+                double min = priceList[0];
+                double max = priceList[priceList.length - 1];
+                tvMin.setText(String.valueOf(min) + " - ");
+                tvMax.setText(String.valueOf((max)));
+
+            }
         }
-        sortInsert(priceList);
-        //最小值
-        if (priceLists.size() > 1) {
-            tvMin.setText(Double.toString(priceList[0]) + " - ");
-            tvMax.setText(Double.toString(priceList[priceList.length - 1]));
-        } else {
-            tvMin.setText(Double.toString(priceList[0]));
-        }
+
     }
 
     public double[] sortInsert(double[] array){

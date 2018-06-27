@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.campaign.ConversationAdapter;
 
-import com.qingye.wtsyou.model.Conversation;
+import com.qingye.wtsyou.model.ChatingRoom;
+import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.view.campaign.ConversationView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
@@ -19,7 +20,9 @@ import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
 
-public class DetailedConversationFragment extends BaseHttpRecyclerFragment<Conversation,ConversationView,ConversationAdapter>implements CacheCallBack<Conversation> {
+public class DetailedConversationFragment extends BaseHttpRecyclerFragment<ChatingRoom,ConversationView,ConversationAdapter>implements CacheCallBack<ChatingRoom> {
+
+    private  List<ChatingRoom> chatingRooms =  new ArrayList<>();
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -42,6 +45,10 @@ public class DetailedConversationFragment extends BaseHttpRecyclerFragment<Conve
         setContentView(R.layout.fragment_campaign_detailed_conversation);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
+        //获取传来的数据
+        Bundle bundle = getArguments();
+        chatingRooms = (List<ChatingRoom>) bundle.getSerializable(Constant.CHATINTROOMLIST);
+
         initCache(this);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
@@ -62,6 +69,8 @@ public class DetailedConversationFragment extends BaseHttpRecyclerFragment<Conve
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
         srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
 
+        setList(chatingRooms);
+
         return view;
     }
 
@@ -71,14 +80,8 @@ public class DetailedConversationFragment extends BaseHttpRecyclerFragment<Conve
     }
 
     @Override
-    public void setList(final List<Conversation> list) {
-        final List<Conversation> templist = new ArrayList<>();
-        for(int i = 1;i < 4;i ++) {
-            Conversation conversation = new Conversation();
-            conversation.setId(i);
-            templist.add(conversation);
-        }
-        //list.addAll(templist);
+    public void setList(final List<ChatingRoom> list) {
+
         setList(new AdapterCallBack<ConversationAdapter>() {
 
             @Override
@@ -88,7 +91,7 @@ public class DetailedConversationFragment extends BaseHttpRecyclerFragment<Conve
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -107,12 +110,12 @@ public class DetailedConversationFragment extends BaseHttpRecyclerFragment<Conve
     }
 
     @Override
-    public List<Conversation> parseArray(String json) {
+    public List<ChatingRoom> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Conversation> getCacheClass() {
+    public Class<ChatingRoom> getCacheClass() {
         return null;
     }
 
@@ -122,7 +125,7 @@ public class DetailedConversationFragment extends BaseHttpRecyclerFragment<Conve
     }
 
     @Override
-    public String getCacheId(Conversation data) {
+    public String getCacheId(ChatingRoom data) {
         return null;
     }
 

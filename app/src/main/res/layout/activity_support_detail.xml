@@ -91,8 +91,7 @@
                             android:id="@+id/iv_campaign_background_img"
                             android:layout_width="match_parent"
                             android:layout_height="170dp"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/img_v"/>
+                            android:scaleType="fitXY"/>
 
                         <LinearLayout
                             android:id="@+id/ll_ing"
@@ -203,7 +202,7 @@
                                 android:layout_marginRight="@dimen/margin_12"
                                 android:maxLines="1"
                                 android:ellipsize="end"
-                                android:text="[房间里的音乐会]陈绮贞音乐会应援"
+                                android:text=""
                                 android:textSize="@dimen/text_size_13"
                                 android:textColor="@color/black_text"/>
 
@@ -259,7 +258,7 @@
                                             android:id="@+id/tv_crowded_value"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="1938"
+                                            android:text=""
                                             android:textSize="@dimen/text_size_13"
                                             android:textColor="@color/orange_text2"/>
 
@@ -297,7 +296,7 @@
                                             android:id="@+id/tv_target_price_value"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="5000"
+                                            android:text=""
                                             android:textSize="@dimen/text_size_13"
                                             android:textColor="@color/orange_text2"/>
 
@@ -416,6 +415,7 @@
                         android:background="@color/white">
 
                         <RelativeLayout
+                            android:id="@+id/rlCreator"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_10"
@@ -434,8 +434,7 @@
                                     android:id="@+id/iv_creator"
                                     android:layout_width="48dp"
                                     android:layout_height="48dp"
-                                    android:layout_gravity="center"
-                                    android:src="@mipmap/head_d"/>
+                                    android:layout_gravity="center"/>
 
                             </LinearLayout>
 
@@ -490,7 +489,7 @@
                                     android:layout_height="wrap_content"
                                     android:maxLines="1"
                                     android:ellipsize="end"
-                                    android:text="我们都爱讲冷笑话"
+                                    android:text=""
                                     android:textColor="@color/black_text1"
                                     android:textSize="@dimen/text_size_12"/>
 
@@ -517,7 +516,7 @@
                                             android:layout_height="wrap_content"
                                             android:maxLines="1"
                                             android:ellipsize="end"
-                                            android:text="345"
+                                            android:text=""
                                             android:textColor="@color/gray_text1"
                                             android:textSize="@dimen/text_size_11"/>
 
@@ -542,7 +541,7 @@
                                             android:layout_height="wrap_content"
                                             android:maxLines="1"
                                             android:ellipsize="end"
-                                            android:text="74783"
+                                            android:text=""
                                             android:textColor="@color/gray_text1"
                                             android:textSize="@dimen/text_size_11"/>
 
@@ -560,9 +559,10 @@
                                 android:layout_centerVertical="true">
 
                                 <TextView
-                                    android:id="@+id/tv_operate"
+                                    android:id="@+id/tv_focus"
                                     android:layout_width="48dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginRight="@dimen/margin_10"
                                     android:gravity="center_horizontal"
                                     android:paddingTop="@dimen/margin_4"
                                     android:paddingBottom="@dimen/margin_4"
@@ -570,6 +570,21 @@
                                     android:textSize="@dimen/text_size_11"
                                     android:textColor="@color/orange_line"
                                     android:background="@drawable/corners_orange_1"/>
+
+                                <TextView
+                                    android:id="@+id/tv_cancel_focus"
+                                    android:layout_width="48dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="@dimen/margin_10"
+                                    android:gravity="center_horizontal"
+                                    android:paddingTop="@dimen/margin_4"
+                                    android:paddingBottom="@dimen/margin_4"
+                                    android:text="已关注"
+                                    android:textSize="@dimen/text_size_11"
+                                    android:textColor="@color/gray_text1"
+                                    android:background="@drawable/corners_gray"
+                                    android:visibility="gone"/>
+
                             </LinearLayout>
                         </RelativeLayout>
 
@@ -633,9 +648,8 @@
                             android:layout_marginBottom="@dimen/margin_12"
                             android:layout_marginLeft="@dimen/margin_6"
                             android:layout_marginRight="@dimen/margin_6"
-                            android:text="众筹须知
-            付款成功后即可成功参与投票。"
-                            android:textSize="@dimen/text_size_12"
+                            android:text=""
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text2"/>
 
                     </LinearLayout>

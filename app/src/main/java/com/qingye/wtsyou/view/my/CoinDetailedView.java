@@ -29,9 +29,9 @@ public class CoinDetailedView extends BaseView<CoinDetailed> implements View.OnC
     @Override
     public View createView() {
 
-        tvType = findViewById(R.id.tv_type);
-        tvTime = findViewById(R.id.tv_time);
-        tvValue = findViewById(R.id.tv_value);
+        tvType = findView(R.id.tv_type);
+        tvTime = findView(R.id.tv_time);
+        tvValue = findView(R.id.tv_value);
 
         return super.createView();
     }

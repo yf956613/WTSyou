@@ -38,7 +38,7 @@
             android:src="@mipmap/e_mail"/>
 
         <EditText
-            android:id="@+id/edt_phone"
+            android:id="@+id/edt_mail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_40"
@@ -47,12 +47,47 @@
             android:padding="@dimen/margin_10"
             android:maxLines="1"
             android:hint="请输入邮箱账号"
-            android:inputType="phone"
             android:textSize="@dimen/text_size_13"
             android:textColorHint="@color/gray_text2"
             android:textColor="@color/black_text1"
             android:textCursorDrawable="@drawable/color_cursor"
             android:background="@color/gray_background2"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginLeft="@dimen/margin_8"
+            android:layout_marginRight="@dimen/margin_8">
+
+            <EditText
+                android:id="@+id/edt_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:padding="@dimen/margin_10"
+                android:maxLength="10"
+                android:hint="请输入验证码"
+                android:inputType="phone"
+                android:textSize="@dimen/text_size_13"
+                android:textColorHint="@color/gray_text2"
+                android:textColor="@color/black_text1"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:background="@color/gray_background2"/>
+
+            <com.qingye.wtsyou.widget.CountButton
+                android:id="@+id/btn_getVerifyCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/margin_10"
+                android:gravity="center_horizontal"
+                android:text="获取验证码"
+                android:textColor="@color/orange_text2"
+                android:textSize="@dimen/text_size_13"
+                android:background="@null"/>
+
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"

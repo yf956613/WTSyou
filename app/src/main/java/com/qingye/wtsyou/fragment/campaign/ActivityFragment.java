@@ -2,8 +2,6 @@ package com.qingye.wtsyou.fragment.campaign;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -25,42 +23,42 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.campaign.CreateSupportActivity;
 import com.qingye.wtsyou.activity.campaign.CreateVoteActivity;
-import com.qingye.wtsyou.activity.campaign.DetailedActivity;
-import com.qingye.wtsyou.activity.search.SearchCampaignActivity;
 import com.qingye.wtsyou.activity.campaign.ShowAllActivity;
 import com.qingye.wtsyou.activity.campaign.SupportAllActivity;
+import com.qingye.wtsyou.activity.search.SearchCampaignActivity;
 import com.qingye.wtsyou.adapter.campaign.LoopShowContentAdapter;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpModel;
 import com.qingye.wtsyou.model.Banners;
 import com.qingye.wtsyou.model.Embeds;
 import com.qingye.wtsyou.model.EntityCampaignHome;
+import com.qingye.wtsyou.model.EntityPersonalMessage;
 import com.qingye.wtsyou.model.Hots;
 import com.qingye.wtsyou.model.Officials;
 import com.qingye.wtsyou.model.Supports;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.HttpRequest;
-import com.qingye.wtsyou.utils.NetUtil;
-
-import zuo.biao.library.ui.WebViewActivity;
-import zuo.biao.library.widget.CustomDialog;
-
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import com.qingye.wtsyou.utils.URLConstant;
+import com.qingye.wtsyou.widget.VpSwipeRefreshLayout;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import wzp.demo.imageloop.widget.ImageLoopViewPager;
 import wzp.demo.imageloop.widget.PageIndicatorView;
 import zuo.biao.library.base.BaseFragment;
-import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.interfaces.IErrorCodeTool;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.ui.AlertDialog;
-import zuo.biao.library.util.JSON;
-import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.ui.WebViewActivity;
+import zuo.biao.library.widget.CustomDialog;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -90,8 +88,13 @@ public class ActivityFragment extends BaseFragment implements View.OnClickListen
     private LoopShowContentAdapter loopAdapter;
 
     private ScrollView scrollView;
-    private SwipeRefreshLayout swipeRefresh;
+    private VpSwipeRefreshLayout swipeRefresh;
     private CustomDialog progressBar;
+
+    private EntityPersonalMessage entityPersonalMessage;
+
+    private HttpModel<EntityCampaignHome> mEntityCampaignHomeHttpModel;
+    private HttpModel<EntityPersonalMessage> mEntityPersonalMessageHttpModel;
 
     public ActivityFragment() {
         // Required empty public constructor
@@ -107,7 +110,11 @@ public class ActivityFragment extends BaseFragment implements View.OnClickListen
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
+        //活动列表
+        mEntityCampaignHomeHttpModel = new HttpModel<>(EntityCampaignHome.class);
         getCampaignHome();
+        //获取个人信息
+        mEntityPersonalMessageHttpModel = new HttpModel<>(EntityPersonalMessage.class);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
@@ -232,6 +239,7 @@ public class ActivityFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_create:
+                getPersonalMessage();
                 //创建对话框
                 dialog = new Dialog(getContext(),R.style.dialog1);
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.support_or_vote,null);
@@ -250,12 +258,20 @@ public class ActivityFragment extends BaseFragment implements View.OnClickListen
                 dialog.show();
                 break;
             case R.id.ll_support:
-                toActivity(CreateSupportActivity.createIntent(context));
-                dialog.dismiss();
+                //if (entityPersonalMessage.getContent().getLevel() > 7) {
+                    toActivity(CreateSupportActivity.createIntent(context));
+                    dialog.dismiss();
+                /*} else {
+                    showShortToast(R.string.createCampaignFail);
+                }*/
                 break;
             case R.id.ll_vote:
-                toActivity(CreateVoteActivity.createIntent(context));
-                dialog.dismiss();
+                //if (entityPersonalMessage.getContent().getLevel() > 7) {
+                    toActivity(CreateVoteActivity.createIntent(context));
+                    dialog.dismiss();
+                /*} else {
+                    showShortToast(R.string.createCampaignFail);
+                }*/
                 break;
             case R.id.rl_close:
                 dialog.dismiss();
@@ -281,62 +297,6 @@ public class ActivityFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-    private void getCampaignHome() {
-
-        //检查网络
-        if (NetUtil.checkNetwork(context)) {
-            setProgressBar();
-            progressBar.show();
-
-            HttpRequest.postCampaignHome(0, new OnHttpResponseListener() {
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                    if(!StringUtil.isEmpty(resultJson)){
-                        EntityCampaignHome entityCampaignHome =  JSON.parseObject(resultJson,EntityCampaignHome.class);
-
-                        if(entityCampaignHome.isSuccess()){
-                            //成功
-                            //showShortToast(R.string.getSuccess);
-                            //轮播图
-                            bannersList.clear();
-                            bannersList = entityCampaignHome.getContent().getBanners();
-                            //官方活动
-                            officialsList = entityCampaignHome.getContent().getOfficials();
-                            //热门活动
-                            hotCampaignList = entityCampaignHome.getContent().getHots();
-                            //广告
-                            embedsList = entityCampaignHome.getContent().getEmbeds();
-                            //应援
-                            supportsList = entityCampaignHome.getContent().getSupports();
-                            //轮播图
-                            imageloop();
-                            //广告
-                            ad();
-                            //其他
-                            fragment();
-
-                        }else{//显示失败信息
-                            if (entityCampaignHome.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityCampaignHome.getMessage());
-                            }
-
-                            progressBarDismiss();
-                        }
-                    }else{
-                        showShortToast(R.string.noReturn);
-
-                        progressBarDismiss();
-                    }
-                }
-            });
-        } else {
-            showShortToast(R.string.checkNetwork);
-        }
-    }
-
     //轮播图
     private void imageloop(){
         viewList.clear();
@@ -351,7 +311,7 @@ public class ActivityFragment extends BaseFragment implements View.OnClickListen
                 @Override
                 public void run() {
                     for (int i = 0; i < bannersList.size(); i ++) {
-                        View view = getLayoutInflater().inflate(R.layout.loop_show, null);
+                        View view = LayoutInflater.from(getActivity()).inflate(R.layout.loop_show, null);
                         final String url = bannersList.get(i).getAdvertUrl();
                         final String title = bannersList.get(i).getTitle();
                         view.setOnClickListener(new View.OnClickListener() {
@@ -434,8 +394,66 @@ public class ActivityFragment extends BaseFragment implements View.OnClickListen
             transaction.replace(R.id.list_support,activitySupportFragment);
         }
 
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
 
+        progressBarDismiss();
+    }
+
+    private void getCampaignHome() {
+        setProgressBar();
+        progressBar.show();
+
+        String request = HttpRequest.postCampaignHome();
+        mEntityCampaignHomeHttpModel.post(request, URL_BASE + URLConstant.CAMPAIGNHOME,1,this);
+    }
+
+    public void getPersonalMessage() {
+        /*setProgressBar();
+        progressBar.show();*/
+
+        mEntityPersonalMessageHttpModel.get(URL_BASE + URLConstant.GETPERSONALMESSAGE,2,this);
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                EntityCampaignHome.Content entityCampaignHome = mEntityCampaignHomeHttpModel.getData().getContent();
+                //成功
+                //showShortToast(R.string.getSuccess);
+                //轮播图
+                bannersList.clear();
+                bannersList = entityCampaignHome.getBanners();
+                //官方活动
+                officialsList = entityCampaignHome.getOfficials();
+                //热门活动
+                hotCampaignList = entityCampaignHome.getHots();
+                //广告
+                embedsList = entityCampaignHome.getEmbeds();
+                //应援
+                supportsList = entityCampaignHome.getSupports();
+                //轮播图
+                imageloop();
+                //广告
+                ad();
+                //其他
+                fragment();
+
+                break;
+            case 2:
+                entityPersonalMessage = mEntityPersonalMessageHttpModel.getData();
+                break;
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
         progressBarDismiss();
     }
 }

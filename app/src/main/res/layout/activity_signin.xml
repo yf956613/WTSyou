@@ -366,14 +366,16 @@
                         android:layout_marginRight="@dimen/margin_30"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <WebView
+                            android:id="@+id/webView"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:layout_alignParentRight="true"
-                            android:text="1  每签到一次获得爱心，爱心可以用来打榜"
-                            android:textSize="@dimen/text_size_12"
-                            android:textColor="@color/black_text2"/>
+                            android:layout_centerInParent="true"
+                            android:text="这是规则!!!!"
+                            android:textSize="@dimen/text_size_15"
+                            android:textColor="@color/black_text1"
+                            tools:ignore="WebViewLayout" />
+
                     </LinearLayout>
 
                 </RelativeLayout>

@@ -14,13 +14,6 @@ limitations under the License.*/
 
 package zuo.biao.library.ui;
 
-import java.io.File;
-
-import zuo.biao.library.R;
-import zuo.biao.library.base.BaseActivity;
-import zuo.biao.library.util.CommonUtil;
-import zuo.biao.library.util.DataKeeper;
-import zuo.biao.library.util.StringUtil;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +23,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+
+import java.io.File;
+
+import zuo.biao.library.R;
+import zuo.biao.library.base.BaseActivity;
+import zuo.biao.library.util.CommonUtil;
+import zuo.biao.library.util.DataKeeper;
+import zuo.biao.library.util.StringUtil;
 
 /**通用获取裁剪单张照片Activity
  * @author Lemon
@@ -49,6 +50,8 @@ public class CutPictureActivity extends BaseActivity {
 
 	public static final String INTENT_CUT_WIDTH = "INTENT_CUT_WIDTH";
 	public static final String INTENT_CUT_HEIGHT = "INTENT_CUT_HEIGHT";
+	public static final String INTENT_CUT_X = "INTENT_CUT_X";
+	public static final String INTENT_CUT_Y = "INTENT_CUT_Y";
 
 	/**启动这个Activity的Intent
 	 * @param context
@@ -59,8 +62,8 @@ public class CutPictureActivity extends BaseActivity {
 	 * @return
 	 */
 	public static Intent createIntent(Context context, String originalPath
-			, String cuttedPath, String cuttedName, int cuttedSize) {
-		return createIntent(context, originalPath, cuttedPath, cuttedName, cuttedSize, cuttedSize);
+			, String cuttedPath, String cuttedName, int cuttedSize, int aspectX, int aspectY) {
+		return createIntent(context, originalPath, cuttedPath, cuttedName, cuttedSize, cuttedSize, aspectX, aspectY);
 	}
 	/**启动这个Activity的Intent
 	 * @param context
@@ -72,13 +75,15 @@ public class CutPictureActivity extends BaseActivity {
 	 * @return
 	 */
 	public static Intent createIntent(Context context, String originalPath
-			, String cuttedPath, String cuttedName, int cuttedWidth, int cuttedHeight) {
+			, String cuttedPath, String cuttedName, int cuttedWidth, int cuttedHeight, int aspectX, int aspectY) {
 		Intent intent = new Intent(context, CutPictureActivity.class);
 		intent.putExtra(INTENT_ORIGINAL_PICTURE_PATH, originalPath);
 		intent.putExtra(INTENT_CUTTED_PICTURE_PATH, cuttedPath);
 		intent.putExtra(INTENT_CUTTED_PICTURE_NAME, cuttedName);
 		intent.putExtra(INTENT_CUT_WIDTH, cuttedWidth);
 		intent.putExtra(INTENT_CUT_HEIGHT, cuttedHeight);
+		if(aspectX > 0)intent.putExtra(INTENT_CUT_X, aspectX);
+		if(aspectY > 0)intent.putExtra(INTENT_CUT_Y, aspectY);
 		return intent;
 	}
 
@@ -95,6 +100,9 @@ public class CutPictureActivity extends BaseActivity {
 	private String cuttedPictureName;
 	private int cuttedWidth;
 	private int cuttedHeight;
+	private int aspectX = 0;
+	private int aspectY = 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -104,6 +112,10 @@ public class CutPictureActivity extends BaseActivity {
 		originalPicturePath = intent.getStringExtra(INTENT_ORIGINAL_PICTURE_PATH);
 		cuttedWidth = intent.getIntExtra(INTENT_CUT_WIDTH, 0);
 		cuttedHeight = intent.getIntExtra(INTENT_CUT_HEIGHT, 0);
+
+		aspectX = intent.getIntExtra(INTENT_CUT_X, 0);
+		aspectY = intent.getIntExtra(INTENT_CUT_Y, 0);
+
 		if (cuttedWidth <= 0) {
 			cuttedWidth = cuttedHeight;
 		}
@@ -141,21 +153,21 @@ public class CutPictureActivity extends BaseActivity {
 	 * @param width
 	 * @param height
 	 */
-	public void startPhotoZoom(String path, int width, int height) {
-		startPhotoZoom(Uri.fromFile(new File(path)), width, height);
+	public void startPhotoZoom(String path, int width, int height, int aspectX, int aspectY) {
+		startPhotoZoom(Uri.fromFile(new File(path)), width, height, aspectX, aspectY);
 	}
 	/**照片裁剪
 	 * @param fileUri
 	 * @param width
 	 * @param height
 	 */
-	public void startPhotoZoom(Uri fileUri, int width, int height) {
+	public void startPhotoZoom(Uri fileUri, int width, int height, int aspectX, int aspectY) {
 
 		intent = new Intent("com.android.camera.action.CROP");
 		intent.setDataAndType(fileUri, "image/*");
 		// aspectX aspectY 是宽高的比例
-		intent.putExtra("aspectX", 1);
-		intent.putExtra("aspectY", 1);
+		intent.putExtra("aspectX", aspectX);
+		intent.putExtra("aspectY", aspectY);
 
 		// outputX,outputY 是剪裁图片的宽高
 		intent.putExtra("outputX", width);
@@ -193,7 +205,7 @@ public class CutPictureActivity extends BaseActivity {
 	@Override
 	public void initData() {//必须调用
 		
-		startPhotoZoom(originalPicturePath, cuttedWidth, cuttedHeight);
+		startPhotoZoom(originalPicturePath, cuttedWidth, cuttedHeight, aspectX, aspectY);
 	}
 
 

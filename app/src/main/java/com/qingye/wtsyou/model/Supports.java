@@ -1,6 +1,8 @@
 package com.qingye.wtsyou.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import zuo.biao.library.base.BaseModel;
 
@@ -8,7 +10,7 @@ import zuo.biao.library.base.BaseModel;
  * Created by pm89 on 2018/5/7.
  */
 
-public class Supports extends BaseModel {
+public class Supports implements Serializable {
 
     private String uuid;
     private String created;
@@ -21,9 +23,9 @@ public class Supports extends BaseModel {
     private String activityIcon;
     private String description;
     private String detail;
-    private String startTime;
-    private String endTime;
-    private String deadline;
+    private Date startTime;
+    private Date endTime;
+    private Date deadline;
     private String state;
     private String createUserId;
     private String activityType;
@@ -128,27 +130,27 @@ public class Supports extends BaseModel {
         this.detail = detail;
     }
 
-    public String getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
-    public String getDeadline() {
+    public Date getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(String deadline) {
+    public void setDeadline(Date deadline) {
         this.deadline = deadline;
     }
 
@@ -272,8 +274,4 @@ public class Supports extends BaseModel {
         this.settingGoalsNum = settingGoalsNum;
     }
 
-    @Override
-    protected boolean isCorrect() {
-        return false;
-    }
 }

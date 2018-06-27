@@ -17,34 +17,28 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.home.FansMainActivity;
 import com.qingye.wtsyou.adapter.home.FansChartsAdapter;
-import zuo.biao.library.model.EntityBase;
 import com.qingye.wtsyou.model.EntityPageData;
 import com.qingye.wtsyou.model.RankInfos;
-import com.qingye.wtsyou.model.FocusStars;
 import com.qingye.wtsyou.utils.BroadcastAction;
-import com.qingye.wtsyou.utils.DataUtil;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.home.FansChartsView;
-import zuo.biao.library.widget.CustomDialog;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
-
-import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+import zuo.biao.library.widget.CustomDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -121,12 +115,11 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        srlBaseHttpRecycler.setEnableRefresh(true);//启用下拉刷新
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(true);//启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(true);//启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(true);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部
-
-        //srlBaseHttpRecycler.autoRefresh();
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部*/
 
         return view;
     }
@@ -218,6 +211,10 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
     public void initData() {
         super.initData();
 
+        if (fansTopChartsList.size() == 0) {
+            return;
+        }
+
         if (fansTopChartsList.get(0) != null) {
             RankInfos first = fansTopChartsList.get(0);
             //名字
@@ -230,6 +227,11 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
                 Glide.with(context)
                         .load(url1)
                         .into(ivFirImg);
+            } else {
+                int defaultHead = R.mipmap.head;
+                Glide.with(context)
+                        .load(defaultHead)
+                        .into(ivFirImg);
             }
             if (first.getFollow()) {
                 tvFirFocus.setVisibility(View.GONE);
@@ -239,6 +241,10 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
                 tvFirCan.setVisibility(View.GONE);
             }
 
+        }
+
+        if (fansTopChartsList.size() < 2) {
+            return;
         }
 
         if (fansTopChartsList.get(1) != null) {
@@ -253,6 +259,11 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
                 Glide.with(context)
                         .load(url2)
                         .into(ivSecImg);
+            } else {
+                int defaultHead = R.mipmap.head;
+                Glide.with(context)
+                        .load(defaultHead)
+                        .into(ivSecImg);
             }
             if (second.getFollow()) {
                 tvSecFocus.setVisibility(View.GONE);
@@ -261,6 +272,10 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
                 tvSecFocus.setVisibility(View.VISIBLE);
                 tvSecCan.setVisibility(View.GONE);
             }
+        }
+
+        if (fansTopChartsList.size() < 2) {
+            return;
         }
 
         if (fansTopChartsList.get(2) != null) {
@@ -274,6 +289,11 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
             if (url3 != null) {
                 Glide.with(context)
                         .load(url3)
+                        .into(ivThiImg);
+            } else {
+                int defaultHead = R.mipmap.head;
+                Glide.with(context)
+                        .load(defaultHead)
                         .into(ivThiImg);
             }
             if (third.getFollow()) {
@@ -322,6 +342,10 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
         tvSecCan.setOnClickListener(this);
         tvThiFocus.setOnClickListener(this);
         tvThiCan.setOnClickListener(this);
+
+        ivFirImg.setOnClickListener(this);
+        ivSecImg.setOnClickListener(this);
+        ivThiImg.setOnClickListener(this);
     }
 
     public void rankingQuery(){
@@ -330,8 +354,6 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
 
     public void rankingQuery(final int page) {
         if (NetUtil.checkNetwork(getActivity())) {
-            setProgressBar();
-            progressBar.show();
 
             String keywords = null;
             String periods = null;
@@ -382,8 +404,6 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
                                         }
                                     }
 
-                                    progressBarDismiss();
-
                                     setList(fansOtherChartsList);
 
                                     totalPage = entityPageData.getContent().getPageCount();
@@ -391,27 +411,18 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
                                     currentPage ++;
 
                                 }else{//显示失败信息
-                                    if (entityPageData.getCode().equals("401")) {
-                                        showShortToast(R.string.tokenInvalid);
-                                        toActivity(MainActivity.createIntent(context));
-                                    } else {
-                                        showShortToast(entityPageData.getMessage());
-                                    }
 
-                                    progressBarDismiss();
+                                    showShortToast(entityPageData.getMessage());
                                 }
 
                             }else{
                                 showShortToast(R.string.noReturn);
-
-                                progressBarDismiss();
                             }
                         }
                     });
         } else {
             showShortToast(R.string.checkNetwork);
 
-            progressBarDismiss();
         }
     }
 
@@ -454,22 +465,27 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
 
                 }
                 break;
+            case R.id.iv_second_img:
+                toActivity(FansMainActivity.createIntent(context, fansTopChartsList.get(1).getUserId()));
+                break;
+            case R.id.iv_first_img:
+                toActivity(FansMainActivity.createIntent(context, fansTopChartsList.get(0).getUserId()));
+                break;
+            case R.id.iv_third_img:
+                toActivity(FansMainActivity.createIntent(context, fansTopChartsList.get(2).getUserId()));
+                break;
+            default:
+                break;
         }
     }
 
     public void focusFans(RankInfos fansCharts, final TextView focus, final TextView can) {
-        List<FocusStars> focusStarsRequestList = new ArrayList<>();
-        FocusStars focusStarsRequest = new FocusStars();
-        focusStarsRequest.setStarUuid(fansCharts.getUserId());
-        focusStarsRequest.setStarName(fansCharts.getUserName());
-        focusStarsRequest.setStarPhoto(fansCharts.getUserPhoto());
-        focusStarsRequestList.add(focusStarsRequest);
 
         if (NetUtil.checkNetwork(getActivity())) {
             setProgressBar();
             progressBar.show();
 
-            HttpRequest.postFocusStars(0, focusStarsRequestList, new OnHttpResponseListener() {
+            HttpRequest.getGetFocusFriend(0, fansCharts.getUserId(), new OnHttpResponseListener() {
                 @Override
                 public void onHttpResponse(int requestCode, String resultJson, Exception e) {
                     if(!StringUtil.isEmpty(resultJson)){
@@ -486,13 +502,8 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
                             progressBarDismiss();
 
                         }else{//显示失败信息
-                            if (entityBase.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityBase.getMessage());
-                            }
 
+                            showShortToast(entityBase.getMessage());
                             progressBarDismiss();
                         }
                     }else{
@@ -510,18 +521,11 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
 
     public void cancelFans(RankInfos fansCharts, final TextView focus, final TextView can) {
 
-        List<FocusStars> cancelStarsRequest = new ArrayList<>();
-        FocusStars focusStarsRequest = new FocusStars();
-        focusStarsRequest.setStarUuid(fansCharts.getUserId());
-        focusStarsRequest.setStarName(fansCharts.getUserName());
-        focusStarsRequest.setStarPhoto(fansCharts.getUserPhoto());
-        cancelStarsRequest.add(focusStarsRequest);
-
         if (NetUtil.checkNetwork(context)) {
             setProgressBar();
             progressBar.show();
 
-            HttpRequest.postCancelStars(0, cancelStarsRequest, new OnHttpResponseListener() {
+            HttpRequest.getGetCancelFocusFriend(0, fansCharts.getUserId(), new OnHttpResponseListener() {
                 @Override
                 public void onHttpResponse(int requestCode, String resultJson, Exception e) {
                     if(!StringUtil.isEmpty(resultJson)){
@@ -533,18 +537,11 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
                             focus.setVisibility(View.VISIBLE);
                             can.setVisibility(View.GONE);
 
-                            rankingQuery();
-
                             progressBarDismiss();
 
                         }else{//显示失败信息
-                            if (entityBase.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityBase.getMessage());
-                            }
 
+                            showShortToast(entityBase.getMessage());
                             progressBarDismiss();
                         }
                     }else{
@@ -563,7 +560,7 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
     //点击item
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        toActivity(FansMainActivity.createIntent(context));
+        toActivity(FansMainActivity.createIntent(context, fansOtherChartsList.get(position).getUserId()));
     }
 
     @Override
@@ -587,4 +584,5 @@ public class HomeChartsFansFragment extends BaseHttpRecyclerFragment<RankInfos,F
     public void onCancelFocus(View view, int position, TextView focus, TextView rank) {
         cancelFans(fansOtherChartsList.get(position),focus,rank);
     }
+
 }

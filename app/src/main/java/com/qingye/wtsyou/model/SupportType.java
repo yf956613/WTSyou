@@ -1,12 +1,14 @@
 package com.qingye.wtsyou.model;
 
+import java.io.Serializable;
+
 import zuo.biao.library.base.BaseModel;
 
 /**
  * Created by pm89 on 2018/5/9.
  */
 
-public class SupportType extends BaseModel {
+public class SupportType implements Serializable {
     private String uuid;
     public String created;
     public String modified;
@@ -62,8 +64,4 @@ public class SupportType extends BaseModel {
         this.name = name;
     }
 
-    @Override
-    protected boolean isCorrect() {
-        return true;
-    }
 }

@@ -23,8 +23,4 @@ public class ActivityHotShowAdapter extends BaseAdapter<Hots,ActivityHotShowView
         return new ActivityHotShowView(context, parent);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

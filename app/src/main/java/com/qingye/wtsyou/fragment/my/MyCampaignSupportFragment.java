@@ -12,18 +12,18 @@ import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.campaign.SupportDetailedActivity;
 import com.qingye.wtsyou.adapter.campaign.ActivityNewSupportAdapter;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
 import com.qingye.wtsyou.fragment.campaign.ActivityOfficialFragment;
+import com.qingye.wtsyou.manager.HttpPageModel;
 import com.qingye.wtsyou.model.EntityPageData;
-import com.qingye.wtsyou.model.EntitySupportDetailed;
 import com.qingye.wtsyou.model.Supports;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
-import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.campaign.ActivityNewSupportView;
-import zuo.biao.library.widget.CustomDialog;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,16 +31,21 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
-import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.util.JSON;
-import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.interfaces.IErrorCodeTool;
+import zuo.biao.library.interfaces.OnHttpPageCallBack;
+import zuo.biao.library.widget.CustomDialog;
+
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyCampaignSupportFragment extends BaseHttpRecyclerFragment<Supports,ActivityNewSupportView,ActivityNewSupportAdapter> implements CacheCallBack<Supports> {
+public class MyCampaignSupportFragment extends BaseHttpRecyclerFragment<Supports,ActivityNewSupportView,ActivityNewSupportAdapter>
+        implements CacheCallBack<Supports>, OnHttpPageCallBack<EntityPageData, Supports> {
 
     private LinearLayout noMessage;
+
+    private HttpPageModel<EntityPageData, Supports> mEntityPageDataHttpModel;
 
     private CustomDialog progressBar;
 
@@ -69,20 +74,23 @@ public class MyCampaignSupportFragment extends BaseHttpRecyclerFragment<Supports
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
+        //应援列表
+        mEntityPageDataHttpModel = new HttpPageModel<>(EntityPageData.class);
+        supportQuery();
+
         initCache(this);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
-        supportQuery();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        //srlBaseHttpRecycler.autoRefresh();
-        srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部*/
 
         return view;
     }
@@ -191,99 +199,135 @@ public class MyCampaignSupportFragment extends BaseHttpRecyclerFragment<Supports
 
     }
 
-    public void supportQuery() {
-        if (NetUtil.checkNetwork(getActivity())) {
-            setProgressBar();
-            progressBar.show();
-
-            HttpRequest.postMySupport(0, new OnHttpResponseListener() {
-
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-
-                    if(!StringUtil.isEmpty(resultJson)){
-
-                        EntityPageData entityPageData =  JSON.parseObject(resultJson,EntityPageData.class);
-
-                        if(entityPageData.isSuccess()){
-                            //成功
-                            //showShortToast(R.string.getSuccess);
-                            supportList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageData.getContent().getData())
-                                    ,new TypeToken<List<Supports>>(){}.getType());
-
-                            if (supportList.size() > 0) {
-                                setList(supportList);
-                                noMessage.setVisibility(View.GONE);
-                            } else {
-                                noMessage.setVisibility(View.VISIBLE);
-                            }
-
-                            progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entityPageData.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityPageData.getMessage());
-                            }
-
-                            progressBarDismiss();
-                        }
-
-                    }else{
-                        showShortToast(R.string.noReturn);
-
-                        progressBarDismiss();
-                    }
-                }
-            });
-        } else {
-            showShortToast(R.string.checkNetwork);
-
-            progressBarDismiss();
-        }
-    }
-
     //点击item
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //检查网络
-        if (NetUtil.checkNetwork(context)) {
-            String uuid = supportList.get(position).getActivityId();
 
-            setProgressBar();
-            progressBar.show();
+        toActivity(SupportDetailedActivity.createIntent(context, supportList.get(position).getActivityId()));
+    }
 
-            HttpRequest.getSupportDetailed(0, uuid, new OnHttpResponseListener() {
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                    if(!StringUtil.isEmpty(resultJson)){
-                        EntitySupportDetailed entitySupportDetailed =  JSON.parseObject(resultJson,EntitySupportDetailed.class);
-                        if(entitySupportDetailed.isSuccess()){
-                            //成功//showShortToast(R.string.getSuccess);
-                            toActivity(SupportDetailedActivity.createIntent(context, entitySupportDetailed));
+    public void supportQuery() {
+        /*setProgressBar();
+        progressBar.show();*/
 
-                            progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entitySupportDetailed.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entitySupportDetailed.getMessage());
-                            }
+        //应援列表
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.MYSUPPORTQUERY, this);
 
-                            progressBarDismiss();
-                        }
-                    }else{
-                        showShortToast(R.string.noReturn);
+    }
 
-                        progressBarDismiss();
-                    }
-                }
-            });
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
 
+    @Override
+    public List<Supports> getList(EntityPageData data) {
+        return GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(data.getContent().getData())
+                ,new TypeToken<List<Supports>>(){}.getType());
+    }
+
+    @Override
+    public String getRequestJsonStr(int page, int pageSize) {
+
+        String activityProperty = "support";
+        String parts = null;
+        String request = HttpRequest.postMyCampaign(activityProperty, parts, page, pageSize);
+        return request;
+    }
+
+    @Override
+    public void emptyPagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishRefresh();
+
+        if (supportList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
         } else {
-            showShortToast(R.string.checkNetwork);
+            noMessage.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void refreshSuccessPagingList(List<Supports> list) {
+        supportList.clear();
+
+        supportList.addAll(list);
+        srlBaseHttpRecycler.finishRefresh();
+        srlBaseHttpRecycler.setLoadmoreFinished(false);
+
+        setList(supportList);
+
+        if (supportList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void noMorePagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+
+        if (supportList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void loadMoreSuccessPagingList(List<Supports> list) {
+        supportList.addAll(list);
+        srlBaseHttpRecycler.finishLoadmore();
+
+        setList(supportList);
+
+        if (supportList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void refreshErrorPagingList() {
+        showShortToast(R.string.noReturn);
+
+        if (supportList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void loadMoreErrorPagingList() {
+        showShortToast(R.string.noReturn);
+
+        if (supportList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        super.onRefresh(refreshlayout);
+        //应援列表
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.MYSUPPORTQUERY, this);
+    }
+
+    @Override
+    public void onLoadmore(RefreshLayout refreshlayout) {
+        super.onLoadmore(refreshlayout);
+        //应援列表
+        mEntityPageDataHttpModel.loadMorePost(URL_BASE + URLConstant.MYSUPPORTQUERY, this);
     }
 }

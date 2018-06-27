@@ -1,23 +1,21 @@
 package com.qingye.wtsyou.view.home;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.model.Campaign;
+import com.qingye.wtsyou.model.Activitys;
 
-import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
 
 /**
  * Created by pm89 on 2018/3/6.
  */
 
-public class StarsMainShowView extends BaseView<Campaign> implements View.OnClickListener {
+public class StarsMainShowView extends BaseView<Activitys> implements View.OnClickListener {
 
-    public StarsMainShowView(Activity context, ViewGroup parent) {
+    public StarsMainShowView(android.app.Activity context, ViewGroup parent) {
         super(context, R.layout.list_stars_main_show, parent);
     }
 
@@ -29,14 +27,12 @@ public class StarsMainShowView extends BaseView<Campaign> implements View.OnClic
     }
 
     @Override
-    public void bindView(Campaign data_){
-        super.bindView(data_ != null ? data_ : new Campaign());
+    public void bindView(Activitys data_){
+        super.bindView(data_ != null ? data_ : new Activitys());
     }
 
     @Override
     public void onClick(View v) {
-        if (BaseModel.isCorrect(data) == false) {
-            return;
-        }
+
     }
 }

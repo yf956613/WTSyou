@@ -23,8 +23,4 @@ public class MessageAdapter extends BaseAdapter<Message,MessageView> {
         return new MessageView(context, parent);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

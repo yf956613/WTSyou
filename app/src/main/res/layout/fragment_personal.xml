@@ -50,32 +50,47 @@
 
                             <com.qingye.wtsyou.widget.CircleImageView
                                 android:id="@+id/iv_personal"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_centerInParent="true"/>
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:layout_centerInParent="true"
+                                android:src="@mipmap/head"/>
 
                         </RelativeLayout>
 
-                        <TextView
-                            android:layout_below="@+id/ll_img"
-                            android:id="@+id/personal_name"
+                        <LinearLayout
+                            android:id="@+id/ll_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_6"
-                            android:layout_centerHorizontal="true"
-                            android:maxLength="15"
-                            android:singleLine="true"
-                            android:text=""
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/text_size_14"
-                            android:textStyle="bold"/>
+                            android:layout_below="@+id/ll_img"
+                            android:layout_marginTop="@dimen/margin_5"
+                            android:layout_centerHorizontal="true">
+
+                            <TextView
+                                android:id="@+id/personal_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text=""
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_size_14"
+                                android:textStyle="bold"/>
+
+                            <ImageView
+                                android:id="@+id/iv_lv_img"
+                                android:layout_width="44dp"
+                                android:layout_height="14dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/margin_8"
+                                android:src="@mipmap/lv0"/>
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_5"
                             android:orientation="horizontal"
-                            android:layout_below="@+id/personal_name"
+                            android:layout_below="@+id/ll_name"
                             android:layout_centerInParent="true">
 
                             <TextView

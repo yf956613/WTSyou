@@ -23,8 +23,4 @@ public class QuestionAdapter extends BaseAdapter<Question,QuestionView> {
         return new QuestionView(context, parent);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

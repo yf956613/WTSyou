@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:ellipsize="end"
-            android:text="93747090"
+            android:text=""
             android:textSize="@dimen/text_size_13"
             android:textColor="@color/black_text1"/>
     </LinearLayout>
@@ -41,22 +41,20 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2.5">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/iv_order_img"
-                android:layout_width="95dp"
-                android:layout_height="60dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/img_w"/>
+                android:layout_width="110dp"
+                android:layout_height="73dp"
+                android:scaleType="centerCrop"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="7.5"
+            android:layout_weight="2"
             android:background="@color/gray_background1"
             android:orientation="vertical">
 
@@ -64,10 +62,11 @@
                 android:id="@+id/tv_order_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginLeft="@dimen/margin_15"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:text="范玮琪 福州演唱会"
+                android:text=""
                 android:textSize="@dimen/text_size_13"
                 android:textColor="@color/black_text1"/>
 
@@ -81,12 +80,13 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tv_order_content"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:text="CD + 海报"
+                    android:text=""
                     android:textSize="@dimen/text_size_12"
                     android:textColor="@color/black_text2"/>
 
@@ -109,7 +109,7 @@
                         android:id="@+id/tv_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="100"
+                        android:text=""
                         android:textSize="@dimen/text_size_15"
                         android:textColor="@color/orange_text2" />
 
@@ -138,7 +138,7 @@
             android:id="@+id/tv_goods_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1"
+            android:text=""
             android:textSize="@dimen/text_size_11"
             android:textColor="@color/black_text2"/>
 
@@ -153,7 +153,7 @@
             android:id="@+id/tv_total_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="100"
+            android:text=""
             android:textSize="@dimen/text_size_11"
             android:textColor="@color/black_text2"/>
 
@@ -192,7 +192,7 @@
             android:paddingBottom="@dimen/margin_3"
             android:gravity="center"
             android:layout_marginRight="@dimen/margin_10"
-            android:text="查看物流"
+            android:text="电话咨询"
             android:textSize="@dimen/text_size_11"
             android:textColor="@color/black_text2"
             android:background="@drawable/corners_black_1"
@@ -208,7 +208,7 @@
             android:layout_marginRight="@dimen/margin_10"
             android:text="提醒发货"
             android:textSize="@dimen/text_size_11"
-            android:textColor="@color/black_text2"
+            android:textColor="@color/orange_text2"
             android:background="@drawable/corners_orange_3"
             android:visibility="gone"/>
 
@@ -237,6 +237,21 @@
             android:textSize="@dimen/text_size_11"
             android:textColor="@color/orange_text2"
             android:background="@drawable/corners_orange_3"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_3"
+            android:paddingBottom="@dimen/margin_3"
+            android:paddingLeft="@dimen/margin_10"
+            android:paddingRight="@dimen/margin_10"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/margin_10"
+            android:text="订单已取消"
+            android:textSize="@dimen/text_size_11"
+            android:textColor="@color/black_text2"
             android:visibility="gone"/>
 
     </LinearLayout>

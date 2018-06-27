@@ -10,16 +10,16 @@ import android.widget.AdapterView;
 
 import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.home.PastFansChartsDetailedActivity;
 import com.qingye.wtsyou.adapter.home.HomeFansChartsPastAdapter;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpPageModel;
 import com.qingye.wtsyou.model.EntityPageData;
-import com.qingye.wtsyou.model.EntityRankInfo;
+import com.qingye.wtsyou.model.RankInfo;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
-import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.home.HomeFansChartsPastView;
-import zuo.biao.library.widget.CustomDialog;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
@@ -28,24 +28,26 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
-import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.util.JSON;
-import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.interfaces.IErrorCodeTool;
+import zuo.biao.library.interfaces.OnHttpPageCallBack;
+import zuo.biao.library.widget.CustomDialog;
+
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeChartsPastFansFragment extends BaseHttpRecyclerFragment<EntityRankInfo,HomeFansChartsPastView,HomeFansChartsPastAdapter> implements CacheCallBack<EntityRankInfo> {
+public class HomeChartsPastFansFragment extends BaseHttpRecyclerFragment<RankInfo,HomeFansChartsPastView,HomeFansChartsPastAdapter>
+        implements CacheCallBack<RankInfo>, OnHttpPageCallBack<EntityPageData, RankInfo> {
 
-    private int currentPage = 1;
-    private final int pageSize = 12;
-    private int totalPage = 0;
+    private HttpPageModel<EntityPageData, RankInfo> mEntityPageDataHttpModel;
+
     //是否降序
     private final Boolean desc = false;
 
     private CustomDialog progressBar;
 
-    private List<EntityRankInfo> rankInfoList = new ArrayList<>();
+    private List<RankInfo> rankInfoList = new ArrayList<>();
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -69,6 +71,8 @@ public class HomeChartsPastFansFragment extends BaseHttpRecyclerFragment<EntityR
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
+        //往期查询
+        mEntityPageDataHttpModel = new HttpPageModel<>(EntityPageData.class);
         historyRankingQuery();
 
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
@@ -81,12 +85,11 @@ public class HomeChartsPastFansFragment extends BaseHttpRecyclerFragment<EntityR
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-
-        srlBaseHttpRecycler.setEnableRefresh(true);//不启用下拉刷新
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(true);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(true);//不启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(true);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部
-        //srlBaseHttpRecycler.autoRefresh();
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部*/
 
         return view;
     }
@@ -131,7 +134,7 @@ public class HomeChartsPastFansFragment extends BaseHttpRecyclerFragment<EntityR
     }
 
     @Override
-    public void setList(final List<EntityRankInfo> list) {
+    public void setList(final List<RankInfo> list) {
 
         setList(new AdapterCallBack<HomeFansChartsPastAdapter>() {
 
@@ -158,7 +161,7 @@ public class HomeChartsPastFansFragment extends BaseHttpRecyclerFragment<EntityR
     }
 
     @Override
-    public List<EntityRankInfo> parseArray(String json) {
+    public List<RankInfo> parseArray(String json) {
         return null;
     }
 
@@ -168,7 +171,7 @@ public class HomeChartsPastFansFragment extends BaseHttpRecyclerFragment<EntityR
     }
 
     @Override
-    public Class<EntityRankInfo> getCacheClass() {
+    public Class<RankInfo> getCacheClass() {
         return null;
     }
 
@@ -178,7 +181,7 @@ public class HomeChartsPastFansFragment extends BaseHttpRecyclerFragment<EntityR
     }
 
     @Override
-    public String getCacheId(EntityRankInfo data) {
+    public String getCacheId(RankInfo data) {
         return null;
     }
 
@@ -187,101 +190,97 @@ public class HomeChartsPastFansFragment extends BaseHttpRecyclerFragment<EntityR
         return 10;
     }
 
-    public void historyRankingQuery(){
-        historyRankingQuery(1);
-    }
-
-    public void historyRankingQuery(final int page) {
-        if (NetUtil.checkNetwork(getActivity())) {
-            setProgressBar();
-            progressBar.show();
-
-            String keywords = null;
-            String periods = null;
-            String maxPeriods = null;
-
-            HttpRequest.postHistoryFansWeekRank(0, page, pageSize, desc, keywords, periods, maxPeriods, new OnHttpResponseListener() {
-
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-
-                    if(!StringUtil.isEmpty(resultJson)){
-
-                        EntityPageData entityPageData =  JSON.parseObject(resultJson,EntityPageData.class);
-
-                        if(entityPageData.isSuccess()){
-
-                            //成功
-                            //showShortToast(R.string.getSuccess);
-                            if (page == 1) {
-                                currentPage = 1;
-                                rankInfoList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageData.getContent().getData())
-                                        ,new TypeToken<List<EntityRankInfo>>(){}.getType());
-
-                                srlBaseHttpRecycler.finishRefresh();
-                                srlBaseHttpRecycler.setLoadmoreFinished(false);
-
-                            } else {
-
-                                List<EntityRankInfo> entityRankInfos = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageData.getContent().getData())
-                                        ,new TypeToken<List<EntityRankInfo>>(){}.getType());
-
-                                if (rankInfoList.size() == 0) {
-                                    srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
-                                } else {
-                                    rankInfoList.addAll(entityRankInfos);
-                                    srlBaseHttpRecycler.finishLoadmore();
-                                }
-                            }
-
-                            progressBarDismiss();
-
-                            setList(rankInfoList);
-
-                            totalPage = entityPageData.getContent().getPageCount();
-
-                            currentPage ++;
-
-                        }else{//显示失败信息
-                            if (entityPageData.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityPageData.getMessage());
-                            }
-
-                            progressBarDismiss();
-                        }
-
-                    }else{
-                        showShortToast(R.string.noReturn);
-
-                        progressBarDismiss();
-                    }
-                }
-            });
-        } else {
-            showShortToast(R.string.checkNetwork);
-
-            progressBarDismiss();
-        }
-    }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         toActivity(PastFansChartsDetailedActivity.createIntent(context, rankInfoList.get(position).getPeriods(), rankInfoList.get(position).getPeriodsZone()));
     }
 
+    public void historyRankingQuery() {
+        /*setProgressBar();
+        progressBar.show();*/
+
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.HISTORYFANSWEEKRANKING, this);
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public List<RankInfo> getList(EntityPageData data) {
+        return GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(data.getContent().getData())
+                ,new TypeToken<List<RankInfo>>(){}.getType());
+    }
+
+    @Override
+    public String getRequestJsonStr(int page, int pageSize) {
+        String keywords = null;
+        String periods = null;
+        String maxPeriods = null;
+
+        String request = HttpRequest.postRankQuery(page, pageSize, desc,
+                keywords,periods,maxPeriods);
+        return request;
+    }
+
+    @Override
+    public void emptyPagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishRefresh();
+    }
+
+    @Override
+    public void refreshSuccessPagingList(List<RankInfo> list) {
+        rankInfoList.clear();
+
+        rankInfoList.addAll(list);
+        srlBaseHttpRecycler.finishRefresh();
+        srlBaseHttpRecycler.setLoadmoreFinished(false);
+
+        setList(rankInfoList);
+    }
+
+    @Override
+    public void noMorePagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+    }
+
+    @Override
+    public void loadMoreSuccessPagingList(List<RankInfo> list) {
+        rankInfoList.addAll(list);
+        srlBaseHttpRecycler.finishLoadmore();
+
+        setList(rankInfoList);
+    }
+
+    @Override
+    public void refreshErrorPagingList() {
+        showShortToast(R.string.noReturn);
+    }
+
+    @Override
+    public void loadMoreErrorPagingList() {
+        showShortToast(R.string.noReturn);
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
+    }
 
     @Override
     public void onRefresh(RefreshLayout refreshlayout) {
         super.onRefresh(refreshlayout);
-        historyRankingQuery();
+        //往期列表
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.HISTORYFANSWEEKRANKING, this);
     }
 
     @Override
     public void onLoadmore(RefreshLayout refreshlayout) {
         super.onLoadmore(refreshlayout);
-        historyRankingQuery(currentPage);
+        //往期列表
+        mEntityPageDataHttpModel.loadMorePost(URL_BASE + URLConstant.HISTORYFANSWEEKRANKING, this);
     }
 }

@@ -11,7 +11,8 @@ import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.campaign.AssociateConversationAdapter;
-import com.qingye.wtsyou.model.Conversation;
+import com.qingye.wtsyou.model.ChatingRoom;
+import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.view.campaign.AssociateConversationView;
 
 import java.util.ArrayList;
@@ -24,7 +25,9 @@ import zuo.biao.library.interfaces.CacheCallBack;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AssociateConversationFragment extends BaseHttpRecyclerFragment<Conversation,AssociateConversationView,AssociateConversationAdapter> implements CacheCallBack<Conversation> {
+public class AssociateConversationFragment extends BaseHttpRecyclerFragment<ChatingRoom,AssociateConversationView,AssociateConversationAdapter> implements CacheCallBack<ChatingRoom> {
+
+    private  List<ChatingRoom> selectedConversation =  new ArrayList<>();
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -47,6 +50,10 @@ public class AssociateConversationFragment extends BaseHttpRecyclerFragment<Conv
         setContentView(R.layout.fragment_activity_hot_show);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
+        //获取activity传来的数据
+        Bundle bundle = getArguments();
+        selectedConversation = (List<ChatingRoom>) bundle.getSerializable(Constant.SELECTED_CONVERSATION);
+
         initCache(this);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
@@ -65,6 +72,8 @@ public class AssociateConversationFragment extends BaseHttpRecyclerFragment<Conv
         rvBaseRecycler.setLayoutManager(layoutManager);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
+        setList(selectedConversation);
+
         return view;
     }
 
@@ -74,14 +83,8 @@ public class AssociateConversationFragment extends BaseHttpRecyclerFragment<Conv
     }
 
     @Override
-    public void setList(final List<Conversation> list) {
-        final List<Conversation> templist = new ArrayList<>();
-        for(int i = 1;i < 4;i ++) {
-            Conversation conversation = new Conversation();
-            conversation.setId(i);
-            templist.add(conversation);
-        }
-        //list.addAll(templist);
+    public void setList(final List<ChatingRoom> list) {
+
         setList(new AdapterCallBack<AssociateConversationAdapter>() {
 
             @Override
@@ -91,7 +94,7 @@ public class AssociateConversationFragment extends BaseHttpRecyclerFragment<Conv
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -110,12 +113,12 @@ public class AssociateConversationFragment extends BaseHttpRecyclerFragment<Conv
     }
 
     @Override
-    public List<Conversation> parseArray(String json) {
+    public List<ChatingRoom> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Conversation> getCacheClass() {
+    public Class<ChatingRoom> getCacheClass() {
         return null;
     }
 
@@ -125,7 +128,7 @@ public class AssociateConversationFragment extends BaseHttpRecyclerFragment<Conv
     }
 
     @Override
-    public String getCacheId(Conversation data) {
+    public String getCacheId(ChatingRoom data) {
         return null;
     }
 

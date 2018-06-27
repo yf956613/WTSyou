@@ -43,11 +43,11 @@ public class FocusStarsView extends BaseView<FocusStars> implements View.OnClick
     @SuppressLint("InflateParams")
     @Override
     public View createView() {
-        tvName = findViewById(R.id.tv_name);
-        ivImg = findViewById(R.id.iv_img);
-        tvHit = findViewById(R.id.tv_hit, this);
+        tvName = findView(R.id.tv_name);
+        ivImg = findView(R.id.iv_img);
+        tvHit = findView(R.id.tv_hit, this);
 
-        tvRanking = findViewById(R.id.tv_ranking);
+        tvRanking = findView(R.id.tv_ranking);
 
         return super.createView();
     }
@@ -56,9 +56,9 @@ public class FocusStarsView extends BaseView<FocusStars> implements View.OnClick
     public void bindView(FocusStars data_){
         super.bindView(data_ != null ? data_ : new FocusStars());
 
-        tvName.setText(data.getStarName());
+        tvName.setText(data.getName());
 
-        String url = data.getStarPhoto();
+        String url = data.getPhoto();
         Glide.with(context)
                 .load(url)
                 .into(ivImg);

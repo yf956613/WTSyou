@@ -10,6 +10,7 @@
     >
 
     <com.scwang.smartrefresh.layout.header.ClassicsHeader
+        android:id="@id/head"
         style="@style/match_wrap"
        />
 
@@ -17,10 +18,12 @@
         android:overScrollMode="never"
         android:scrollbars="none"
         android:id="@id/rvBaseRecycler"
-        style="@style/lv_no_divider"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         />
 
     <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+        android:id="@id/foot"
         style="@style/match_wrap"
         />
 </com.scwang.smartrefresh.layout.SmartRefreshLayout>

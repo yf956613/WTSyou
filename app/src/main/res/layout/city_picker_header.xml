@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/gray_bg"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="@dimen/activity_padding"
+            android:paddingRight="@dimen/activity_padding"
+            android:paddingTop="10dp"
+            android:text="定位城市"
+            android:textColor="@color/gray_text3"
+            android:textSize="12sp"
+            android:background="@color/gray_background2"/>
+
+        <TextView
+            android:id="@+id/c_p_header_gps_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_selector"
+            android:gravity="center_vertical"
+            android:paddingBottom="10dp"
+            android:paddingLeft="@dimen/activity_padding"
+            android:paddingRight="@dimen/activity_padding"
+            android:paddingTop="10dp"
+            android:text="@string/location_city_lodding"
+            android:textColor="@color/black_text1"
+            android:textSize="13sp"/>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/c_p_header_historytitle_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="@dimen/activity_padding"
+        android:paddingRight="@dimen/activity_padding"
+        android:paddingTop="10dp"
+        android:text="历史访问城市"
+        android:textColor="@color/gray_text3"
+        android:textSize="12sp"
+        android:background="@color/gray_background2"/>
+
+    <android.support.v7.widget.GridLayout
+        android:id="@+id/c_p_header_historygroup_gl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_padding"
+        android:paddingRight="35dp"
+        android:paddingTop="10dp"
+        app:columnCount="3">
+
+
+
+    </android.support.v7.widget.GridLayout>
+
+    <TextView
+        android:id="@+id/c_p_header_hottitle_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="@dimen/activity_padding"
+        android:paddingRight="@dimen/activity_padding"
+        android:paddingTop="10dp"
+        android:text="热门城市"
+        android:textColor="@color/gray_text3"
+        android:textSize="12sp"
+        android:background="@color/gray_background2"/>
+
+    <android.support.v7.widget.GridLayout
+        android:id="@+id/c_p_header_hotgroup_gl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_padding"
+        android:paddingRight="35dp"
+        android:paddingTop="10dp"
+        app:columnCount="3">
+
+    </android.support.v7.widget.GridLayout>
+</LinearLayout>

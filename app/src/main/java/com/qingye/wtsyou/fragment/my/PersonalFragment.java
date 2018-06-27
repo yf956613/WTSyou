@@ -23,35 +23,34 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.MainActivity;
-import com.qingye.wtsyou.activity.conversation.MyConversationActivity;
-import com.qingye.wtsyou.activity.my.CampaignActivity;
-import com.qingye.wtsyou.activity.my.FocusStarsActivity;
 import com.qingye.wtsyou.activity.my.AddressActivity;
+import com.qingye.wtsyou.activity.my.CampaignActivity;
 import com.qingye.wtsyou.activity.my.CardActivity;
 import com.qingye.wtsyou.activity.my.CoinActivity;
 import com.qingye.wtsyou.activity.my.DataActivity;
 import com.qingye.wtsyou.activity.my.DiamondActivity;
+import com.qingye.wtsyou.activity.my.FocusStarsActivity;
 import com.qingye.wtsyou.activity.my.FriendsActivity;
 import com.qingye.wtsyou.activity.my.HeartActivity;
 import com.qingye.wtsyou.activity.my.MessageActivity;
+import com.qingye.wtsyou.activity.my.MyConversationActivity;
 import com.qingye.wtsyou.activity.my.OrderActivity;
 import com.qingye.wtsyou.activity.my.SettingActivity;
 import com.qingye.wtsyou.activity.my.SignInActivity;
 import com.qingye.wtsyou.activity.my.TicketActivity;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpModel;
 import com.qingye.wtsyou.model.EntityPersonalMessage;
 import com.qingye.wtsyou.utils.BroadcastAction;
-import com.qingye.wtsyou.utils.HttpRequest;
-import com.qingye.wtsyou.utils.NetUtil;
-import zuo.biao.library.widget.CustomDialog;
+import com.qingye.wtsyou.utils.URLConstant;
 
 import zuo.biao.library.base.BaseFragment;
-import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.interfaces.IErrorCodeTool;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.ui.AlertDialog;
-import zuo.biao.library.util.JSON;
-import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
 
-import static android.support.v4.content.LocalBroadcastManager.getInstance;
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,6 +66,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     private TextView tvSignature;
     private ImageView ivHead;
     private ImageView ivBackground;
+    private ImageView ivLvImg;//等级
 
     private LinearLayout llIdol;
     private LinearLayout llFriends;
@@ -86,7 +86,10 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     private CustomDialog progressBar;
 
     private EntityPersonalMessage entityPersonalMessage;
-    private int heartCount,diamondCount,coinCount;
+
+    private int level;
+
+    private HttpModel<EntityPersonalMessage> mEntityPersonalMessageHttpModel;
 
     public PersonalFragment() {
         // Required empty public constructor
@@ -123,6 +126,9 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
+        //获取个人信息
+        mEntityPersonalMessageHttpModel = new HttpModel<>(EntityPersonalMessage.class);
+
         IntentFilter myIntentFilter = new IntentFilter();
         myIntentFilter.addAction(BroadcastAction.ACTION_MESSAGE_REFRESH);
         // 注册广播
@@ -157,6 +163,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         tvSignature = findViewById(R.id.personal_signature);
         //背景
         ivBackground = findViewById(R.id.iv_background);
+        //等级
+        ivLvImg = findView(R.id.iv_lv_img);
 
         llIdol = findViewById(R.id.llIdol);
         llFriends = findViewById(R.id.llFriends);
@@ -241,30 +249,79 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void initData() {
-        //昵称
-        tvNickName.setText(entityPersonalMessage.getContent().getNickname());
-        //头像
-        if (entityPersonalMessage.getContent().getPhoto() != null) {
-            String url = entityPersonalMessage.getContent().getPhoto();
-            Glide.with(getActivity())
-                    .load(url)
-                    .into(ivHead);
-        }
-        //背景
-        if (entityPersonalMessage.getContent().getPhoto() != null) {
-            String url = entityPersonalMessage.getContent().getBackgruoud();
-            Glide.with(getActivity())
-                    .load(url)
-                    .into(ivBackground);
-        }
-        //签名
-        if (entityPersonalMessage.getContent().getAutograph() != null) {
-            tvSignature.setText(entityPersonalMessage.getContent().getAutograph());
+        if (isAdded()) {
+            //昵称
+            tvNickName.setText(entityPersonalMessage.getContent().getNickname());
+            //头像
+            if (entityPersonalMessage.getContent().getPhoto() != null) {
+                //图片
+                String url = entityPersonalMessage.getContent().getPhoto();
+                if (url != null) {
+                    Glide.with(getActivity())
+                            .load(url)
+                            .into(ivHead);
+                } else {
+                    int defaultHead = R.mipmap.head;
+                    Glide.with(context)
+                            .load(defaultHead)
+                            .into(ivHead);
+                }
+
+            }
+            //背景
+            if (entityPersonalMessage.getContent().getBackgruoud() != null) {
+                String url = entityPersonalMessage.getContent().getBackgruoud();
+                Glide.with(getActivity())
+                        .load(url)
+                        .into(ivBackground);
+            }
+            //签名
+            if (entityPersonalMessage.getContent().getAutograph() != null) {
+                tvSignature.setText(entityPersonalMessage.getContent().getAutograph());
+            }
+
+            //等级
+            level = entityPersonalMessage.getContent().getLevel();
+            levelPic(level);
         }
 
-        heartCount = entityPersonalMessage.getContent().getLoveCount();
-        diamondCount = entityPersonalMessage.getContent().getDiamondCount();
-        coinCount = entityPersonalMessage.getContent().getGoldCount();
+    }
+
+    public void levelPic(int level) {
+        switch (level) {
+            case 1:
+                ivLvImg.setImageResource(R.mipmap.lv1);
+                break;
+            case 2:
+                ivLvImg.setImageResource(R.mipmap.lv2);
+                break;
+            case 3:
+                ivLvImg.setImageResource(R.mipmap.lv3);
+                break;
+            case 4:
+                ivLvImg.setImageResource(R.mipmap.lv4);
+                break;
+            case 5:
+                ivLvImg.setImageResource(R.mipmap.lv5);
+                break;
+            case 6:
+                ivLvImg.setImageResource(R.mipmap.lv6);
+                break;
+            case 7:
+                ivLvImg.setImageResource(R.mipmap.lv7);
+                break;
+            case 8:
+                ivLvImg.setImageResource(R.mipmap.lv8);
+                break;
+            case 9:
+                ivLvImg.setImageResource(R.mipmap.lv9);
+                break;
+            case 10:
+                ivLvImg.setImageResource(R.mipmap.lv10);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -310,13 +367,13 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 toActivity(MyConversationActivity.createIntent(context));
                 break;
             case R.id.llHeart:
-                toActivity(HeartActivity.createIntent(context,heartCount));
+                toActivity(HeartActivity.createIntent(context));
                 break;
             case R.id.llDiamonds:
-                toActivity(DiamondActivity.createIntent(context,diamondCount));
+                toActivity(DiamondActivity.createIntent(context));
                 break;
             case R.id.llCoin:
-                toActivity(CoinActivity.createIntent(context,coinCount));
+                toActivity(CoinActivity.createIntent(context));
                 break;
             case R.id.llCampaign:
                 toActivity(CampaignActivity.createIntent(context));
@@ -341,48 +398,37 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
+    @Override
+    public void onDialogButtonClick(int requestCode, boolean isPositive) {
+
+    }
+
     public void getPersonalMessage() {
-        if (NetUtil.checkNetwork(getActivity())) {
-            setProgressBar();
-            progressBar.show();
+        setProgressBar();
+        progressBar.show();
 
-            HttpRequest.getPersonalMessage(0, new OnHttpResponseListener() {
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                    if(!StringUtil.isEmpty(resultJson)){
-                        entityPersonalMessage =  JSON.parseObject(resultJson,EntityPersonalMessage.class);
-                        if(entityPersonalMessage.isSuccess()){
-                            //成功
-                            //showShortToast(R.string.getSuccess);
+        mEntityPersonalMessageHttpModel.get(URL_BASE + URLConstant.GETPERSONALMESSAGE,1,this);
+    }
 
-                            initData();
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
 
-                            progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entityPersonalMessage.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityPersonalMessage.getMessage());
-                            }
-
-                            progressBarDismiss();
-                        }
-                    }else{
-                        showShortToast(R.string.noReturn);
-
-                        progressBarDismiss();
-                    }
-                }
-            });
-        } else {
-            showShortToast(R.string.checkNetwork);
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                entityPersonalMessage = mEntityPersonalMessageHttpModel.getData();
+                initData();
+                break;
         }
     }
 
     @Override
-    public void onDialogButtonClick(int requestCode, boolean isPositive) {
-
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
     }
 
 }

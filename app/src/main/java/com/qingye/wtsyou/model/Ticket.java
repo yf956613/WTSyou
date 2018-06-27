@@ -1,6 +1,7 @@
 package com.qingye.wtsyou.model;
 
 import com.qingye.wtsyou.basemodel.IdName;
+import com.qingye.wtsyou.basemodel.POI;
 
 import java.io.Serializable;
 
@@ -33,11 +34,10 @@ public class Ticket implements Serializable {
     private String refundState;
     private String refundReason;
     private String activityId;
-    private String activityProperty;
     private String skuId;
     private String reveiver;
     private String mobile;
-    private String reveiveAddress;
+    private POI reveiveAddress;
     private String carrier;
     private String expressBillId;
     private double carrierFee;
@@ -231,14 +231,6 @@ public class Ticket implements Serializable {
         this.activityId = activityId;
     }
 
-    public String getActivityProperty() {
-        return activityProperty;
-    }
-
-    public void setActivityProperty(String activityProperty) {
-        this.activityProperty = activityProperty;
-    }
-
     public String getSkuId() {
         return skuId;
     }
@@ -263,11 +255,11 @@ public class Ticket implements Serializable {
         this.mobile = mobile;
     }
 
-    public String getReveiveAddress() {
+    public POI getReveiveAddress() {
         return reveiveAddress;
     }
 
-    public void setReveiveAddress(String reveiveAddress) {
+    public void setReveiveAddress(POI reveiveAddress) {
         this.reveiveAddress = reveiveAddress;
     }
 

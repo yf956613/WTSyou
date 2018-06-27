@@ -3,7 +3,7 @@ package com.qingye.wtsyou.adapter.campaign;
 import android.app.Activity;
 import android.view.ViewGroup;
 
-import com.qingye.wtsyou.model.Conversation;
+import com.qingye.wtsyou.model.ChatingRoom;
 import com.qingye.wtsyou.view.campaign.ConversationView;
 
 import zuo.biao.library.base.BaseAdapter;
@@ -12,7 +12,7 @@ import zuo.biao.library.base.BaseAdapter;
  * Created by pm89 on 2018/3/6.
  */
 
-public class ConversationAdapter extends BaseAdapter<Conversation,ConversationView> {
+public class ConversationAdapter extends BaseAdapter<ChatingRoom,ConversationView> {
 
     public ConversationAdapter(Activity context) {
         super(context);
@@ -23,8 +23,4 @@ public class ConversationAdapter extends BaseAdapter<Conversation,ConversationVi
         return new ConversationView(context, parent);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

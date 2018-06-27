@@ -88,7 +88,6 @@ public class ActivitySupportFragment extends BaseHttpRecyclerFragment<Supports,A
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
         srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
 
-        srlBaseHttpRecycler.autoRefresh();
         setList(supports);
 
         return view;
@@ -193,43 +192,7 @@ public class ActivitySupportFragment extends BaseHttpRecyclerFragment<Supports,A
     //点击item
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //检查网络
-        if (NetUtil.checkNetwork(context)) {
-            String uuid = supports.get(position).getActivityId();
 
-            setProgressBar();
-            progressBar.show();
-
-            HttpRequest.getSupportDetailed(0, uuid, new OnHttpResponseListener() {
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                    if(!StringUtil.isEmpty(resultJson)){
-                        EntitySupportDetailed entitySupportDetailed =  JSON.parseObject(resultJson,EntitySupportDetailed.class);
-                        if(entitySupportDetailed.isSuccess()){
-                            //成功//showShortToast(R.string.getSuccess);
-                            toActivity(SupportDetailedActivity.createIntent(context, entitySupportDetailed));
-
-                            progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entitySupportDetailed.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entitySupportDetailed.getMessage());
-                            }
-
-                            progressBarDismiss();
-                        }
-                    }else{
-                        showShortToast(R.string.noReturn);
-
-                        progressBarDismiss();
-                    }
-                }
-            });
-
-        } else {
-            showShortToast(R.string.checkNetwork);
-        }
+        toActivity(SupportDetailedActivity.createIntent(context, supports.get(position).getActivityId()));
     }
 }

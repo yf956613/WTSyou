@@ -21,8 +21,8 @@
 
             <com.qingye.wtsyou.widget.CircleImageView
                 android:id="@+id/iv_stars_head"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_centerInParent="true"
                 />
 
@@ -36,8 +36,8 @@
             android:visibility="gone">
 
             <View
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/circle_clarity_black1" />
 

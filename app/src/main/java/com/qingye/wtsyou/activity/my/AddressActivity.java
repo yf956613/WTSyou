@@ -7,15 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,29 +19,36 @@ import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.adapter.my.DeliveryAddressAdapter;
-import zuo.biao.library.model.EntityBase;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpModel;
 import com.qingye.wtsyou.model.DeliveryAddress;
 import com.qingye.wtsyou.model.EntityContent;
 import com.qingye.wtsyou.utils.BroadcastAction;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.my.DeliveryAddressView;
-import zuo.biao.library.widget.CustomDialog;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import zuo.biao.library.base.BaseHttpRecyclerActivity;
 import zuo.biao.library.interfaces.AdapterCallBack;
+import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.ui.BottomMenuWindow;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
 
-public class AddressActivity extends BaseHttpRecyclerActivity<DeliveryAddress,DeliveryAddressView,DeliveryAddressAdapter> implements View.OnClickListener,OnBottomDragListener,
-        DeliveryAddressView.OnItemChildClickListener{
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
+
+public class AddressActivity extends BaseHttpRecyclerActivity<DeliveryAddress,DeliveryAddressView,DeliveryAddressAdapter>
+        implements View.OnClickListener, OnBottomDragListener, DeliveryAddressView.OnItemChildClickListener {
 
     private ImageView ivLeft;
     private TextView tvHead;
@@ -53,13 +56,15 @@ public class AddressActivity extends BaseHttpRecyclerActivity<DeliveryAddress,De
 
     private DeliveryAddressAdapter deliveryAddressAdapter;
 
-    String deleteUuid = null;
-
+    private LinearLayout noMessage;
     private RelativeLayout relativelayout;
-    private SwipeRefreshLayout swipeRefresh;
     private CustomDialog progressBar;
 
+    private HttpModel<EntityContent> mAddressHttpModel;
+
     private List<DeliveryAddress> deliveryAddressList = new ArrayList<>();
+
+    private String deleteUuid = null;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -101,21 +106,21 @@ public class AddressActivity extends BaseHttpRecyclerActivity<DeliveryAddress,De
         // 注册广播
         registerReceiver(mBroadcastReceiver, myIntentFilter);
 
+        //地址
+        mAddressHttpModel = new HttpModel<>(EntityContent.class);
         getAddress();
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
-        //刷新
-        initHrvsr();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        //srlBaseHttpRecycler.autoRefresh();
-        srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
-        srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
-        srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(true);//不启用下拉刷新
+        srlBaseHttpRecycler.setEnableLoadmore(true);//不启用上拉加载更多
+        srlBaseHttpRecycler.setEnableHeaderTranslationContent(true);//头部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部*/
     }
 
     @Override
@@ -124,16 +129,16 @@ public class AddressActivity extends BaseHttpRecyclerActivity<DeliveryAddress,De
 
         ivLeft = findView(R.id.iv_left);
         ivLeft.setImageResource(R.mipmap.back_a);
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("我的收货地址");
-        btnCreate = findViewById(R.id.btn_create_address);
+        btnCreate = findView(R.id.btn_create_address);
 
-        relativelayout = findViewById(R.id.relativelayout);
-        swipeRefresh = findViewById(R.id.swipe_refresh_widget);
+        relativelayout = findView(R.id.relativelayout);
+
+        noMessage = findView(R.id.noMessage);
     }
 
     public void onResume() {
-        //getAddress();
         super.onResume();
     }
 
@@ -164,39 +169,6 @@ public class AddressActivity extends BaseHttpRecyclerActivity<DeliveryAddress,De
                 progressBar.cancel();
             }
         }
-    }
-
-    //刷新
-    private void initHrvsr(){
-        //设置刷新时动画的颜色，可以设置4个
-        swipeRefresh.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_light,
-                android.R.color.holo_red_light, android.R.color.holo_orange_light,
-                android.R.color.holo_green_light);
-        swipeRefresh.setProgressViewOffset(false, 0, (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
-                        .getDisplayMetrics()));
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.e("swipeRefresh", "invoke onRefresh...");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getAddress();
-                        showShortToast(R.string.getSuccess);
-                        swipeRefresh.setRefreshing(false);
-                    }
-                }, 1500);
-            }
-        });
-        // 设置子视图是否允许滚动到顶部
-        swipeRefresh.setOnChildScrollUpCallback(new SwipeRefreshLayout.OnChildScrollUpCallback() {
-            @Override
-            public boolean canChildScrollUp(SwipeRefreshLayout parent, @Nullable View child) {
-                return relativelayout.getScrollY() > 0;
-            }
-        });
     }
 
     @Override
@@ -281,47 +253,6 @@ public class AddressActivity extends BaseHttpRecyclerActivity<DeliveryAddress,De
                 break;
             default:
                 break;
-        }
-    }
-
-    public void getAddress() {
-        if (NetUtil.checkNetwork(this)) {
-            setProgressBar();
-            progressBar.show();
-
-            HttpRequest.postGetAddress(0, new OnHttpResponseListener() {
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                    if(!StringUtil.isEmpty(resultJson)){
-                        EntityContent entityContent =  JSON.parseObject(resultJson,EntityContent.class);
-                        if(entityContent.isSuccess()){
-                            //成功
-                            //showShortToast(R.string.getSuccess);
-                            deliveryAddressList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityContent.getContent())
-                                    ,new TypeToken<List<DeliveryAddress>>(){}.getType());
-
-                            setList(deliveryAddressList);
-
-                            progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entityContent.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityContent.getMessage());
-                            }
-
-                            progressBarDismiss();
-                        }
-                    }else{
-                        showShortToast(R.string.noReturn);
-
-                        progressBarDismiss();
-                    }
-                }
-            });
-        } else {
-            showShortToast(R.string.checkNetwork);
         }
     }
 
@@ -410,6 +341,64 @@ public class AddressActivity extends BaseHttpRecyclerActivity<DeliveryAddress,De
     }
 
     @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch(keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                finish();
+                return true;
+        }
+
+        return super.onKeyUp(keyCode, event);
+    }
+
+    public void getAddress() {
+        /*setProgressBar();
+        progressBar.show();*/
+
+        String request = HttpRequest.postGetAddress();
+        //地址列表
+        mAddressHttpModel.post(request, URL_BASE + URLConstant.GETRECEIVINGADDRESS, 1,this);
+    }
+
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                EntityContent entityContent =  mAddressHttpModel.getData();
+                deliveryAddressList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityContent.getContent())
+                        ,new TypeToken<List<DeliveryAddress>>(){}.getType());
+                if (deliveryAddressList.size() > 0) {
+                    noMessage.setVisibility(View.GONE);
+                } else {
+                    noMessage.setVisibility(View.VISIBLE);
+                }
+
+                setList(deliveryAddressList);
+                srlBaseHttpRecycler.finishRefresh();
+                srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+                break;
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        super.onRefresh(refreshlayout);
+        getAddress();
+    }
+
+    @Override
     public void onEditClick(View view, int position) {
         toActivity(EditAddressActivity.createIntent(context, deliveryAddressList.get(position)));
     }
@@ -433,21 +422,5 @@ public class AddressActivity extends BaseHttpRecyclerActivity<DeliveryAddress,De
             }
         }
         setList(deliveryAddressList);
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        switch(keyCode){
-            case KeyEvent.KEYCODE_BACK:
-                finish();
-                return true;
-        }
-
-        return super.onKeyUp(keyCode, event);
     }
 }

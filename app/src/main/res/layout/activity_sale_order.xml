@@ -68,7 +68,7 @@
                                 android:id="@+id/tv_ticket_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="G-DRACON [KWON JI YONG]"
+                                android:text=""
                                 android:textSize="@dimen/text_size_14"
                                 android:textColor="@color/black_text1"/>
 
@@ -97,7 +97,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/margin_10"
-                                    android:text="厦门嘉庚体育馆"
+                                    android:text=""
                                     android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/black_text1"/>
 
@@ -120,7 +120,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/margin_10"
-                                    android:text="2018-4-28 20：00"
+                                    android:text=""
                                     android:textSize="@dimen/text_size_13"
                                     android:textColor="@color/black_text1"/>
 
@@ -278,10 +278,13 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tv_selected_card"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="9"
                     android:layout_marginLeft="@dimen/margin_8"
+                    android:paddingTop="@dimen/margin_10"
+                    android:paddingBottom="@dimen/margin_10"
                     android:layout_gravity="center_vertical"
                     android:text="选择优惠券"
                     android:textSize="@dimen/text_size_13"
@@ -293,8 +296,7 @@
                     android:layout_weight="1"
                     android:paddingLeft="@dimen/margin_10"
                     android:paddingRight="@dimen/margin_10"
-                    android:paddingTop="@dimen/margin_10"
-                    android:paddingBottom="@dimen/margin_10"
+                    android:layout_gravity="center_vertical"
                     android:src="@mipmap/down_dd"/>
 
             </LinearLayout>
@@ -353,7 +355,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="7"
-                                android:text="哦哈"
+                                android:text=""
                                 android:textSize="@dimen/text_size_13"
                                 android:textColor="@color/black_text2"/>
 
@@ -363,7 +365,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="3"
                                 android:gravity="right"
-                                android:text="1689383908"
+                                android:text=""
                                 android:textColor="@color/black_text2"
                                 android:textSize="@dimen/text_size_13"/>
 
@@ -376,7 +378,7 @@
                             android:layout_marginLeft="@dimen/margin_18"
                             android:layout_marginRight="@dimen/margin_18"
                             android:layout_marginTop="@dimen/margin_12"
-                            android:text="福建省厦门市思明区西柚有限公司"
+                            android:text=""
                             android:textColor="@color/black_text2"
                             android:textSize="@dimen/text_size_13"/>
 
@@ -395,12 +397,13 @@
 
                 </LinearLayout>
 
-                <View
+                <!--<View
                     style="@style/divider_horizontal_1px"
                     android:layout_marginTop="@dimen/margin_10"
                     android:layout_marginRight="@dimen/margin_10"
-                    android:layout_marginLeft="@dimen/margin_10"/>
+                    android:layout_marginLeft="@dimen/margin_10"/>-->
 
+<!--
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -440,6 +443,7 @@
                     </LinearLayout>
 
                 </RelativeLayout>
+-->
 
             </LinearLayout>
 
@@ -553,7 +557,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_5"
-            android:text="众筹服务条款"
+            android:text="购票服务条款"
             android:textSize="@dimen/text_size_11"
             android:textColor="@color/pink_text"/>
 

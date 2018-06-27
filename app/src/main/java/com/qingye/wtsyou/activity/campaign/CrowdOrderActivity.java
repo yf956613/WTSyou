@@ -31,11 +31,14 @@ import android.widget.TextView;
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.MainActivity;
+import com.qingye.wtsyou.activity.home.RuleActivity;
 import com.qingye.wtsyou.activity.my.CreateAddressActivity;
 import com.qingye.wtsyou.adapter.campaign.SelectAddressAdapter;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
 import com.qingye.wtsyou.basemodel.IdName;
 import com.qingye.wtsyou.basemodel.POI;
+import com.qingye.wtsyou.manager.HttpModel;
+import com.qingye.wtsyou.model.Card;
 import com.qingye.wtsyou.model.DeliveryAddress;
 import com.qingye.wtsyou.model.EntityContent;
 import com.qingye.wtsyou.model.EntityCrowdDetailed;
@@ -47,9 +50,10 @@ import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.campaign.SelectAddressView;
 import com.qingye.wtsyou.widget.AutoLineFeedLayout;
-import zuo.biao.library.widget.CustomDialog;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -59,10 +63,15 @@ import java.util.Map;
 import pub.devrel.easypermissions.EasyPermissions;
 import zuo.biao.library.base.BaseHttpRecyclerActivity;
 import zuo.biao.library.interfaces.AdapterCallBack;
+import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
+
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress,SelectAddressView,SelectAddressAdapter>
         implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener, SelectAddressView.OnItemChildClickListener {
@@ -79,10 +88,25 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
 
     //购票信息
     private EditText edtNumber;
-    private BigDecimal number = BigDecimal.ONE;
+    private int number = 1;
     private TextView tvTotal;
     private double total;
-    private BigDecimal price;
+    private double originalTotal;
+    private double price;
+    //优惠券
+    private LinearLayout llCard;
+    private TextView tvSelectCard;
+    private Card selectCard;
+    private Double disAmount = Double.valueOf(0);
+    //明细
+    private LinearLayout llDetailed;
+    private Button btnGone;
+    private TextView tvDetailNumber;
+    private TextView tvDetailedPrice;
+    private RelativeLayout rlCardDiscount;
+    private TextView tvDetailedDiscount;
+    //private TextView tvDetailedFare;
+    private TextView tvDetailedTotal;
 
     private TextView tvPay;
 
@@ -91,14 +115,15 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
     private RadioGroup radioGroup;
     private RadioButton rbtWei,rbtAli;
     private TextView tvSelect;
+    private Button btnClose;//支付弹窗
 
     //默认
     private TextView tvDefaultName;
     private TextView tvDefaultPhone;
     private TextView tvDefaultAddress;
-    private TextView tvFare;
+    //private TextView tvFare;
     //运费
-    int fare = 10;
+    int fare = 0;
 
     private SelectAddressAdapter selectAddressAdapter;
 
@@ -110,7 +135,11 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
     private TextView tvConfirm;
     private TextView tvCreateNewAddress;
     private TextView tvCreateAddress;
+    private Button btnCloseAddress;//地址弹窗
+
     private List<DeliveryAddress> deliveryAddressList = new ArrayList<>();
+
+    private TextView tvAgreement;
 
     DeliveryAddress defaultAddress = null;
 
@@ -123,13 +152,9 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
     private PriceList currentPriceList;
     private AutoLineFeedLayout layout;
 
-    //明细
-    private LinearLayout llDetailed;
-    private Button btnGone;
-
-    private Double crowdPrice = Double.valueOf(0);
-
     private CustomDialog progressBar;
+
+    private HttpModel<EntityContent> mAddressHttpModel;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -179,6 +204,8 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
         setProgressBar();
         progressBar.show();
 
+        //地址
+        mAddressHttpModel = new HttpModel<>(EntityContent.class);
         getAddress();
 
         //功能归类分区方法，必须调用<<<<<<<<<<
@@ -188,11 +215,11 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        //srlBaseHttpRecycler.autoRefresh();
-        srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部*/
 
     }
 
@@ -208,7 +235,7 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
         price = priceListItem.get(0).getPriceList().getPrice();
         priceListItem.get(0).setSelector(true);
         currentPriceList = priceListItem.get(0).getPriceList();
-        getTotalValue(number);
+        getTotalValue();
         /*total = number.multiply(price).doubleValue() + fare;
         tvTotal.setText(Double.toString(total));*/
         selectPrice();
@@ -216,13 +243,14 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
 
     public void selectPrice() {
         View view;
-        final List<Button> buttonList = new ArrayList<>();
+        layout.removeAllViews();
+        final List<TextView> buttonList = new ArrayList<>();
         for (int i = 0; i < priceListItem.size(); i ++) {
             view = LayoutInflater.from(CrowdOrderActivity.this).inflate(R.layout.list_radiobutton, null);
-            final Button button = view.findViewById(R.id.btn);
+            final TextView button = (TextView) view.findViewById(R.id.btn);
             button.setTag(i);
-            BigDecimal allBig = priceListItem.get(i).getPriceList().getPrice();
-            double allDou = allBig.doubleValue();
+            double allBig = priceListItem.get(i).getPriceList().getPrice();
+            double allDou = allBig;
             button.setText("￥" + Double.toString(allDou));
             boolean isSelect = priceListItem.get(i).getSelector();
             if (isSelect) {
@@ -240,7 +268,8 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
                             currentPriceList = priceListItem.get(j).getPriceList();
                             price = priceListItem.get(j).getPriceList().getPrice();
 
-                            getTotalValue(new BigDecimal(edtNumber.getText().toString()));
+                            number = new Integer(edtNumber.getText().toString());
+                            getTotalValue();
                         } else {
                             buttonList.get(j).setSelected(false);
                             priceListItem.get(j).setSelector(false);
@@ -254,27 +283,41 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
 
     }
 
-    public void getTotalValue(BigDecimal number) {
-        total = number.multiply(price).doubleValue() + fare;
+    public void getTotalValue() {
+        if (selectCard != null) {
+            disAmount = selectCard.getDiscountAmount();
+            rlCardDiscount.setVisibility(View.VISIBLE);
+            tvDetailedDiscount.setText("" + disAmount);
+        } else {
+            rlCardDiscount.setVisibility(View.GONE);
+        }
+
+        tvDetailNumber.setText("" + number);
+        tvDetailedPrice.setText("" + price * number);
+        //tvDetailedFare.setText("" + fare);
+
+        originalTotal = number * price + fare;
+        total = originalTotal - disAmount;
         tvTotal.setText(Double.toString(total));
+        tvDetailedTotal.setText("" + total);
     }
 
     @Override
     public void initView() {
         super.initView();
-        ivBack = findViewById(R.id.iv_left);
+        ivBack = findView(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("众筹确认");
 
         //活动名称
-        tvName = findViewById(R.id.tv_ticket_name);
+        tvName = findView(R.id.tv_ticket_name);
         //地址
-        tvAddress = findViewById(R.id.tv_ticket_address);
+        tvAddress = findView(R.id.tv_ticket_address);
         //时间
-        tvTime = findViewById(R.id.tv_ticket_time);
+        tvTime = findView(R.id.tv_ticket_time);
         //数量
-        edtNumber = findViewById(R.id.edt_number_count);
+        edtNumber = findView(R.id.edt_number_count);
         if (edtNumber.getTag() instanceof TextWatcher) {
             edtNumber.removeTextChangedListener((TextWatcher) edtNumber.getTag());
         }
@@ -296,7 +339,8 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
                 if (!TextUtils.isEmpty(s)) {
                     if (s.toString().equals("0")) {
                     } else {
-                        getTotalValue(number = new BigDecimal(s.toString()));
+                        number = new Integer(s.toString());
+                        getTotalValue();
                     }
                 } else {
 
@@ -305,45 +349,60 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
         };
         edtNumber.addTextChangedListener(watcher);
         edtNumber.setTag(watcher);
+        //优惠券
+        llCard = findView(R.id.llCard);
+        tvSelectCard = findView(R.id.tv_selected_card);
 
         //默认
-        tvDefaultName = findViewById(R.id.tv_default_contact_name);
-        tvDefaultPhone = findViewById(R.id.tv_default_contact_phone);
-        tvDefaultAddress = findViewById(R.id.tv_default_delivery_address);
+        tvDefaultName = findView(R.id.tv_default_contact_name);
+        tvDefaultPhone = findView(R.id.tv_default_contact_phone);
+        tvDefaultAddress = findView(R.id.tv_default_delivery_address);
         //运费
-        tvFare = findViewById(R.id.tv_fare);
+        //tvFare = findView(R.id.tv_fare);
 
         //总价
-        tvTotal = findViewById(R.id.tv_total);
-        layout = findViewById(R.id.al);
+        tvTotal = findView(R.id.tv_total);
+        layout = findView(R.id.al);
 
         //查看明细
-        btnDetailed = findViewById(R.id.btn_detailed);
-        llBottom = findViewById(R.id.ll_bottom);
-        ivArrow = findViewById(R.id.iv_arrow);
-        llDetailed = findViewById(R.id.llDetailed);
-        btnGone = findViewById(R.id.gone);
+        btnDetailed = findView(R.id.btn_detailed);
+        llBottom = findView(R.id.ll_bottom);
+        ivArrow = findView(R.id.iv_arrow);
+        llDetailed = findView(R.id.llDetailed);
+        btnGone = findView(R.id.gone);
+        //明细里面的详细内容
+        tvDetailNumber = findView(R.id.tv_detailed_number);
+        tvDetailedPrice = findView(R.id.tv_detailed_price);
+        rlCardDiscount = findView(R.id.rlCardDiscount);
+        tvDetailedDiscount = findView(R.id.tv_detailed_card_price);
+        //tvDetailedFare = findView(R.id.tv_detailed_fare);
+        tvDetailedTotal = findView(R.id.tv_detailed_total);
 
-        llAddress = findViewById(R.id.llAddress);
+        llAddress = findView(R.id.llAddress);
         //选择地址
-        llSelectAddress = findViewById(R.id.llSelectAddress);
-        tvCancel = findViewById(R.id.tv_cancel);
-        tvConfirm = findViewById(R.id.tv_confirm);
+        llSelectAddress = findView(R.id.llSelectAddress);
+        tvCancel = findView(R.id.tv_cancel);
+        tvConfirm = findView(R.id.tv_confirm);
         //没地址时添加地址
-        tvCreateAddress = findViewById(R.id.tv_create_address);
+        tvCreateAddress = findView(R.id.tv_create_address);
         //添加新的地址
-        tvCreateNewAddress = findViewById(R.id.tv_create_new_address);
+        tvCreateNewAddress = findView(R.id.tv_create_new_address);
+        btnCloseAddress = findView(R.id.btn_close_address);
 
-        tvPay = findViewById(R.id.tv_pay);
+        tvPay = findView(R.id.tv_pay);
         popUpView = getLayoutInflater().inflate(R.layout.popupwindow_pay_way, null);
         payWayWin = new PopupWindow(popUpView, RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams.MATCH_PARENT);
         payWayWin.setOutsideTouchable(true);
-        radioGroup = popUpView.findViewById(R.id.radio_group);
-        rbtWei = popUpView.findViewById(R.id.rbtn_wei);
-        rbtAli = popUpView.findViewById(R.id.rbtn_ali);
-        tvSelect = popUpView.findViewById(R.id.tv_select);
+        radioGroup = (RadioGroup) popUpView.findViewById(R.id.radio_group);
+        rbtWei = (RadioButton) popUpView.findViewById(R.id.rbtn_wei);
+        rbtAli = (RadioButton) popUpView.findViewById(R.id.rbtn_ali);
+        tvSelect = (TextView) popUpView.findViewById(R.id.tv_select);
+        btnClose = (Button) popUpView.findViewById(R.id.btn_close);
         radioGroup.setOnCheckedChangeListener(new WayGrouplistener());
+
+        tvAgreement = findView(R.id.tv_agreement);
+        tvAgreement.setText("众筹服务条款");
     }
 
     @Override
@@ -425,41 +484,47 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
 
         if (deliveryAddressList.size() > 0) {
             tvCreateAddress.setVisibility(View.GONE);
+            llAddress.setVisibility(View.VISIBLE);
+            getSelectAddress();
         } else {
             tvCreateAddress.setVisibility(View.VISIBLE);
+            llAddress.setVisibility(View.GONE);
         }
 
-        getSelectAddress();
-
-        tvFare.setText(Integer.toString(fare));
+        //tvFare.setText(Integer.toString(fare));
 
         progressBarDismiss();
     }
 
     public void getSelectAddress() {
 
-        for (DeliveryAddress deliveryAddress : deliveryAddressList) {
-            if (deliveryAddress.getDefault()) {
-                defaultAddress = deliveryAddress;
+        if (deliveryAddressList.size() > 0) {
+            for (DeliveryAddress deliveryAddress : deliveryAddressList) {
+                if (deliveryAddress.getDefault()) {
+                    defaultAddress = deliveryAddress;
+                }
             }
+
+            //名字
+            tvDefaultName.setText(defaultAddress.getName());
+            //联系电话
+            tvDefaultPhone.setText(defaultAddress.getMobile());
+            //省
+            String defaultProvince = defaultAddress.getPoi().getPcdt().getProvince();
+            //市
+            String defaultCity = defaultAddress.getPoi().getPcdt().getCity();
+            //区
+            String defaultDistrict = defaultAddress.getPoi().getPcdt().getDistrict();
+            //街道
+            String defaultTownship = defaultAddress.getPoi().getPcdt().getTownship();
+            //详细
+            String defaultDetail = defaultAddress.getPoi().getAddress();
+            //地址
+            tvDefaultAddress.setText(defaultProvince + defaultCity + defaultDistrict + defaultTownship + defaultDetail);
+        } else {
+            return;
         }
 
-        //名字
-        tvDefaultName.setText(defaultAddress.getName());
-        //联系电话
-        tvDefaultPhone.setText(defaultAddress.getMobile());
-        //省
-        String defaultProvince = defaultAddress.getPoi().getPcdt().getProvince();
-        //市
-        String defaultCity = defaultAddress.getPoi().getPcdt().getCity();
-        //区
-        String defaultDistrict = defaultAddress.getPoi().getPcdt().getDistrict();
-        //街道
-        String defaultTownship = defaultAddress.getPoi().getPcdt().getTownship();
-        //详细
-        String defaultDetail = defaultAddress.getPoi().getAddress();
-        //地址
-        tvDefaultAddress.setText(defaultProvince + defaultCity + defaultDistrict + defaultTownship + defaultDetail);
     }
     @Override
     public void getListAsync(int page) {
@@ -483,15 +548,23 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
         tvConfirm.setOnClickListener(this);
         tvCreateAddress.setOnClickListener(this);
         tvCreateNewAddress.setOnClickListener(this);
+        btnCloseAddress.setOnClickListener(this);
+        llCard.setOnClickListener(this);
 
         tvPay.setOnClickListener(this);
         tvSelect.setOnClickListener(this);
+        btnClose.setOnClickListener(this);
+        tvAgreement.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_left:
+                Intent intent2 = new Intent(
+                        BroadcastAction.ACTION_CROWD_REFRESH);
+                // 发送广播
+                sendBroadcast(intent2);
                 finish();
                 break;
             case R.id.btn_detailed:
@@ -529,6 +602,9 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
             case R.id.tv_create_address:
                 toActivity(CreateAddressActivity.createIntent(context));
                 break;
+            case R.id.btn_close_address:
+                llSelectAddress.setVisibility(View.GONE);
+                break;
             case R.id.tv_pay:
                 payWayWin.showAtLocation(v, Gravity.BOTTOM, 0, 0);
                 payWayWin.update(0, 0, RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -551,6 +627,38 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
                 }
                 payWayWin.dismiss();
                 break;
+            case R.id.btn_close:
+                payWayWin.dismiss();
+                break;
+            case R.id.llCard:
+                toActivity(CardCanUseActivity.createIntent(context, originalTotal), REQUEST_TO_SELECT_CARD);
+                break;
+            case R.id.tv_agreement:
+                toActivity(RuleActivity.createIntent(context, "crowdPay", "众筹服务条款"));
+                break;
+            default:
+                break;
+        }
+    }
+
+    //类相关监听<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    private static final int REQUEST_TO_SELECT_CARD = 1;
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case REQUEST_TO_SELECT_CARD:
+                if (data != null) {
+                     selectCard = (Card) data.getExtras().getSerializable(Constant.SELECTCARD);
+                     disAmount = selectCard.getDiscountAmount();
+                     tvSelectCard.setText("已选择优惠券 ： 满" + selectCard.getMinAmount() + "减" + selectCard.getDiscountAmount());
+                     getTotalValue();
+                }
+                break;
             default:
                 break;
         }
@@ -560,6 +668,10 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
         String[] perms = {android.Manifest.permission.READ_PHONE_STATE,};
         String uuid = entityCrowdDetailed.getContent().getActivityId();
         BigDecimal carrieFree = BigDecimal.ZERO;
+        if (defaultAddress == null ) {
+            showShortToast(R.string.noDeliveryAddress);
+            return;
+        }
         POI poi = new POI();
         poi = defaultAddress.getPoi();
 		/*LngLat lanLat = new LngLat();
@@ -585,7 +697,7 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
                 setProgressBar();
                 progressBar.show();
 
-                HttpRequest.postGetPaymentConfigOrder(0, uuid, carrieFree, price ,number,
+                HttpRequest.postGetPaymentConfigOrder(0, uuid, carrieFree, new BigDecimal(price) ,new BigDecimal(number),
                         channel, phone, poi, receiver, SkuId, new OnHttpResponseListener() {
 
                             @Override
@@ -596,14 +708,14 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
                                     if(entityPaymentConfig.isSuccess()) {
                                         aliPay(entityPaymentConfig);
 
+                                        Intent intent1 = new Intent(
+                                                BroadcastAction.ACTION_SHOWALL_REFRESH);
+                                        // 发送广播
+                                        sendBroadcast(intent1);
+
                                         progressBarDismiss();
                                     } else {
-                                        if (entityPaymentConfig.getCode().equals("401")) {
-                                            showShortToast(R.string.tokenInvalid);
-                                            toActivity(MainActivity.createIntent(context));
-                                        } else {
-                                            showShortToast(entityPaymentConfig.getMessage());
-                                        }
+                                        showShortToast(entityPaymentConfig.getMessage());
 
                                         progressBarDismiss();
                                     }
@@ -639,49 +751,6 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
             }
         }
     };
-
-    public void getAddress() {
-        if (NetUtil.checkNetwork(this)) {
-            setProgressBar();
-            progressBar.show();
-
-            HttpRequest.postGetAddress(0, new OnHttpResponseListener() {
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                    if(!StringUtil.isEmpty(resultJson)){
-                        EntityContent entityContent =  JSON.parseObject(resultJson,EntityContent.class);
-                        if(entityContent.isSuccess()){
-                            //成功
-                            //showShortToast(R.string.getSuccess);
-                            deliveryAddressList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityContent.getContent())
-                                    ,new TypeToken<List<DeliveryAddress>>(){}.getType());
-
-                            initData();
-
-                            setList(deliveryAddressList);
-
-                            progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entityContent.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityContent.getMessage());
-                            }
-
-                            progressBarDismiss();
-                        }
-                    }else{
-                        showShortToast(R.string.noReturn);
-
-                        progressBarDismiss();
-                    }
-                }
-            });
-        } else {
-            showShortToast(R.string.checkNetwork);
-        }
-    }
 
     private void aliPay(EntityPaymentConfig object) {
         final EntityPaymentConfig entity = object;
@@ -732,11 +801,6 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
     }
 
     @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
-    }
-
-    @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch(keyCode){
             case KeyEvent.KEYCODE_BACK:
@@ -745,5 +809,52 @@ public class CrowdOrderActivity extends BaseHttpRecyclerActivity<DeliveryAddress
         }
 
         return super.onKeyUp(keyCode, event);
+    }
+
+    public void getAddress() {
+        /*setProgressBar();
+        progressBar.show();*/
+
+        String request = HttpRequest.postGetAddress();
+        //地址列表
+        mAddressHttpModel.post(request, URL_BASE + URLConstant.GETRECEIVINGADDRESS, 1,this);
+    }
+
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                EntityContent entityContent =  mAddressHttpModel.getData();
+                deliveryAddressList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityContent.getContent())
+                        ,new TypeToken<List<DeliveryAddress>>(){}.getType());
+
+                if (deliveryAddressList.size() > 0) {
+                    setList(deliveryAddressList);
+                }
+
+                srlBaseHttpRecycler.finishRefresh();
+                srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+
+                initData();
+                break;
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        super.onRefresh(refreshlayout);
+        getAddress();
     }
 }

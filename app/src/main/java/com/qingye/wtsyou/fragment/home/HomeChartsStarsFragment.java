@@ -16,29 +16,25 @@ import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.adapter.home.StarsChartsAdapter;
-import zuo.biao.library.model.EntityBase;
 import com.qingye.wtsyou.model.EntityPageData;
-import com.qingye.wtsyou.model.FocusStars;
 import com.qingye.wtsyou.model.RankInfos;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.home.StarsChartsView;
-import zuo.biao.library.widget.CustomDialog;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
-
-import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+import zuo.biao.library.widget.CustomDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,12 +100,11 @@ public class HomeChartsStarsFragment extends BaseHttpRecyclerFragment<RankInfos,
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        srlBaseHttpRecycler.setEnableRefresh(true);//启用下拉刷新
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(true);//启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(true);//启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(true);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部
-
-        //srlBaseHttpRecycler.autoRefresh();
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部*/
 
         return view;
     }
@@ -198,6 +193,10 @@ public class HomeChartsStarsFragment extends BaseHttpRecyclerFragment<RankInfos,
     public void initData() {
         super.initData();
 
+        if (starsTopChartsList.size() == 0) {
+            return;
+        }
+
         if (starsTopChartsList.get(0) != null) {
             RankInfos first = starsTopChartsList.get(0);
             //名字
@@ -220,6 +219,10 @@ public class HomeChartsStarsFragment extends BaseHttpRecyclerFragment<RankInfos,
             }
         }
 
+        if (starsTopChartsList.size() < 2) {
+            return;
+        }
+
         if (starsTopChartsList.get(1) != null) {
             RankInfos second = starsTopChartsList.get(1);
             //名字
@@ -240,6 +243,10 @@ public class HomeChartsStarsFragment extends BaseHttpRecyclerFragment<RankInfos,
                 tvSecFocus.setVisibility(View.VISIBLE);
                 tvSecRank.setVisibility(View.GONE);
             }
+        }
+
+        if (starsTopChartsList.size() < 3) {
+            return;
         }
 
         if (starsTopChartsList.get(2) != null) {
@@ -314,8 +321,6 @@ public class HomeChartsStarsFragment extends BaseHttpRecyclerFragment<RankInfos,
 
     public void rankingQuery(final int page) {
         if (NetUtil.checkNetwork(getActivity())) {
-            setProgressBar();
-            progressBar.show();
 
             String keywords = null;
             String periods = null;
@@ -367,8 +372,6 @@ public class HomeChartsStarsFragment extends BaseHttpRecyclerFragment<RankInfos,
                                 }
                             }
 
-                            progressBarDismiss();
-
                             setList(starsOtherChartsList);
 
                             totalPage = entityPageData.getContent().getPageCount();
@@ -383,20 +386,17 @@ public class HomeChartsStarsFragment extends BaseHttpRecyclerFragment<RankInfos,
                                 showShortToast(entityPageData.getMessage());
                             }
 
-                            progressBarDismiss();
                         }
 
                     }else{
                         showShortToast(R.string.noReturn);
 
-                        progressBarDismiss();
                     }
                 }
             });
         } else {
             showShortToast(R.string.checkNetwork);
 
-            progressBarDismiss();
         }
     }
 
@@ -486,18 +486,12 @@ public class HomeChartsStarsFragment extends BaseHttpRecyclerFragment<RankInfos,
     }
 
     public void focusStars(RankInfos starsCharts,final TextView focus,final TextView rank) {
-        List<FocusStars> focusStarsRequestList = new ArrayList<>();
-        FocusStars focusStarsRequest = new FocusStars();
-        focusStarsRequest.setStarUuid(starsCharts.getUserId());
-        focusStarsRequest.setStarName(starsCharts.getUserName());
-        focusStarsRequest.setStarPhoto(starsCharts.getUserPhoto());
-        focusStarsRequestList.add(focusStarsRequest);
 
         if (NetUtil.checkNetwork(getActivity())) {
             setProgressBar();
             progressBar.show();
 
-            HttpRequest.postFocusStars(0, focusStarsRequestList, new OnHttpResponseListener() {
+            HttpRequest.postFocusStars(0, starsCharts.getUserId(), new OnHttpResponseListener() {
                 @Override
                 public void onHttpResponse(int requestCode, String resultJson, Exception e) {
                     if(!StringUtil.isEmpty(resultJson)){

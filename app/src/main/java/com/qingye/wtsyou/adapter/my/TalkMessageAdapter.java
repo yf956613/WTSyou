@@ -23,8 +23,4 @@ public class TalkMessageAdapter extends BaseAdapter<Message,TalkMessageView> {
         return new TalkMessageView(context, parent);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

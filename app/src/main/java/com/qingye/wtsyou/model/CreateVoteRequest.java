@@ -12,6 +12,7 @@ public class CreateVoteRequest {
     private String relevanceStar;
     private POI address;
     private String description;
+    private String[] chatingRooms;
 
     public String getName() {
         return name;
@@ -43,5 +44,13 @@ public class CreateVoteRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String[] getChatingRooms() {
+        return chatingRooms;
+    }
+
+    public void setChatingRooms(String[] chatingRooms) {
+        this.chatingRooms = chatingRooms;
     }
 }

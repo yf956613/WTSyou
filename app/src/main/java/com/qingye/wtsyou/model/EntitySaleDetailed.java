@@ -1,11 +1,12 @@
 package com.qingye.wtsyou.model;
 
-import zuo.biao.library.model.EntityBase;
 import com.qingye.wtsyou.basemodel.POI;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
+import zuo.biao.library.model.EntityBase;
 
 /**
  * Created by pm89 on 2018/3/6.
@@ -49,6 +50,8 @@ public class EntitySaleDetailed extends EntityBase {
         private Date deadline;
         private String deadlineStr;
         private List<PriceList> priceList;
+        private List<ChatingRoom> chartRoomList;
+        private List<EntityStars> relevanceStars;
 
         public String getUuid() {
             return uuid;
@@ -312,6 +315,22 @@ public class EntitySaleDetailed extends EntityBase {
 
         public void setPriceList(List<PriceList> priceList) {
             this.priceList = priceList;
+        }
+
+        public List<ChatingRoom> getChartRoomList() {
+            return chartRoomList;
+        }
+
+        public void setChartRoomList(List<ChatingRoom> chartRoomList) {
+            this.chartRoomList = chartRoomList;
+        }
+
+        public List<EntityStars> getRelevanceStars() {
+            return relevanceStars;
+        }
+
+        public void setRelevanceStars(List<EntityStars> relevanceStars) {
+            this.relevanceStars = relevanceStars;
         }
     }
 

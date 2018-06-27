@@ -1,17 +1,32 @@
 package com.qingye.wtsyou.fragment.home;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.adapter.campaign.ActivityOfficialAdapter;
-import com.qingye.wtsyou.model.Officials;
-import com.qingye.wtsyou.view.campaign.ActivityOfficialView;
+import com.qingye.wtsyou.activity.MainActivity;
+import com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity;
+import com.qingye.wtsyou.activity.campaign.SaleDetailedActivity;
+import com.qingye.wtsyou.activity.campaign.SupportDetailedActivity;
+import com.qingye.wtsyou.activity.campaign.VoteDetailedActivity;
+import com.qingye.wtsyou.adapter.campaign.FansMainActivityAdapter;
+import com.qingye.wtsyou.model.Activitys;
+import com.qingye.wtsyou.model.EntityCrowdDetailed;
+import com.qingye.wtsyou.model.EntitySaleDetailed;
+import com.qingye.wtsyou.model.EntitySupportDetailed;
+import com.qingye.wtsyou.model.EntityVoteDetailed;
+import com.qingye.wtsyou.utils.Constant;
+import com.qingye.wtsyou.utils.HttpRequest;
+import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.view.campaign.FansMainActivityView;
+import com.qingye.wtsyou.widget.StartSnapHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +34,19 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
+import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.util.JSON;
+import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Officials,ActivityOfficialView,ActivityOfficialAdapter> implements View.OnClickListener ,CacheCallBack<Officials> {
+public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Activitys,FansMainActivityView,FansMainActivityAdapter> implements View.OnClickListener ,CacheCallBack<Activitys> {
 
-    private int size = 2;
+    private  List<Activitys> activitysList =  new ArrayList<>();
+
+    private CustomDialog progressBar;
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -48,7 +69,13 @@ public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Officials
         setContentView(R.layout.fragment_fans_main_campaign);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+
         initCache(this);
+
+        //获取传来的数据
+        Bundle bundle = getArguments();
+        activitysList = (List<Activitys>) bundle.getSerializable(Constant.ACTIVITYLIST);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
@@ -66,6 +93,11 @@ public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Officials
         rvBaseRecycler.setLayoutManager(layoutManager);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
+        StartSnapHelper snapHelper = new StartSnapHelper();
+        snapHelper.attachToRecyclerView(rvBaseRecycler);
+
+        setList(activitysList);
+
         return view;
     }
 
@@ -75,23 +107,18 @@ public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Officials
     }
 
     @Override
-    public void setList(final List<Officials> list) {
-        final List<Officials> templist = new ArrayList<>();
-        for(int i = 0;i < size;i ++) {
-            Officials campaign = new Officials();
-            templist.add(campaign);
-        }
-        //list.addAll(templist);
-        setList(new AdapterCallBack<ActivityOfficialAdapter>() {
+    public void setList(final List<Activitys> list) {
+
+        setList(new AdapterCallBack<FansMainActivityAdapter>() {
 
             @Override
-            public ActivityOfficialAdapter createAdapter() {
-                return new ActivityOfficialAdapter(context);
+            public FansMainActivityAdapter createAdapter() {
+                return new FansMainActivityAdapter(context);
             }
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -109,13 +136,45 @@ public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Officials
 
     }
 
+    public void onResume() {
+
+        super.onResume();
+    }
+
     @Override
-    public List<Officials> parseArray(String json) {
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
+        }
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
+    }
+
+    @Override
+    public List<Activitys> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Officials> getCacheClass() {
+    public Class<Activitys> getCacheClass() {
         return null;
     }
 
@@ -125,7 +184,7 @@ public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Officials
     }
 
     @Override
-    public String getCacheId(Officials data) {
+    public String getCacheId(Activitys data) {
         return null;
     }
 
@@ -145,6 +204,42 @@ public class FansMainCampaignFragment extends BaseHttpRecyclerFragment<Officials
 
     @Override
     public void onClick(View v) {
+
+    }
+
+    //点击item
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, final long id) {
+
+        //检查网络
+        if (NetUtil.checkNetwork(context)) {
+            String activityState = activitysList.get(position).getState();
+            String uuid = activitysList.get(position).getActivityId();
+
+            setProgressBar();
+            progressBar.show();
+
+            if (activityState.equals("voting") || activityState.equals("votesuccess") || activityState.equals("votefail")) {
+
+                toActivity(VoteDetailedActivity.createIntent(context, uuid));
+            }
+            else if (activityState.equals("crowding") || activityState.equals("crowdsuccess") || activityState.equals("crowdfail")) {
+
+                toActivity(CrowdDetailedActivity.createIntent(context, uuid));
+            }
+            else if (activityState.equals("saling")) {
+
+                toActivity(SaleDetailedActivity.createIntent(context, uuid));
+            }
+            else if (activityState.equals("supporting") || activityState.equals("supportsuccess") || activityState.equals("supportfail")) {
+                toActivity(SupportDetailedActivity.createIntent(context, uuid));
+            }
+            else if (activityState.equals("unaudited")) {
+                showShortToast("这是个未审核的活动~");
+            }
+        } else {
+            showShortToast(R.string.checkNetwork);
+        }
 
     }
 }

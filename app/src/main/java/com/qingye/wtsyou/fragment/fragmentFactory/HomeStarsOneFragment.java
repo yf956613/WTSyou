@@ -19,20 +19,21 @@ import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
+import com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity;
+import com.qingye.wtsyou.activity.campaign.SaleDetailedActivity;
+import com.qingye.wtsyou.activity.campaign.SupportDetailedActivity;
+import com.qingye.wtsyou.activity.campaign.VoteDetailedActivity;
 import com.qingye.wtsyou.activity.home.RecommendStarsConversationActivity;
 import com.qingye.wtsyou.activity.search.SearchFansActivity;
 import com.qingye.wtsyou.adapter.home.HomeContentAdapter;
-import zuo.biao.library.model.EntityBase;
 import com.qingye.wtsyou.model.EntityHomeContent;
 import com.qingye.wtsyou.model.EntityHomeList;
 import com.qingye.wtsyou.model.EntityPageData;
-import com.qingye.wtsyou.model.FocusStars;
 import com.qingye.wtsyou.model.RecommendStars;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.home.HomeContentView;
-import zuo.biao.library.widget.CustomDialog;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
@@ -42,7 +43,9 @@ import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -174,7 +177,7 @@ public class HomeStarsOneFragment extends BaseHttpRecyclerFragment<EntityHomeCon
         if (recommendStar != null) {
             tvName.setText(recommendStar.getStarName());
             tvFans.setText(recommendStar.getFunsCount());
-            tvConversation.setText(recommendStar.getChatRoomCount());
+            tvConversation.setText("" + recommendStar.getChatRoomCount());
 
             String url = recommendStar.getStarPhoto();
             Glide.with(context)
@@ -188,6 +191,12 @@ public class HomeStarsOneFragment extends BaseHttpRecyclerFragment<EntityHomeCon
             } else {
                 btnFocus.setVisibility(View.VISIBLE);
                 btnRank.setVisibility(View.GONE);
+            }
+
+            if (recommendStar.getChatRoomCount() == 0) {
+                llconversation.setEnabled(false);
+            } else {
+                llconversation.setEnabled(true);
             }
         }
 
@@ -244,7 +253,9 @@ public class HomeStarsOneFragment extends BaseHttpRecyclerFragment<EntityHomeCon
                 toActivity(SearchFansActivity.createIntent(context, recommendStarsList.get(0)));
                 break;
             case R.id.ll_conversation:
-                toActivity(RecommendStarsConversationActivity.createIntent(context));
+                String[] relevanceStar = new String[1];
+                relevanceStar[0] = recommendStar.getStarUuid();
+                toActivity(RecommendStarsConversationActivity.createIntent(context, relevanceStar));
                 break;
             case R.id.btn_focus:
                 focusStars();
@@ -261,7 +272,22 @@ public class HomeStarsOneFragment extends BaseHttpRecyclerFragment<EntityHomeCon
     //点击item
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //toActivity(SaleDetailedActivity.createIntent(context,id));
+        String activityState = campaignList.get(position).getState();
+        String uuid = campaignList.get(position).getActivityId();
+
+        if (activityState.equals("voting") || activityState.equals("votesuccess")) {
+
+            toActivity(VoteDetailedActivity.createIntent(context, uuid));
+        } else if (activityState.equals("crowding") || activityState.equals("crowdsuccess")) {
+
+            toActivity(CrowdDetailedActivity.createIntent(context, uuid));
+        } else if (activityState.equals("saling") || activityState.equals("over")) {
+
+            toActivity(SaleDetailedActivity.createIntent(context, uuid));
+        } else if (activityState.equals("supporting") || activityState.equals("supportsuccess")) {
+
+            toActivity(SupportDetailedActivity.createIntent(context, uuid));
+        }
     }
 
     public void getStars() {
@@ -364,20 +390,12 @@ public class HomeStarsOneFragment extends BaseHttpRecyclerFragment<EntityHomeCon
     }
 
     public void focusStars() {
-        List<FocusStars> focusStarsRequestList = new ArrayList<>();
-        if (recommendStarsList.size() > 0) {
-                FocusStars focusStarsRequest = new FocusStars();
-                focusStarsRequest.setStarUuid(recommendStarsList.get(0).getStarUuid());
-                focusStarsRequest.setStarName(recommendStarsList.get(0).getStarName());
-                focusStarsRequest.setStarPhoto(recommendStarsList.get(0).getStarPhoto());
-                focusStarsRequestList.add(focusStarsRequest);
-        }
 
         if (NetUtil.checkNetwork(getActivity())) {
             setProgressBar();
             progressBar.show();
 
-            HttpRequest.postFocusStars(0, focusStarsRequestList, new OnHttpResponseListener() {
+            HttpRequest.postFocusStars(0, recommendStarsList.get(0).getStarUuid(), new OnHttpResponseListener() {
                 @Override
                 public void onHttpResponse(int requestCode, String resultJson, Exception e) {
                     if(!StringUtil.isEmpty(resultJson)){

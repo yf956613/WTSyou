@@ -1,27 +1,43 @@
 package com.qingye.wtsyou.activity.my;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpModel;
+import com.qingye.wtsyou.model.EntityPersonalMessage;
+import com.qingye.wtsyou.utils.URLConstant;
 
 import zuo.biao.library.base.BaseActivity;
+import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
+import zuo.biao.library.model.EntityBase;
+import zuo.biao.library.widget.CustomDialog;
+
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 public class ChangePhoneActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
     private ImageView ivLeft;
     private TextView tvRight,tvHead;
+    private TextView tvPhone;
     private TextView tvChange;
-    private EditText edtPhone;
+
+    private CustomDialog progressBar;
+
+    private EntityPersonalMessage entityPersonalMessage;
+
+    private HttpModel<EntityPersonalMessage> mEntityPersonalMessageHttpModel;
+
+    private String phone;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -45,28 +61,72 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_phone,this);
 
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+
+        //获取个人信息
+        mEntityPersonalMessageHttpModel = new HttpModel<>(EntityPersonalMessage.class);
+        getPersonalMessage();
+
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
-        initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
     }
 
     @Override
     public void initView() {
-        ivLeft = findViewById(R.id.iv_left);
+        ivLeft = findView(R.id.iv_left);
         ivLeft.setImageResource(R.mipmap.back_a);
-        tvRight = findViewById(R.id.tv_add_temp);
-        tvHead = findViewById(R.id.tv_head_title);
+        tvRight = findView(R.id.tv_add_temp);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("手机号");
 
-        tvChange = findViewById(R.id.tv_change);
-        edtPhone = findViewById(R.id.edt_phone);
+        tvPhone = findView(R.id.tv_phone);
+        tvChange = findView(R.id.tv_change);
+    }
+
+    public void onResume() {
+        getPersonalMessage();
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
+        }
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
     }
 
     @Override
     public void initData() {
-
+        if (isAlive()) {
+            phone = entityPersonalMessage.getContent().getMobile();
+            if (phone == null) {
+                tvPhone.setText(R.string.noBind);
+            } else {
+                tvPhone.setText(phone);
+            }
+        }
     }
 
     @Override
@@ -100,11 +160,6 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
-    }
-
-    @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch(keyCode){
             case KeyEvent.KEYCODE_BACK:
@@ -113,5 +168,33 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
         }
 
         return super.onKeyUp(keyCode, event);
+    }
+
+    public void getPersonalMessage() {
+        setProgressBar();
+        progressBar.show();
+
+        mEntityPersonalMessageHttpModel.get(URL_BASE + URLConstant.GETPERSONALMESSAGE,1,this);
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                entityPersonalMessage = mEntityPersonalMessageHttpModel.getData();
+                initData();
+                break;
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
     }
 }

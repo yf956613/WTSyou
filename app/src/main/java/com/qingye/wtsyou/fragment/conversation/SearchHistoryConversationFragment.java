@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.search.SearchHistoryConversationAdapter;
-import com.qingye.wtsyou.model.SearchContent;
+import com.qingye.wtsyou.model.HotTopic;
 import com.qingye.wtsyou.view.search.SearchHistoryConversationView;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
 
-public class SearchHistoryConversationFragment extends BaseHttpRecyclerFragment<SearchContent,SearchHistoryConversationView,SearchHistoryConversationAdapter>implements CacheCallBack<SearchContent> {
+public class SearchHistoryConversationFragment extends BaseHttpRecyclerFragment<HotTopic,SearchHistoryConversationView,SearchHistoryConversationAdapter>implements CacheCallBack<HotTopic> {
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -63,11 +63,10 @@ public class SearchHistoryConversationFragment extends BaseHttpRecyclerFragment<
     }
 
     @Override
-    public void setList(final List<SearchContent> list) {
-        final List<SearchContent> templist = new ArrayList<>();
+    public void setList(final List<HotTopic> list) {
+        final List<HotTopic> templist = new ArrayList<>();
         for(int i = 1;i < 4;i ++) {
-            SearchContent conversation = new SearchContent();
-            conversation.setId(i);
+            HotTopic conversation = new HotTopic();
             templist.add(conversation);
         }
         //list.addAll(templist);
@@ -99,12 +98,12 @@ public class SearchHistoryConversationFragment extends BaseHttpRecyclerFragment<
     }
 
     @Override
-    public List<SearchContent> parseArray(String json) {
+    public List<HotTopic> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<SearchContent> getCacheClass() {
+    public Class<HotTopic> getCacheClass() {
         return null;
     }
 
@@ -114,7 +113,7 @@ public class SearchHistoryConversationFragment extends BaseHttpRecyclerFragment<
     }
 
     @Override
-    public String getCacheId(SearchContent data) {
+    public String getCacheId(HotTopic data) {
         return null;
     }
 

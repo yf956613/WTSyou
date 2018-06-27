@@ -10,11 +10,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.model.CrowdMoneyDetailed;
-import com.qingye.wtsyou.utils.DataUtil;
 
 import java.math.BigDecimal;
 
-import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
 
 /**
@@ -34,9 +32,9 @@ public class CrowdMoneyDetailedView extends BaseView<CrowdMoneyDetailed> impleme
     @SuppressLint("InflateParams")
     @Override
     public View createView() {
-        ivImg = findViewById(R.id.iv_fans_img);
-        tvName = findViewById(R.id.tv_name);
-        tvDetailed = findViewById(R.id.tv_detailed);
+        ivImg = findView(R.id.iv_fans_img);
+        tvName = findView(R.id.tv_name);
+        tvDetailed = findView(R.id.tv_detailed);
 
         return super.createView();
     }
@@ -46,10 +44,18 @@ public class CrowdMoneyDetailedView extends BaseView<CrowdMoneyDetailed> impleme
         super.bindView(data_ != null ? data_ : new CrowdMoneyDetailed());
 
         //图片
+        //图片
         String url = data.getPhoto();
-        Glide.with(context)
-                .load(url)
-                .into(ivImg);
+        if (url != null) {
+            Glide.with(context)
+                    .load(url)
+                    .into(ivImg);
+        } else {
+            int defaultHead = R.mipmap.head;
+            Glide.with(context)
+                    .load(defaultHead)
+                    .into(ivImg);
+        }
         //名字
         tvName.setText(data.getUserName());
         //明细

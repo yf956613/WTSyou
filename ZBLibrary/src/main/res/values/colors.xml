@@ -2,8 +2,8 @@
 <resources>
 
     <color name="activity_bg">#00f7f8f8</color>
-    <color name="topbar_bg">#0033cc99</color>
-    <color name="topbar_bg_white">#ffffffff</color>
+    <color name="topbar_bg">#00ffffff</color>
+    <color name="topbar_bg_white">#00ffffff</color>
     <color name="topbar_bg_black">#272e2a</color>
     <color name="divider">#dddddd</color>
     <color name="indicator_enter">#999999</color>
@@ -19,7 +19,7 @@
     <color name="pink">#ff6666</color>
     <color name="yellow">#ffd400</color>
 
-    <color name="alpha_complete">#000</color>
+    <color name="alpha_complete">#22000000</color>
     <color name="alpha_9">#9000</color>
     <color name="alpha_6">#6000</color>
     <color name="alpha_3">#eeeeee</color>
@@ -57,8 +57,8 @@
     <color name="btn_red_normal">#ff3b3b</color>
     <color name="btn_red_pressed">#dd0000</color>
 
-    <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorPrimary">#00FFFFFF</color>
+    <color name="colorPrimaryDark">#00FFFFFF</color>
     <color name="colorAccent">#00FFFFFF</color>
 
     <color name="white">#FFFFFF</color>
@@ -73,9 +73,11 @@
     <color name="gray_background">#F5F5F5</color>
     <color name="gray_background1">#FAFAFA</color>
     <color name="gray_background2">#F0F0F0</color>
+    <color name="gray_background3">#B4B4B4</color>
     <color name="orange_background">#F9A986</color>
     <color name="blue_1">#F2FAFF</color>
     <color name="blue_line">#71C9FF</color>
+    <color name="blue_text">#4A90E2</color>
     <color name="orange_1">#FFEEEA</color>
     <color name="orange_2">#FFB447</color>
     <color name="orange_3">#FF7755</color>
@@ -99,17 +101,34 @@
     <color name="gray_text7">#B0B0B0</color>
     <color name="gray_text8">#9E9E9E</color>
     <color name="gray_text9">#B5B5B5</color>
+    <color name="gray_text10">#959595</color>
+    <color name="gray_text11">#a6a6a6</color>
     <color name="orange_text">#FFB148</color>
     <color name="orange_text1">#FF7654</color>
     <color name="orange_text2">#FE8360</color>
     <color name="orange_text3">#FB8063</color>
     <color name="pink_text">#FF728A</color>
     <color name="red_text1">#ff3737</color>
+    <color name="red_text2">#ff163c</color>
     <color name="light_gray">#33DADADA</color>
 
     <color name="background_tab_pressed">#0033B5E5</color>
     <color name="slidingtab_indicatorcolor">#85B850</color>
     <color name="cursor_color">#0fd7d0</color>
     <color name="tab_gray">#FAFAFA</color>
+
+
+    <color name="split_line">#11112233</color>
+    <color name="text1">#59B29C</color>
+    <color name="text2">#333333</color>
+
+
+
+    <color name="gray_bg">#FBFBFB</color>
+
+
+    <color name="theme_main_color">#ffffff</color>
+    <color name="theme_vice1_color">#c7ceb2</color>
+    <color name="theme_vice2_color">#FE8360</color>
 
 </resources>

@@ -2,13 +2,14 @@ package com.qingye.wtsyou.model;
 
 import com.qingye.wtsyou.basemodel.IdName;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * Created by pm89 on 2018/3/21.
  */
 
-public class CrowdMoneyDetailed {
+public class CrowdMoneyDetailed implements Serializable {
 
     private String uuid;
     private String created;

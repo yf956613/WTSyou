@@ -93,16 +93,16 @@ public class StarsMainActivity extends BaseActivity implements View.OnClickListe
     }
 
     public void initView() {
-        ivBack = findViewById(R.id.iv_left);
-        ivMore = findViewById(R.id.iv_right);
+        ivBack = findView(R.id.iv_left);
+        ivMore = findView(R.id.iv_right);
 
-        //llFans = findViewById(R.id.ll_fans);
-        //llConversation = findViewById(R.id.ll_conversation);
+        //llFans = findView(R.id.ll_fans);
+        //llConversation = findView(R.id.ll_conversation);
 
-        mTabLayout = findViewById(R.id.tab);
+        mTabLayout = findView(R.id.tab);
         mTabLayout.setBackgroundColor(Color.parseColor("#fafafa"));
         mTabLayout.setUnderlineColor(Color.parseColor("#00dddddd"));
-        mViewPager = findViewById(R.id.viewPager);
+        mViewPager = findView(R.id.viewPager);
         mViewPager.setAdapter(new SlidingPagerAdapter(getSupportFragmentManager(),mFragments,mTitles,context));
         mViewPager.setOffscreenPageLimit(4);//设置缓存界面个数
         tabLayout();
@@ -180,11 +180,6 @@ public class StarsMainActivity extends BaseActivity implements View.OnClickListe
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override

@@ -1,11 +1,12 @@
-package com.qingye.wtsyou.widget;
+package zuo.biao.library.widget;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.WindowManager;
 
-import com.qingye.wtsyou.R;
+import zuo.biao.library.R;
+
 /**
  * Created by pm89 on 2018/5/9.
  */

@@ -10,17 +10,17 @@ import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity;
 import com.qingye.wtsyou.adapter.home.StarsMainCrowdAdapter;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpPageModel;
 import com.qingye.wtsyou.model.Crowd;
-import com.qingye.wtsyou.model.EntityCrowdDetailed;
 import com.qingye.wtsyou.model.EntityPageData;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
-import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.home.StarsMainCrowdView;
-import zuo.biao.library.widget.CustomDialog;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +28,18 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
-import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.util.JSON;
-import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.interfaces.IErrorCodeTool;
+import zuo.biao.library.interfaces.OnHttpPageCallBack;
+import zuo.biao.library.widget.CustomDialog;
 
-public class MyCampaignCrowdFragment extends BaseHttpRecyclerFragment<Crowd,StarsMainCrowdView,StarsMainCrowdAdapter> implements CacheCallBack<Crowd> {
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
+
+public class MyCampaignCrowdFragment extends BaseHttpRecyclerFragment<Crowd,StarsMainCrowdView,StarsMainCrowdAdapter>
+        implements CacheCallBack<Crowd>, OnHttpPageCallBack<EntityPageData, Crowd> {
 
     private LinearLayout noMessage;
+
+    private HttpPageModel<EntityPageData, Crowd> mEntityPageDataHttpModel;
 
     private CustomDialog progressBar;
 
@@ -63,20 +68,23 @@ public class MyCampaignCrowdFragment extends BaseHttpRecyclerFragment<Crowd,Star
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
+        //众筹列表
+        mEntityPageDataHttpModel = new HttpPageModel<>(EntityPageData.class);
+        crowdQuery();
+
         initCache(this);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
-        crowdQuery();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        //srlBaseHttpRecycler.autoRefresh();
-        srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部*/
 
         return view;
     }
@@ -184,95 +192,134 @@ public class MyCampaignCrowdFragment extends BaseHttpRecyclerFragment<Crowd,Star
         super.initEvent();
     }
 
+
     public void crowdQuery() {
-        if (NetUtil.checkNetwork(getActivity())) {
-            setProgressBar();
-            progressBar.show();
+        /*setProgressBar();
+        progressBar.show();*/
 
-            HttpRequest.postMyCrowd(0, new OnHttpResponseListener() {
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.MYCROWDQUERY, this);
+    }
 
-                        @Override
-                        public void onHttpResponse(int requestCode, String resultJson, Exception e) {
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
 
-                            if(!StringUtil.isEmpty(resultJson)){
-                                EntityPageData entityPageData =  JSON.parseObject(resultJson,EntityPageData.class);
+    @Override
+    public List<Crowd> getList(EntityPageData data) {
+        return GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(data.getContent().getData())
+                ,new TypeToken<List<Crowd>>(){}.getType());
+    }
 
-                                if(entityPageData.isSuccess()){
-                                    //成功
-                                    //showShortToast(R.string.getSuccess);
-                                    crowdList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageData.getContent().getData())
-                                            ,new TypeToken<List<Crowd>>(){}.getType());
+    @Override
+    public String getRequestJsonStr(int page, int pageSize) {
 
-                                    if (crowdList.size() > 0) {
-                                        setList(crowdList);
-                                        noMessage.setVisibility(View.GONE);
-                                    } else {
-                                        noMessage.setVisibility(View.VISIBLE);
-                                    }
+        String activityProperty = "crowd";
+        String parts = null;
+        String request = HttpRequest.postMyCampaign(activityProperty, parts, page, pageSize);
+        return request;
+    }
 
-                                    progressBarDismiss();
-                                }else{//显示失败信息
-                                    if (entityPageData.getCode().equals("401")) {
-                                        showShortToast(R.string.tokenInvalid);
-                                        toActivity(MainActivity.createIntent(context));
-                                    } else {
-                                        showShortToast(entityPageData.getMessage());
-                                    }
+    @Override
+    public void emptyPagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishRefresh();
 
-                                    progressBarDismiss();
-                                }
-
-                            }else{
-                                showShortToast(R.string.noReturn);
-
-                                progressBarDismiss();
-                            }
-                        }
-                    });
+        if (crowdList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
         } else {
-            showShortToast(R.string.checkNetwork);
-
-            progressBarDismiss();
+            noMessage.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void refreshSuccessPagingList(List<Crowd> list) {
+        crowdList.clear();
+
+        crowdList.addAll(list);
+        srlBaseHttpRecycler.finishRefresh();
+        srlBaseHttpRecycler.setLoadmoreFinished(false);
+
+        setList(crowdList);
+
+        if (crowdList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void noMorePagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+
+        if (crowdList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void loadMoreSuccessPagingList(List<Crowd> list) {
+        crowdList.addAll(list);
+        srlBaseHttpRecycler.finishLoadmore();
+
+        setList(crowdList);
+
+        if (crowdList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void refreshErrorPagingList() {
+        showShortToast(R.string.noReturn);
+
+        if (crowdList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void loadMoreErrorPagingList() {
+        showShortToast(R.string.noReturn);
+
+        if (crowdList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        super.onRefresh(refreshlayout);
+        //众筹列表
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.MYCROWDQUERY, this);
+    }
+
+    @Override
+    public void onLoadmore(RefreshLayout refreshlayout) {
+        super.onLoadmore(refreshlayout);
+        //众筹列表
+        mEntityPageDataHttpModel.loadMorePost(URL_BASE + URLConstant.MYCROWDQUERY, this);
     }
 
     //点击item
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //检查网络
-        if (NetUtil.checkNetwork(context)) {
-            String uuid = crowdList.get(position).getActivityId();
 
-            setProgressBar();
-            progressBar.show();
-
-            HttpRequest.getCrowdDetailed(0, uuid, new OnHttpResponseListener() {
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                    if(!StringUtil.isEmpty(resultJson)){
-                        EntityCrowdDetailed entityCrowdDetailed =  JSON.parseObject(resultJson,EntityCrowdDetailed.class);
-                        if(entityCrowdDetailed.isSuccess()){
-                            //成功//showShortToast(R.string.getSuccess);
-                            toActivity(CrowdDetailedActivity.createIntent(context, entityCrowdDetailed));
-
-                            progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entityCrowdDetailed.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityCrowdDetailed.getMessage());
-                            }
-                        }
-                    }else{
-                        showShortToast(R.string.noReturn);
-
-                        progressBarDismiss();
-                    }
-                }
-            });
-        } else {
-            showShortToast(R.string.checkNetwork);
-        }
+        toActivity(CrowdDetailedActivity.createIntent(context, crowdList.get(position).getActivityId()));
     }
 }

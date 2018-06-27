@@ -18,12 +18,13 @@
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_widget"
         android:layout_below="@+id/ll_head"
+        android:id="@+id/swipe_refresh_widget"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <RelativeLayout
+            android:layout_below="@+id/ll_head"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -135,7 +136,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="@dimen/margin_15"
                         android:layout_marginTop="@dimen/margin_10">
 

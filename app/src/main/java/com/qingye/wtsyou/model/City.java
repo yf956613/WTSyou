@@ -8,7 +8,7 @@ import zuo.biao.library.base.BaseModel;
  * Created by pm89 on 2018/3/21.
  */
 
-public class City extends BaseModel implements Comparable<City>{
+public class City implements Comparable<City>{
     public String name;
     public String pinYin;
     public int isFirst;
@@ -17,7 +17,7 @@ public class City extends BaseModel implements Comparable<City>{
 
     }
 
-    public City(String name,int i,int isFirst) {
+    public City(String name, int isFirst) {
         this.name = name;
         this.isFirst = isFirst;
         //一开始就转化好拼音
@@ -37,8 +37,4 @@ public class City extends BaseModel implements Comparable<City>{
         this.isFirst = isFirst;
     }
 
-    @Override
-    protected boolean isCorrect() {
-        return true;
-    }
 }

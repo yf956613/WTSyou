@@ -30,6 +30,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="@dimen/margin_4"
+                android:paddingBottom="@dimen/margin_4"
                 android:layout_marginLeft="@dimen/margin_18"
                 android:layout_marginRight="@dimen/margin_18">
 
@@ -56,11 +58,11 @@
                         android:textSize="@dimen/text_size_13"/>
 
                     <TextView
-                        android:id="@+id/tv_number"
+                        android:id="@+id/tv_detailed_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_5"
-                        android:text="1"
+                        android:text=""
                         android:textColor="@color/black_text2"
                         android:textSize="@dimen/text_size_13"/>
 
@@ -81,25 +83,27 @@
                         android:textSize="@dimen/text_size_13"/>
 
                     <TextView
-                        android:id="@+id/tv_price"
+                        android:id="@+id/tv_detailed_price"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="@dimen/margin_1"
-                        android:text="1280"
+                        android:text=""
                         android:textColor="@color/black_text2"
-                        android:textSize="@dimen/text_size_13"/>
+                        android:textSize="@dimen/text_size_13" />
 
                 </LinearLayout>
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/ll_crowd"
+                android:id="@+id/rlCardDiscount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_8"
+                android:paddingTop="@dimen/margin_4"
+                android:paddingBottom="@dimen/margin_4"
                 android:layout_marginLeft="@dimen/margin_18"
-                android:layout_marginRight="@dimen/margin_18">
+                android:layout_marginRight="@dimen/margin_18"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -122,11 +126,11 @@
                         android:textColor="@color/black_text2"
                         android:textSize="@dimen/text_size_13"/>
                     <TextView
-                        android:id="@+id/tv_card_price"
+                        android:id="@+id/tv_detailed_card_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_1"
-                        android:text="280"
+                        android:text=""
                         android:textColor="@color/black_text2"
                         android:textSize="@dimen/text_size_13"/>
 
@@ -134,10 +138,12 @@
 
             </RelativeLayout>
 
+<!--
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_8"
+                android:paddingTop="@dimen/margin_4"
+                android:paddingBottom="@dimen/margin_4"
                 android:layout_marginLeft="@dimen/margin_18"
                 android:layout_marginRight="@dimen/margin_18">
 
@@ -162,22 +168,24 @@
                         android:textColor="@color/black_text2"
                         android:textSize="@dimen/text_size_13"/>
                     <TextView
-                        android:id="@+id/tv_delivery_price"
+                        android:id="@+id/tv_detailed_fare"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_1"
-                        android:text="12"
+                        android:text=""
                         android:textColor="@color/black_text2"
                         android:textSize="@dimen/text_size_13"/>
 
                 </LinearLayout>
 
             </RelativeLayout>
+-->
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_8"
+                android:paddingTop="@dimen/margin_4"
+                android:paddingBottom="@dimen/margin_4"
                 android:layout_marginLeft="@dimen/margin_18"
                 android:layout_marginRight="@dimen/margin_18">
 
@@ -202,11 +210,11 @@
                         android:textColor="@color/red_text1"
                         android:textSize="@dimen/text_size_11"/>
                     <TextView
-                        android:id="@+id/tv_total_price"
+                        android:id="@+id/tv_detailed_total"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_1"
-                        android:text="1012"
+                        android:text=""
                         android:textColor="@color/red_text1"
                         android:textSize="@dimen/text_size_15"/>
 

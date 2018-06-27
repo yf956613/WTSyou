@@ -41,16 +41,16 @@ public class CardView extends BaseView<Card> implements View.OnClickListener {
     @SuppressLint("InflateParams")
     @Override
     public View createView() {
-        tvName = findViewById(R.id.tv_name);
-        tvTime = findViewById(R.id.tv_time);
-        tvDiscount = findViewById(R.id.tv_discount);
-        tvMinAmount = findViewById(R.id.tv_minAmount);
-        ivMore = findViewById(R.id.iv_more,this);
-        ivLess = findViewById(R.id.iv_less,this);
-        llDetailed = findViewById(R.id.ll_detailed);
-        ivUsedImg = findViewById(R.id.iv_used_img);
-        ivUsed = findViewById(R.id.iv_used);
-        tvDetailed = findViewById(R.id.tv_detailed);
+        tvName = findView(R.id.tv_name);
+        tvTime = findView(R.id.tv_time);
+        tvDiscount = findView(R.id.tv_discount);
+        tvMinAmount = findView(R.id.tv_minAmount);
+        ivMore = findView(R.id.iv_more,this);
+        ivLess = findView(R.id.iv_less,this);
+        llDetailed = findView(R.id.ll_detailed);
+        ivUsedImg = findView(R.id.iv_used_img);
+        ivUsed = findView(R.id.iv_used);
+        tvDetailed = findView(R.id.tv_detailed);
 
         return super.createView();
     }

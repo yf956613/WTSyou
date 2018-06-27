@@ -74,7 +74,7 @@
                             android:layout_height="wrap_content"
                             android:maxLines="2"
                             android:ellipsize="end"
-                            android:text="薛之谦[我好像在哪里见过你]全国巡回演唱会"
+                            android:text=""
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_size_14"/>
 
@@ -101,7 +101,7 @@
                                     android:id="@+id/tv_campaign_value"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="7000"
+                                    android:text=""
                                     android:textSize="@dimen/text_size_16"
                                     android:textColor="@color/pink_text"/>
 
@@ -116,7 +116,7 @@
                                     android:id="@+id/tv_campaign_all_value"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="8000"
+                                    android:text=""
                                     android:textSize="@dimen/text_size_16"
                                     android:textColor="@color/white"/>
 
@@ -190,7 +190,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/margin_10"
                                 android:layout_gravity="center"
-                                android:text="福建厦门"
+                                android:text=""
                                 android:textSize="@dimen/text_size_12"
                                 android:textColor="@color/black_text"/>
                         </LinearLayout>
@@ -212,7 +212,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/margin_10"
                                 android:layout_gravity="center"
-                                android:text="2018-4-28 20：00"
+                                android:text=""
                                 android:textSize="@dimen/text_size_12"
                                 android:textColor="@color/black_text1"/>
 
@@ -227,7 +227,7 @@
                                 android:id="@+id/tv_campaign_end_time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="4月23日 23:59"
+                                android:text=""
                                 android:textSize="@dimen/text_size_10"
                                 android:textColor="@color/gray_text6"/>
 
@@ -400,9 +400,8 @@
                     android:layout_marginRight="@dimen/margin_6"
                     android:maxLines="8"
                     android:ellipsize="end"
-                    android:text="众筹须知
-            付款成功后即可成功参与投票。"
-                    android:textSize="@dimen/text_size_11"
+                    android:text=""
+                    android:textSize="@dimen/text_size_13"
                     android:textColor="@color/black_text2"/>
 
             </LinearLayout>
@@ -414,6 +413,7 @@
                 android:background="@color/white">
 
                 <RelativeLayout
+                    android:id="@+id/rlCreator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_10"
@@ -432,8 +432,7 @@
                             android:id="@+id/iv_creator"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:layout_gravity="center"
-                            android:src="@mipmap/head_d"/>
+                            android:layout_gravity="center"/>
 
                     </LinearLayout>
 
@@ -488,7 +487,7 @@
                             android:layout_height="wrap_content"
                             android:maxLines="1"
                             android:ellipsize="end"
-                            android:text="我们都爱讲冷笑话"
+                            android:text=""
                             android:textColor="@color/black_text1"
                             android:textSize="@dimen/text_size_12"/>
 
@@ -515,7 +514,7 @@
                                     android:layout_height="wrap_content"
                                     android:maxLines="1"
                                     android:ellipsize="end"
-                                    android:text="345"
+                                    android:text=""
                                     android:textColor="@color/gray_text1"
                                     android:textSize="@dimen/text_size_11"/>
 
@@ -540,7 +539,7 @@
                                     android:layout_height="wrap_content"
                                     android:maxLines="1"
                                     android:ellipsize="end"
-                                    android:text="74783"
+                                    android:text=""
                                     android:textColor="@color/gray_text1"
                                     android:textSize="@dimen/text_size_11"/>
 
@@ -558,9 +557,10 @@
                         android:layout_centerVertical="true">
 
                         <TextView
-                            android:id="@+id/tv_operate"
+                            android:id="@+id/tv_focus"
                             android:layout_width="48dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/margin_10"
                             android:gravity="center_horizontal"
                             android:paddingTop="@dimen/margin_4"
                             android:paddingBottom="@dimen/margin_4"
@@ -568,6 +568,21 @@
                             android:textSize="@dimen/text_size_11"
                             android:textColor="@color/orange_line"
                             android:background="@drawable/corners_orange_1"/>
+
+                        <TextView
+                            android:id="@+id/tv_cancel_focus"
+                            android:layout_width="48dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/margin_10"
+                            android:gravity="center_horizontal"
+                            android:paddingTop="@dimen/margin_4"
+                            android:paddingBottom="@dimen/margin_4"
+                            android:text="已关注"
+                            android:textSize="@dimen/text_size_11"
+                            android:textColor="@color/gray_text1"
+                            android:background="@drawable/corners_gray"
+                            android:visibility="gone"/>
+
                     </LinearLayout>
 
                 </RelativeLayout>

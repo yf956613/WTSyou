@@ -43,10 +43,10 @@ public class SelectAddressView extends BaseView<DeliveryAddress> implements View
     @Override
     public View createView() {
 
-        tvContactName = findViewById(R.id.tv_contact_name);
-        tvContactPhone = findViewById(R.id.tv_contact_phone);
-        tvAddress = findViewById(R.id.tv_delivery_address);
-        isDefault = findViewById(R.id.cbtn_select_address, this);
+        tvContactName = findView(R.id.tv_contact_name);
+        tvContactPhone = findView(R.id.tv_contact_phone);
+        tvAddress = findView(R.id.tv_delivery_address);
+        isDefault = findView(R.id.cbtn_select_address, this);
 
         return super.createView();
     }

@@ -1,6 +1,7 @@
 package com.qingye.wtsyou.fragment.conversation;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,10 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.conversation.ConversationTopAdapter;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
 import com.qingye.wtsyou.fragment.campaign.ActivityHotShowFragment;
-import com.qingye.wtsyou.model.Conversation;
+import com.qingye.wtsyou.manager.HttpModel;
+import com.qingye.wtsyou.model.ChatingRoom;
+import com.qingye.wtsyou.model.EntityPageData;
+import com.qingye.wtsyou.utils.GsonUtil;
+import com.qingye.wtsyou.utils.HttpRequest;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.conversation.ConversationTopView;
 
 import java.util.ArrayList;
@@ -20,11 +28,35 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
+import zuo.biao.library.interfaces.IErrorCodeTool;
+import zuo.biao.library.model.EntityBase;
+import zuo.biao.library.widget.CustomDialog;
+
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ConversationTopFragment extends BaseHttpRecyclerFragment<Conversation,ConversationTopView,ConversationTopAdapter> implements CacheCallBack<Conversation> {
+public class ConversationTopFragment extends BaseHttpRecyclerFragment<ChatingRoom,ConversationTopView,ConversationTopAdapter> implements CacheCallBack<ChatingRoom> {
+
+    private HttpModel<EntityPageData> mEntityPageDataHttpModel;
+
+    private  List<ChatingRoom> chatingRoomList =  new ArrayList<>();
+
+    private CustomDialog progressBar;
+
+    String name = null;
+    String ownerId = null;
+    String adminUserId = null;
+    String personId = null;
+    String status = null;
+    String topRecommend = "true";
+    String hotRecommend = null;
+    String desc = "false";
+    String excludeMyself = null;
+    String sortKey = null;
+
+    int size = 0;
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -47,7 +79,17 @@ public class ConversationTopFragment extends BaseHttpRecyclerFragment<Conversati
         setContentView(R.layout.fragment_converesation_top);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+
+        //聊天室列表
+        mEntityPageDataHttpModel = new HttpModel<>(EntityPageData.class);
+        conversationQuery();
+
         initCache(this);
+
+        //获取传来的数据
+        /*Bundle bundle = getArguments();
+        chatingRoomList = (List<ChatingRoom>) bundle.getSerializable(Constant.TOPRECOMMEND);*/
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
@@ -65,6 +107,8 @@ public class ConversationTopFragment extends BaseHttpRecyclerFragment<Conversati
         rvBaseRecycler.setLayoutManager(layoutManager);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
+        setList(chatingRoomList);
+
         return view;
     }
 
@@ -74,14 +118,34 @@ public class ConversationTopFragment extends BaseHttpRecyclerFragment<Conversati
     }
 
     @Override
-    public void setList(final List<Conversation> list) {
-        final List<Conversation> templist = new ArrayList<>();
-        for(int i = 1;i < 6;i ++) {
-            Conversation conversation = new Conversation();
-            conversation.setId(i);
-            templist.add(conversation);
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
         }
-        //list.addAll(templist);
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
+    }
+
+    @Override
+    public void setList(final List<ChatingRoom> list) {
         setList(new AdapterCallBack<ConversationTopAdapter>() {
 
             @Override
@@ -91,7 +155,7 @@ public class ConversationTopFragment extends BaseHttpRecyclerFragment<Conversati
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -110,12 +174,12 @@ public class ConversationTopFragment extends BaseHttpRecyclerFragment<Conversati
     }
 
     @Override
-    public List<Conversation> parseArray(String json) {
+    public List<ChatingRoom> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Conversation> getCacheClass() {
+    public Class<ChatingRoom> getCacheClass() {
         return null;
     }
 
@@ -125,7 +189,7 @@ public class ConversationTopFragment extends BaseHttpRecyclerFragment<Conversati
     }
 
     @Override
-    public String getCacheId(Conversation data) {
+    public String getCacheId(ChatingRoom data) {
         return null;
     }
 
@@ -143,4 +207,63 @@ public class ConversationTopFragment extends BaseHttpRecyclerFragment<Conversati
         super.initEvent();
 
     }
+
+    public void conversationQuery() {
+        setProgressBar();
+        progressBar.show();
+
+        //聊天室列表
+        String request = HttpRequest.postConversationQueryList(name, null, ownerId, adminUserId, personId, status,
+                topRecommend,hotRecommend, desc, excludeMyself, sortKey);
+        mEntityPageDataHttpModel.post(request, URL_BASE + URLConstant.CONVERSATIONQUERY,1,this);
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                EntityPageData.Content entityPageDatafirst = mEntityPageDataHttpModel.getData().getContent();
+                chatingRoomList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageDatafirst.getData())
+                        ,new TypeToken<List<ChatingRoom>>(){}.getType());
+                /*if (chatingRoomList.size() < 6) {
+                    size = 6 - chatingRoomList.size();
+
+                    sortKey = "userCount";
+                    //聊天室列表
+                    String request = HttpRequest.postConversationQueryList(name, null, ownerId, adminUserId, personId, status,
+                            topRecommend,hotRecommend, desc, excludeMyself, sortKey);
+                    mEntityPageDataHttpModel.post(request, URL_BASE + URLConstant.CONVERSATIONQUERY,2,this);
+                } else {*/
+                    setList(chatingRoomList);
+                //}
+                break;
+            /*case 2:
+                hotRecommend = "false";
+                EntityPageData.Content entityPageDataSecond = mEntityPageDataHttpModel.getData().getContent();
+                List<ChatingRoom> chatingRooms = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageDataSecond.getData())
+                        ,new TypeToken<List<ChatingRoom>>(){}.getType());
+                if (chatingRooms.size() < size) {
+                    chatingRoomList.addAll(chatingRooms);
+                } else {
+                    for (int i = 0; i < size; i ++) {
+                        chatingRoomList.add(chatingRooms.get(i));
+                    }
+                }
+                setList(chatingRoomList);
+
+                break;*/
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
+    }
+
 }

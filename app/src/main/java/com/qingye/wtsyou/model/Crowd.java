@@ -2,6 +2,7 @@ package com.qingye.wtsyou.model;
 
 import com.qingye.wtsyou.basemodel.POI;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * Created by pm89 on 2018/3/6.
  */
 
-public class Crowd {
+public class Crowd implements Serializable {
 
     private String uuid;
     private String created;

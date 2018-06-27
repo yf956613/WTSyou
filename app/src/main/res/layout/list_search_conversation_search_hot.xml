@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/item"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="40dp"
+    android:layout_marginLeft="@dimen/margin_10"
+    android:layout_marginRight="@dimen/margin_10"
     android:orientation="vertical">
 
     <LinearLayout
@@ -24,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_10"
-            android:text="#大吉大利 今晚吃鸡#"
+            android:text=""
             android:textSize="@dimen/text_size_14"
             android:textColor="@color/black_text2"/>
 
@@ -32,6 +35,7 @@
 
     <View
         android:layout_alignParentBottom="true"
-        style="@style/divider_horizontal_1px"/>
+        style="@style/divider_horizontal_1px"
+        android:background="@color/gray_background2"/>
 
 </RelativeLayout>

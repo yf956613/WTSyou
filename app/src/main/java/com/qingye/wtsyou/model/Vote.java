@@ -2,6 +2,7 @@ package com.qingye.wtsyou.model;
 
 import com.qingye.wtsyou.basemodel.POI;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -9,7 +10,7 @@ import java.util.Date;
  * Created by pm89 on 2018/3/6.
  */
 
-public class Vote {
+public class Vote implements Serializable {
 
     private String uuid;
     private String created;
@@ -167,7 +168,7 @@ public class Vote {
     }
 
     public void setActivityStateName(String activityStateName) {
-        activityStateName = activityStateName;
+        this.activityStateName = activityStateName;
     }
 
     public String getCreateUserId() {

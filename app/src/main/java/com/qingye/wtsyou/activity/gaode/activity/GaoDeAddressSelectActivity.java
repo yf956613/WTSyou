@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,6 +20,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
@@ -42,6 +47,7 @@ import com.amap.api.services.geocoder.RegeocodeResult;
 import com.amap.api.services.help.Inputtips;
 import com.amap.api.services.help.InputtipsQuery;
 import com.amap.api.services.help.Tip;
+import com.qingye.wtsyou.activity.campaign.ShowAllActivity;
 import com.qingye.wtsyou.activity.gaode.adapter.GaodeEnableCityAdapter;
 import com.qingye.wtsyou.activity.gaode.adapter.GaodeTipAddressAdapter;
 import com.qingye.wtsyou.basemodel.LngLat;
@@ -49,20 +55,27 @@ import com.qingye.wtsyou.basemodel.PCDT;
 import com.qingye.wtsyou.basemodel.POI;
 
 import com.qingye.wtsyou.R;
+import com.qingye.wtsyou.citypicker.bean.BaseCity;
+import com.qingye.wtsyou.citypicker.bin.CityPicker;
+import com.qingye.wtsyou.citypicker.ui.CityPickerActivity;
 import com.qingye.wtsyou.utils.Constant;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import zuo.biao.library.base.BaseActivity;
+import zuo.biao.library.interfaces.OnBottomDragListener;
 
 /**
  * AMapV2地图中简单介绍一些Marker的用法.
  * Marker动画功能介绍
  */
-public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtips.InputtipsListener, View.OnClickListener {
+public class GaoDeAddressSelectActivity extends BaseActivity
+        implements Inputtips.InputtipsListener, View.OnClickListener, OnBottomDragListener, AMapLocationListener {
     private TextView mTv_btnSure;
     private View mView_btnBack;
     private TextView mTv_citySel;
@@ -73,20 +86,25 @@ public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtip
     private String mSelectCity = "";
     private AutoCompleteTextView mKeywordText;
     private ListView mListView_tip;
-    private ListView mListView_city;
+    //private ListView mListView_city;
 
     private RelativeLayout cityView;
     private GaodeTipAddressAdapter mAdapter;
-    private GaodeEnableCityAdapter mAdapter_enableCtiy;
+    //private GaodeEnableCityAdapter mAdapter_enableCtiy;
     private List<HashMap<String, String>> mList_tip = new ArrayList<HashMap<String, String>>();
     private List<Tip> mTipList = new ArrayList<>();
-    private List<String> mCityList = new ArrayList<>();
+    //private List<String> mCityList = new ArrayList<>();
     //
     private MyLocationStyle myLocationStyle;
     private boolean mIsChangeCity = false;
 
-    private TextView tvCloseCity;
+    //private TextView tvCloseCity;
     private ImageView ivCloseSearch;
+
+    //声明mlocationClient对象
+    public AMapLocationClient mlocationClient;
+    //声明mLocationOption对象
+    public AMapLocationClientOption mLocationOption = null;
 
     //启动方法<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -110,7 +128,7 @@ public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtip
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gaode_address_select_activity);
-        mMapView = findViewById(R.id.map);
+        mMapView = findView(R.id.map);
         mMapView.onCreate(savedInstanceState); // 此方法必须重写
         init();
         initData();
@@ -125,7 +143,7 @@ public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtip
      * 获取可选城市
      */
     public void initData() {
-        mCityList.add("厦门");
+        /*mCityList.add("厦门");
         mCityList.add("北京");
         mCityList.add("成都");
         mCityList.add("上海");
@@ -134,11 +152,11 @@ public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtip
         mCityList.add("大连");
         mCityList.add("长沙");
         mCityList.add("郑州");
-        mCityList.add("武汉");
+        mCityList.add("武汉");*/
 
-        mAdapter_enableCtiy.notifyDataSetChanged();
+        //mAdapter_enableCtiy.notifyDataSetChanged();
 
-        mSelectCity = mCityList.get(0);
+        //mSelectCity = mCityList.get(0);
     }
 
     @Override
@@ -146,15 +164,41 @@ public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtip
 
     }
 
+    @Override
+    public void onLocationChanged(AMapLocation amapLocation) {
+        if (amapLocation != null) {
+            if (amapLocation.getErrorCode() == 0) {
+                //定位成功回调信息，设置相关消息
+                amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+                amapLocation.getLatitude();//获取纬度
+                amapLocation.getLongitude();//获取经度
+                amapLocation.getAccuracy();//获取精度信息
+
+                //高德定位
+                mTv_citySel.setText(amapLocation.getCity());
+                mSelectCity = amapLocation.getCity();
+
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date(amapLocation.getTime());
+                df.format(date);//定位时间
+            } else {
+                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                zuo.biao.library.util.Log.e("AmapError", "location Error, ErrCode:"
+                        + amapLocation.getErrorCode() + ", errInfo:"
+                        + amapLocation.getErrorInfo());
+            }
+        }
+    }
+
     /**
      * 初始化AMap对象
      */
     private void init() {
-        mTv_btnSure = findViewById(R.id.tv_btnSure);
+        mTv_btnSure = findView(R.id.tv_btnSure);
         mTv_btnSure.setOnClickListener(this);
-        mView_btnBack = findViewById(R.id.view_btnBack);
+        mView_btnBack = findView(R.id.view_btnBack);
         mView_btnBack.setOnClickListener(this);
-        mTv_citySel = findViewById(R.id.tv_citySel);
+        mTv_citySel = findView(R.id.tv_citySel);
         mTv_citySel.setOnClickListener(this);
         //
         if (mAMap == null) {
@@ -185,8 +229,28 @@ public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtip
         myLocationStyle = new MyLocationStyle();
         mAMap.setMyLocationStyle(myLocationStyle);
         mAMap.setMyLocationStyle(myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE));
+
+        //文字定位
+        mlocationClient = new AMapLocationClient(this);
+        //初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+        //设置定位监听
+        mlocationClient.setLocationListener(this);
+        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(2000);
+        //设置定位参数
+        mlocationClient.setLocationOption(mLocationOption);
+        // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+        // 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+        // 在定位结束后，在合适的生命周期调用onDestroy()方法
+        // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
+        //启动定位
+        mlocationClient.startLocation();
+
         //
-        mListView_tip = findViewById(R.id.listView_tip);
+        mListView_tip = findView(R.id.listView_tip);
         mListView_tip.setDividerHeight(0);
         mAdapter = new GaodeTipAddressAdapter(GaoDeAddressSelectActivity.this, mTipList);
         mListView_tip.setAdapter(mAdapter);
@@ -203,14 +267,14 @@ public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtip
             }
         });
 
-        cityView = findViewById(R.id.city_view);
+        cityView = findView(R.id.city_view);
         //
-        mListView_city = findViewById(R.id.listView_city);
-        mListView_city.setDividerHeight(0);
-        mAdapter_enableCtiy = new GaodeEnableCityAdapter(GaoDeAddressSelectActivity.this, mCityList);
-        mListView_city.setAdapter(mAdapter_enableCtiy);
-        mListView_city.setVisibility(View.GONE);
-        mListView_city.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //mListView_city = findView(R.id.listView_city);
+        //mListView_city.setDividerHeight(0);
+        //mAdapter_enableCtiy = new GaodeEnableCityAdapter(GaoDeAddressSelectActivity.this, mCityList);
+        //mListView_city.setAdapter(mAdapter_enableCtiy);
+        //mListView_city.setVisibility(View.GONE);
+        /*mListView_city.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 showMap();
@@ -221,9 +285,9 @@ public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtip
                 mIsChangeCity = true;
                 searchTipByKeyWords(mKeywordText.getText().toString().trim());
             }
-        });
+        });*/
         //
-        mKeywordText = findViewById(R.id.input_edittext);
+        mKeywordText = findView(R.id.input_edittext);
         mKeywordText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -256,9 +320,9 @@ public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtip
         showMap();
 
         //关闭操作
-        tvCloseCity = findViewById(R.id.close_city);
-        ivCloseSearch = findViewById(R.id.close_search);
-        tvCloseCity.setOnClickListener(this);
+        //tvCloseCity = findView(R.id.close_city);
+        ivCloseSearch = findView(R.id.close_search);
+        //tvCloseCity.setOnClickListener(this);
         ivCloseSearch.setOnClickListener(this);
     }
 
@@ -448,7 +512,9 @@ public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtip
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_citySel:
-                showEnableCity();
+                //showEnableCity();
+                Intent intent = new Intent(GaoDeAddressSelectActivity.this, CityPickerActivity.class);
+                startActivityForResult(intent,REQUEST_TO_SELECT_AREA);
                 break;
             case R.id.view_btnBack:
                 /*if (mListView_tip.getVisibility() == View.VISIBLE || mListView_city.getVisibility() == View.VISIBLE) {
@@ -511,9 +577,9 @@ public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtip
                     }
                 });
                 break;
-            case R.id.close_city:
+            /*case R.id.close_city:
                 cityView.setVisibility(View.GONE);
-                break;
+                break;*/
             case R.id.close_search:
                 mKeywordText.setText("");
                 showMap();
@@ -521,9 +587,36 @@ public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtip
         }
     }
 
+    private static final int REQUEST_TO_SELECT_AREA = 1;
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case REQUEST_TO_SELECT_AREA:
+                if (data != null) {
+                    BaseCity selectedCity = (BaseCity) data.getExtras().getSerializable(Constant.SELECTED_ADDRESS);
+
+                    showMap();
+                    //
+                    mTv_citySel.setText(selectedCity.getCityName());
+                    mSelectCity = selectedCity.getCityName();
+                    //
+                    mIsChangeCity = true;
+                    searchTipByKeyWords(mKeywordText.getText().toString().trim());
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+
     private void showEnableCity() {
         cityView.setVisibility(View.VISIBLE);
-        mListView_city.setVisibility(View.VISIBLE);
+        //mListView_city.setVisibility(View.VISIBLE);
         mListView_tip.setVisibility(View.GONE);//隐藏提示
         hideSoftInput();//隐藏软键盘
         mTv_btnSure.setVisibility(View.VISIBLE);
@@ -532,7 +625,7 @@ public class GaoDeAddressSelectActivity extends BaseActivity implements Inputtip
     }
 
     private void showTip() {
-        mListView_city.setVisibility(View.VISIBLE);
+        //mListView_city.setVisibility(View.VISIBLE);
         mListView_tip.setVisibility(View.VISIBLE);//隐藏提示
         mTv_btnSure.setVisibility(View.GONE);
         mTv_citySel.setVisibility(View.GONE);

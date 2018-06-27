@@ -28,7 +28,7 @@ public class SelectedStarsView extends BaseView<EntityStars> implements View.OnC
     @SuppressLint("InflateParams")
     @Override
     public View createView() {
-        head = findViewById(R.id.iv_stars_head);
+        head = findView(R.id.iv_stars_head);
 
         return super.createView();
     }
@@ -43,8 +43,6 @@ public class SelectedStarsView extends BaseView<EntityStars> implements View.OnC
 
     @Override
     public void onClick(View v) {
-        if (BaseModel.isCorrect(data) == false) {
-            return;
-        }
+
     }
 }

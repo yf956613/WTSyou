@@ -6,6 +6,7 @@ import com.qingye.wtsyou.basemodel.POI;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by pm89 on 2018/3/6.
@@ -16,13 +17,14 @@ public class EntityVoteDetailed extends EntityBase {
     private Content content;
 
     public class Content implements Serializable {
+
         private String uuid;
         private String created;
         private String modified;
         private String creator;
         private String modifier;
-        private String relevanceStar;
         private String relevanceStarName;
+        private String relevanceStar;
         private String activityName;
         private String activityPic;
         private String activityIcon;
@@ -32,14 +34,12 @@ public class EntityVoteDetailed extends EntityBase {
         private Date endTime;
         private String state;
         private String ActivityStateName;
-        private String createUserId;
         private String activityType;
         private String activityProperty;
         private String activityId;
         private POI address;
         private String activityTypeName;
         private String activityStateName;
-        private String createUserName;
         private String startTimeStr;
         private String endTimeStr;
         private int chatroomNumber;
@@ -47,6 +47,14 @@ public class EntityVoteDetailed extends EntityBase {
         private BigDecimal settingGoals;
         private Date deadline;
         private String deadlineStr;
+        private String createUserId;
+        private String createUserName;
+        private Boolean isFollowCreatetUser;
+        private String createUserPic;
+        private Integer funsNumber;
+        private Integer followNumber;
+        private List<ChatingRoom> chartRoomList;
+        private List<EntityStars> relevanceStars;
 
         public String getUuid() {
             return uuid;
@@ -88,20 +96,20 @@ public class EntityVoteDetailed extends EntityBase {
             this.modifier = modifier;
         }
 
-        public String getRelevanceStar() {
-            return relevanceStar;
-        }
-
-        public void setRelevanceStar(String relevanceStar) {
-            this.relevanceStar = relevanceStar;
-        }
-
         public String getRelevanceStarName() {
             return relevanceStarName;
         }
 
         public void setRelevanceStarName(String relevanceStarName) {
             this.relevanceStarName = relevanceStarName;
+        }
+
+        public String getRelevanceStar() {
+            return relevanceStar;
+        }
+
+        public void setRelevanceStar(String relevanceStar) {
+            this.relevanceStar = relevanceStar;
         }
 
         public String getActivityName() {
@@ -168,14 +176,6 @@ public class EntityVoteDetailed extends EntityBase {
             this.state = state;
         }
 
-        public String getCreateUserId() {
-            return createUserId;
-        }
-
-        public void setCreateUserId(String createUserId) {
-            this.createUserId = createUserId;
-        }
-
         public String getActivityType() {
             return activityType;
         }
@@ -222,14 +222,6 @@ public class EntityVoteDetailed extends EntityBase {
 
         public void setActivityStateName(String activityStateName) {
             this.activityStateName = activityStateName;
-        }
-
-        public String getCreateUserName() {
-            return createUserName;
-        }
-
-        public void setCreateUserName(String createUserName) {
-            this.createUserName = createUserName;
         }
 
         public String getStartTimeStr() {
@@ -286,6 +278,70 @@ public class EntityVoteDetailed extends EntityBase {
 
         public void setDeadlineStr(String deadlineStr) {
             this.deadlineStr = deadlineStr;
+        }
+
+        public String getCreateUserId() {
+            return createUserId;
+        }
+
+        public void setCreateUserId(String createUserId) {
+            this.createUserId = createUserId;
+        }
+
+        public String getCreateUserName() {
+            return createUserName;
+        }
+
+        public void setCreateUserName(String createUserName) {
+            this.createUserName = createUserName;
+        }
+
+        public Boolean getFollowCreatetUser() {
+            return isFollowCreatetUser;
+        }
+
+        public void setFollowCreatetUser(Boolean followCreatetUser) {
+            isFollowCreatetUser = followCreatetUser;
+        }
+
+        public String getCreateUserPic() {
+            return createUserPic;
+        }
+
+        public void setCreateUserPic(String createUserPic) {
+            this.createUserPic = createUserPic;
+        }
+
+        public Integer getFunsNumber() {
+            return funsNumber;
+        }
+
+        public void setFunsNumber(Integer funsNumber) {
+            this.funsNumber = funsNumber;
+        }
+
+        public Integer getFollowNumber() {
+            return followNumber;
+        }
+
+        public void setFollowNumber(Integer followNumber) {
+            this.followNumber = followNumber;
+        }
+
+        public List<ChatingRoom> getChartRoomList() {
+            return chartRoomList;
+        }
+
+        public void setChartRoomList(List<ChatingRoom> chartRoomList) {
+            this.chartRoomList = chartRoomList;
+        }
+
+        public List<EntityStars> getRelevanceStars() {
+            return relevanceStars;
+        }
+
+        public void setRelevanceStars(List<EntityStars> relevanceStars) {
+            this.relevanceStars = relevanceStars;
         }
     }
 

@@ -2,8 +2,6 @@ package com.qingye.wtsyou.widget;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -11,8 +9,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import android.widget.Button;
-
-import com.qingye.wtsyou.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,7 +24,7 @@ public class CountButton extends Button implements View.OnClickListener {
     /*
      倒计时时长,默认计时时间
      */
-    private long defaultTime = 6 * 1000;
+    private long defaultTime = 60 * 1000;
     private long time = defaultTime;
 
     /*

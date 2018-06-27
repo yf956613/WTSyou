@@ -67,7 +67,6 @@ public class MessageTalkFragment extends BaseHttpRecyclerFragment<Message,TalkMe
         final List<Message> templist = new ArrayList<>();
         for(int i = 1;i < 3;i ++) {
             Message message = new Message();
-            message.setId(i);
             templist.add(message);
         }
         //list.addAll(templist);

@@ -12,7 +12,6 @@ import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.model.Officials;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import zuo.biao.library.base.BaseModel;
 import zuo.biao.library.base.BaseView;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
@@ -36,8 +35,8 @@ public class ActivityOfficialView extends BaseView<Officials> implements View.On
     public View createView() {
         //rlTag1 = findView(R.id.rl_tag1);
         //rlTag2 = findView(R.id.rl_tag2);
-        tvName = findViewById(R.id.tv_activity_official_name);
-        ivImg = findViewById(R.id.iv_activity_official_img);
+        tvName = findView(R.id.tv_activity_official_name);
+        ivImg = findView(R.id.iv_activity_official_img);
 
         return super.createView();
     }

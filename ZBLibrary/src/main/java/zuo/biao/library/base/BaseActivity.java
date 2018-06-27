@@ -14,19 +14,9 @@ limitations under the License.*/
 
 package zuo.biao.library.base;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import zuo.biao.library.R;
-import zuo.biao.library.interfaces.ActivityPresenter;
-import zuo.biao.library.interfaces.OnBottomDragListener;
-import zuo.biao.library.manager.SystemBarTintManager;
-import zuo.biao.library.manager.ThreadManager;
-import zuo.biao.library.util.Log;
-import zuo.biao.library.util.ScreenUtil;
-import zuo.biao.library.util.StringUtil;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -50,6 +40,24 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jaeger.library.StatusBarUtil;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import zuo.biao.library.R;
+import zuo.biao.library.interfaces.ActivityPresenter;
+import zuo.biao.library.interfaces.IErrorCodeTool;
+import zuo.biao.library.interfaces.OnBottomDragListener;
+import zuo.biao.library.interfaces.OnHttpCallBack;
+import zuo.biao.library.manager.ThreadManager;
+import zuo.biao.library.model.EntityBase;
+import zuo.biao.library.util.Log;
+import zuo.biao.library.util.ScreenUtil;
+import zuo.biao.library.util.StringUtil;
+
 /**基础android.support.v4.app.FragmentActivity，通过继承可获取或使用 里面创建的 组件 和 方法
  * *onFling内控制左右滑动手势操作范围，可自定义
  * @author Lemon
@@ -63,7 +71,9 @@ import android.widget.Toast;
  * @see #onDestroy
  * @use extends BaseActivity, 具体参考 .DemoActivity 和 .DemoFragmentActivity
  */
-public abstract class BaseActivity extends FragmentActivity implements ActivityPresenter, OnGestureListener {
+public abstract class BaseActivity extends FragmentActivity implements ActivityPresenter, OnGestureListener, OnHttpCallBack,
+		OnBottomDragListener {
+
 	private static final String TAG = "BaseActivity";
 
 	/**
@@ -89,10 +99,14 @@ public abstract class BaseActivity extends FragmentActivity implements ActivityP
 
 	private boolean isAlive = false;
 	private boolean isRunning = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+		/*getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
 
 		context = (BaseActivity) getActivity();
 		isAlive = true;
@@ -118,18 +132,77 @@ public abstract class BaseActivity extends FragmentActivity implements ActivityP
 	public void setContentView(int layoutResID) {
 		super.setContentView(layoutResID);
 
-		// 状态栏沉浸，4.4+生效 <<<<<<<<<<<<<<<<<
+		setStatusBar();
+
+		setMeizuStatusBarDarkIcon(context,true);
+		setMiuiStatusBarDarkMode(context,true);
+
+		/*// 状态栏沉浸，4.4+生效 <<<<<<<<<<<<<<<<<
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			getWindow().setFlags(
 					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
 					WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 		}
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			getWindow().getDecorView().setSystemUiVisibility(
+					View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+		}
+
 		SystemBarTintManager tintManager = new SystemBarTintManager(this);
 		tintManager.setStatusBarTintEnabled(true);
-		tintManager.setStatusBarTintResource(R.color.topbar_bg);//状态背景色，可传drawable资源
+		tintManager.setStatusBarTintResource(R.color.topbar_bg);//状态背景色，可传drawable资源*/
 		// 状态栏沉浸，4.4+生效 >>>>>>>>>>>>>>>>>
 
 		tvBaseTitle = findView(R.id.tvBaseTitle);//绑定默认标题TextView
+	}
+
+	protected void setStatusBar() {
+		StatusBarUtil.setTranslucentForImageViewInFragment(this, null);
+		/*StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));*/
+	}
+
+	public static boolean setMeizuStatusBarDarkIcon(Activity activity, boolean dark) {
+		boolean result = false;
+		if (activity != null) {
+			try {
+				WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
+				Field darkFlag = WindowManager.LayoutParams.class
+						.getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
+				Field meizuFlags = WindowManager.LayoutParams.class
+						.getDeclaredField("meizuFlags");
+				darkFlag.setAccessible(true);
+				meizuFlags.setAccessible(true);
+				int bit = darkFlag.getInt(null);
+				int value = meizuFlags.getInt(lp);
+				if (dark) {
+					value |= bit;
+				} else {
+					value &= ~bit;
+				}
+				meizuFlags.setInt(lp, value);
+				activity.getWindow().setAttributes(lp);
+				result = true;
+			} catch (Exception e) {
+			}
+		}
+		return result;
+	}
+
+	public static boolean setMiuiStatusBarDarkMode(Activity activity, boolean darkmode) {
+		Class<? extends Window> clazz = activity.getWindow().getClass();
+		try {
+			int darkModeFlag = 0;
+			Class<?> layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+			Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
+			darkModeFlag = field.getInt(layoutParams);
+			Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
+			extraFlagField.invoke(activity.getWindow(), darkmode ? darkModeFlag : 0, darkModeFlag);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	//底部滑动实现同点击标题栏左右按钮效果<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -377,7 +450,7 @@ public abstract class BaseActivity extends FragmentActivity implements ActivityP
 				if (isForceDismissProgressDialog) {
 					dismissProgressDialog();
 				}
-				Toast.makeText(context, "" + string, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "" + string, Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
@@ -677,7 +750,41 @@ public abstract class BaseActivity extends FragmentActivity implements ActivityP
 		return super.dispatchTouchEvent(ev);
 	}
 
+	@Override
+	public void Success(String url, int RequestCode, EntityBase entityBase) {
+		IErrorCodeTool iErrorCodeTool = getErrorCodeTool();
+		iErrorCodeTool.Success(this, entityBase);
+		ProgressDismiss(url, RequestCode);
+	}
+
+	@Override
+	public void Error(String url, int RequestCode, Exception e) {
+		IErrorCodeTool iErrorCodeTool = getErrorCodeTool();
+		iErrorCodeTool.Error(this, e);
+		ProgressDismiss(url, RequestCode);
+	}
+
+	@Override
+	public void CodeError(String url, int RequestCode, EntityBase entityBase) {
+		IErrorCodeTool iErrorCodeTool = getErrorCodeTool();
+		iErrorCodeTool.errorCode(this, entityBase);
+		ProgressDismiss(url, RequestCode);
+	}
+
+	public IErrorCodeTool getErrorCodeTool() {
+		return null;
+	}
+
 	//底部滑动实现同点击标题栏左右按钮效果>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+	public void ProgressDismiss(String url, int RequestCode) {
 
+	}
+
+	@Override
+	public void onDragBottom(boolean rightToLeft) {
+		if (rightToLeft) {
+			finish();
+		}
+	}
 }

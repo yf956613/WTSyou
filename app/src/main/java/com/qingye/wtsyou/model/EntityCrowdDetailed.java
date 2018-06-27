@@ -1,12 +1,13 @@
 package com.qingye.wtsyou.model;
 
-import zuo.biao.library.model.EntityBase;
 import com.qingye.wtsyou.basemodel.POI;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import zuo.biao.library.model.EntityBase;
 
 /**
  * Created by pm89 on 2018/3/6.
@@ -22,8 +23,8 @@ public class EntityCrowdDetailed extends EntityBase {
         private String modified;
         private String creator;
         private String modifier;
-        private String relevanceStar;
         private String relevanceStarName;
+        private String relevanceStar;
         private String activityName;
         private String activityPic;
         private String activityIcon;
@@ -49,6 +50,8 @@ public class EntityCrowdDetailed extends EntityBase {
         private Date deadline;
         private String deadlineStr;
         private List<PriceList> priceList;
+        private List<ChatingRoom> chatingRoomList;
+        private List<EntityStars> relevanceStars;
 
         public String getUuid() {
             return uuid;
@@ -90,20 +93,20 @@ public class EntityCrowdDetailed extends EntityBase {
             this.modifier = modifier;
         }
 
-        public String getRelevanceStar() {
-            return relevanceStar;
-        }
-
-        public void setRelevanceStar(String relevanceStar) {
-            this.relevanceStar = relevanceStar;
-        }
-
         public String getRelevanceStarName() {
             return relevanceStarName;
         }
 
         public void setRelevanceStarName(String relevanceStarName) {
             this.relevanceStarName = relevanceStarName;
+        }
+
+        public String getRelevanceStar() {
+            return relevanceStar;
+        }
+
+        public void setRelevanceStar(String relevanceStar) {
+            this.relevanceStar = relevanceStar;
         }
 
         public String getActivityName() {
@@ -304,6 +307,22 @@ public class EntityCrowdDetailed extends EntityBase {
 
         public void setPriceList(List<PriceList> priceList) {
             this.priceList = priceList;
+        }
+
+        public List<ChatingRoom> getChatingRoomList() {
+            return chatingRoomList;
+        }
+
+        public void setChatingRoomList(List<ChatingRoom> chatingRoomList) {
+            this.chatingRoomList = chatingRoomList;
+        }
+
+        public List<EntityStars> getRelevanceStars() {
+            return relevanceStars;
+        }
+
+        public void setRelevanceStars(List<EntityStars> relevanceStars) {
+            this.relevanceStars = relevanceStars;
         }
     }
 

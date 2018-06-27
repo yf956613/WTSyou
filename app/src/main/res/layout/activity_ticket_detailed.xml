@@ -34,39 +34,41 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"/>
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_below="@+id/ll_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="@dimen/margin_45"
         android:layout_marginLeft="@dimen/margin_50"
         android:layout_marginRight="@dimen/margin_50"
+        android:layout_marginBottom="@dimen/margin_45"
         android:layout_centerInParent="true"
         android:orientation="vertical"
         android:background="@drawable/corners_white_6">
 
         <ImageView
             android:id="@+id/iv_ticket_img"
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:scaleType="fitXY"
-            android:src="@mipmap/img_x" />
-
-        <LinearLayout
-            android:layout_below="@+id/iv_ticket_img"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:src="@mipmap/img_x"
+            app:layout_constraintBottom_toTopOf="@+id/rlMessage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <RelativeLayout
+            android:id="@+id/rlMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_4"
-            android:layout_marginBottom="@dimen/margin_30">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_10"
                 android:layout_marginTop="@dimen/margin_10"
                 android:orientation="horizontal">
 
@@ -82,28 +84,27 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="G-DRACON [KWON JI YONG]"
-                        android:textSize="@dimen/text_size_14"
-                        android:textColor="@color/black_text1"/>
+                        android:textColor="@color/black_text1"
+                        android:textSize="@dimen/text_size_13" />
 
-                        <TextView
-                            android:id="@+id/tv_address"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_4"
-                            android:maxLines="2"
-                            android:ellipsize="end"
-                            android:text="寄送地址：厦门市思明区观音山商务营运中心
-18号楼1001"
-                            android:textSize="@dimen/text_size_10"
-                            android:textColor="@color/gray_text5"/>
+                    <TextView
+                        android:id="@+id/tv_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_4"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text=""
+                        android:textColor="@color/gray_text5"
+                        android:textSize="@dimen/text_size_11" />
 
                     <View
-                        android:background="@drawable/horizontal_line"
-                        android:layout_marginTop="-40dp"
-                        android:layout_marginBottom="-40dp"
-                        android:layerType="software"
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"/>
+                        android:layout_height="100dp"
+                        android:layout_marginBottom="-50dp"
+                        android:layout_marginTop="-45dp"
+                        android:background="@drawable/horizontal_line"
+                        android:layerType="software" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -114,24 +115,24 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="日期"
-                                android:textSize="@dimen/text_size_13"
-                                android:textColor="@color/black_text1"/>
+                                android:textColor="@color/black_text1"
+                                android:textSize="@dimen/text_size_11" />
 
                             <TextView
                                 android:id="@+id/tv_date"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/margin_8"
-                                android:text="18/03/12"
-                                android:textSize="@dimen/text_size_13"
-                                android:textColor="@color/black_text1"/>
+                                android:text=""
+                                android:textColor="@color/black_text1"
+                                android:textSize="@dimen/text_size_11" />
 
                         </LinearLayout>
 
@@ -145,17 +146,17 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="时间"
-                                android:textSize="@dimen/text_size_13"
-                                android:textColor="@color/black_text1"/>
+                                android:textColor="@color/black_text1"
+                                android:textSize="@dimen/text_size_11" />
 
                             <TextView
                                 android:id="@+id/tv_time"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/margin_8"
-                                android:text="20:00"
-                                android:textSize="@dimen/text_size_13"
-                                android:textColor="@color/black_text1"/>
+                                android:text=""
+                                android:textColor="@color/black_text1"
+                                android:textSize="@dimen/text_size_11" />
 
                         </LinearLayout>
 
@@ -168,8 +169,8 @@
                         android:layout_marginTop="@dimen/margin_10"
                         android:ellipsize="end"
                         android:text="暂无选座信息"
-                        android:textSize="@dimen/text_size_13"
-                        android:textColor="@color/black_text1"/>
+                        android:textColor="@color/black_text1"
+                        android:textSize="@dimen/text_size_11" />
 
                 </LinearLayout>
 
@@ -177,8 +178,6 @@
 
         </RelativeLayout>
 
-        </LinearLayout>
-
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </RelativeLayout>

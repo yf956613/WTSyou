@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/FJEditTextCountLib/FJEditTextCountLib.iml" filepath="$PROJECT_DIR$/FJEditTextCountLib/FJEditTextCountLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FlycoTabLayout_Lib/FlycoTabLayout_Lib.iml" filepath="$PROJECT_DIR$/FlycoTabLayout_Lib/FlycoTabLayout_Lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LoopingViewPager/LoopingViewPager.iml" filepath="$PROJECT_DIR$/LoopingViewPager/LoopingViewPager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/QRCodeLibrary/QRCodeLibrary.iml" filepath="$PROJECT_DIR$/QRCodeLibrary/QRCodeLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WTSyou.iml" filepath="$PROJECT_DIR$/WTSyou.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ZBLibrary/ZBLibrary.iml" filepath="$PROJECT_DIR$/ZBLibrary/ZBLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/circleindicator/circleindicator.iml" filepath="$PROJECT_DIR$/circleindicator/circleindicator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gesturelock/gesturelock.iml" filepath="$PROJECT_DIR$/gesturelock/gesturelock.iml" />
+      <module fileurl="file://$PROJECT_DIR$/imageloop/imageloop.iml" filepath="$PROJECT_DIR$/imageloop/imageloop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/odenlib/odenlib.iml" filepath="$PROJECT_DIR$/odenlib/odenlib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pulltorefresh/pulltorefresh.iml" filepath="$PROJECT_DIR$/pulltorefresh/pulltorefresh.iml" />
+    </modules>
+  </component>
+</project>

@@ -222,15 +222,14 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true">
 
-                        <CheckBox
-                            android:layout_width="108dp"
-                            android:layout_height="60dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginRight="-24dp"
-                            android:focusable="true"
-                            android:scaleX="0.4"
-                            android:scaleY="0.4"
-                            style="@style/OnOrOff"/>
+                        <com.qingye.wtsyou.widget.SwitchView
+                            android:id="@+id/switch_gesture"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/margin_12"
+                            android:paddingRight="@dimen/margin_3"
+                            android:paddingTop="@dimen/margin_5"
+                            android:paddingBottom="@dimen/margin_5"/>
 
                         <ImageView
                             android:layout_width="@dimen/margin_15"
@@ -278,15 +277,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/margin_8"
                             android:layout_gravity="center"
-                            android:text="24.0"
-                            android:textSize="@dimen/text_size_13"
-                            android:textColor="@color/gray_text1"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="  M"
+                            android:text=""
                             android:textSize="@dimen/text_size_13"
                             android:textColor="@color/gray_text1"/>
 

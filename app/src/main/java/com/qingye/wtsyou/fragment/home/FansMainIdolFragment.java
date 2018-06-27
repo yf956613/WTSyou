@@ -11,7 +11,8 @@ import android.widget.TextView;
 
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.home.FansMainIdolAdapter;
-import com.qingye.wtsyou.model.Stars;
+import com.qingye.wtsyou.model.FansIdol;
+import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.view.home.FansMainIdolView;
 import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
@@ -25,11 +26,11 @@ import zuo.biao.library.interfaces.CacheCallBack;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FansMainIdolFragment extends BaseHttpRecyclerFragment<Stars,FansMainIdolView,FansMainIdolAdapter> implements View.OnClickListener ,CacheCallBack<Stars> {
+public class FansMainIdolFragment extends BaseHttpRecyclerFragment<FansIdol,FansMainIdolView,FansMainIdolAdapter> implements View.OnClickListener ,CacheCallBack<FansIdol> {
+
+    private  List<FansIdol> starsList =  new ArrayList<>();
 
     private TextView tvMore,tvLess;
-
-    private int size = 4;
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -49,10 +50,14 @@ public class FansMainIdolFragment extends BaseHttpRecyclerFragment<Stars,FansMai
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //类相关初始化，必须使用<<<<<<<<<<<<<<<<
         super.onCreateView(inflater, container, savedInstanceState);
-        setContentView(R.layout.fragment_fans_main_idol);
+        setContentView(R.layout.fragment_fans_main);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
         initCache(this);
+
+        //获取传来的数据
+        Bundle bundle = getArguments();
+        starsList = (List<FansIdol>) bundle.getSerializable(Constant.STARSLIST);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
@@ -72,9 +77,26 @@ public class FansMainIdolFragment extends BaseHttpRecyclerFragment<Stars,FansMai
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
         srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
 
-        //实例化一个GridLayoutManager，列数为2
+        //实例化一个GridLayoutManager，列数为4
         final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 4);
         rvBaseRecycler.setLayoutManager(layoutManager);
+
+        List<FansIdol> fansIdolList = new ArrayList<>();
+        if (starsList != null) {
+            if (starsList.size() > 4) {
+                for (int i = 0;i < 4;i ++) {
+                    fansIdolList.add(starsList.get(i));
+                }
+                setList(fansIdolList);
+                tvMore.setEnabled(true);
+            } else {
+                fansIdolList.addAll(starsList);
+                setList(fansIdolList);
+                tvMore.setEnabled(false);
+            }
+        } else {
+            tvMore.setEnabled(false);
+        }
 
         return view;
     }
@@ -82,19 +104,13 @@ public class FansMainIdolFragment extends BaseHttpRecyclerFragment<Stars,FansMai
     @Override
     public void initView() {
         super.initView();
-        tvMore = findViewById(R.id.tv_stars_more);
-        tvLess = findViewById(R.id.tv_stars_less);
+        tvMore = findViewById(R.id.tv_more);
+        tvLess = findViewById(R.id.tv_less);
     }
 
     @Override
-    public void setList(final List<Stars> list) {
-        final List<Stars> templist = new ArrayList<>();
-        for(int i = 0;i < size;i ++) {
-            Stars stars = new Stars();
-            stars.setId(i);
-            templist.add(stars);
-        }
-        //list.addAll(templist);
+    public void setList(final List<FansIdol> list) {
+
         setList(new AdapterCallBack<FansMainIdolAdapter>() {
 
             @Override
@@ -104,7 +120,7 @@ public class FansMainIdolFragment extends BaseHttpRecyclerFragment<Stars,FansMai
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -123,12 +139,12 @@ public class FansMainIdolFragment extends BaseHttpRecyclerFragment<Stars,FansMai
     }
 
     @Override
-    public List<Stars> parseArray(String json) {
+    public List<FansIdol> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Stars> getCacheClass() {
+    public Class<FansIdol> getCacheClass() {
         return null;
     }
 
@@ -138,7 +154,7 @@ public class FansMainIdolFragment extends BaseHttpRecyclerFragment<Stars,FansMai
     }
 
     @Override
-    public String getCacheId(Stars data) {
+    public String getCacheId(FansIdol data) {
         return null;
     }
 
@@ -158,32 +174,41 @@ public class FansMainIdolFragment extends BaseHttpRecyclerFragment<Stars,FansMai
         tvLess.setOnClickListener(this);
     }
 
+    public void setMoreStarsList(int size) {
+        List<FansIdol> fansIdolList = new ArrayList<>();
+        if (size > 4) {
+            fansIdolList.addAll(starsList);
+            setList(fansIdolList);
+        } else {
+            tvMore.setEnabled(false);
+        }
+    }
+
+    public void setLessStarsList(int size) {
+        List<FansIdol> fansIdolList = new ArrayList<>();
+        if (size > 4) {
+            for (int i = 0;i < 4;i ++) {
+                fansIdolList.add(starsList.get(i));
+            }
+            setList(fansIdolList);
+        } else {
+            fansIdolList.addAll(starsList);
+            setList(fansIdolList);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_stars_more:
+            case R.id.tv_more:
                 tvMore.setVisibility(View.GONE);
                 tvLess.setVisibility(View.VISIBLE);
-                size = 6;
-                final List<Stars> templist1 = new ArrayList<>();
-                for(int i = 0;i < size;i ++) {
-                    Stars conversation = new Stars();
-                    conversation.setId(i);
-                    templist1.add(conversation);
-                }
-                setList(templist1);
+                setMoreStarsList(starsList.size());
                 break;
-            case R.id.tv_stars_less:
+            case R.id.tv_less:
                 tvMore.setVisibility(View.VISIBLE);
                 tvLess.setVisibility(View.GONE);
-                size = 4;
-                final List<Stars> templist2 = new ArrayList<>();
-                for(int i = 0;i < size;i ++) {
-                    Stars conversation = new Stars();
-                    conversation.setId(i);
-                    templist2.add(conversation);
-                }
-                setList(templist2);
+                setLessStarsList(starsList.size());
                 break;
             default:
                 break;

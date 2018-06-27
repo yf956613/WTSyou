@@ -15,7 +15,6 @@ limitations under the License.*/
 package zuo.biao.library.util;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
@@ -229,15 +228,17 @@ public final class SettingUtil {
 	/**
 	 * TODO 改为你的正式服务器地址
 	 */
-	public static final String URL_SERVER_ADDRESS_NORMAL_HTTP = "http://apprest.missyou.iqingyu.com.cn/missyou-apprest-server/rest/";//正式服务器
+	String TEST1 = "http://apprest.missyou.iqingyu.com.cn/missyou-apprest-server/rest/";
+	String TEST2 = "http://192.168.2.154:8080/missyou-apprest-server/rest/";
+	public static final String URL_SERVER_ADDRESS_NORMAL_HTTP = "http://192.168.2.154:8080/missyou-apprest-server/rest/";//正式服务器
 	/**
 	 * TODO 改为你的正式服务器地址
 	 */
-	public static final String URL_SERVER_ADDRESS_NORMAL_HTTPS = "http://apprest.missyou.iqingyu.com.cn/missyou-apprest-server/rest/";//正式服务器
+	public static final String URL_SERVER_ADDRESS_NORMAL_HTTPS = "http://192.168.2.154:8080/missyou-apprest-server/rest/";//正式服务器
 	/**
 	 * TODO 改为你的测试服务器地址,如果有的话
 	 */
-	public static final String URL_SERVER_ADDRESS_TEST = "http://apprest.missyou.iqingyu.com.cn/missyou-apprest-server/rest/";//测试服务器
+	public static final String URL_SERVER_ADDRESS_TEST = "http://192.168.2.154:8080/missyou-apprest-server/rest/";//测试服务器
 
 	/**获取当前服务器地址
 	 * isHttps = false

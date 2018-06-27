@@ -36,8 +36,6 @@ public class TalkMessageView extends BaseView<Message> implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (BaseModel.isCorrect(data) == false) {
-            return;
-        }
+
     }
 }

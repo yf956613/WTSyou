@@ -41,7 +41,7 @@ public class OrderDetailedBottomWindow extends PopupWindow implements View.OnCli
         LayoutInflater inflater = LayoutInflater.from(context);
         //绑定布局
         mPopView = inflater.inflate(R.layout.order_detailed_bottom_window, null);
-        tvClose = mPopView.findViewById(R.id.tv_close);
+        tvClose = (TextView) mPopView.findViewById(R.id.tv_close);
     }
 
     /**

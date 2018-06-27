@@ -1,12 +1,12 @@
 package com.qingye.wtsyou.model;
 
-import zuo.biao.library.base.BaseModel;
+import java.io.Serializable;
 
 /**
  * Created by pm89 on 2018/5/7.
  */
 
-public class Hots extends BaseModel {
+public class Hots implements Serializable {
     private String uuid;
     private String created;
     private String modified;
@@ -116,8 +116,4 @@ public class Hots extends BaseModel {
         this.activityStateName = activityStateName;
     }
 
-    @Override
-    protected boolean isCorrect() {
-        return true;
-    }
 }

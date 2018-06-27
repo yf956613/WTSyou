@@ -42,6 +42,8 @@ public class DateUtil {
 	public static final String DATE_PATTERN_5 = "yyyy.MM.dd";
 	public static final String DATE_PATTERN_6 = "yyyy/MM/dd";
 	public static final String DATE_PATTERN_7 = "yyyy-MM-dd";
+	public static final String DATE_PATTERN_8 = "yyyy-MM-dd HH:mm";
+	public static final String DATE_PATTERN_9 = "HH:mm";
 	public static final Integer THIS_YEAR = Integer.valueOf(new SimpleDateFormat("yyyy").format(new Date(System.currentTimeMillis())));
 
 	/**
@@ -283,6 +285,50 @@ public class DateUtil {
 			df.applyPattern(DATE_PATTERN_2);
 		else
 			df.applyPattern(DATE_PATTERN_1);
+
+		return df.format(date);
+
+	}
+
+	public static String showDate2(Date date, boolean isPattern2) {
+		SimpleDateFormat df = new SimpleDateFormat();
+		long times = calculateDate(new Date(),date);
+		if (times < DAY_TIME_MILLIS) {// 时间小于一天
+			df.applyPattern(HOUR_PATTERN);
+			return df.format(date);
+		}
+		if (times < 2 * DAY_TIME_MILLIS) {// 昨天
+			/*if (isPattern2)
+				df.applyPattern(YESTERDAY_2);
+			else
+				df.applyPattern(YESTERDAY_1);*/
+			df.applyPattern(DATE_PATTERN_6);
+			return df.format(date);
+		}
+		if (times < 3 * DAY_TIME_MILLIS) {// 前天
+			/*if (isPattern2)
+				df.applyPattern(THE_DAY_BEFORE_YESTERDAY_2);
+			else
+				df.applyPattern(THE_DAY_BEFORE_YESTERDAY_1);*/
+			df.applyPattern(DATE_PATTERN_6);
+			return df.format(date);
+		}
+		if (times < WEEK_TIME_MILLIS) {// 显示星期几
+			/*if (isPattern2)
+				df.applyPattern(WEEK_PATTERN_2);
+			else
+				df.applyPattern(WEEK_PATTERN_1);*/
+			df.applyPattern(DATE_PATTERN_6);
+			return df.format(date);
+		}
+		/*// 具体日期
+		if (isPattern2)
+			df.applyPattern(DATE_PATTERN_2);
+		else
+			df.applyPattern(DATE_PATTERN_1);*/
+
+		df.applyPattern(DATE_PATTERN_6);
+
 		return df.format(date);
 
 	}

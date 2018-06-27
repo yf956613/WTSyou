@@ -1,14 +1,24 @@
 package com.qingye.wtsyou.fragment.conversation;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.campaign.ConversationAdapter;
-import com.qingye.wtsyou.model.Conversation;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpManager;
+import com.qingye.wtsyou.manager.HttpModel;
+import com.qingye.wtsyou.model.ChatingRoom;
+import com.qingye.wtsyou.model.EntityPageData;
+import com.qingye.wtsyou.utils.GsonUtil;
+import com.qingye.wtsyou.utils.HttpRequest;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.campaign.ConversationView;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +26,22 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
+import zuo.biao.library.interfaces.IErrorCodeTool;
+import zuo.biao.library.model.EntityBase;
+import zuo.biao.library.widget.CustomDialog;
 
-public class CreateConversationFragment extends BaseHttpRecyclerFragment<Conversation,ConversationView,ConversationAdapter>implements CacheCallBack<Conversation> {
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
+
+public class CreateConversationFragment extends BaseHttpRecyclerFragment<ChatingRoom,ConversationView,ConversationAdapter>
+        implements CacheCallBack<ChatingRoom> {
+
+    private String userId;
+
+    private HttpModel<EntityPageData> mMyConversationHttpModel;
+
+    private  List<ChatingRoom> chatingRoomList =  new ArrayList<>();
+
+    private CustomDialog progressBar;
 
     //与Activity通信<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -40,6 +64,14 @@ public class CreateConversationFragment extends BaseHttpRecyclerFragment<Convers
         setContentView(R.layout.fragment_campaign_detailed_conversation);
         //类相关初始化，必须使用>>>>>>>>>>>>>>>>
 
+        progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
+
+        userId = HttpManager.getInstance().getUserId();
+
+        //聊天室列表
+        mMyConversationHttpModel = new HttpModel<>(EntityPageData.class);
+        conversationQuery();
+
         initCache(this);
 
         //功能归类分区方法，必须调用<<<<<<<<<<
@@ -47,6 +79,16 @@ public class CreateConversationFragment extends BaseHttpRecyclerFragment<Convers
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
+
+        //获取传来的数据
+        /*Bundle bundle = getArguments();
+        myChatingRooms = (List<ChatingRoom>) bundle.getSerializable(Constant.CHATINTROOMLIST);*/
+
+        //禁止滑动
+        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
+        linearLayoutManager.setScrollEnabled(false);
+        rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
+        rvBaseRecycler.setLayoutManager(linearLayoutManager);
 
         //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
@@ -63,13 +105,34 @@ public class CreateConversationFragment extends BaseHttpRecyclerFragment<Convers
     }
 
     @Override
-    public void setList(final List<Conversation> list) {
-        final List<Conversation> templist = new ArrayList<>();
-        for(int i = 1;i < 3;i ++) {
-            Conversation conversation = new Conversation();
-            conversation.setId(i);
-            templist.add(conversation);
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+            }
+
+            progressBar = null;
         }
+    }
+
+    private void setProgressBar() {
+        progressBar.setCancelable(true);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    }
+
+    private void progressBarDismiss() {
+        if (progressBar != null) {
+            if (progressBar.isShowing()) {
+                progressBar.dismiss();
+                progressBar.cancel();
+            }
+        }
+    }
+
+    @Override
+    public void setList(final List<ChatingRoom> list) {
         //list.addAll(templist);
         setList(new AdapterCallBack<ConversationAdapter>() {
 
@@ -80,7 +143,7 @@ public class CreateConversationFragment extends BaseHttpRecyclerFragment<Convers
 
             @Override
             public void refreshAdapter() {
-                adapter.refresh(templist);
+                adapter.refresh(list);
             }
         });
     }
@@ -99,12 +162,12 @@ public class CreateConversationFragment extends BaseHttpRecyclerFragment<Convers
     }
 
     @Override
-    public List<Conversation> parseArray(String json) {
+    public List<ChatingRoom> parseArray(String json) {
         return null;
     }
 
     @Override
-    public Class<Conversation> getCacheClass() {
+    public Class<ChatingRoom> getCacheClass() {
         return null;
     }
 
@@ -114,7 +177,7 @@ public class CreateConversationFragment extends BaseHttpRecyclerFragment<Convers
     }
 
     @Override
-    public String getCacheId(Conversation data) {
+    public String getCacheId(ChatingRoom data) {
         return null;
     }
 
@@ -132,4 +195,48 @@ public class CreateConversationFragment extends BaseHttpRecyclerFragment<Convers
         super.initEvent();
 
     }
+
+    public void conversationQuery() {
+        setProgressBar();
+        progressBar.show();
+
+        String name = null;
+        String ownerId = userId;
+        String adminUserId = null;
+        String personId = null;
+        String status = null;
+        String topRecommend = null;
+        String hotRecommend = null;
+        String desc = "false";
+        String excludeMyself = null;
+        String sortKey = null;
+        //聊天室列表
+        String request = HttpRequest.postConversationQueryList(name, null, ownerId, adminUserId, personId, status,
+                topRecommend,hotRecommend, desc, excludeMyself, sortKey);
+        mMyConversationHttpModel.post(request, URL_BASE + URLConstant.CONVERSATIONQUERY,1,this);
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                EntityPageData.Content entityPageData = mMyConversationHttpModel.getData().getContent();
+                chatingRoomList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageData.getData())
+                        ,new TypeToken<List<ChatingRoom>>(){}.getType());
+                setList(chatingRoomList);
+                break;
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
+    }
+
 }

@@ -61,6 +61,7 @@ public class AssociateStarsFragment extends BaseHttpRecyclerFragment<EntityStars
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
+        //srlBaseHttpRecycler.autoRefresh();
         srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
@@ -70,7 +71,7 @@ public class AssociateStarsFragment extends BaseHttpRecyclerFragment<EntityStars
         rvBaseRecycler.setLayoutManager(layoutManager);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        srlBaseHttpRecycler.autoRefresh();
+
         setList(selectedStars);
 
         return view;

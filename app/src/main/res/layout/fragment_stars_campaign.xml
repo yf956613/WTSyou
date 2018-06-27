@@ -7,7 +7,6 @@
 
     <include layout="@layout/base_http_recycler_fragment"/>
 
-
     <LinearLayout
         android:id="@+id/noMessage"
         android:layout_width="wrap_content"
@@ -26,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_6"
-            android:text="啊哦，您还没有参与相关活动哟！"
+            android:text="啊哦，没有相关活动哟！"
             android:textSize="@dimen/text_size_14"
             android:textColor="@color/gray_text10"
             android:layout_gravity="center_vertical"/>

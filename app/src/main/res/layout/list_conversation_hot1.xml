@@ -7,7 +7,7 @@
     android:layout_margin="@dimen/margin_4"
     android:background="@drawable/corners_white_shadow">
 
-    <ImageView
+    <com.qingye.wtsyou.widget.CircleImageView
         android:id="@+id/iv_conversation_cover"
         android:layout_width="170dp"
         android:layout_height="106dp"

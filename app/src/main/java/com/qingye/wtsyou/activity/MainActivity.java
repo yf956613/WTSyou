@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     public void initView() {
-        verticalViewPager = findViewById(R.id.viewpager);
+        verticalViewPager = findView(R.id.viewpager);
         verticalViewPager.setAdapter(new VerticalViewPagerAdapter(getSupportFragmentManager(), getFragmentList()));
     }
 

@@ -18,13 +18,13 @@
 
 
             <ImageView
-                android:id="@+id/iv_charts"
+                android:id="@+id/iv_background"
                 android:layout_width="100dp"
                 android:layout_height="65dp"
-                android:src="@mipmap/img_q"/>
+                android:scaleType="fitXY"/>
 
             <LinearLayout
-                android:layout_toRightOf="@+id/iv_charts"
+                android:layout_toRightOf="@+id/iv_background"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_10"
@@ -37,13 +37,13 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tv_charts_name"
+                        android:id="@+id/tv_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="9"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:text="范玮琪 福州演唱会应援活动"
+                        android:text=""
                         android:textColor="@color/black_text1"
                         android:textSize="@dimen/text_size_13"/>
 
@@ -63,12 +63,13 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tv_creator_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="7"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:text="维维维琪"
+                        android:text=""
                         android:textColor="@color/black_text2"
                         android:textSize="@dimen/text_size_11"/>
 
@@ -87,11 +88,12 @@
                             android:src="@mipmap/personal_g"/>
 
                         <TextView
+                            android:id="@+id/tv_online"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/margin_8"
-                            android:text="4178"
+                            android:text=""
                             android:textColor="@color/gray_text1"
                             android:textSize="@dimen/text_size_11"/>
 

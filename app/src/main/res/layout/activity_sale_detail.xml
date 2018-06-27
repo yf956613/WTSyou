@@ -60,6 +60,7 @@
                                     android:id="@+id/iv_campaign_img"
                                     android:layout_width="102dp"
                                     android:layout_height="133dp"
+                                    android:scaleType="fitXY"
                                     android:src="@mipmap/img_x"/>
 
                             </RelativeLayout>
@@ -79,7 +80,7 @@
                                     android:layout_height="wrap_content"
                                     android:maxLines="2"
                                     android:ellipsize="end"
-                                    android:text="薛之谦[我好像在哪里见过你]全国巡回演唱会"
+                                    android:text=""
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/text_size_14"/>
 
@@ -126,7 +127,7 @@
                                 <TextView
                                     android:layout_below="@+id/rl_center"
                                     android:id="@+id/tv_tag"
-                                    android:layout_width="40dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/margin_25"
                                     android:gravity="center"
@@ -180,7 +181,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="@dimen/margin_10"
                                         android:layout_gravity="center"
-                                        android:text="福建厦门"
+                                        android:text=""
                                         android:textSize="@dimen/text_size_13"
                                         android:textColor="@color/black_text"/>
                                 </LinearLayout>
@@ -202,7 +203,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="@dimen/margin_10"
                                         android:layout_gravity="center"
-                                        android:text="2018-4-28 20：00"
+                                        android:text=""
                                         android:textSize="@dimen/text_size_13"
                                         android:textColor="@color/black_text1"/>
 
@@ -274,14 +275,14 @@
                             android:layout_marginRight="@dimen/margin_6"
                             android:maxLines="8"
                             android:ellipsize="end"
-                            android:text="购票须知
-                付款成功后即可成功参与投票。"
-                            android:textSize="@dimen/text_size_12"
+                            android:text=""
+                            android:textSize="@dimen/text_size_13"
                             android:textColor="@color/black_text2"/>
 
                     </LinearLayout>
 
                     <RelativeLayout
+                        android:id="@+id/ll_conversation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_4"

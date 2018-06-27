@@ -15,6 +15,7 @@ import com.qingye.wtsyou.adapter.campaign.ActivityOfficialAdapter;
 import com.qingye.wtsyou.model.Officials;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.view.campaign.ActivityOfficialView;
+import com.qingye.wtsyou.widget.StartSnapHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,12 +70,16 @@ public class ActivityOfficialFragment extends BaseHttpRecyclerFragment<Officials
         srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
         srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
+        rvBaseRecycler.setFocusableInTouchMode(false);
+        rvBaseRecycler.requestFocus();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvBaseRecycler.setLayoutManager(layoutManager);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        srlBaseHttpRecycler.autoRefresh();
+        StartSnapHelper snapHelper = new StartSnapHelper();
+        snapHelper.attachToRecyclerView(rvBaseRecycler);
+
         setList(officials);
 
         return view;

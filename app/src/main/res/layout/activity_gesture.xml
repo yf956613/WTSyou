@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="@color/white"></LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/head"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_state"
+        android:text="请输入手势密码"
+        android:textSize="@dimen/text_size_14"
+        android:textColor="@color/black_text1"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.syd.oden.gesturelock.view.GestureLockViewGroup
+        android:id="@+id/gesturelock"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_30"
+        app:preference_id="1"
+        android:layout_marginTop="30dp"
+        app:count="3"
+        app:color_no_finger="@color/gray_text"
+        app:color_finger_on="@color/orange_text1"/>
+
+</LinearLayout>

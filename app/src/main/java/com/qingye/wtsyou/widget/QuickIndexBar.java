@@ -2,7 +2,6 @@ package com.qingye.wtsyou.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -17,7 +16,7 @@ import com.qingye.wtsyou.R;
 public class QuickIndexBar extends View {
 
     private static final String TAG = "QuickIndexBar";
-    private String[] indexArr = {"A", "B", "C", "D", "E", "F", "G", "H",
+    private String[] indexArr = {"热","A", "B", "C", "D", "E", "F", "G", "H",
             "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
             "V", "W", "X", "Y", "Z"};
 

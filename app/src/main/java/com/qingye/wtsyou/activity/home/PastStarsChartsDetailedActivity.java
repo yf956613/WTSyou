@@ -5,10 +5,18 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -16,9 +24,7 @@ import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.adapter.home.PastStarsChartsAdapter;
-import zuo.biao.library.model.EntityBase;
 import com.qingye.wtsyou.model.EntityPageData;
-import com.qingye.wtsyou.model.FocusStars;
 import com.qingye.wtsyou.model.RankInfos;
 import com.qingye.wtsyou.utils.BroadcastAction;
 import com.qingye.wtsyou.utils.Constant;
@@ -26,21 +32,20 @@ import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.home.PastStarsChartsView;
-import zuo.biao.library.widget.CustomDialog;
+import com.qingye.wtsyou.widget.FullyLinearLayoutManager;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import zuo.biao.library.base.BaseHttpRecyclerActivity;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
-
-import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+import zuo.biao.library.widget.CustomDialog;
 
 public class PastStarsChartsDetailedActivity extends BaseHttpRecyclerActivity<RankInfos,PastStarsChartsView,PastStarsChartsAdapter> implements View.OnClickListener
         , View.OnLongClickListener, PastStarsChartsView.OnItemChildClickListener, OnBottomDragListener {
@@ -68,7 +73,12 @@ public class PastStarsChartsDetailedActivity extends BaseHttpRecyclerActivity<Ra
     private String keywords;
     private String periodsZone;
 
+    private ScrollView scrollView;
     private CustomDialog progressBar;
+    private RelativeLayout linearLayout;
+    private SwipeRefreshLayout swipeRefresh;
+
+    FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
 
     private PastStarsChartsAdapter starsChartsAdapter;
 
@@ -108,51 +118,118 @@ public class PastStarsChartsDetailedActivity extends BaseHttpRecyclerActivity<Ra
 
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
+        //刷新
+        initHrvsr();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        /*//禁止滑动
-        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(context);
-        linearLayoutManager.setScrollEnabled(false);
-        rvBaseRecycler.setNestedScrollingEnabled(false);//解决卡顿
-        rvBaseRecycler.setLayoutManager(linearLayoutManager);*/
+        setScrollEnable(false);
 
-        //srlBaseHttpRecycler.autoRefresh();
-        srlBaseHttpRecycler.setEnableRefresh(true);//启用下拉刷新
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(true);//启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(true);//启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(true);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部*/
     }
 
     @Override
     public void initView() {
         super.initView();
-        ivBack = findViewById(R.id.iv_left);
+
+        swipeRefresh = findView(R.id.swipe_refresh_widget);
+        linearLayout = findView(R.id.linearlayout);
+        scrollView = findView(R.id.scrollview);
+        scrollView.setOnTouchListener(new TouchListenerImpl());
+
+        ivBack = findView(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
-        ivRules = findViewById(R.id.iv_right);
+        ivRules = findView(R.id.iv_right);
         ivRules.setImageResource(R.mipmap.rule);
         tvHead = findView(R.id.tv_head_title);
 
         //名字
-        tvSecName = findViewById(R.id.tv_second_name);
-        tvFirName = findViewById(R.id.tv_first_name);
-        tvThiName = findViewById(R.id.tv_third_name);
+        tvSecName = findView(R.id.tv_second_name);
+        tvFirName = findView(R.id.tv_first_name);
+        tvThiName = findView(R.id.tv_third_name);
         //贡献值
-        tvSecValue = findViewById(R.id.tv_second_value);
-        tvFirValue = findViewById(R.id.tv_first_value);
-        tvThiValue = findViewById(R.id.tv_third_value);
+        tvSecValue = findView(R.id.tv_second_value);
+        tvFirValue = findView(R.id.tv_first_value);
+        tvThiValue = findView(R.id.tv_third_value);
         //图片
-        ivSecImg = findViewById(R.id.iv_second_img);
-        ivFirImg = findViewById(R.id.iv_first_img);
-        ivThiImg = findViewById(R.id.iv_third_img);
+        ivSecImg = findView(R.id.iv_second_img);
+        ivFirImg = findView(R.id.iv_first_img);
+        ivThiImg = findView(R.id.iv_third_img);
         //关注
-        tvSecFocus = findViewById(R.id.tv_second_focus);
-        tvFirFocus = findViewById(R.id.tv_first_focus);
-        tvThiFocus = findViewById(R.id.tv_third_focus);
+        tvSecFocus = findView(R.id.tv_second_focus);
+        tvFirFocus = findView(R.id.tv_first_focus);
+        tvThiFocus = findView(R.id.tv_third_focus);
         //取消关注
-        tvSecCan = findViewById(R.id.tv_second_cancel);
-        tvFirCan = findViewById(R.id.tv_first_cancel);
-        tvThiCan = findViewById(R.id.tv_third_cancel);
+        tvSecCan = findView(R.id.tv_second_cancel);
+        tvFirCan = findView(R.id.tv_first_cancel);
+        tvThiCan = findView(R.id.tv_third_cancel);
+    }
+
+    //刷新
+    private void initHrvsr(){
+        //设置刷新时动画的颜色，可以设置4个
+        swipeRefresh.setProgressBackgroundColorSchemeResource(android.R.color.white);
+        swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_light,
+                android.R.color.holo_red_light, android.R.color.holo_orange_light,
+                android.R.color.holo_green_light);
+        swipeRefresh.setProgressViewOffset(false, 0, (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
+                        .getDisplayMetrics()));
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.e("swipeRefresh", "invoke onRefresh...");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        rankingQuery();
+                        showShortToast(R.string.getSuccess);
+                        swipeRefresh.setRefreshing(false);
+                    }
+                }, 1500);
+            }
+        });
+        // 设置子视图是否允许滚动到顶部
+        swipeRefresh.setOnChildScrollUpCallback(new SwipeRefreshLayout.OnChildScrollUpCallback() {
+            @Override
+            public boolean canChildScrollUp(SwipeRefreshLayout parent, @Nullable View child) {
+                return scrollView.getScrollY() > 0;
+            }
+        });
+    }
+
+    private class TouchListenerImpl implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    int scrollY=view.getScrollY();
+                    int height=view.getHeight();
+                    int scrollViewMeasuredHeight = scrollView.getChildAt(0).getMeasuredHeight();
+                    if(scrollY == 0){
+
+                    }
+                    else if((scrollY+height) == scrollViewMeasuredHeight){
+                        setScrollEnable(true);
+                    } else {
+                        setScrollEnable(false);
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            return false;
+        }
+
     }
 
     public void onResume() {
@@ -211,71 +288,86 @@ public class PastStarsChartsDetailedActivity extends BaseHttpRecyclerActivity<Ra
     public void initData() {
         super.initData();
 
-        tvHead.setText(periodsZone);
+        if (isAlive()) {
 
-        if (starsTopChartsList.get(0) != null) {
-            RankInfos first = starsTopChartsList.get(0);
-            //名字
-            tvFirName.setText(first.getUserName());
-            //贡献
-            tvFirValue.setText("" + first.getScore());
-            //图片
-            String url1 = first.getUserPhoto();
-            if (url1 != null) {
-                Glide.with(context)
-                        .load(url1)
-                        .into(ivFirImg);
+            if (starsChartsList.size() == 0) {
+                return;
             }
-            if (first.getFollow()) {
-                tvFirFocus.setVisibility(View.GONE);
-                tvFirCan.setVisibility(View.VISIBLE);
-            } else {
-                tvFirFocus.setVisibility(View.VISIBLE);
-                tvFirCan.setVisibility(View.GONE);
-            }
-        }
 
-        if (starsTopChartsList.get(1) != null) {
-            RankInfos second = starsTopChartsList.get(1);
-            //名字
-            tvSecName.setText(second.getUserName());
-            //贡献
-            tvSecValue.setText("" + second.getScore());
-            //图片
-            String url2 = second.getUserPhoto();
-            if (url2 != null) {
-                Glide.with(context)
-                        .load(url2)
-                        .into(ivSecImg);
-            }
-            if (second.getFollow()) {
-                tvSecFocus.setVisibility(View.GONE);
-                tvSecCan.setVisibility(View.VISIBLE);
-            } else {
-                tvSecFocus.setVisibility(View.VISIBLE);
-                tvSecCan.setVisibility(View.GONE);
-            }
-        }
+            tvHead.setText(periodsZone);
 
-        if (starsTopChartsList.get(2) != null) {
-            RankInfos third = starsTopChartsList.get(2);
-            //名字
-            tvThiName.setText(third.getUserName());
-            //贡献
-            tvThiValue.setText("" + third.getScore());
-            //图片
-            String url3 = third.getUserPhoto();
-            if (url3 != null) {
-                Glide.with(context)
-                        .load(url3)
-                        .into(ivThiImg);
+            if (starsTopChartsList.get(0) != null) {
+                RankInfos first = starsTopChartsList.get(0);
+                //名字
+                tvFirName.setText(first.getUserName());
+                //贡献
+                tvFirValue.setText("" + first.getScore());
+                //图片
+                String url1 = first.getUserPhoto();
+                if (url1 != null) {
+                    Glide.with(context)
+                            .load(url1)
+                            .into(ivFirImg);
+                }
+                if (first.getFollow()) {
+                    tvFirFocus.setVisibility(View.GONE);
+                    tvFirCan.setVisibility(View.VISIBLE);
+                } else {
+                    tvFirFocus.setVisibility(View.VISIBLE);
+                    tvFirCan.setVisibility(View.GONE);
+                }
             }
-            if (third.getFollow()) {
-                tvThiFocus.setVisibility(View.GONE);
-                tvThiCan.setVisibility(View.VISIBLE);
-            } else {
-                tvThiFocus.setVisibility(View.VISIBLE);
-                tvThiCan.setVisibility(View.GONE);
+
+            if (starsChartsList.size() < 2) {
+                return;
+            }
+
+            if (starsTopChartsList.get(1) != null) {
+                RankInfos second = starsTopChartsList.get(1);
+                //名字
+                tvSecName.setText(second.getUserName());
+                //贡献
+                tvSecValue.setText("" + second.getScore());
+                //图片
+                String url2 = second.getUserPhoto();
+                if (url2 != null) {
+                    Glide.with(context)
+                            .load(url2)
+                            .into(ivSecImg);
+                }
+                if (second.getFollow()) {
+                    tvSecFocus.setVisibility(View.GONE);
+                    tvSecCan.setVisibility(View.VISIBLE);
+                } else {
+                    tvSecFocus.setVisibility(View.VISIBLE);
+                    tvSecCan.setVisibility(View.GONE);
+                }
+            }
+
+            if (starsChartsList.size() < 3) {
+                return;
+            }
+
+            if (starsTopChartsList.get(2) != null) {
+                RankInfos third = starsTopChartsList.get(2);
+                //名字
+                tvThiName.setText(third.getUserName());
+                //贡献
+                tvThiValue.setText("" + third.getScore());
+                //图片
+                String url3 = third.getUserPhoto();
+                if (url3 != null) {
+                    Glide.with(context)
+                            .load(url3)
+                            .into(ivThiImg);
+                }
+                if (third.getFollow()) {
+                    tvThiFocus.setVisibility(View.GONE);
+                    tvThiCan.setVisibility(View.VISIBLE);
+                } else {
+                    tvThiFocus.setVisibility(View.VISIBLE);
+                    tvThiCan.setVisibility(View.GONE);
+                }
             }
         }
 
@@ -312,7 +404,7 @@ public class PastStarsChartsDetailedActivity extends BaseHttpRecyclerActivity<Ra
                 finish();
                 break;
             case R.id.iv_right:
-                toActivity(PastChartsRuleActivity.createIntent(context));
+                toActivity(RuleActivity.createIntent(context, "ranking", "排行榜规则"));
                 break;
             case R.id.tv_first_focus:
                 if (starsTopChartsList.get(0) != null) {
@@ -361,8 +453,6 @@ public class PastStarsChartsDetailedActivity extends BaseHttpRecyclerActivity<Ra
 
     public void rankingQuery(final int page) {
         if (NetUtil.checkNetwork(getActivity())) {
-            setProgressBar();
-            progressBar.show();
 
             String periods = null;
             String maxPeriods = null;
@@ -413,8 +503,6 @@ public class PastStarsChartsDetailedActivity extends BaseHttpRecyclerActivity<Ra
                                 }
                             }
 
-                            progressBarDismiss();
-
                             setList(starsOtherChartsList);
 
                             totalPage = entityPageData.getContent().getPageCount();
@@ -422,43 +510,29 @@ public class PastStarsChartsDetailedActivity extends BaseHttpRecyclerActivity<Ra
                             currentPage ++;
 
                         }else{//显示失败信息
-                            if (entityPageData.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entityPageData.getMessage());
-                            }
 
-                            progressBarDismiss();
+                            showShortToast(entityPageData.getMessage());
                         }
 
                     }else{
                         showShortToast(R.string.noReturn);
 
-                        progressBarDismiss();
                     }
                 }
             });
         } else {
             showShortToast(R.string.checkNetwork);
 
-            progressBarDismiss();
         }
     }
 
-    public void focusFans(RankInfos fansCharts, final TextView focus, final TextView can) {
-        List<FocusStars> focusStarsRequestList = new ArrayList<>();
-        FocusStars focusStarsRequest = new FocusStars();
-        focusStarsRequest.setStarUuid(fansCharts.getUserId());
-        focusStarsRequest.setStarName(fansCharts.getUserName());
-        focusStarsRequest.setStarPhoto(fansCharts.getUserPhoto());
-        focusStarsRequestList.add(focusStarsRequest);
+    public void focusFans(RankInfos starsCharts, final TextView focus, final TextView can) {
 
         if (NetUtil.checkNetwork(getActivity())) {
             setProgressBar();
             progressBar.show();
 
-            HttpRequest.postFocusStars(0, focusStarsRequestList, new OnHttpResponseListener() {
+            HttpRequest.postFocusStars(0, starsCharts.getUserId(), new OnHttpResponseListener() {
                 @Override
                 public void onHttpResponse(int requestCode, String resultJson, Exception e) {
                     if(!StringUtil.isEmpty(resultJson)){
@@ -500,20 +574,13 @@ public class PastStarsChartsDetailedActivity extends BaseHttpRecyclerActivity<Ra
         }
     }
 
-    public void cancelFans(RankInfos fansCharts, final TextView focus, final TextView can) {
-
-        List<FocusStars> cancelStarsRequest = new ArrayList<>();
-        FocusStars focusStarsRequest = new FocusStars();
-        focusStarsRequest.setStarUuid(fansCharts.getUserId());
-        focusStarsRequest.setStarName(fansCharts.getUserName());
-        focusStarsRequest.setStarPhoto(fansCharts.getUserPhoto());
-        cancelStarsRequest.add(focusStarsRequest);
+    public void cancelFans(RankInfos starsCharts, final TextView focus, final TextView can) {
 
         if (NetUtil.checkNetwork(context)) {
             setProgressBar();
             progressBar.show();
 
-            HttpRequest.postCancelStars(0, cancelStarsRequest, new OnHttpResponseListener() {
+            HttpRequest.postCancelStars(0, starsCharts.getUserId(), new OnHttpResponseListener() {
                 @Override
                 public void onHttpResponse(int requestCode, String resultJson, Exception e) {
                     if(!StringUtil.isEmpty(resultJson)){
@@ -602,5 +669,11 @@ public class PastStarsChartsDetailedActivity extends BaseHttpRecyclerActivity<Ra
     @Override
     public void onCancelFocus(View view, int position, TextView focus, TextView rank) {
         cancelFans(starsOtherChartsList.get(position),focus,rank);
+    }
+
+    public void setScrollEnable(Boolean enable) {
+        linearLayoutManager.setScrollEnabled(enable);
+        rvBaseRecycler.setNestedScrollingEnabled(enable);//解决卡顿
+        rvBaseRecycler.setLayoutManager(linearLayoutManager);
     }
 }

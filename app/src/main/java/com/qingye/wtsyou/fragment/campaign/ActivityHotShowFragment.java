@@ -11,20 +11,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.campaign.CrowdDetailedActivity;
 import com.qingye.wtsyou.activity.campaign.SaleDetailedActivity;
 import com.qingye.wtsyou.activity.campaign.VoteDetailedActivity;
 import com.qingye.wtsyou.adapter.campaign.ActivityHotShowAdapter;
-import com.qingye.wtsyou.model.EntityCrowdDetailed;
-import com.qingye.wtsyou.model.EntitySaleDetailed;
-import com.qingye.wtsyou.model.EntityVoteDetailed;
 import com.qingye.wtsyou.model.Hots;
 import com.qingye.wtsyou.utils.Constant;
-import com.qingye.wtsyou.utils.HttpRequest;
-import com.qingye.wtsyou.utils.NetUtil;
 import com.qingye.wtsyou.view.campaign.ActivityHotShowView;
-import zuo.biao.library.widget.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +25,7 @@ import java.util.List;
 import zuo.biao.library.base.BaseHttpRecyclerFragment;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.CacheCallBack;
-import zuo.biao.library.interfaces.OnHttpResponseListener;
-import zuo.biao.library.util.JSON;
-import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -195,103 +186,19 @@ public class ActivityHotShowFragment extends BaseHttpRecyclerFragment<Hots,Activ
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, final long id) {
 
-        //检查网络
-        if (NetUtil.checkNetwork(context)) {
-            String activityState = hotCampaigns.get(position).getActivityState();
-            String uuid = hotCampaigns.get(position).getActivityId();
+        String activityState = hotCampaigns.get(position).getActivityState();
+        String uuid = hotCampaigns.get(position).getActivityId();
 
-            setProgressBar();
-            progressBar.show();
+        if (activityState.equals("voting") || activityState.equals("votesuccess") || activityState.equals("votefail")) {
 
-            if (activityState.equals("voting") || activityState.equals("votesuccess") || activityState.equals("votefail")) {
-                HttpRequest.getVoteDetailed(0, uuid, new OnHttpResponseListener() {
-                    @Override
-                    public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                        if(!StringUtil.isEmpty(resultJson)){
-                            EntityVoteDetailed entityVoteDetailed =  JSON.parseObject(resultJson,EntityVoteDetailed.class);
-                            if(entityVoteDetailed.isSuccess()){
-                                //成功//showShortToast(R.string.getSuccess);
-                                toActivity(VoteDetailedActivity.createIntent(context, entityVoteDetailed));
+            toActivity(VoteDetailedActivity.createIntent(context, uuid));
+        }
+        else if (activityState.equals("crowding") || activityState.equals("crowdsuccess") || activityState.equals("crowdfail")) {
 
-                                progressBarDismiss();
-                            }else{//显示失败信息
-                                if (entityVoteDetailed.getCode().equals("401")) {
-                                    showShortToast(R.string.tokenInvalid);
-                                    toActivity(MainActivity.createIntent(context));
-                                } else {
-                                    showShortToast(entityVoteDetailed.getMessage());
-                                }
-
-                                progressBarDismiss();
-                            }
-                        }else{
-                            showShortToast(R.string.noReturn);
-
-                            progressBarDismiss();
-                        }
-                    }
-                });
-            }
-            else if (activityState.equals("crowding") || activityState.equals("crowdsuccess") || activityState.equals("crowdfail")) {
-                HttpRequest.getCrowdDetailed(0, uuid, new OnHttpResponseListener() {
-                    @Override
-                    public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                        if(!StringUtil.isEmpty(resultJson)){
-                            EntityCrowdDetailed entityCrowdDetailed =  JSON.parseObject(resultJson,EntityCrowdDetailed.class);
-                            if(entityCrowdDetailed.isSuccess()){
-                                //成功//showShortToast(R.string.getSuccess);
-                                toActivity(CrowdDetailedActivity.createIntent(context, entityCrowdDetailed));
-
-                                progressBarDismiss();
-                            }else{//显示失败信息
-                                if (entityCrowdDetailed.getCode().equals("401")) {
-                                    showShortToast(R.string.tokenInvalid);
-                                    toActivity(MainActivity.createIntent(context));
-                                } else {
-                                    showShortToast(entityCrowdDetailed.getMessage());
-                                }
-
-                                progressBarDismiss();
-                            }
-                        }else{
-                            showShortToast(R.string.noReturn);
-
-                            progressBarDismiss();
-                        }
-                    }
-                });
-            }
-            else if (activityState.equals("saling")) {
-                HttpRequest.getSaleDetailed(0, uuid, new OnHttpResponseListener() {
-                    @Override
-                    public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                        if(!StringUtil.isEmpty(resultJson)){
-                            EntitySaleDetailed entitySaleDetailed =  JSON.parseObject(resultJson,EntitySaleDetailed.class);
-                            if(entitySaleDetailed.isSuccess()){
-                                //成功//showShortToast(R.string.getSuccess);
-                                toActivity(SaleDetailedActivity.createIntent(context,entitySaleDetailed));
-
-                                progressBarDismiss();
-                            }else{//显示失败信息
-                                if (entitySaleDetailed.getCode().equals("401")) {
-                                    showShortToast(R.string.tokenInvalid);
-                                    toActivity(MainActivity.createIntent(context));
-                                } else {
-                                    showShortToast(entitySaleDetailed.getMessage());
-                                }
-
-                                progressBarDismiss();
-                            }
-                        }else{
-                            showShortToast(R.string.noReturn);
-
-                            progressBarDismiss();
-                        }
-                    }
-                });
-            }
-        } else {
-            showShortToast(R.string.checkNetwork);
+            toActivity(CrowdDetailedActivity.createIntent(context, uuid));
+        }
+        else if (activityState.equals("saling") || activityState.equals("over")) {
+            toActivity(SaleDetailedActivity.createIntent(context,uuid));
         }
 
     }

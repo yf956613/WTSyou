@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,31 +15,36 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
-import com.qingye.wtsyou.activity.gaode.activity.GaoDeAddressSelectActivity;
-import zuo.biao.library.model.EntityBase;
+import com.qingye.wtsyou.areawheelview.AddressPickTask;
+import com.qingye.wtsyou.areawheelview.model.City;
+import com.qingye.wtsyou.areawheelview.model.County;
+import com.qingye.wtsyou.areawheelview.model.Province;
+import com.qingye.wtsyou.areawheelview.utils.ConvertUtils;
 import com.qingye.wtsyou.basemodel.POI;
 import com.qingye.wtsyou.model.EntityPersonalMessage;
 import com.qingye.wtsyou.model.EntityQiniuToken;
 import com.qingye.wtsyou.model.QiniuMessage;
+import com.qingye.wtsyou.timewheelview.CustomDatePicker;
 import com.qingye.wtsyou.utils.BroadcastAction;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
-import com.qingye.wtsyou.widget.CustomDatePicker;
-import zuo.biao.library.widget.CustomDialog;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.ui.AlertDialog;
 import zuo.biao.library.ui.BottomMenuWindow;
 import zuo.biao.library.ui.CutPictureActivity;
@@ -50,6 +54,7 @@ import zuo.biao.library.util.DataKeeper;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.Log;
 import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
 
 public class DataActivity extends BaseActivity implements View.OnClickListener, OnBottomDragListener
         , AlertDialog.OnDialogButtonClickListener, ItemDialog.OnDialogItemClickListener, View.OnTouchListener {
@@ -133,41 +138,41 @@ public class DataActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void initView() {
-        ivLeft = findViewById(R.id.iv_left);
+        ivLeft = findView(R.id.iv_left);
         ivLeft.setImageResource(R.mipmap.back_a);
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("我的资料");
-        tvRight = findViewById(R.id.tv_add_temp);
+        tvRight = findView(R.id.tv_add_temp);
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText("保存");
 
         //头像
-        rlHead = findViewById(R.id.rlHead,this);
-        ivHead = findViewById(R.id.iv_head);
+        rlHead = findView(R.id.rlHead,this);
+        ivHead = findView(R.id.iv_head);
 
         //背景
-        rlBackground = findViewById(R.id.rlBackground,this);
-        ivBackground = findViewById(R.id.iv_background);
+        rlBackground = findView(R.id.rlBackground,this);
+        ivBackground = findView(R.id.iv_background);
 
         //昵称
-        rlNickName = findViewById(R.id.rlNickname,this);
-        tvNickName = findViewById(R.id.tv_nickname);
+        rlNickName = findView(R.id.rlNickname,this);
+        tvNickName = findView(R.id.tv_nickname);
 
         //个性签名
-        rlSignature = findViewById(R.id.rlSignature,this);
-        tvSignature = findViewById(R.id.tv_signature);
+        rlSignature = findView(R.id.rlSignature,this);
+        tvSignature = findView(R.id.tv_signature);
 
         //性别
-        rlSex = findViewById(R.id.rlSex,this);
-        tvSex = findViewById(R.id.tv_sex);
+        rlSex = findView(R.id.rlSex,this);
+        tvSex = findView(R.id.tv_sex);
 
         //生日
-        rlBirthday = findViewById(R.id.rlBirthday,this);
-        tvBirthday = findViewById(R.id.tv_birthday);
+        rlBirthday = findView(R.id.rlBirthday,this);
+        tvBirthday = findView(R.id.tv_birthday);
 
         //地区
-        rlArea = findViewById(R.id.rlArea);
-        tvArea = findViewById(R.id.tv_area);
+        rlArea = findView(R.id.rlArea);
+        tvArea = findView(R.id.tv_area);
 
         initDatePicker();
     }
@@ -236,9 +241,16 @@ public class DataActivity extends BaseActivity implements View.OnClickListener, 
         }
         this.picturePath = path;
 
-        toActivity(CutPictureActivity.createIntent(context, path
-                , DataKeeper.imagePath, "photo" + System.currentTimeMillis(), 200)
-                , REQUEST_TO_CUT_PICTURE);
+        if (ivWhich < 1) {
+            toActivity(CutPictureActivity.createIntent(context, path
+                    , DataKeeper.imagePath, "photo" + System.currentTimeMillis(), 200,  1,1)
+                    , REQUEST_TO_CUT_PICTURE);
+        } else {
+            toActivity(CutPictureActivity.createIntent(context, path
+                    , DataKeeper.imagePath, "photo" + System.currentTimeMillis(), 400, 300,  4, 3)
+                    , REQUEST_TO_CUT_PICTURE);
+        }
+
     }
 
     /**显示图片
@@ -377,7 +389,32 @@ public class DataActivity extends BaseActivity implements View.OnClickListener, 
                 customDatePicker.show(now);
                 break;
             case R.id.rlArea:
-                toActivity(GaoDeAddressSelectActivity.createIntent(context),REQUEST_TO_SELECT_AREA);
+                //toActivity(GaoDeAddressSelectActivity.createIntent(context),REQUEST_TO_SELECT_AREA);
+                AddressPickTask task = new AddressPickTask(this);
+                ArrayList<Province> data = new ArrayList<>();
+                String json = null;
+                try {
+                    json = ConvertUtils.toString(getAssets().open("city2.json"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                data.addAll(com.alibaba.fastjson.JSON.parseArray(json, Province.class));
+                task.setCallback(new AddressPickTask.Callback() {
+                    @Override
+                    public void onAddressInitFailed() {
+                        showShortToast("数据初始化失败");
+                    }
+
+                    @Override
+                    public void onAddressPicked(Province province, City city, County county) {
+                        if (county == null) {
+                            tvArea.setText(province.getAreaName() + "-" + city.getAreaName());
+                        } else {
+                            tvArea.setText(province.getAreaName() + "-" + city.getAreaName() + "-" + county.getAreaName());
+                        }
+                    }
+                });
+                task.execute("北京", "北京", "东城");
                 break;
             default:
                 break;
@@ -480,9 +517,10 @@ public class DataActivity extends BaseActivity implements View.OnClickListener, 
                                                 String hash = qiniuMessage.getHash();
                                                 String backKey = qiniuMessage.getKey();
 
-                                                if (ivWhich < 1) {
+                                                if (ivWhich == 0) {
                                                     headQiniu = url + "/"+ backKey;
-                                                } else {
+                                                }
+                                                else if (ivWhich == 1){
                                                     backgroundQiniu = url + "/" + backKey;
                                                 }
 
@@ -522,46 +560,46 @@ public class DataActivity extends BaseActivity implements View.OnClickListener, 
 
         String nickname = tvNickName.getText().toString().trim();
         //昵称
-        if (TextUtils.isEmpty(nickname)) {
+        /*if (TextUtils.isEmpty(nickname)) {
             showShortToast(R.string.noNickName);
             return;
-        }
+        }*/
 
         String signature = tvSignature.getText().toString().trim();
         //个性签名
-        if (TextUtils.isEmpty(signature)) {
+        /*if (TextUtils.isEmpty(signature)) {
             showShortToast(R.string.noSignature);
             return;
-        }
+        }*/
 
         String sex = tvSex.getText().toString().trim();
         //性别
-        if (TextUtils.isEmpty(sex)) {
+        /*if (TextUtils.isEmpty(sex)) {
             showShortToast(R.string.noSex);
             return;
-        }
+        }*/
 
         String birthday = tvBirthday.getText().toString().trim();
         //生日
-        if (TextUtils.isEmpty(birthday)) {
+        /*if (TextUtils.isEmpty(birthday)) {
             showShortToast(R.string.noBirthday);
             return;
-        }
+        }*/
 
         String area = tvArea.getText().toString().trim();
         //地区
-        if (TextUtils.isEmpty(area)) {
+        /*if (TextUtils.isEmpty(area)) {
             showShortToast(R.string.noArea);
             return;
-        }
+        }*/
 
-        if (headQiniu.isEmpty()) {
+        /*if (headQiniu.isEmpty()) {
             headQiniu = pictureHeadPath;
         }
 
         if (backgroundQiniu.isEmpty()) {
             backgroundQiniu = pictureBackgroundPath;
-        }
+        }*/
 
         //检查网络
         if (NetUtil.checkNetwork(context)) {
@@ -616,11 +654,6 @@ public class DataActivity extends BaseActivity implements View.OnClickListener, 
             progressBarDismiss();
         }
 
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override

@@ -23,6 +23,8 @@ import android.widget.AdapterView;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
@@ -80,12 +82,19 @@ public abstract class BaseHttpRecyclerFragment<T, VH extends RecyclerView.ViewHo
 	// UI显示区(操作UI，但不存在数据获取或处理代码，也不存在事件监听代码)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	protected SmartRefreshLayout srlBaseHttpRecycler;
+	protected ClassicsHeader header;
+	protected ClassicsFooter footer;
 
 	@Override
 	public void initView() {
 		super.initView();
 
 		srlBaseHttpRecycler = findView(R.id.srlBaseHttpRecycler);
+		header = findViewById(R.id.head);
+		header.setTextSizeTitle(12);
+		header.setTextSizeTime(10);
+		footer = findViewById(R.id.foot);
+		footer.setTextSizeTitle(12);
 
 		setList((List<T>) null);//RecyclerView需要设置adapter才能显示header和footer; setAdapter调不到子类方法
 	}

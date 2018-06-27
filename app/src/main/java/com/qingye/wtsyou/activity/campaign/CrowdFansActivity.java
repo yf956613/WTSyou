@@ -15,14 +15,15 @@ import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.adapter.campaign.CrowdFansAdapter;
 import com.qingye.wtsyou.basemodel.ErrorCodeTool;
+import com.qingye.wtsyou.manager.HttpPageModel;
 import com.qingye.wtsyou.model.CrowdFans;
-import com.qingye.wtsyou.model.EntityCrowdDetailed;
 import com.qingye.wtsyou.model.EntityPageData;
 import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.campaign.CrowdFansView;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,22 +32,22 @@ import zuo.biao.library.base.BaseHttpRecyclerActivity;
 import zuo.biao.library.interfaces.AdapterCallBack;
 import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
-import zuo.biao.library.model.EntityBase;
-import zuo.biao.library.util.HttpModel;
+import zuo.biao.library.interfaces.OnHttpPageCallBack;
 import zuo.biao.library.widget.CustomDialog;
 
 import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
-public class CrowdFansActivity extends BaseHttpRecyclerActivity <CrowdFans,CrowdFansView,CrowdFansAdapter> implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
+public class CrowdFansActivity extends BaseHttpRecyclerActivity <CrowdFans,CrowdFansView,CrowdFansAdapter>
+        implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener, OnHttpPageCallBack<EntityPageData, CrowdFans> {
 
     private ImageView ivBack;
     private TextView tvHead;
 
     private CustomDialog progressBar;
 
-    private EntityCrowdDetailed entityCrowdDetailed;
+    private String activityId;
 
-    private HttpModel<EntityPageData> mEntityPageDataHttpModel;
+    private HttpPageModel<EntityPageData,CrowdFans> mEntityPageDataHttpModel;
 
     private List<CrowdFans> crowdFansList = new ArrayList<>();
 
@@ -56,10 +57,8 @@ public class CrowdFansActivity extends BaseHttpRecyclerActivity <CrowdFans,Crowd
      * @param context
      * @return
      */
-    public static Intent createIntent(Context context, EntityCrowdDetailed entityCrowdDetailed) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(Constant.CROWDDETAILED, entityCrowdDetailed);//放进数据流中
-        return new Intent(context,CrowdFansActivity.class).putExtras(bundle);
+    public static Intent createIntent(Context context, String activityId) {
+        return new Intent(context,CrowdFansActivity.class).putExtra(Constant.ACTIVITYID, activityId);
     }
 
     //启动方法>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -78,10 +77,10 @@ public class CrowdFansActivity extends BaseHttpRecyclerActivity <CrowdFans,Crowd
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
         intent = getIntent();
-        entityCrowdDetailed = (EntityCrowdDetailed) intent.getSerializableExtra(Constant.CROWDDETAILED);
+        activityId = intent.getStringExtra(Constant.ACTIVITYID);
 
         //筹资列表
-        mEntityPageDataHttpModel = new HttpModel<>(EntityPageData.class);
+        mEntityPageDataHttpModel = new HttpPageModel<>(EntityPageData.class);
         crowdFansQuery();
 
         //功能归类分区方法，必须调用<<<<<<<<<<
@@ -90,11 +89,11 @@ public class CrowdFansActivity extends BaseHttpRecyclerActivity <CrowdFans,Crowd
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        //srlBaseHttpRecycler.autoRefresh();
-        srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
         srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
         srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部*/
 
         //实例化一个GridLayoutManager，列数为3
         final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
@@ -104,10 +103,10 @@ public class CrowdFansActivity extends BaseHttpRecyclerActivity <CrowdFans,Crowd
     @Override
     public void initView() {
         super.initView();
-        ivBack = findViewById(R.id.iv_left);
+        ivBack = findView(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
-        tvHead = findViewById(R.id.tv_head_title);
-        tvHead.setText("参与粉丝");
+        tvHead = findView(R.id.tv_head_title);
+        tvHead.setText("众筹列表");
     }
 
     @Override
@@ -194,11 +193,6 @@ public class CrowdFansActivity extends BaseHttpRecyclerActivity <CrowdFans,Crowd
     }
 
     @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
-    }
-
-    @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch(keyCode){
             case KeyEvent.KEYCODE_BACK:
@@ -213,9 +207,8 @@ public class CrowdFansActivity extends BaseHttpRecyclerActivity <CrowdFans,Crowd
         setProgressBar();
         progressBar.show();
 
-        String request = HttpRequest.postCrowdFans(entityCrowdDetailed.getContent().getActivityId());
         //筹资明细
-        mEntityPageDataHttpModel.post(request, URL_BASE + URLConstant.CROWDFANSDETAILED,1,this);
+        mEntityPageDataHttpModel.refreshPost( URL_BASE + URLConstant.CROWDFANSDETAILED,this);
     }
 
     @Override
@@ -224,20 +217,74 @@ public class CrowdFansActivity extends BaseHttpRecyclerActivity <CrowdFans,Crowd
     }
 
     @Override
-    public void Success(String url, int RequestCode, EntityBase entityBase) {
-        super.Success(url, RequestCode, entityBase);
-        switch (RequestCode) {
-            case 1:
-                EntityPageData pageData = mEntityPageDataHttpModel.getData();
-                crowdFansList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(pageData.getContent().getData())
-                        ,new TypeToken<List<CrowdFans>>(){}.getType());
-                setList(crowdFansList);
-                break;
-        }
+    public List<CrowdFans> getList(EntityPageData data) {
+        return GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(data.getContent().getData())
+                ,new TypeToken<List<CrowdFans>>(){}.getType());
+    }
+
+    @Override
+    public String getRequestJsonStr(int page, int pageSize) {
+        String request = HttpRequest.postJoinFans(activityId, page, pageSize);
+        return request;
+    }
+
+    @Override
+    public void emptyPagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishRefresh();
+    }
+
+    @Override
+    public void refreshSuccessPagingList(List<CrowdFans> list) {
+        crowdFansList.clear();
+
+        crowdFansList.addAll(list);
+        setList(crowdFansList);
+        srlBaseHttpRecycler.finishRefresh();
+        srlBaseHttpRecycler.setLoadmoreFinished(false);
+    }
+
+    @Override
+    public void noMorePagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+    }
+
+    @Override
+    public void loadMoreSuccessPagingList(List<CrowdFans> list) {
+        crowdFansList.addAll(list);
+        srlBaseHttpRecycler.finishLoadmore();
+
+        setList(crowdFansList);
+
+    }
+
+    @Override
+    public void refreshErrorPagingList() {
+        showShortToast(R.string.noReturn);
+    }
+
+    @Override
+    public void loadMoreErrorPagingList() {
+        showShortToast(R.string.noReturn);
     }
 
     @Override
     public void ProgressDismiss(String url, int RequestCode) {
         progressBarDismiss();
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        super.onRefresh(refreshlayout);
+        //参与列表
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.CROWDFANSDETAILED, this);
+    }
+
+    @Override
+    public void onLoadmore(RefreshLayout refreshlayout) {
+        super.onLoadmore(refreshlayout);
+        //参与列表
+        mEntityPageDataHttpModel.loadMorePost(URL_BASE + URLConstant.CROWDFANSDETAILED, this);
     }
 }

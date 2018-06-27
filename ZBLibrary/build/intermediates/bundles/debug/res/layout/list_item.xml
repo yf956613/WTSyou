@@ -4,7 +4,7 @@
     android:layout_width="@dimen/top_menu_item_width"
     android:layout_height="@dimen/top_menu_item_height"
     android:background="@drawable/to_alpha"
-    android:gravity="center_vertical|left"
+    android:gravity="center"
     android:paddingLeft="27dp"
     android:text="选项itemITEM"
     android:paddingRight="0dp"

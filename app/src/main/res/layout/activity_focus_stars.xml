@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@color/gray_background2"
     tools:context="com.qingye.wtsyou.activity.search.SearchFansActivity">
 
     <LinearLayout
+        android:id="@+id/ll_top"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_25">
+        android:layout_height="@dimen/margin_25"
+        android:background="@color/white"
+        android:orientation="vertical">
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/ll_top"
+        android:id="@+id/ll_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <include layout="@layout/head"></include>
     </LinearLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <LinearLayout
         android:layout_below="@+id/ll_head"
-        android:id="@+id/swipe_refresh_widget"
+        android:layout_marginTop="@dimen/margin_4"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <LinearLayout
             android:id="@+id/linearlayout"
@@ -31,6 +41,30 @@
             <include layout="@layout/base_http_recycler_fragment"/>
         </LinearLayout>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/noMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/activity_b"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_6"
+            android:text="啊哦，快去关注一些喜欢的爱豆吧！"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/gray_text10"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+</RelativeLayout>

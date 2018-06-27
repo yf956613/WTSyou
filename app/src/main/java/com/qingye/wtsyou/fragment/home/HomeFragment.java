@@ -142,7 +142,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 toActivity(ChartsActivity.createIntent(context));
                 break;
             case R.id.iv_right:
-                toActivity(SelectStarsActivity.createIntent(context, 2));
+                toActivity(SelectStarsActivity.createIntent(context, 3));
                 break;
             default:
                 break;

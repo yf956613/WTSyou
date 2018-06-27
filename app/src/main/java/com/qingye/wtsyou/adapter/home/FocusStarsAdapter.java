@@ -31,6 +31,6 @@ public class FocusStarsAdapter extends BaseAdapter<FocusStars,FocusStarsView> {
         FocusStarsView focusStarsView = new FocusStarsView(context, parent);
         focusStarsView.setOnItemChildClickListener(onItemChildClickListener);
 
-        return new FocusStarsView(context, parent);
+        return focusStarsView;
     }
 }

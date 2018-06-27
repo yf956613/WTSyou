@@ -47,13 +47,13 @@ public class StarsChartsView extends BaseView<RankInfos> implements View.OnClick
     @SuppressLint("InflateParams")
     @Override
     public View createView() {
-        tvNo = findViewById(R.id.tv_No);
-        tvName = findViewById(R.id.tv_stars_name);
-        tvValue = findViewById(R.id.tv_value);
-        tvFocus = findViewById(R.id.tv_focus,this);
-        ivImg = findViewById(R.id.iv_stars_img);
+        tvNo = findView(R.id.tv_No);
+        tvName = findView(R.id.tv_stars_name);
+        tvValue = findView(R.id.tv_value);
+        tvFocus = findView(R.id.tv_focus,this);
+        ivImg = findView(R.id.iv_stars_img);
 
-        tvRank = findViewById(R.id.tv_rank,this);
+        tvRank = findView(R.id.tv_rank,this);
 
         return super.createView();
     }

@@ -14,13 +14,24 @@ import zuo.biao.library.base.BaseAdapter;
 
 public class SearchFansAdapter extends BaseAdapter<Fans,SearchFansView> {
 
+    private SearchFansView.OnItemChildClickListener onItemChildClickListener;
+
+    //给监听设置一个构造函数，用于main中调用
+    public void setOnItemChildClickListener(SearchFansView.OnItemChildClickListener onItemChildClickListener) {
+        this.onItemChildClickListener = onItemChildClickListener;
+    }
+
     public SearchFansAdapter(Activity context) {
         super(context);
     }
 
     @Override
     public SearchFansView createView(int position, ViewGroup parent) {
-        return new SearchFansView(context, parent);
+
+        SearchFansView searchFansView = new SearchFansView(context, parent);
+        searchFansView.setOnItemChildClickListener(onItemChildClickListener);
+
+        return searchFansView;
     }
 
 }

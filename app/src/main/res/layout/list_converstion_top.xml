@@ -7,13 +7,17 @@
     android:layout_marginRight="@dimen/margin_6">
 
     <ImageView
-        android:id="@+id/iv_conversation_top_img"
+        android:id="@+id/iv_img"
         android:layout_width="160dp"
         android:layout_height="100dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/img_q"/>
+        android:scaleType="fitXY"/>
 
-    <TextView
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/corners_clarity_black"/>
+
+    <!--<TextView
         android:id="@+id/tv_star_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +32,7 @@
         android:text="陈绮贞"
         android:textSize="@dimen/text_size_9"
         android:textColor="@color/white"
-        android:background="@drawable/re_corners_red"/>
+        android:background="@drawable/re_corners_red"/>-->
 
     <RelativeLayout
         android:layout_width="170dp"
@@ -45,7 +49,8 @@
             android:maxLines="2"
             android:ellipsize="end"
             android:gravity="center"
-            android:text="陈绮贞房间里的音乐会讨论聊天室"
+            android:layout_centerHorizontal="true"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_13"/>
 
@@ -71,7 +76,7 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:gravity="center"
-                android:text="1789"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_10"/>
 

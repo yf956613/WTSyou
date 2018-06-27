@@ -48,14 +48,14 @@ public class IdentifyConversationActivity extends BaseActivity implements View.O
 
     @Override
     public void initView() {
-        tvLeft = findViewById(R.id.tv_left);
+        tvLeft = findView(R.id.tv_left);
         tvLeft.setVisibility(View.VISIBLE);
         tvLeft.setText("取消");
-        tvRight = findViewById(R.id.tv_add_temp);
+        tvRight = findView(R.id.tv_add_temp);
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText("下一步");
         tvRight.setTextColor(getResources().getColor(R.color.orange_text2));
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("创建聊天室");
     }
 
@@ -83,11 +83,6 @@ public class IdentifyConversationActivity extends BaseActivity implements View.O
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override

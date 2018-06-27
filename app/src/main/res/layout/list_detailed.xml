@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:text="签到"
+                android:text=""
                 android:textColor="@color/black_text1"
                 android:textSize="@dimen/text_size_14"/>
 
@@ -77,7 +77,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="200"
+                android:text=""
                 android:textSize="@dimen/text_size_13"
                 android:textColor="@color/orange_line"/>
         </LinearLayout>

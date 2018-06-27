@@ -23,8 +23,4 @@ public class SelectedStarsAdapter extends BaseAdapter<EntityStars,SelectedStarsV
         return new SelectedStarsView(context, parent);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
 }

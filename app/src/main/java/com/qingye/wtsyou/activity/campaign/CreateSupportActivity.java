@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -11,6 +12,8 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,12 +26,16 @@ import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.search.SelectThreeStarsActivity;
-import zuo.biao.library.model.EntityBase;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
 import com.qingye.wtsyou.fragment.campaign.AssociateConversationFragment;
 import com.qingye.wtsyou.fragment.campaign.AssociateStarsFragment;
-import com.qingye.wtsyou.model.EntityQiniuToken;
-import com.qingye.wtsyou.model.EntityStars;
+import com.qingye.wtsyou.manager.HttpModel;
+import com.qingye.wtsyou.model.ChatingRoom;
 import com.qingye.wtsyou.model.EntityContent;
+import com.qingye.wtsyou.model.EntityQiniuToken;
+import com.qingye.wtsyou.model.EntityRule;
+import com.qingye.wtsyou.model.EntityStars;
+import com.qingye.wtsyou.model.Id;
 import com.qingye.wtsyou.model.QiniuMessage;
 import com.qingye.wtsyou.model.SupportType;
 import com.qingye.wtsyou.model.SupportTypeItem;
@@ -36,8 +43,8 @@ import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.widget.AutoLineFeedLayout;
-import zuo.biao.library.widget.CustomDialog;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
@@ -51,14 +58,19 @@ import java.util.List;
 
 import fj.edittextcount.lib.FJEditTextCount;
 import zuo.biao.library.base.BaseActivity;
+import zuo.biao.library.interfaces.IErrorCodeTool;
 import zuo.biao.library.interfaces.OnBottomDragListener;
 import zuo.biao.library.interfaces.OnHttpResponseListener;
+import zuo.biao.library.model.EntityBase;
 import zuo.biao.library.ui.CutPictureActivity;
 import zuo.biao.library.ui.SelectPictureActivity;
 import zuo.biao.library.util.DataKeeper;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.Log;
 import zuo.biao.library.util.StringUtil;
+import zuo.biao.library.widget.CustomDialog;
+
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
 
 public class CreateSupportActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -75,6 +87,7 @@ public class CreateSupportActivity extends BaseActivity implements View.OnClickL
 
     private RelativeLayout rlPicture;
     private ImageView ivSelectPicture;
+    private WebView webView;
 
     //应援类型
     List<SupportTypeItem> supportTypeItem = new ArrayList<>();
@@ -83,8 +96,13 @@ public class CreateSupportActivity extends BaseActivity implements View.OnClickL
     private String name;//选择类型
     private BigDecimal bigTarget = BigDecimal.ZERO;//目标金额
 
+    private HttpModel<EntityBase> mEntityBaseHttpModel;
+    private HttpModel<EntityRule> mEntityRuleHttpModel;
+
     //关联明星
     private List<EntityStars> selectStars = new ArrayList<>();
+    //关联聊天室
+    private List<ChatingRoom> selectConversation = new ArrayList<>();
 
     private CustomDialog progressBar;
 
@@ -111,6 +129,11 @@ public class CreateSupportActivity extends BaseActivity implements View.OnClickL
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
+        mEntityBaseHttpModel = new HttpModel<>(EntityBase.class);
+        //规则
+        mEntityRuleHttpModel = new HttpModel<>(EntityRule.class);
+        ruleQuery();
+
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
@@ -120,37 +143,29 @@ public class CreateSupportActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void initView() {
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("发起应援");
-        tvRight = findViewById(R.id.tv_add_temp);
+        tvRight = findView(R.id.tv_add_temp);
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setTextColor(getResources().getColor(R.color.black_text));
         tvRight.setText("取消");
 
-        edtName = findViewById(R.id.edt_support_name);
-        edtContent = findViewById(R.id.edt_support_content);
-        edtTarget = findViewById(R.id.edt_target_value);
+        edtName = findView(R.id.edt_support_name);
+        edtContent = findView(R.id.edt_support_content);
+        edtTarget = findView(R.id.edt_target_value);
 
-        layout = findViewById(R.id.al);
+        layout = findView(R.id.al);
 
-        //关联聊天室
-        AssociateConversationFragment associateConversationFragment = new AssociateConversationFragment();
-        //注意这里是调用getChildFragmentManager()方法
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        //把碎片添加到碎片中
-        transaction.replace(R.id.list_associate_conversation,associateConversationFragment);
-        transaction.commit();
-
-        llAssociateConversation = findViewById(R.id.ll_associate_conversation);
-        llAssociationStars = findViewById(R.id.ll_associate_star);
-        llTargetValue = findViewById(R.id.ll_target_value);
+        llAssociateConversation = findView(R.id.ll_associate_conversation);
+        llAssociationStars = findView(R.id.ll_associate_star);
+        llTargetValue = findView(R.id.ll_target_value);
 
         //添加图片
-        rlPicture = findViewById(R.id.rl_picture);
-        ivSelectPicture = findViewById(R.id.iv_select_img);
+        rlPicture = findView(R.id.rl_picture);
+        ivSelectPicture = findView(R.id.iv_select_img);
 
-        btnCreate = findViewById(R.id.btn_create);
+        btnCreate = findView(R.id.btn_create);
+        webView = findView(R.id.webView);
     }
 
     @Override
@@ -218,7 +233,7 @@ public class CreateSupportActivity extends BaseActivity implements View.OnClickL
         this.picturePath = path;
 
         toActivity(CutPictureActivity.createIntent(context, path
-                , DataKeeper.imagePath, "photo" + System.currentTimeMillis(), 200)
+                , DataKeeper.imagePath, "photo" + System.currentTimeMillis(), 400, 300, 4, 3)
                 , REQUEST_TO_CUT_PICTURE);
     }
 
@@ -242,10 +257,18 @@ public class CreateSupportActivity extends BaseActivity implements View.OnClickL
             case R.id.tv_add_temp:
                 finish();
                 break;case R.id.ll_associate_star:
-                toActivity(SelectThreeStarsActivity.createIntent(context,selectStars),REQUEST_TO_SELECT_STARS);
+                toActivity(SelectThreeStarsActivity.createIntent(context,selectStars), REQUEST_TO_SELECT_STARS);
                 break;
             case R.id.ll_associate_conversation:
-                toActivity(SelectStarsConversationActivity.createIntent(context));
+                if (selectStars.isEmpty()) {
+                    showShortToast(R.string.associateStars);
+                    return;
+                }
+                String[] relevanceStar = new String[selectStars.size()];
+                for (int i = 0;i < selectStars.size();i ++) {
+                    relevanceStar[i] = selectStars.get(i).getUuid();
+                }
+                toActivity(SelectStarsConversationActivity.createIntent(context, relevanceStar, selectConversation), REQUEST_TO_SELECT_CONVERSATION);
                 break;
             case R.id.rl_picture:
                 selectPicture();
@@ -260,6 +283,7 @@ public class CreateSupportActivity extends BaseActivity implements View.OnClickL
     }
 
     private static final int REQUEST_TO_SELECT_STARS = 1;
+    private static final int REQUEST_TO_SELECT_CONVERSATION = 3;
     private static final int REQUEST_TO_SELECT_PICTURE = 20;
     private static final int REQUEST_TO_CUT_PICTURE = 21;
 
@@ -296,6 +320,22 @@ public class CreateSupportActivity extends BaseActivity implements View.OnClickL
                     setPicture(data.getStringExtra(CutPictureActivity.RESULT_PICTURE_PATH));
                 }
                 break;
+            case REQUEST_TO_SELECT_CONVERSATION:
+                if (data != null) {
+                    selectConversation = (List<ChatingRoom>) data.getExtras().getSerializable(Constant.SELECTED_CONVERSATION);
+
+                    //关联聊天室
+                    AssociateConversationFragment associateConversationFragment = new AssociateConversationFragment();
+                    //注意这里是调用getChildFragmentManager()方法
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction transaction = manager.beginTransaction();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Constant.SELECTED_CONVERSATION, (Serializable) selectConversation);
+                    associateConversationFragment.setArguments(bundle);
+                    //把碎片添加到碎片中
+                    transaction.replace(R.id.list_associate_conversation,associateConversationFragment);
+                    transaction.commit();
+                }
             default:
                 break;
         }
@@ -339,10 +379,10 @@ public class CreateSupportActivity extends BaseActivity implements View.OnClickL
 
     public void selectSupportType() {
         View view;
-        final List<Button> buttonList = new ArrayList<>();
+        final List<TextView> buttonList = new ArrayList<>();
         for (int i = 0; i < supportTypeItem.size(); i ++) {
             view = LayoutInflater.from(CreateSupportActivity.this).inflate(R.layout.list_radiobutton, null);
-            final Button button = view.findViewById(R.id.btn);
+            final TextView button = (TextView) view.findViewById(R.id.btn);
             button.setTag(i);
             button.setText(supportTypeItem.get(i).getSupportType().getName());
             boolean isSelect = supportTypeItem.get(i).getSelector();
@@ -491,7 +531,12 @@ public class CreateSupportActivity extends BaseActivity implements View.OnClickL
             }
         }
         String detail = edtContent.getText().toString().trim();
-        String relevanceStar = selectStars.get(0).getUuid();
+        List<Id> relevanceStar = new ArrayList<>();
+        for (int i = 0;i < selectStars.size();i ++) {
+            Id id = new Id();
+            id.setId(selectStars.get(i).getUuid());
+            relevanceStar.add(id);
+        }
         if (WHICH == 1) {
             String allTarget = edtTarget.getText().toString().trim();
             bigTarget = new BigDecimal(allTarget);
@@ -499,59 +544,31 @@ public class CreateSupportActivity extends BaseActivity implements View.OnClickL
             bigTarget = BigDecimal.ZERO;
         }
 
-        //检查网络
-        if (NetUtil.checkNetwork(this)) {
+        String[] chatingRooms = new String[selectConversation.size()];
+        if (selectConversation.size() > 0) {
 
-            setProgressBar();
-            progressBar.show();
-
-            HttpRequest.postCreateSupport(0, activityName, activityIcon,
-                    name, detail, relevanceStar, bigTarget, WHICH,new OnHttpResponseListener() {
-
-                        @Override
-                        public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-
-                            if(!StringUtil.isEmpty(resultJson)){
-                                EntityBase entityBase =  JSON.parseObject(resultJson,EntityBase.class);
-                                if(entityBase.isSuccess()){
-                                    //成功
-                                    showShortToast(R.string.createSuppoertSuccess);
-                                    finish();
-
-                                    progressBarDismiss();
-                                }else{//显示失败信息
-                                    if (entityBase.getCode().equals("401")) {
-                                        showShortToast(R.string.tokenInvalid);
-                                        toActivity(MainActivity.createIntent(context));
-                                    } else {
-                                        showShortToast(entityBase.getMessage());
-                                    }
-
-                                    progressBarDismiss();
-                                }
-                            }else{
-                                showShortToast(R.string.noReturn);
-
-                                progressBarDismiss();
-
-                            }
-                        }
-                    });
+            for (int i = 0;i < selectConversation.size();i ++) {
+                chatingRooms[i] = selectConversation.get(i).getId();
+            }
         } else {
-            showShortToast(R.string.checkNetwork);
-
-            progressBarDismiss();
+            chatingRooms = null;
         }
+
+        setProgressBar();
+        progressBar.show();
+
+        String request = HttpRequest.postCreateSupport(activityName, activityIcon,
+                name, detail, relevanceStar, bigTarget, WHICH, chatingRooms);
+        mEntityBaseHttpModel.post(request, URL_BASE + URLConstant.CREATESUPPORT,1,this);
+    }
+
+    public void ruleQuery() {
+        mEntityRuleHttpModel.get( URL_BASE + URLConstant.RULE + "support",2,this);
     }
 
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override
@@ -563,5 +580,47 @@ public class CreateSupportActivity extends BaseActivity implements View.OnClickL
         }
 
         return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public void Success(String url, int RequestCode, EntityBase entityBase) {
+        super.Success(url, RequestCode, entityBase);
+        switch (RequestCode) {
+            case 1:
+                //成功
+                showShortToast(R.string.createSupportSuccess);
+                finish();
+                break;
+            case 2:
+                WebSettings settings = webView.getSettings();
+                settings.setJavaScriptEnabled(true);
+                settings.setDomStorageEnabled(true);
+                settings.setUseWideViewPort(true);
+                settings.setLoadWithOverviewMode(true);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+                } else {
+                    settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+                }
+
+                settings.setDefaultFontSize(30);
+                settings.setDefaultFixedFontSize(30);
+
+                EntityRule entityRule = mEntityRuleHttpModel.getData();
+                webView.setBackgroundColor(0); // 设置背景色
+                webView.loadData(entityRule.getContent().getRuleDescription(), "text/html;charset=utf-8","utf-8");
+                break;
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
     }
 }

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.model.EntityRankInfo;
+import com.qingye.wtsyou.model.RankInfo;
 
 import zuo.biao.library.base.BaseView;
 
@@ -18,7 +18,7 @@ import zuo.biao.library.base.BaseView;
  * Created by pm89 on 2018/3/6.
  */
 
-public class HomeStarsChartsPastView extends BaseView<EntityRankInfo> implements View.OnClickListener {
+public class HomeStarsChartsPastView extends BaseView<RankInfo> implements View.OnClickListener {
 
     private LinearLayout ll1,ll2,ll3;
     private TextView tvPeriodsZone;
@@ -34,40 +34,62 @@ public class HomeStarsChartsPastView extends BaseView<EntityRankInfo> implements
     @Override
     public View createView() {
 
-        ll1 = findViewById(R.id.ll1);
-        ll2 = findViewById(R.id.ll2);
-        ll3 = findViewById(R.id.ll3);
+        ll1 = findView(R.id.ll1);
+        ll2 = findView(R.id.ll2);
+        ll3 = findView(R.id.ll3);
 
         //区间
-        tvPeriodsZone = findViewById(R.id.tv_periods_zone);
+        tvPeriodsZone = findView(R.id.tv_periods_zone);
 
         //名字
-        tvFirstName = findViewById(R.id.tv_first_name);
-        tvSecondName = findViewById(R.id.tv_second_name);
-        tvThirdName = findViewById(R.id.tv_third_name);
+        tvFirstName = findView(R.id.tv_first_name);
+        tvSecondName = findView(R.id.tv_second_name);
+        tvThirdName = findView(R.id.tv_third_name);
         //积分
-        tvFirstScore = findViewById(R.id.tv_first_value);
-        tvSecondScore = findViewById(R.id.tv_second_value);
-        tvThirdScore = findViewById(R.id.tv_third_value);
+        tvFirstScore = findView(R.id.tv_first_value);
+        tvSecondScore = findView(R.id.tv_second_value);
+        tvThirdScore = findView(R.id.tv_third_value);
         //图片
-        ivFirstImg = findViewById(R.id.iv_first_img);
-        ivSecondImg = findViewById(R.id.iv_second_img);
-        ivThirdImg = findViewById(R.id.iv_third_img);
+        ivFirstImg = findView(R.id.iv_first_img);
+        ivSecondImg = findView(R.id.iv_second_img);
+        ivThirdImg = findView(R.id.iv_third_img);
 
         return super.createView();
     }
 
     @Override
-    public void bindView(EntityRankInfo data_){
-        super.bindView(data_ != null ? data_ : new EntityRankInfo());
+    public void bindView(RankInfo data_){
+        super.bindView(data_ != null ? data_ : new RankInfo());
 
         tvPeriodsZone.setText(data.getPeriodsZone());
+
+        int size = data.getRankInfos().size();
+        if (size > 3) {
+            ll1.setVisibility(View.VISIBLE);
+            ll2.setVisibility(View.VISIBLE);
+            ll3.setVisibility(View.VISIBLE);
+        }
+        else if (size < 3 && size > 1) {
+            ll1.setVisibility(View.VISIBLE);
+            ll2.setVisibility(View.VISIBLE);
+            ll3.setVisibility(View.GONE);
+        }
+        else if (size < 2 && size > 0) {
+            ll1.setVisibility(View.VISIBLE);
+            ll2.setVisibility(View.GONE);
+            ll3.setVisibility(View.GONE);
+        }
+        else if (size == 0) {
+            ll1.setVisibility(View.VISIBLE);
+            ll2.setVisibility(View.VISIBLE);
+            ll3.setVisibility(View.GONE);
+        }
 
         if (data.getRankInfos().size() > 0) {
             ll1.setVisibility(View.VISIBLE);
             if (data.getRankInfos().get(0) != null) {
                 tvFirstName.setText(data.getRankInfos().get(0).getUserName());
-                tvFirstScore.setText("" + data.getRankInfos().get(0).getRanking());
+                tvFirstScore.setText("" + data.getRankInfos().get(0).getScore());
 
                 //图片
                 String urlFirst = data.getRankInfos().get(0).getUserPhoto();
@@ -83,7 +105,7 @@ public class HomeStarsChartsPastView extends BaseView<EntityRankInfo> implements
             ll2.setVisibility(View.VISIBLE);
             if (data.getRankInfos().get(1) != null) {
                 tvSecondName.setText(data.getRankInfos().get(1).getUserName());
-                tvSecondScore.setText("" + data.getRankInfos().get(1).getRanking());
+                tvSecondScore.setText("" + data.getRankInfos().get(1).getScore());
 
                 //图片
                 String urlFirst = data.getRankInfos().get(1).getUserPhoto();
@@ -99,7 +121,7 @@ public class HomeStarsChartsPastView extends BaseView<EntityRankInfo> implements
             ll3.setVisibility(View.VISIBLE);
             if (data.getRankInfos().get(2) != null) {
                 tvThirdName.setText(data.getRankInfos().get(2).getUserName());
-                tvThirdScore.setText("" + data.getRankInfos().get(2).getRanking());
+                tvThirdScore.setText("" + data.getRankInfos().get(2).getScore());
 
                 //图片
                 String urlFirst = data.getRankInfos().get(2).getUserPhoto();

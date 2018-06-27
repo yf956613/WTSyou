@@ -2,18 +2,15 @@ package com.qingye.wtsyou.activity.campaign;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,21 +21,21 @@ import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.qingye.wtsyou.R;
-import com.qingye.wtsyou.activity.gaode.activity.GaoDeAddressSelectActivity;
 import com.qingye.wtsyou.adapter.SlidingPagerAdapter;
-import com.qingye.wtsyou.basemodel.POI;
+import com.qingye.wtsyou.citypicker.bean.BaseCity;
+import com.qingye.wtsyou.citypicker.ui.CityPickerActivity;
 import com.qingye.wtsyou.entity.TabEntity;
 import com.qingye.wtsyou.fragment.campaign.StarsCampaignCrowdFragment;
 import com.qingye.wtsyou.fragment.campaign.StarsCampaignShowFragment;
 import com.qingye.wtsyou.fragment.campaign.StarsCampaignVoteFragment;
+import com.qingye.wtsyou.utils.BroadcastAction;
 import com.qingye.wtsyou.utils.Constant;
-import zuo.biao.library.widget.CustomDialog;
-import com.qingye.wtsyou.widget.VpSwipeRefreshLayout;
 
 import java.util.ArrayList;
 
 import zuo.biao.library.base.BaseActivity;
 import zuo.biao.library.interfaces.OnBottomDragListener;
+import zuo.biao.library.widget.CustomDialog;
 
 public class ShowAllActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, OnBottomDragListener {
 
@@ -62,7 +59,6 @@ public class ShowAllActivity extends BaseActivity implements View.OnClickListene
     private String cityName = null;
 
     private LinearLayout linearLayout;
-    private VpSwipeRefreshLayout swipeRefresh;
 
     private CustomDialog progressBar;
 
@@ -83,6 +79,17 @@ public class ShowAllActivity extends BaseActivity implements View.OnClickListene
         return this; //必须return this;
     }
 
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastAction.ACTION_SHOWALL_REFRESH)) {
+                setView();
+            }
+        }
+
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,30 +97,32 @@ public class ShowAllActivity extends BaseActivity implements View.OnClickListene
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
+        IntentFilter myIntentFilter = new IntentFilter();
+        myIntentFilter.addAction(BroadcastAction.ACTION_SHOWALL_REFRESH);
+        // 注册广播
+        registerReceiver(mBroadcastReceiver, myIntentFilter);
+
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         setView();
-        //刷新
-        initHrvsr();
         initData();
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
     }
 
     public void initView() {
-        swipeRefresh = findViewById(R.id.swipe_refresh_widget);
-        linearLayout = findViewById(R.id.linearlayout);
+        linearLayout = findView(R.id.linearlayout);
 
-        ivBack = findViewById(R.id.iv_left);
+        ivBack = findView(R.id.iv_left);
         ivBack.setImageResource(R.mipmap.back_a);
         tvHead = findView(R.id.tv_head_title);
         tvHead.setText("全部演出");
-        llCity = findViewById(R.id.ll_city);
+        llCity = findView(R.id.ll_city);
         llCity.setVisibility(View.VISIBLE);
-        tvRight = findViewById(R.id.tv_right);
+        tvRight = findView(R.id.tv_right);
 
-        mTabLayout = findViewById(R.id.tab);
-        mViewPager = findViewById(R.id.viewPager);
+        mTabLayout = findView(R.id.tab);
+        mViewPager = findView(R.id.viewPager);
     }
 
     public void onResume() {
@@ -124,6 +133,8 @@ public class ShowAllActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        unregisterReceiver(mBroadcastReceiver);
 
         if (progressBar != null) {
             if (progressBar.isShowing()) {
@@ -148,39 +159,6 @@ public class ShowAllActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-    //刷新
-    private void initHrvsr(){
-        //设置刷新时动画的颜色，可以设置4个
-        swipeRefresh.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_light,
-                android.R.color.holo_red_light, android.R.color.holo_orange_light,
-                android.R.color.holo_green_light);
-        swipeRefresh.setProgressViewOffset(false, 0, (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
-                        .getDisplayMetrics()));
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.e("swipeRefresh", "invoke onRefresh...");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        setView();
-                        showShortToast(R.string.getSuccess);
-                        swipeRefresh.setRefreshing(false);
-                    }
-                }, 1500);
-            }
-        });
-        // 设置子视图是否允许滚动到顶部
-        swipeRefresh.setOnChildScrollUpCallback(new SwipeRefreshLayout.OnChildScrollUpCallback() {
-            @Override
-            public boolean canChildScrollUp(SwipeRefreshLayout parent, @Nullable View child) {
-                return linearLayout.getScrollY() > 0;
-            }
-        });
-    }
-
     public void setView() {
         mTabEntities.clear();
         Bundle bundle = new Bundle();
@@ -193,7 +171,7 @@ public class ShowAllActivity extends BaseActivity implements View.OnClickListene
             for (Fragment f : this.mFragments) {
                 ft.remove(f);
             }
-            ft.commit();
+            ft.commitAllowingStateLoss();
             ft = null;
             fm.executePendingTransactions();
         }
@@ -256,6 +234,7 @@ public class ShowAllActivity extends BaseActivity implements View.OnClickListene
             }
         });
 
+        //设置tab
         mTabLayout.setIndicatorAnimEnable(false);
         mTabLayout.setCurrentTab(0);
     }
@@ -271,6 +250,12 @@ public class ShowAllActivity extends BaseActivity implements View.OnClickListene
         llCity.setOnClickListener(this);
     }
 
+    /*@Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY, R.style.CustomTheme);
+    }*/
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -278,7 +263,9 @@ public class ShowAllActivity extends BaseActivity implements View.OnClickListene
                 finish();
                 break;
             case R.id.ll_city:
-                toActivity(GaoDeAddressSelectActivity.createIntent(context),REQUEST_TO_SELECT_AREA);
+                //toActivity(GaoDeAddressSelectActivity.createIntent(context),REQUEST_TO_SELECT_AREA);
+                Intent intent = new Intent(ShowAllActivity.this, CityPickerActivity.class);
+                startActivityForResult(intent,REQUEST_TO_SELECT_AREA);
                 break;
             default:
                 break;
@@ -295,9 +282,9 @@ public class ShowAllActivity extends BaseActivity implements View.OnClickListene
         switch (requestCode) {
             case REQUEST_TO_SELECT_AREA:
                 if (data != null) {
-                    POI selectedCity = (POI) data.getExtras().getSerializable(Constant.SELECTED_ADDRESS);
-                    tvRight.setText(selectedCity.getPcdt().getCity().toString());
-                    cityName = selectedCity.getPcdt().getCity().toString();
+                    BaseCity selectedCity = (BaseCity) data.getExtras().getSerializable(Constant.SELECTED_ADDRESS);
+                    tvRight.setText(selectedCity.getCityName());
+                    cityName = selectedCity.getCityName();
                     setView();
                 }
                 break;
@@ -311,11 +298,6 @@ public class ShowAllActivity extends BaseActivity implements View.OnClickListene
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override

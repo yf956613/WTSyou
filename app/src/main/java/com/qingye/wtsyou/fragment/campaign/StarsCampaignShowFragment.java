@@ -6,12 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
 import com.qingye.wtsyou.R;
 import com.qingye.wtsyou.activity.MainActivity;
 import com.qingye.wtsyou.activity.campaign.SaleDetailedActivity;
 import com.qingye.wtsyou.adapter.campaign.StarsCampaignShowAdapter;
+import com.qingye.wtsyou.basemodel.ErrorCodeTool;
 import com.qingye.wtsyou.model.Concert;
 import com.qingye.wtsyou.model.EntityPageData;
 import com.qingye.wtsyou.model.EntitySaleDetailed;
@@ -19,7 +21,13 @@ import com.qingye.wtsyou.utils.Constant;
 import com.qingye.wtsyou.utils.GsonUtil;
 import com.qingye.wtsyou.utils.HttpRequest;
 import com.qingye.wtsyou.utils.NetUtil;
+import com.qingye.wtsyou.utils.URLConstant;
 import com.qingye.wtsyou.view.campaign.StarsCampaignShowView;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+
+import zuo.biao.library.interfaces.IErrorCodeTool;
+import zuo.biao.library.interfaces.OnHttpPageCallBack;
+import com.qingye.wtsyou.manager.HttpPageModel;
 import zuo.biao.library.widget.CustomDialog;
 
 import java.util.ArrayList;
@@ -32,7 +40,14 @@ import zuo.biao.library.interfaces.OnHttpResponseListener;
 import zuo.biao.library.util.JSON;
 import zuo.biao.library.util.StringUtil;
 
-public class StarsCampaignShowFragment extends BaseHttpRecyclerFragment<Concert,StarsCampaignShowView,StarsCampaignShowAdapter> implements CacheCallBack<Concert> {
+import static com.qingye.wtsyou.utils.HttpRequest.URL_BASE;
+
+public class StarsCampaignShowFragment extends BaseHttpRecyclerFragment<Concert,StarsCampaignShowView,StarsCampaignShowAdapter>
+        implements CacheCallBack<Concert>, OnHttpPageCallBack<EntityPageData, Concert> {
+
+    private LinearLayout noMessage;
+
+    private HttpPageModel<EntityPageData, Concert> mEntityPageDataHttpModel;
 
     private CustomDialog progressBar;
 
@@ -67,6 +82,8 @@ public class StarsCampaignShowFragment extends BaseHttpRecyclerFragment<Concert,
 
         progressBar = new CustomDialog(getActivity(),R.style.CustomDialog);
 
+        //演唱会列表
+        mEntityPageDataHttpModel = new HttpPageModel<>(EntityPageData.class);
         concertQuery();
 
         initCache(this);
@@ -77,11 +94,11 @@ public class StarsCampaignShowFragment extends BaseHttpRecyclerFragment<Concert,
         initEvent();
         //功能归类分区方法，必须调用>>>>>>>>>>
 
-        //srlBaseHttpRecycler.autoRefresh();
-        srlBaseHttpRecycler.setEnableRefresh(false);//不启用下拉刷新
-        srlBaseHttpRecycler.setEnableLoadmore(false);//不启用上拉加载更多
-        srlBaseHttpRecycler.setEnableHeaderTranslationContent(false);//头部
-        srlBaseHttpRecycler.setEnableFooterTranslationContent(false);//尾部
+        srlBaseHttpRecycler.autoRefresh();
+        /*srlBaseHttpRecycler.setEnableRefresh(true);//不启用下拉刷新
+        srlBaseHttpRecycler.setEnableLoadmore(true);//不启用上拉加载更多
+        srlBaseHttpRecycler.setEnableHeaderTranslationContent(true);//头部
+        srlBaseHttpRecycler.setEnableFooterTranslationContent(true);//尾部*/
 
         return view;
     }
@@ -90,6 +107,7 @@ public class StarsCampaignShowFragment extends BaseHttpRecyclerFragment<Concert,
     public void initView() {
         super.initView();
 
+        noMessage = findViewById(R.id.noMessage);
     }
 
     public void onResume() {
@@ -190,105 +208,141 @@ public class StarsCampaignShowFragment extends BaseHttpRecyclerFragment<Concert,
         return 0;
     }
 
-    public void concertQuery() {
-        if (NetUtil.checkNetwork(getActivity())) {
-            setProgressBar();
-            progressBar.show();
-
-            String activityStates = null;
-            String relevanceStar = null;
-            String activityProperty = "concert";
-            String createUserId = null;
-            String parts = "prices";
-
-            HttpRequest.postConcertQuery(0, activityStates, relevanceStar, cityName, activityProperty,
-                    createUserId, parts, new OnHttpResponseListener() {
-
-                        @Override
-                        public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-
-                            if(!StringUtil.isEmpty(resultJson)){
-
-                                if(!StringUtil.isEmpty(resultJson)){
-
-                                    EntityPageData entityPageData =  JSON.parseObject(resultJson,EntityPageData.class);
-
-                                    if(entityPageData.isSuccess()){
-                                        //成功
-                                        //showShortToast(R.string.getSuccess);
-                                        concertList = GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(entityPageData.getContent().getData())
-                                                ,new TypeToken<List<Concert>>(){}.getType());
-
-                                        setList(concertList);
-
-                                        progressBarDismiss();
-                                    }else{//显示失败信息
-                                        if (entityPageData.getCode().equals("401")) {
-                                            showShortToast(R.string.tokenInvalid);
-                                            toActivity(MainActivity.createIntent(context));
-                                        } else {
-                                            showShortToast(entityPageData.getMessage());
-                                        }
-
-                                        progressBarDismiss();
-                                    }
-
-                                }else{
-                                    showShortToast(R.string.noReturn);
-
-                                    progressBarDismiss();
-                                }
-                            }else{
-                                showShortToast(R.string.noReturn);
-
-                                progressBarDismiss();
-                            }
-                        }
-                    });
-        } else {
-            showShortToast(R.string.checkNetwork);
-        }
-    }
-
     //点击item
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //检查网络
-        if (NetUtil.checkNetwork(context)) {
-            String uuid = concertList.get(position).getActivityId();
 
-            setProgressBar();
-            progressBar.show();
+        String uuid = concertList.get(position).getActivityId();
+        toActivity(SaleDetailedActivity.createIntent(context, concertList.get(position).getActivityId()));
 
-            HttpRequest.getSaleDetailed(0, uuid, new OnHttpResponseListener() {
-                @Override
-                public void onHttpResponse(int requestCode, String resultJson, Exception e) {
-                    if(!StringUtil.isEmpty(resultJson)){
-                        EntitySaleDetailed entitySaleDetailed =  JSON.parseObject(resultJson,EntitySaleDetailed.class);
-                        if(entitySaleDetailed.isSuccess()){
-                            //成功//showShortToast(R.string.getSuccess);
-                            toActivity(SaleDetailedActivity.createIntent(context, entitySaleDetailed));
+    }
 
-                            progressBarDismiss();
-                        }else{//显示失败信息
-                            if (entitySaleDetailed.getCode().equals("401")) {
-                                showShortToast(R.string.tokenInvalid);
-                                toActivity(MainActivity.createIntent(context));
-                            } else {
-                                showShortToast(entitySaleDetailed.getMessage());
-                            }
+    public void concertQuery() {
+        /*setProgressBar();
+        progressBar.show();*/
 
-                            progressBarDismiss();
-                        }
-                    }else{
-                        showShortToast(R.string.noReturn);
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.CONCERTQUERY, this);
 
-                        progressBarDismiss();
-                    }
-                }
-            });
+    }
+
+    @Override
+    public IErrorCodeTool getErrorCodeTool() {
+        return ErrorCodeTool.getInstance();
+    }
+
+    @Override
+    public List<Concert> getList(EntityPageData data) {
+        return GsonUtil.getGson().fromJson(GsonUtil.getGson().toJson(data.getContent().getData())
+                ,new TypeToken<List<Concert>>(){}.getType());
+    }
+
+    @Override
+    public String getRequestJsonStr(int page, int pageSize) {
+        String activityStates = null;
+        String relevanceStar = null;
+        String activityProperty = "concert";
+        String createUserId = null;
+        String parts = "prices";
+
+        String request = HttpRequest.postConcertQuery(activityStates, relevanceStar, cityName,
+                activityProperty, createUserId, parts, page, pageSize);
+        return request;
+    }
+
+    @Override
+    public void emptyPagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishRefresh();
+
+        if (concertList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
         } else {
-            showShortToast(R.string.checkNetwork);
+            noMessage.setVisibility(View.VISIBLE);
         }
     }
+
+    @Override
+    public void refreshSuccessPagingList(List<Concert> list) {
+        concertList.clear();
+
+        concertList.addAll(list);
+        srlBaseHttpRecycler.finishRefresh();
+        srlBaseHttpRecycler.setLoadmoreFinished(false);
+
+        setList(concertList);
+
+        if (concertList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void noMorePagingList() {
+        showShortToast(R.string.noMoreData);
+        srlBaseHttpRecycler.finishLoadmoreWithNoMoreData();
+
+        if (concertList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void loadMoreSuccessPagingList(List<Concert> list) {
+        concertList.addAll(list);
+        srlBaseHttpRecycler.finishLoadmore();
+
+        setList(concertList);
+
+        if (concertList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void refreshErrorPagingList() {
+        showShortToast(R.string.noReturn);
+
+        if (concertList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void loadMoreErrorPagingList() {
+        showShortToast(R.string.noReturn);
+
+        if (concertList.size() > 0) {
+            noMessage.setVisibility(View.GONE);
+        } else {
+            noMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void ProgressDismiss(String url, int RequestCode) {
+        progressBarDismiss();
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        super.onRefresh(refreshlayout);
+        //演唱会列表
+        mEntityPageDataHttpModel.refreshPost(URL_BASE + URLConstant.CONCERTQUERY, this);
+    }
+
+    @Override
+    public void onLoadmore(RefreshLayout refreshlayout) {
+        super.onLoadmore(refreshlayout);
+        //演唱会列表
+        mEntityPageDataHttpModel.loadMorePost(URL_BASE + URLConstant.CONCERTQUERY, this);
+    }
+
 }

@@ -62,23 +62,23 @@ public class EditSignatureActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void initView() {
-        tvHead = findViewById(R.id.tv_head_title);
+        tvHead = findView(R.id.tv_head_title);
         tvHead.setText("设置个性签名");
-        tvLeft = findViewById(R.id.tv_left);
+        tvLeft = findView(R.id.tv_left);
         tvLeft.setVisibility(View.VISIBLE);
         tvLeft.setTextColor(getResources().getColor(R.color.black_text));
         tvLeft.setText("取消");
-        tvRight = findViewById(R.id.tv_add_temp);
+        tvRight = findView(R.id.tv_add_temp);
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setTextColor(getResources().getColor(R.color.black_text));
         tvRight.setText("保存");
 
-        llNickname = findViewById(R.id.llNickname);
+        llNickname = findView(R.id.llNickname);
         llNickname.setVisibility(View.GONE);
-        llSignature = findViewById(R.id.llSignature);
+        llSignature = findView(R.id.llSignature);
         llSignature.setVisibility(View.VISIBLE);
 
-        edtSignature = findViewById(R.id.edt_signature);
+        edtSignature = findView(R.id.edt_signature);
     }
 
     @Override
@@ -115,11 +115,6 @@ public class EditSignatureActivity extends BaseActivity implements View.OnClickL
     @Override
     public boolean onLongClick(View v) {
         return false;
-    }
-
-    @Override
-    public void onDragBottom(boolean rightToLeft) {
-        finish();
     }
 
     @Override

@@ -1,12 +1,13 @@
 package com.qingye.wtsyou.model;
 
-import zuo.biao.library.base.BaseModel;
+import java.io.Serializable;
 
 /**
  * Created by pm89 on 2018/4/27.
  */
 
-public class EntityStars extends BaseModel{
+public class EntityStars implements Serializable {
+
     private String uuid;
     private String created;
     private String modified;
@@ -22,8 +23,8 @@ public class EntityStars extends BaseModel{
     private String constellation;
     private String birthdate;
     private String starIntroduce;
-    private String funsCount;
-    private String chatRoomCount;
+    private int funsCount;
+    private int chatRoomCount;
     private Boolean isFollow;
 
     public String getUuid() {
@@ -146,19 +147,19 @@ public class EntityStars extends BaseModel{
         this.starIntroduce = starIntroduce;
     }
 
-    public String getFunsCount() {
+    public int getFunsCount() {
         return funsCount;
     }
 
-    public void setFunsCount(String funsCount) {
+    public void setFunsCount(int funsCount) {
         this.funsCount = funsCount;
     }
 
-    public String getChatRoomCount() {
+    public int getChatRoomCount() {
         return chatRoomCount;
     }
 
-    public void setChatRoomCount(String chatRoomCount) {
+    public void setChatRoomCount(int chatRoomCount) {
         this.chatRoomCount = chatRoomCount;
     }
 
@@ -170,8 +171,4 @@ public class EntityStars extends BaseModel{
         this.isFollow = isFollow;
     }
 
-    @Override
-    protected boolean isCorrect() {
-        return true;
-    }
 }

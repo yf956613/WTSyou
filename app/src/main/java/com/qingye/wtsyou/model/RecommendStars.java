@@ -1,17 +1,19 @@
 package com.qingye.wtsyou.model;
 
+import java.io.Serializable;
+
 import zuo.biao.library.base.BaseModel;
 
 /**
  * Created by pm89 on 2018/4/27.
  */
 
-public class RecommendStars extends BaseModel{
+public class RecommendStars implements Serializable {
     private String starUuid;
     private String starName;
     private String starPhoto;
     private String funsCount;
-    private String chatRoomCount;
+    private int chatRoomCount;
     private Boolean isFollow;
 
     public String getStarUuid() {
@@ -46,11 +48,11 @@ public class RecommendStars extends BaseModel{
         this.funsCount = funsCount;
     }
 
-    public String getChatRoomCount() {
+    public int getChatRoomCount() {
         return chatRoomCount;
     }
 
-    public void setChatRoomCount(String chatRoomCount) {
+    public void setChatRoomCount(int chatRoomCount) {
         this.chatRoomCount = chatRoomCount;
     }
 
@@ -62,8 +64,4 @@ public class RecommendStars extends BaseModel{
         this.isFollow = isFollow;
     }
 
-    @Override
-    protected boolean isCorrect() {
-        return true;
-    }
 }

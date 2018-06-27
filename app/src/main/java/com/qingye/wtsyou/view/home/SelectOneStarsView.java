@@ -32,9 +32,9 @@ public class SelectOneStarsView extends BaseView<EntityStarsItem> implements Vie
     @SuppressLint("InflateParams")
     @Override
     public View createView() {
-        head = findViewById(R.id.iv_stars_head);
-        name = findViewById(R.id.tv_name);
-        rlSelected = findViewById(R.id.rl_selected);
+        head = findView(R.id.iv_stars_head);
+        name = findView(R.id.tv_name);
+        rlSelected = findView(R.id.rl_selected);
 
         return super.createView();
     }
@@ -57,8 +57,6 @@ public class SelectOneStarsView extends BaseView<EntityStarsItem> implements Vie
 
     @Override
     public void onClick(View v) {
-        if (BaseModel.isCorrect(data) == false) {
-            return;
-        }
+
     }
 }
